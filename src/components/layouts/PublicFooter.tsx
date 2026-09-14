@@ -17,7 +17,7 @@ const COLUMNS: { title: string; links: string[] }[] = [
   { title: "Legal", links: ["Privacy", "Terms", "Security", "Cookies"] },
 ];
 
-export default function Footer() {
+export default function PublicFooter() {
   const year = new Date().getFullYear();
 
   return (

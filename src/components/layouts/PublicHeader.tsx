@@ -3,8 +3,7 @@ import Logo from "../ui/Logo";
 const NAV_LINKS = [
   { label: "Features", href: "#features" },
   { label: "Pricing", href: "#pricing" },
-  { label: "FAQ", href: "#faq" },
-  { label: "For Schools", href: "#for-schools" },
+  { label: "FAQ", href: "#faq" }
 ];
 
 interface HeaderProps {
@@ -12,7 +11,7 @@ interface HeaderProps {
   onGetStarted?: () => void;
 }
 
-export default function Header({ onSignIn, onGetStarted }: HeaderProps) {
+export default function PublicHeader({ onSignIn, onGetStarted }: HeaderProps) {
   return (
     <header className="sticky top-0 z-40 bg-[#FAFAF9]/90 backdrop-blur border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
