@@ -11,6 +11,7 @@ import AppLayouts from '../layout/AppLayouts'
 
 import PublicRoute from './PublicRoutes'
 import ProtectedRoute from './ProtectedRoute'
+import ProfilePage from '../pages/main/ProfilePage'
 
 const router = createBrowserRouter([
   {
@@ -37,6 +38,7 @@ const router = createBrowserRouter([
             path: '/chat',
             Component: ChatPage,
           },
+          { path: '/profile', Component: ProfilePage },
         ],
       },
     ],
