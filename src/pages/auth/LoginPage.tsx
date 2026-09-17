@@ -8,9 +8,10 @@ import FormInput from '../../components/ui/FormInput'
 import PrimaryButton from '../../components/ui/PrimaryButton'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useNavigate } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import { loginSchema, type LoginPayload } from '../../schemas/auth.schema'
 import { useLoginMutation } from '../../hooks/useAuthQuery'
+import { toast } from 'sonner'
 
 export default function LoginPage() {
   const [rememberMe, setRememberMe] = useState(true)
@@ -44,7 +45,7 @@ export default function LoginPage() {
           } else {
             sessionStorage.setItem('access_token', token)
           }
-
+          toast.success('Đăng nhập thành công!')
           // Chuyển hướng vào trang trong
           navigate('/dashboard')
         }
@@ -155,9 +156,9 @@ export default function LoginPage() {
 
           <p className='mt-6 text-center text-sm text-gray-500'>
             No account?{' '}
-            <a href='#' className='font-medium text-gray-900 hover:underline'>
+            <Link to='/register' className='font-medium text-gray-900 hover:underline'>
               Create one
-            </a>
+            </Link>
           </p>
         </div>
       </div>

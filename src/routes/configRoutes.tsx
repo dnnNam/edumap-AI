@@ -2,9 +2,9 @@ import { createBrowserRouter } from 'react-router'
 import HomePage from '../pages/auth/HomePage'
 import LoginPage from '../pages/auth/LoginPage'
 import DashBoard from '../pages/main/DashBoard'
-import RegisterPage from '../pages/auth/Register'
 import AppLayouts from '../layout/AppLayouts'
 import ChatPage from '../pages/main/ChatPage'
+import RegisterPage from '../pages/auth/RegisterPage'
 
 const router = createBrowserRouter([
   {
