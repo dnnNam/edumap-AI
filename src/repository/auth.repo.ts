@@ -16,11 +16,6 @@ class AuthRepository {
     return http.post(`${this.PREFIX}/register`, payload)
   }
 
-  // Hàm gọi API Lấy thông tin user (ví dụ)
-  getProfile() {
-    return http.get(`${this.PREFIX}/profile`)
-  }
-
   getMe() {
     return http.get<ApiResponse<User>>(`${this.PREFIX}/me`)
   }
