@@ -1,4 +1,5 @@
 import http from '../config/http'
+import type { UpdateProfilePayload } from '../schemas/auth.schema'
 import type { UserResponse } from '../types/api/user.type'
 
 class UserRepository {
@@ -8,6 +9,10 @@ class UserRepository {
   // Hàm gọi API Đăng nhập
   getProfile() {
     return http.get<UserResponse>(`${this.PREFIX}/profile`)
+  }
+
+  updateProfile(payload: UpdateProfilePayload) {
+    return http.patch<UserResponse>(`${this.PREFIX}/profile`, payload)
   }
 }
 

@@ -8,6 +8,7 @@ import ChangePasswordModal from '../../components/ui/Changepasswordmodal'
 import type { ChangePasswordPayload } from '../../schemas/auth.schema'
 import { useProfileQuery } from '../../hooks/useUserQuery'
 import { useChangePasswordMutation } from '../../hooks/useAuthQuery'
+import { useNavigate } from 'react-router'
 
 // ---------- data not covered by the /auth/me endpoint yet (swap for real queries later) ----------
 
@@ -101,7 +102,7 @@ export default function ProfilePage() {
   const { data: profileResponse, isLoading, isError } = useProfileQuery()
   const changePasswordMutation = useChangePasswordMutation()
   const user = profileResponse?.data?.data
-
+  const navigate = useNavigate()
   const handleChangePassword = async (data: ChangePasswordPayload) => {
     await changePasswordMutation.mutateAsync(data)
   }
@@ -215,6 +216,7 @@ export default function ProfilePage() {
                 <button
                   type='button'
                   className='flex items-center gap-1.5 rounded-xl border border-gray-200 text-gray-900 text-sm font-medium px-4 py-2 hover:text-indigo-600 hover:border-indigo-600 hover:bg-indigo-50 transition'
+                  onClick={() => navigate('/settings')}
                 >
                   <Pencil className='w-3.5 h-3.5' />
                   Edit profile
