@@ -64,16 +64,14 @@ export default function ChangePasswordModal({
       toast.success('Cập nhật mật khẩu thành công!')
       handleClose()
     } catch {
-      // http.ts interceptor already toasts the error
+      // Axios interceptor tự bắt lỗi và hiển thị toast, không cần xử lý thêm ở đây
     }
   })
 
   return (
     <div className='fixed inset-0 z-50 flex items-center justify-center px-4'>
-      {/* Backdrop */}
       <div className='absolute inset-0 bg-gray-900/40 backdrop-blur-[2px]' onClick={handleClose} />
 
-      {/* Modal */}
       <div className='relative w-full max-w-md bg-white rounded-2xl border border-gray-200 shadow-lg p-6'>
         <button
           type='button'
@@ -91,6 +89,7 @@ export default function ChangePasswordModal({
         <p className='mt-1.5 text-sm text-gray-500'>Choose a strong password you haven't used before.</p>
 
         <form onSubmit={submit} className='mt-6 space-y-4'>
+          {/* Form input Current Password */}
           <div>
             <label htmlFor='oldPassword' className='block text-sm font-medium text-gray-800 mb-1.5'>
               Current password
@@ -106,7 +105,6 @@ export default function ChangePasswordModal({
                 type='button'
                 onClick={() => setShowCurrent((v) => !v)}
                 className='absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors'
-                aria-label={showCurrent ? 'Hide password' : 'Show password'}
               >
                 {showCurrent ? <EyeOff className='w-4 h-4' /> : <Eye className='w-4 h-4' />}
               </button>
@@ -114,6 +112,7 @@ export default function ChangePasswordModal({
             {errors.oldPassword && <p className='text-sm text-red-500 mt-1'>{errors.oldPassword.message}</p>}
           </div>
 
+          {/* Form input New Password */}
           <div>
             <label htmlFor='newPassword' className='block text-sm font-medium text-gray-800 mb-1.5'>
               New password
@@ -129,7 +128,6 @@ export default function ChangePasswordModal({
                 type='button'
                 onClick={() => setShowNew((v) => !v)}
                 className='absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors'
-                aria-label={showNew ? 'Hide password' : 'Show password'}
               >
                 {showNew ? <EyeOff className='w-4 h-4' /> : <Eye className='w-4 h-4' />}
               </button>
@@ -137,6 +135,7 @@ export default function ChangePasswordModal({
             {errors.newPassword && <p className='text-sm text-red-500 mt-1'>{errors.newPassword.message}</p>}
           </div>
 
+          {/* Form input Confirm Password */}
           <div>
             <label htmlFor='confirmNewPassword' className='block text-sm font-medium text-gray-800 mb-1.5'>
               Confirm new password
@@ -152,7 +151,6 @@ export default function ChangePasswordModal({
                 type='button'
                 onClick={() => setShowConfirm((v) => !v)}
                 className='absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors'
-                aria-label={showConfirm ? 'Hide password' : 'Show password'}
               >
                 {showConfirm ? <EyeOff className='w-4 h-4' /> : <Eye className='w-4 h-4' />}
               </button>

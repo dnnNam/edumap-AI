@@ -1,5 +1,5 @@
 import http from '../config/http'
-import type { LoginPayload, RegisterApiPayload } from '../schemas/auth.schema'
+import type { ChangePasswordPayload, LoginPayload, RegisterApiPayload } from '../schemas/auth.schema'
 import type { ApiResponse, AuthResponse, User } from '../types/api/auth.types'
 
 class AuthRepository {
@@ -18,6 +18,10 @@ class AuthRepository {
 
   getMe() {
     return http.get<ApiResponse<User>>(`${this.PREFIX}/me`)
+  }
+
+  changePassword(body: ChangePasswordPayload) {
+    return http.patch(`${this.PREFIX}/change-password`, body)
   }
 }
 

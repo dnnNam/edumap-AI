@@ -4,7 +4,10 @@ import { FaGithub } from 'react-icons/fa'
 import StatCard from '../../components/ui/StatCard'
 
 import ChangePasswordModal from '../../components/ui/Changepasswordmodal'
+
+import type { ChangePasswordPayload } from '../../schemas/auth.schema'
 import { useProfileQuery } from '../../hooks/useUserQuery'
+import { useChangePasswordMutation } from '../../hooks/useAuthQuery'
 
 // ---------- data not covered by the /auth/me endpoint yet (swap for real queries later) ----------
 
@@ -96,8 +99,12 @@ function formatRole(role: string) {
 export default function ProfilePage() {
   const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false)
   const { data: profileResponse, isLoading, isError } = useProfileQuery()
-
+  const changePasswordMutation = useChangePasswordMutation()
   const user = profileResponse?.data?.data
+
+  const handleChangePassword = async (data: ChangePasswordPayload) => {
+    await changePasswordMutation.mutateAsync(data)
+  }
   return (
     <div className='flex-1 min-h-0 overflow-y-auto p-6'>
       <div className='max-w-5xl mx-auto space-y-6'>
@@ -295,7 +302,12 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      <ChangePasswordModal open={isChangePasswordOpen} onClose={() => setIsChangePasswordOpen(false)} />
+      <ChangePasswordModal
+        open={isChangePasswordOpen}
+        onClose={() => setIsChangePasswordOpen(false)}
+        onSubmit={handleChangePassword}
+        isSubmitting={changePasswordMutation.isPending}
+      />
     </div>
   )
 }
