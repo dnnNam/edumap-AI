@@ -1,33 +1,43 @@
 import { createBrowserRouter } from 'react-router'
+
 import HomePage from '../pages/auth/HomePage'
 import LoginPage from '../pages/auth/LoginPage'
-import DashBoard from '../pages/main/DashBoard'
-import AppLayouts from '../layout/AppLayouts'
-import ChatPage from '../pages/main/ChatPage'
 import RegisterPage from '../pages/auth/RegisterPage'
+
+import DashBoard from '../pages/main/DashBoard'
+import ChatPage from '../pages/main/ChatPage'
+
+import AppLayouts from '../layout/AppLayouts'
+
+import PublicRoute from './PublicRoutes'
+import ProtectedRoute from './ProtectedRoute'
 
 const router = createBrowserRouter([
   {
+    Component: PublicRoute,
     path: '/',
-    Component: HomePage,
-  },
-  {
-    path: '/login',
-    Component: LoginPage,
+    children: [
+      { index: true, Component: HomePage },
+      { path: '/login', Component: LoginPage },
+      { path: '/register', Component: RegisterPage },
+    ],
   },
 
-  { path: '/register', Component: RegisterPage },
-
   {
-    Component: AppLayouts,
+    Component: ProtectedRoute,
     children: [
       {
-        path: '/dashboard',
-        Component: DashBoard,
-      },
-      {
-        path: '/chat',
-        Component: ChatPage,
+        Component: AppLayouts,
+        children: [
+          {
+            path: '/dashboard',
+            Component: DashBoard,
+          },
+          {
+            path: '/chat',
+            Component: ChatPage,
+          },
+        ],
       },
     ],
   },

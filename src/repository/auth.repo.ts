@@ -1,6 +1,6 @@
 import http from '../config/http'
 import type { LoginPayload, RegisterApiPayload } from '../schemas/auth.schema'
-import type { AuthResponse } from '../types/api/auth.types'
+import type { ApiResponse, AuthResponse, User } from '../types/api/auth.types'
 
 class AuthRepository {
   // Khai báo prefix chung cho toàn bộ API trong class này
@@ -19,6 +19,10 @@ class AuthRepository {
   // Hàm gọi API Lấy thông tin user (ví dụ)
   getProfile() {
     return http.get(`${this.PREFIX}/profile`)
+  }
+
+  getMe() {
+    return http.get<ApiResponse<User>>(`${this.PREFIX}/me`)
   }
 }
 

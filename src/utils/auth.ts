@@ -1,8 +1,8 @@
-export const getAccessTokenFromLS = () => localStorage.getItem('accessToken') || ''
+export const getAccessTokenFromLS = () => localStorage.getItem('access_token') || ''
 export const LocalStorageEventTarget = new EventTarget()
 
 export const clearLS = () => {
-  localStorage.removeItem('accessToken')
+  localStorage.removeItem('access_token')
   localStorage.removeItem('emailAccount')
   localStorage.removeItem('role')
   localStorage.removeItem('userId')
