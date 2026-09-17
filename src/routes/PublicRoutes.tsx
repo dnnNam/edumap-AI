@@ -1,5 +1,6 @@
-import { Navigate, Outlet } from 'react-router'
+import { Navigate } from 'react-router'
 
+import AnimatedOutlet from '../components/motion/AnimatedOutlet'
 import AppLoadingSkeleton from '../components/ui/AppLoadingSkeleton'
 import { useMeQuery } from '../hooks/useAuthQuery'
 import { getAccessTokenFromLS } from '../utils/auth'
@@ -9,7 +10,7 @@ export default function PublicRoute() {
   const { isLoading, isError } = useMeQuery()
   // Không có token → render route con
   if (!accessToken) {
-    return <Outlet />
+    return <AnimatedOutlet />
   }
 
   if (isLoading) {
@@ -18,7 +19,7 @@ export default function PublicRoute() {
 
   // Token hết hạn/sai → vẫn cho vào public, không redirect nữa
   if (isError) {
-    return <Outlet />
+    return <AnimatedOutlet />
   }
 
   // Token hợp lệ thật → đẩy vào dashboard

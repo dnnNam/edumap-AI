@@ -1,4 +1,5 @@
-import { Navigate, Outlet } from 'react-router'
+import { Navigate } from 'react-router'
+import AnimatedOutlet from '../components/motion/AnimatedOutlet'
 import AppLoadingSkeleton from '../components/ui/AppLoadingSkeleton'
 import { useMeQuery } from '../hooks/useAuthQuery'
 import { getAccessTokenFromLS } from '../utils/auth'
@@ -19,5 +20,5 @@ export default function ProtectedRoute() {
   }
 
   // Có token → hiển thị component
-  return <Outlet />
+  return <AnimatedOutlet />
 }
