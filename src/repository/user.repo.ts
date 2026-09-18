@@ -1,6 +1,7 @@
 import http from '../config/http'
 import type { UpdateProfilePayload } from '../schemas/auth.schema'
-import type { UserResponse } from '../types/api/user.type'
+import type { ApiResponse } from '../types/api/auth.types'
+import type { AdminUser, UserResponse, UserRole } from '../types/api/user.type'
 
 class UserRepository {
   // Khai báo prefix chung cho toàn bộ API trong class này
@@ -13,6 +14,14 @@ class UserRepository {
 
   updateProfile(payload: UpdateProfilePayload) {
     return http.patch<UserResponse>(`${this.PREFIX}/profile`, payload)
+  }
+
+  getAllUsers() {
+    return http.get<ApiResponse<AdminUser[]>>(`${this.PREFIX}/admin/all`)
+  }
+
+  updateUserRole(userId: string, role: UserRole) {
+    return http.patch<ApiResponse<AdminUser>>(`${this.PREFIX}/admin/${userId}/role`, { role })
   }
 }
 

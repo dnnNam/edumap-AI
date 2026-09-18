@@ -13,6 +13,8 @@ import PublicRoute from './PublicRoutes'
 import ProtectedRoute from './ProtectedRoute'
 import ProfilePage from '../pages/main/ProfilePage'
 import SettingsPage from '../pages/main/SettingPage'
+import AdminRoute from './AdminRoute'
+import AdminPermissionsPage from '../pages/main/AdminPermissionPage'
 
 const router = createBrowserRouter([
   {
@@ -41,6 +43,10 @@ const router = createBrowserRouter([
           },
           { path: '/profile', Component: ProfilePage },
           { path: '/settings', Component: SettingsPage },
+          {
+            Component: AdminRoute, // gác thêm 1 lớp checkRole trước khi vào /admin
+            children: [{ path: '/admin', Component: AdminPermissionsPage }],
+          },
         ],
       },
     ],

@@ -12,6 +12,7 @@ import { Link, useNavigate } from 'react-router'
 import { loginSchema, type LoginPayload } from '../../schemas/auth.schema'
 import { useLoginMutation } from '../../hooks/useAuthQuery'
 import { toast } from 'sonner'
+import { saveAuthToLS } from '../../utils/auth'
 
 export default function LoginPage() {
   const [rememberMe, setRememberMe] = useState(true)
@@ -36,17 +37,16 @@ export default function LoginPage() {
   const onSubmit = (data: LoginPayload) => {
     loginUser(data, {
       onSuccess: (response) => {
-        const token = response.data.data.accessToken
+        const { accessToken, user } = response.data.data
 
-        // Nếu chọn rememberMe thì lưu email/token vào localStorage
-        if (token) {
-          if (rememberMe) {
-            localStorage.setItem('access_token', token)
-          } else {
-            sessionStorage.setItem('access_token', token)
-          }
+        if (accessToken) {
+          saveAuthToLS({
+            accessToken,
+            fullName: user?.fullName,
+            role: user?.role,
+            remember: rememberMe,
+          })
           toast.success('Đăng nhập thành công!')
-          // Chuyển hướng vào trang trong
           navigate('/dashboard')
         }
       },
