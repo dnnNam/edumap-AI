@@ -13,7 +13,7 @@ import { analyzeFormSchema, type AnalysisMode, type AnalyzeFormValues } from '..
 import type { GenerateSkillTreePayload } from '../../types/api/ai-advisor.types'
 import { useGenerateSkillTreeMutation } from '../../hooks/ai-adivisorQuery'
 import { useProfileQuery } from '../../hooks/useUserQuery'
-import SectionHeader from '../../components/layouts/SectionHeader'
+import SectionHeader from '../../components/layouts/uploadAndAnalyze/SectionHeader'
 
 // ---------- data ----------
 
@@ -88,9 +88,7 @@ export default function UploadPage() {
     formState: { errors },
   } = useForm<AnalyzeFormValues>({
     resolver: zodResolver(analyzeFormSchema),
-    // Chỉ validate khi bấm submit. Nếu để mặc định (onChange), sau lần submit lỗi đầu tiên
-    // mỗi lần "Add course" RHF sẽ validate lại cả field array -> dòng trống mới hiện lỗi đỏ ngay.
-    // Lỗi từng ô sẽ tự được xoá khi user gõ (clearErrors trong register).
+
     reValidateMode: 'onSubmit',
     defaultValues: {
       mode: 'HYBRID',
@@ -152,14 +150,10 @@ export default function UploadPage() {
         toast.success('Phân tích hoàn tất!')
         navigate('/skill-tree')
       },
-      // onError không cần xử lý riêng vì http.ts interceptor đã toast lỗi chung rồi
     })
   }
 
   return (
-    // Dùng h-full (KHÔNG dùng flex-1): cha trực tiếp của trang là <motion.div className='h-full'>
-    // của AnimatedOutlet — một block thường, không phải flex container, nên flex-1 / min-h-0
-    // không có tác dụng → vùng overflow-y-auto không bị giới hạn chiều cao → không cuộn được.
     <div className='h-full overflow-y-auto flex flex-col [scrollbar-gutter:stable]'>
       <div className='flex-1 w-full max-w-5xl mx-auto px-6 pt-6 pb-6'>
         {/* Page header */}
@@ -254,11 +248,6 @@ export default function UploadPage() {
                   </button>
                 </div>
 
-                {/* Mỗi dòng animate chiều cao (LIST_ITEM) nên các phần tử bên dưới trượt xuống/lên mượt,
-                    không bị "nhảy cục" khi thêm/xoá. Padding nằm ở div trong để height: 0 thật sự về 0 */}
-                {/* Tối đa ~5 dòng rồi cuộn trong khung này, để form không dài vô hạn.
-                    -mx-2/pl-2/pr-1 chừa chỗ cho focus ring không bị cắt; gutter stable để
-                    thanh cuộn xuất hiện không làm các dòng bị dịch ngang */}
                 <div
                   ref={listRef}
                   className='mt-1.5 -mx-2 pl-2 pr-1 max-h-72 overflow-y-auto [scrollbar-gutter:stable] [scrollbar-width:thin]'
@@ -369,7 +358,7 @@ export default function UploadPage() {
         </div>
       </div>
 
-      {/* Overlay trong lúc AI đang phân tích (có thể mất vài chục giây) */}
+      {/* Overlay trong lúc AI đang phân tích  */}
       {isPending && (
         <div
           className='fixed inset-0 z-50 flex items-center justify-center bg-white/70 backdrop-blur-[2px] px-4'

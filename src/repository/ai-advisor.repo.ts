@@ -8,8 +8,7 @@ class AiAdvisorRepository {
   // Phân tích AI và tạo Skill Tree
   generateSkillTree(payload: GenerateSkillTreePayload) {
     return http.post<GenerateSkillTreeResponse>(`${this.PREFIX}/generate-skill-tree`, payload, {
-      // http.ts đang để timeout mặc định 10s — quá ngắn cho AI + đồng bộ GitHub,
-      // nên nới riêng cho endpoint này (2 phút)
+      // set up time out này khác tầm 2 phút thay vì 1 phút mặc định
       timeout: 120_000,
     })
   }
