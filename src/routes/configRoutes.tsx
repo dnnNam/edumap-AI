@@ -15,6 +15,8 @@ import ProfilePage from '../pages/main/ProfilePage'
 import SettingsPage from '../pages/main/SettingPage'
 import AdminRoute from './AdminRoute'
 import AdminPermissionsPage from '../pages/main/AdminPermissionPage'
+import UploadPage from '../pages/main/UploadAndAnalyze'
+import SkillTreePage from '../pages/main/SkillTree'
 
 const router = createBrowserRouter([
   {
@@ -43,6 +45,8 @@ const router = createBrowserRouter([
           },
           { path: '/profile', Component: ProfilePage },
           { path: '/settings', Component: SettingsPage },
+          { path: '/upload', Component: UploadPage },
+          { path: '/skill-tree', Component: SkillTreePage },
           {
             Component: AdminRoute, // gác thêm 1 lớp checkRole trước khi vào /admin
             children: [{ path: '/admin', Component: AdminPermissionsPage }],
