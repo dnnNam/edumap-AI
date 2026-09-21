@@ -11,7 +11,9 @@ import { ALL_CATEGORIES } from '../../../utils/skillTree'
 interface SharedProps {
   selectedId: string | null
   activeCategory: string
+  togglingIds: string[] // các node đang chờ server trả lời
   onSelect: (node: SkillNode) => void
+  onToggle: (node: SkillNode) => void
 }
 
 interface SkillNodeTreeProps extends SharedProps {
@@ -21,13 +23,15 @@ interface SkillNodeTreeProps extends SharedProps {
 // ---------- 1 dòng ----------
 
 function SkillNodeRow({ node, ...shared }: { node: SkillNode } & SharedProps) {
-  const { selectedId, activeCategory, onSelect } = shared
+  const { selectedId, activeCategory, togglingIds, onSelect, onToggle } = shared
   const [open, setOpen] = useState(true)
 
   const hasChildren = node.children.length > 0
   const isSelected = selectedId === node.id
   // Đang lọc category: node cha không khớp chỉ giữ để cây liền mạch nên làm mờ đi
   const isDimmed = activeCategory !== ALL_CATEGORIES && node.skill.category !== activeCategory
+  // Chỉ node có children mới hiện trạng thái hoàn thành (tick) và toggle
+  const showCompleted = hasChildren && node.isCompleted
 
   return (
     <div>
@@ -60,7 +64,7 @@ function SkillNodeRow({ node, ...shared }: { node: SkillNode } & SharedProps) {
           aria-pressed={isSelected}
           className='flex flex-1 min-w-0 items-center gap-3 text-left'
         >
-          {node.isCompleted ? (
+          {showCompleted ? (
             <span className='w-8 h-8 shrink-0 rounded-lg bg-indigo-600 text-white flex items-center justify-center'>
               <Check className='w-4 h-4' />
             </span>
@@ -78,10 +82,15 @@ function SkillNodeRow({ node, ...shared }: { node: SkillNode } & SharedProps) {
           </span>
         </button>
 
-        <ToggleSwitch
-          checked={node.isCompleted}
-          label={`${node.skill.name}: ${node.isCompleted ? 'completed' : 'open'}`}
-        />
+        {/* Chỉ node có children mới có toggle */}
+        {hasChildren && (
+          <ToggleSwitch
+            checked={node.isCompleted}
+            label={`${node.skill.name}: ${node.isCompleted ? 'completed' : 'open'}`}
+            onChange={() => onToggle(node)}
+            disabled={togglingIds.includes(node.id)}
+          />
+        )}
       </div>
 
       {/* Danh sách con: trượt mở/đóng bằng LIST_ITEM (config chung), padding đặt ở phần tử con */}

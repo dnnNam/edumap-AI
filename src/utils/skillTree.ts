@@ -1,4 +1,4 @@
-import type { SkillNode } from '../types/api/skillTree.types'
+import type { SkillNode, SkillTree } from '../types/api/skillTree.types'
 
 // Giá trị đặc biệt cho chip "All" (không trùng với tên category thật)
 export const ALL_CATEGORIES = '__ALL__'
@@ -18,4 +18,20 @@ export function filterTreeByCategory(nodes: SkillNode[], category: string): Skil
     const isMatch = node.skill.category === category
     return isMatch || children.length > 0 ? [{ ...node, children }] : []
   })
+}
+
+export function toggleNodeInTree(tree: SkillTree, nodeId: string): SkillTree {
+  const toggle = (nodes: SkillNode[]): SkillNode[] =>
+    nodes.map((node) => {
+      const children = toggle(node.children)
+      if (node.id !== nodeId) return { ...node, children }
+      const isCompleted = !node.isCompleted
+      return { ...node, isCompleted, completedAt: isCompleted ? new Date().toISOString() : null, children }
+    })
+
+  const nodes = toggle(tree.nodes)
+  const completedCount = flattenNodes(nodes).filter((n) => n.isCompleted).length
+  const completionPercentage = tree.totalNodes > 0 ? Math.round((completedCount / tree.totalNodes) * 100) : 0
+
+  return { ...tree, nodes, completedCount, completionPercentage }
 }

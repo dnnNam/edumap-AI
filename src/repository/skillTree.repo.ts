@@ -8,6 +8,9 @@ class SkillTreeRepository {
   getSkillTree() {
     return http.get(`${this.PREFIX}/my-tree`)
   }
+  toggleNode(treeId: string, nodeId: string) {
+    return http.post(`${this.PREFIX}/${treeId}/nodes/${nodeId}/toggle`)
+  }
 }
 
 // Khởi tạo và xuất ra MỘT đối tượng (instance) duy nhất để dùng chung cho toàn bộ app

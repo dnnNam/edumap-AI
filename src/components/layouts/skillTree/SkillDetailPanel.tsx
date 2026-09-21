@@ -1,6 +1,9 @@
 import { Sparkles } from 'lucide-react'
 import type { SkillNode } from '../../../types/api/skillTree.types'
-import ToggleSwitch from './ToogleSwitch'
+
+export interface SkillDetailPanelProps {
+  node: SkillNode | null
+}
 
 // Dòng thông tin đơn giản: label bên trái, value bên phải
 function InfoRow({ label, value }: { label: string; value: string }) {
@@ -22,12 +25,7 @@ function StatBox({ label, value }: { label: string; value: string }) {
   )
 }
 
-export interface SkillDetailPanelProps {
-  node: SkillNode | null
-  onToggleComplete?: (node: SkillNode) => void
-}
-
-export default function SkillDetailPanel({ node, onToggleComplete }: SkillDetailPanelProps) {
+export default function SkillDetailPanel({ node }: SkillDetailPanelProps) {
   if (!node) {
     return (
       <aside className='bg-white border border-gray-200 rounded-2xl px-6 py-14 text-center'>
@@ -40,16 +38,10 @@ export default function SkillDetailPanel({ node, onToggleComplete }: SkillDetail
 
   return (
     <aside className='bg-white border border-gray-200 rounded-2xl p-6'>
-      {/* Category + toggle hoàn thành */}
-      <div className='flex items-center justify-between gap-3'>
-        <span className='text-xs font-medium text-gray-700 bg-gray-100 rounded-full px-2.5 py-1'>
-          {node.skill.category}
-        </span>
-        <ToggleSwitch
-          checked={node.isCompleted}
-          label={`${node.skill.name}: ${node.isCompleted ? 'completed' : 'open'}`}
-        />
-      </div>
+      {/* Category */}
+      <span className='inline-block text-xs font-medium text-gray-700 bg-gray-100 rounded-full px-2.5 py-1'>
+        {node.skill.category}
+      </span>
 
       {/* Tên + priority */}
       <h3 className='mt-3 text-xl font-bold text-gray-900'>{node.skill.name}</h3>
@@ -67,15 +59,6 @@ export default function SkillDetailPanel({ node, onToggleComplete }: SkillDetail
         <InfoRow label='Node level' value={String(node.nodeLevel)} />
         <InfoRow label='Children' value={String(node.children.length)} />
       </dl>
-
-      {/* CTA */}
-      <button
-        type='button'
-        onClick={() => onToggleComplete?.(node)}
-        className='mt-6 w-full rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium py-2.5 transition-colors'
-      >
-        {node.isCompleted ? 'Mark as incomplete' : 'Mark as complete'}
-      </button>
     </aside>
   )
 }

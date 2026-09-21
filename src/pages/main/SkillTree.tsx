@@ -1,12 +1,11 @@
 import { GitBranch, Sparkles } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router'
-
+import { useMySkillTreeQuery, useToggleSkillNodeMutation, useTogglingNodeIds } from '../../hooks/skillTreeQuery'
 import CategoryFilter from '../../components/layouts/skillTree/CategoryFilter'
 import SkillDetailPanel from '../../components/layouts/skillTree/SkillDetailPanel'
 import SkillTreeSummary from '../../components/layouts/skillTree/SkillTreeSummary'
 
-import { useMySkillTreeQuery } from '../../hooks/skillTreeQuery'
 import { ALL_CATEGORIES, filterTreeByCategory, flattenNodes } from '../../utils/skillTree'
 import {
   SkeletonDetailPanel,
@@ -14,6 +13,7 @@ import {
   SkeletonTreeRow,
 } from '../../components/layouts/skillTree/SkeletonLoader'
 import SkillNodeTree from '../../components/layouts/skillTree/SkillTreeNode'
+import type { SkillNode } from '../../types/api/skillTree.types'
 
 const SKELETON_ROWS = 5
 
@@ -22,7 +22,18 @@ export default function SkillTreePage() {
 
   const { data: response, isLoading, isError, isFetching, refetch } = useMySkillTreeQuery()
   const tree = response?.data?.data
-  console.log(tree)
+
+  const { mutate: toggleNode } = useToggleSkillNodeMutation()
+  const togglingIds = useTogglingNodeIds()
+
+  const handleToggle = (node: SkillNode) => {
+    if (!tree) return
+    // Chỉ gọi API cho node bự (có children)
+    if (node.children.length === 0) return
+    // Node đang chờ server thì bỏ qua, tránh bấm đúp làm lật 2 lần
+    if (togglingIds.includes(node.id)) return
+    toggleNode({ treeId: tree.treeId, nodeId: node.id })
+  }
 
   const [category, setCategory] = useState(ALL_CATEGORIES)
   const [selectedId, setSelectedId] = useState<string | null>(null)
@@ -146,7 +157,9 @@ export default function SkillTreePage() {
                       nodes={visibleNodes}
                       selectedId={selectedId}
                       activeCategory={activeCategory}
+                      togglingIds={togglingIds}
                       onSelect={(node) => setSelectedId(node.id)}
+                      onToggle={handleToggle}
                     />
                   )}
                 </div>
