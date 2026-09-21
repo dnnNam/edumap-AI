@@ -32,6 +32,9 @@ function SkillNodeRow({ node, ...shared }: { node: SkillNode } & SharedProps) {
   const isDimmed = activeCategory !== ALL_CATEGORIES && node.skill.category !== activeCategory
   // Chỉ node có children mới hiện trạng thái hoàn thành (tick) và toggle
   const showCompleted = hasChildren && node.isCompleted
+  // Mastered: node cấp gốc và không có children (không xét isCompleted).
+  // Node con nằm trong 1 node cha thì chỉ là môn con, không gắn Mastered.
+  const isMastered = node.parentNodeId === null && !hasChildren
 
   return (
     <div>
@@ -81,6 +84,14 @@ function SkillNodeRow({ node, ...shared }: { node: SkillNode } & SharedProps) {
             </span>
           </span>
         </button>
+
+        {/* Node gốc không có children -> label "Mastered" */}
+        {isMastered && (
+          <span className='shrink-0 inline-flex items-center gap-1 rounded-full border border-emerald-100 bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700'>
+            <Check className='w-3 h-3' />
+            Mastered
+          </span>
+        )}
 
         {/* Chỉ node có children mới có toggle */}
         {hasChildren && (
