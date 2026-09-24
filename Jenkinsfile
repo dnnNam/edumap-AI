@@ -30,6 +30,9 @@ pipeline {
         stage('4. Build Production (Vite)') {
             steps {
                 echo 'Đang build mã nguồn ra thư mục dist...'
+                withCredentials([file(credentialsId: 'frontend-env-file', variable: 'ENV_FILE')]) {
+                    sh 'cp $ENV_FILE .env'
+                }
                 sh 'npm run build'
             }
         }
