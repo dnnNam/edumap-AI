@@ -34,11 +34,11 @@ pipeline {
             }
         }
 
-      stage('5. Deploy ra Nginx (Phát hành)') {
+        stage('5. Deploy ra Nginx (Phát hành)') {
             steps {
-                echo 'Đang copy code mới lên thư mục web...'
-                sh 'rm -rf /home/nam/edumap_web/*'
-                sh 'cp -r dist/* /home/nam/edumap_web/'
+                echo 'Đang bắn code ra VPS qua cổng SSH...'
+                sh 'ssh -o StrictHostKeyChecking=no ${VPS_USER}@${VPS_IP} "rm -rf /home/nam/edumap_web/*"'
+                sh 'scp -o StrictHostKeyChecking=no -r dist/* ${VPS_USER}@${VPS_IP}:/home/nam/edumap_web/'
             }
         }
     }
