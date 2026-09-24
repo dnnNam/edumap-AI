@@ -34,12 +34,11 @@ pipeline {
             }
         }
 
-        stage('5. Deploy ra Nginx (Phát hành)') {
+      stage('5. Deploy ra Nginx (Phát hành)') {
             steps {
                 echo 'Đang copy code mới lên thư mục web...'
-                // Xóa code cũ và copy code mới từ thư mục dist vào Nginx
-                sh 'rm -rf /var/www/edumapai.io.vn/html/*'
-                sh 'cp -r dist/* /var/www/edumapai.io.vn/html/'
+                sh 'rm -rf /home/nam/edumap_web/*'
+                sh 'cp -r dist/* /home/nam/edumap_web/'
             }
         }
     }
