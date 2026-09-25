@@ -17,6 +17,7 @@ import AdminRoute from './AdminRoute'
 import AdminPermissionsPage from '../pages/main/AdminPermissionPage'
 import UploadPage from '../pages/main/UploadAndAnalyze'
 import SkillTreePage from '../pages/main/SkillTree'
+import NotificationsPage from '../pages/main/NotificationPage'
 
 const router = createBrowserRouter([
   {
@@ -47,6 +48,7 @@ const router = createBrowserRouter([
           { path: '/settings', Component: SettingsPage },
           { path: '/upload', Component: UploadPage },
           { path: '/skill-tree', Component: SkillTreePage },
+          { path: '/notifications', Component: NotificationsPage },
           {
             Component: AdminRoute, // gác thêm 1 lớp checkRole trước khi vào /admin
             children: [{ path: '/admin', Component: AdminPermissionsPage }],
