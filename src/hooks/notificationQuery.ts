@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { notificationRepo } from '../repository/notification.repo'
 import type { GetNotificationsParams } from '../types/api/notification.types'
 import { getAccessTokenFromLS } from '../utils/auth'
+import { toast } from 'sonner'
 
 export const useNotificationsQuery = (params?: GetNotificationsParams) => {
   return useQuery({
@@ -37,6 +38,18 @@ export const useMarkNotificationReadMutation = () => {
       // predicate theo phần tử đầu của queryKey để invalidate luôn cả
       // ['notifications', params] (danh sách) lẫn ['notifications', 'unread-count'] (badge)
       queryClient.invalidateQueries({ queryKey: ['notifications'] })
+    },
+  })
+}
+
+export const useMarkAllNotificationsReadMutation = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: () => notificationRepo.markAllRead(),
+    onSuccess: (res) => {
+      queryClient.invalidateQueries({ queryKey: ['notifications'] })
+      toast.success(res.data.data.message, { duration: 1500 })
     },
   })
 }

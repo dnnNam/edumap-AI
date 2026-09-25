@@ -35,7 +35,7 @@ export type NotificationResponse = ApiResponse<Notification>
 
 // Khớp với GET /notifications/unread-count -> { success, statusCode, data: { unreadCount } }
 export type UnreadCountResponse = ApiResponse<{ unreadCount: number }>
-
+export type MarkAllReadResponse = ApiResponse<{ message: string }>
 export interface GetNotificationsParams {
   page?: number
   limit?: number

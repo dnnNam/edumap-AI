@@ -1,6 +1,7 @@
 import http from '../config/http'
 import type {
   GetNotificationsParams,
+  MarkAllReadResponse,
   NotificationListResponse,
   NotificationResponse,
   UnreadCountResponse,
@@ -22,6 +23,10 @@ class NotificationRepository {
   // PATCH /api/v1/notifications/:id/read — Đánh dấu 1 thông báo đã đọc
   markAsRead(id: string) {
     return http.patch<NotificationResponse>(`${this.PREFIX}/${id}/read`)
+  }
+
+  markAllRead() {
+    return http.patch<MarkAllReadResponse>(`${this.PREFIX}/read-all`)
   }
 }
 
