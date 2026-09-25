@@ -4,6 +4,8 @@ import type {
   ChatSessionListResponse,
   ChatSessionDetailResponse,
   CreateChatSessionPayload,
+  SendChatMessagePayload,
+  SendChatMessageResponse,
 } from '../types/api/chat.types'
 
 class ChatRepository {
@@ -23,7 +25,13 @@ class ChatRepository {
     return http.get<ChatSessionDetailResponse>(`${this.PREFIX}/sessions/${sessionId}`)
   }
 
-  // TODO: bổ sung khi BE có endpoint gửi tin nhắn — POST /chat/sessions/:id/messages
+  // POST /api/v1/chat/sessions/:sessionId/messages — Gửi câu hỏi và nhận lời khuyên AI dựa trên lộ trình hiện tại
+  sendMessage(sessionId: string, payload: SendChatMessagePayload) {
+    return http.post<SendChatMessageResponse>(`${this.PREFIX}/sessions/${sessionId}/messages`, payload, {
+      // AI trả lời có thể lâu hơn 10s mặc định của http.ts, nâng lên 2 phút như generateSkillTree
+      timeout: 120_000,
+    })
+  }
 }
 
 export const chatRepo = new ChatRepository()

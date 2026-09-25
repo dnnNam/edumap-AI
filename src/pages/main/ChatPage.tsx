@@ -1,78 +1,72 @@
-import { useMemo, useState } from 'react'
-import AppLoadingSkeleton from '../../components/ui/AppLoadingSkeleton'
+import { useState } from 'react'
+
 import { useChatSessionsQuery } from '../../hooks/chatQuery'
-import NewChatState from '../../components/layouts/chat/NewChatState'
-import ChatConverstation from '../../components/layouts/chat/ChatConverstation'
-import ChatEmptyState from '../../components/layouts/chat/ChatEmptyState'
+import type { ChatSession } from '../../types/api/chat.types'
 import ChatSidebar from '../../components/layouts/chat/ChatSideBar'
 import ChatUploadRequiredState from '../../components/layouts/chat/ChatUploadRequiredState'
+import ChatConverstation from '../../components/layouts/chat/ChatConverstation'
+import ChatEmptyState from '../../components/layouts/chat/ChatEmptyState'
+import NewChatState from '../../components/layouts/chat/NewChatState'
 
+// Trang tổng của /chat: quản lý danh sách session + session đang mở,
+// còn việc render nội dung 1 cuộc hội thoại cụ thể giao hết cho ChatConverstation (nhận prop sessionId).
 export default function ChatPage() {
-  const { data: sessionsResponse, isLoading: sessionsLoading } = useChatSessionsQuery()
+  const { data: sessionsResponse, isLoading } = useChatSessionsQuery()
   const sessions = sessionsResponse?.data?.data ?? []
 
-  const [manualSessionId, setManualSessionId] = useState<string | null>(null)
-  const [isNewChatOpen, setIsNewChatOpen] = useState(false)
-  // true khi BE từ chối tạo session vì user chưa có dữ liệu phân tích (400) —
-  // hiển thị ChatUploadRequiredState cho đến khi user thử New chat lại
-  const [blocked, setBlocked] = useState(false)
+  const [activeSessionId, setActiveSessionId] = useState<string | null>(null)
+  const [showNewChat, setShowNewChat] = useState(false)
+  const [uploadRequired, setUploadRequired] = useState(false)
 
-  const latestSessionId = useMemo(() => {
-    if (sessions.length === 0) return null
-    return [...sessions].sort(
-      (a, b) => new Date(b.lastMessageAt ?? b.createdAt).getTime() - new Date(a.lastMessageAt ?? a.createdAt).getTime(),
-    )[0].id
-  }, [sessions])
-
-  const resolvedSessionId = manualSessionId ?? latestSessionId
-
-  const openNewChat = () => {
-    setBlocked(false)
-    setIsNewChatOpen(true)
+  const handleCreated = (session: ChatSession) => {
+    setShowNewChat(false)
+    setUploadRequired(false)
+    setActiveSessionId(session.id)
   }
 
-  if (sessionsLoading) return <AppLoadingSkeleton />
+  if (isLoading) {
+    return <div className='flex-1 flex items-center justify-center text-sm text-gray-400'>Đang tải...</div>
+  }
 
   return (
-    // h-full (không dùng flex-1): cha trực tiếp là <motion.div className='h-full'> của AnimatedOutlet,
-    // không phải flex container nên flex-1 không có tác dụng -> khung chat bị co lại theo nội dung
-    <div className='h-full p-4'>
-      {/* Bỏ min-h-[600px] để khung luôn vừa khít chiều cao còn lại của trang */}
-      <div className='h-full flex min-h-0 rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden'>
-        <ChatSidebar
-          sessions={sessions}
-          activeSessionId={resolvedSessionId}
-          onSelect={(id) => {
-            setBlocked(false)
-            setManualSessionId(id)
-          }}
-          onNewChat={openNewChat}
-        />
+    // h-full (KHÔNG phải flex-1) vì cha trực tiếp là <motion.div className='h-full w-full'> trong
+    // AnimatedOutlet.tsx — 1 div thường, không phải flex container, nên flex-1 ở đây sẽ vô tác dụng
+    // và làm div này co lại theo nội dung (shrink-to-fit) thay vì lấp đầy chiều cao khả dụng.
+    <div className='h-full min-h-0 bg-gray-50 p-6'>
+      <div className='flex h-full min-h-0 gap-6'>
+        {/* Card 1: lịch sử chat — border + rounded-2xl + shadow-sm riêng, tách hẳn khỏi card chat bên phải */}
+        <div className='w-72 shrink-0 bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden'>
+          <ChatSidebar
+            sessions={sessions}
+            activeSessionId={activeSessionId}
+            onSelect={(id) => {
+              setUploadRequired(false)
+              setActiveSessionId(id)
+            }}
+            onNewChat={() => setShowNewChat(true)}
+          />
+        </div>
 
-        {/* min-h-0: để vùng tin nhắn (overflow-y-auto) cuộn bên trong, ô nhập luôn dính đáy */}
-        <div className='flex-1 flex flex-col min-w-0 min-h-0'>
-          {resolvedSessionId ? (
-            <ChatConverstation key={resolvedSessionId} sessionId={resolvedSessionId} />
-          ) : blocked ? (
+        {/* Card 2: khung hội thoại — dùng chung style border/rounded/shadow với card 1 để 2 khối đồng bộ */}
+        <div className='flex-1 min-w-0 flex flex-col bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden'>
+          {uploadRequired ? (
             <ChatUploadRequiredState />
+          ) : activeSessionId ? (
+            // key={activeSessionId}: remount ChatConverstation khi đổi session, tự reset state nội bộ (pending messages, input...)
+            <ChatConverstation key={activeSessionId} sessionId={activeSessionId} />
           ) : (
-            <ChatEmptyState onNewChat={openNewChat} />
+            <ChatEmptyState onNewChat={() => setShowNewChat(true)} />
           )}
         </div>
       </div>
 
-      {/* Popup nhập tiêu đề — đè lên trên, không thay thế khung chat */}
       <NewChatState
-        open={isNewChatOpen}
-        onClose={() => setIsNewChatOpen(false)}
-        onCreated={(session) => {
-          setIsNewChatOpen(false)
-          setBlocked(false)
-          setManualSessionId(session.id)
-        }}
+        open={showNewChat}
+        onClose={() => setShowNewChat(false)}
+        onCreated={handleCreated}
         onBlocked={() => {
-          setIsNewChatOpen(false)
-          setBlocked(true)
+          setShowNewChat(false)
+          setUploadRequired(true)
         }}
       />
     </div>

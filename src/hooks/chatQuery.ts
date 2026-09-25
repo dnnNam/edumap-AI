@@ -38,3 +38,18 @@ export const useChatSessionQuery = (sessionId: string | null) => {
     refetchOnWindowFocus: false,
   })
 }
+
+export const useSendChatMessageMutation = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: ({ sessionId, content }: { sessionId: string; content: string }) =>
+      chatRepo.sendMessage(sessionId, { content }),
+
+    // Return promise để mutation vẫn ở trạng thái pending cho tới khi refetch xong:
+    // lúc callback onSuccess ở component chạy thì cache đã có tin nhắn thật từ server,
+    // component xóa tin nhắn tạm ngay lúc đó -> không bị hiện trùng 2 lần.
+    // Prefix ['chat-sessions'] làm mới cả session đang mở lẫn danh sách (sidebar sắp xếp theo lastMessageAt).
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: CHAT_SESSIONS_KEY }),
+  })
+}
