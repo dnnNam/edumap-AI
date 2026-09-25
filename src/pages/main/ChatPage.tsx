@@ -53,7 +53,12 @@ export default function ChatPage() {
             <ChatUploadRequiredState />
           ) : activeSessionId ? (
             // key={activeSessionId}: remount ChatConverstation khi đổi session, tự reset state nội bộ (pending messages, input...)
-            <ChatConverstation key={activeSessionId} sessionId={activeSessionId} />
+            <ChatConverstation
+              key={activeSessionId}
+              sessionId={activeSessionId}
+              // Xóa xong -> quay về ChatEmptyState (activeSessionId = null)
+              onDeleted={() => setActiveSessionId(null)}
+            />
           ) : (
             <ChatEmptyState onNewChat={() => setShowNewChat(true)} />
           )}

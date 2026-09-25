@@ -1,11 +1,14 @@
-import { Send, Sparkles, Trash2 } from 'lucide-react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { AlertTriangle, Loader2, Send, Sparkles, Trash2, X } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import type { Components } from 'react-markdown'
-import { useChatSessionQuery, useSendChatMessageMutation } from '../../../hooks/chatQuery'
+import { useChatSessionQuery, useDeleteChatSessionMutation, useSendChatMessageMutation } from '../../../hooks/chatQuery'
 import type { ChatMessage } from '../../../types/api/chat.types'
 import { getFullNameFromLS } from '../../../utils/auth'
+
+const EASE = [0.22, 1, 0.36, 1] as const
 
 const SUGGESTIONS: string[] = [
   'Analyze my GitHub and suggest projects',
@@ -39,7 +42,92 @@ const markdownComponents: Components = {
   ),
 }
 
-export default function ChatConverstation({ sessionId }: { sessionId: string }) {
+// Modal xác nhận xóa — thay cho window.confirm() mặc định của trình duyệt (xấu, không style được).
+// Style đồng bộ với NewChatState.tsx (cùng backdrop blur + card bo góc + framer-motion).
+function DeleteConfirmModal({
+  open,
+  isDeleting,
+  onCancel,
+  onConfirm,
+}: {
+  open: boolean
+  isDeleting: boolean
+  onCancel: () => void
+  onConfirm: () => void
+}) {
+  return (
+    <AnimatePresence>
+      {open && (
+        <div className='fixed inset-0 z-50 flex items-center justify-center px-4'>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className='absolute inset-0 bg-gray-900/40 backdrop-blur-[2px]'
+            onClick={() => !isDeleting && onCancel()}
+          />
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.94, y: 12 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.94, y: 12 }}
+            transition={{ duration: 0.25, ease: EASE }}
+            className='relative w-full max-w-sm bg-white border border-gray-200 rounded-2xl shadow-lg p-8'
+          >
+            <button
+              type='button'
+              onClick={onCancel}
+              disabled={isDeleting}
+              className='absolute top-5 right-5 text-gray-400 hover:text-gray-600 disabled:opacity-50 transition-colors'
+              aria-label='Đóng'
+            >
+              <X className='w-4.5 h-4.5' />
+            </button>
+
+            <div className='w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center'>
+              <AlertTriangle className='w-5 h-5 text-red-500' />
+            </div>
+            <h2 className='mt-4 text-[17px] font-semibold text-gray-900'>Xóa cuộc trò chuyện này?</h2>
+            <p className='mt-1.5 text-sm text-gray-500'>
+              Toàn bộ tin nhắn trong phiên chat này sẽ bị xóa vĩnh viễn. Hành động này không thể hoàn tác.
+            </p>
+
+            <div className='mt-6 flex items-center justify-end gap-3'>
+              <button
+                type='button'
+                onClick={onCancel}
+                disabled={isDeleting}
+                className='rounded-xl border border-gray-200 text-gray-900 text-sm font-medium px-4 py-2.5 hover:bg-gray-50 disabled:opacity-60 transition'
+              >
+                Hủy
+              </button>
+              <button
+                type='button'
+                onClick={onConfirm}
+                disabled={isDeleting}
+                className='flex items-center gap-2 rounded-xl bg-red-600 hover:bg-red-700 disabled:opacity-70 text-white text-sm font-medium px-4 py-2.5 transition'
+              >
+                {isDeleting ? <Loader2 className='w-4 h-4 animate-spin' /> : <Trash2 className='w-4 h-4' />}
+                Xóa
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
+  )
+}
+
+export default function ChatConverstation({
+  sessionId,
+  onDeleted,
+}: {
+  sessionId: string
+  // Gọi khi xóa session thành công. ChatPage nhận callback này để reset activeSessionId
+  // về null -> tự động quay lại ChatEmptyState (không cần ChatConverstation tự biết về routing/state cha).
+  onDeleted?: () => void
+}) {
   const fullName = getFullNameFromLS()
   const [input, setInput] = useState('')
   const bottomRef = useRef<HTMLDivElement>(null)
@@ -48,6 +136,10 @@ export default function ChatConverstation({ sessionId }: { sessionId: string }) 
   const session = sessionResponse?.data?.data
 
   const { mutate: sendMessage, isPending: isSending } = useSendChatMessageMutation()
+  const { mutate: deleteSession, isPending: isDeleting } = useDeleteChatSessionMutation()
+
+  // Bật/tắt modal xác nhận xóa (thay cho window.confirm)
+  const [confirmOpen, setConfirmOpen] = useState(false)
 
   // Tin nhắn thật từ API
   const apiMessages: ChatMessage[] = useMemo(() => {
@@ -101,6 +193,17 @@ export default function ChatConverstation({ sessionId }: { sessionId: string }) 
     )
   }
 
+  const handleConfirmDelete = () => {
+    if (isDeleting) return
+    deleteSession(sessionId, {
+      onSuccess: () => {
+        setConfirmOpen(false)
+        onDeleted?.()
+      },
+      onError: () => setConfirmOpen(false),
+    })
+  }
+
   if (isLoading || !session) {
     return (
       <div className='flex-1 flex items-center justify-center text-sm text-gray-400'>Đang tải cuộc trò chuyện...</div>
@@ -124,7 +227,7 @@ export default function ChatConverstation({ sessionId }: { sessionId: string }) 
         </div>
         <button
           type='button'
-          onClick={() => window.confirm('Xóa cuộc trò chuyện này?')}
+          onClick={() => setConfirmOpen(true)}
           aria-label='Xóa cuộc trò chuyện'
           title='Xóa cuộc trò chuyện'
           className='w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors'
@@ -220,6 +323,13 @@ export default function ChatConverstation({ sessionId }: { sessionId: string }) 
           </div>
         </div>
       </div>
+
+      <DeleteConfirmModal
+        open={confirmOpen}
+        isDeleting={isDeleting}
+        onCancel={() => setConfirmOpen(false)}
+        onConfirm={handleConfirmDelete}
+      />
     </>
   )
 }

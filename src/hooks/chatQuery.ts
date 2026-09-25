@@ -53,3 +53,25 @@ export const useSendChatMessageMutation = () => {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: CHAT_SESSIONS_KEY }),
   })
 }
+
+export const useDeleteChatSessionMutation = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (sessionId: string) => chatRepo.deleteSession(sessionId),
+    onSuccess: (response, sessionId) => {
+      toast.success(response.data.data.message || 'Đã xóa cuộc trò chuyện.')
+
+      // Hủy request đang bay (nếu có) rồi xóa hẳn cache chi tiết của session vừa xóa —
+      // KHÔNG dùng invalidateQueries cho key này vì query GET /chat/sessions/:id vẫn có thể
+      // đang "enabled" (component chưa kịp unmount) -> bị trigger refetch -> BE trả 404
+      // vì session đã không còn tồn tại nữa.
+      queryClient.cancelQueries({ queryKey: [...CHAT_SESSIONS_KEY, sessionId] })
+      queryClient.removeQueries({ queryKey: [...CHAT_SESSIONS_KEY, sessionId] })
+
+      // exact: true -> chỉ làm mới đúng danh sách sessions, không cascade sang các
+      // session detail khác đang mở (nếu không set exact, prefix ['chat-sessions'] sẽ match luôn chúng)
+      queryClient.invalidateQueries({ queryKey: CHAT_SESSIONS_KEY, exact: true })
+    },
+  })
+}

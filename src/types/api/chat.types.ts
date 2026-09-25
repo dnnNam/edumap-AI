@@ -45,3 +45,10 @@ export interface ChatMessage {
   role: 'user' | 'assistant'
   text: string
 }
+
+export interface DeleteChatSessionData {
+  message: string
+  sessionId: string
+}
+
+export type DeleteChatSessionResponse = ApiResponse<DeleteChatSessionData>

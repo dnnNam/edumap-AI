@@ -6,6 +6,7 @@ import type {
   CreateChatSessionPayload,
   SendChatMessagePayload,
   SendChatMessageResponse,
+  DeleteChatSessionResponse,
 } from '../types/api/chat.types'
 
 class ChatRepository {
@@ -31,6 +32,10 @@ class ChatRepository {
       // AI trả lời có thể lâu hơn 10s mặc định của http.ts, nâng lên 2 phút như generateSkillTree
       timeout: 120_000,
     })
+  }
+
+  deleteSession(sessionId: string) {
+    return http.delete<DeleteChatSessionResponse>(`${this.PREFIX}/sessions/${sessionId}`)
   }
 }
 
