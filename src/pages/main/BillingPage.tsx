@@ -1,18 +1,28 @@
 import { Check, CreditCard, FileText, Minus } from 'lucide-react'
-import { useBillingPlansQuery } from '../../hooks/billingQuery'
-import type { PlanCode } from '../../types/api/Billing.type'
-import { FEATURE_ROWS, formatPrice, getCardHighlights, getYearlySavingBadge, PLAN_COPY_EN } from '../../utils/billing'
-
-// TODO: replace with the user's real plan (fetch from /users/me or /billing/subscription once the BE has that endpoint).
-// Hardcoded to FREE for now to match the mock ("You're on Free.")
-const CURRENT_PLAN_CODE: PlanCode = 'FREE'
+import { useBillingPlansQuery, useMySubscriptionQuery } from '../../hooks/billingQuery'
+import { type PlanCode } from '../../types/api/billing.type'
+import {
+  FEATURE_ROWS,
+  formatDate,
+  formatPrice,
+  getCardHighlights,
+  getYearlySavingBadge,
+  PLAN_COPY_EN,
+  PLAN_RANK,
+} from '../../utils/billing'
 
 export default function SubscriptionPage() {
   const { data, isLoading, isError } = useBillingPlansQuery()
-  const plans = data?.data?.data ?? []
-  const currentPlan = plans.find((p) => p.code === CURRENT_PLAN_CODE)
+  const { data: meData, isLoading: isMeLoading } = useMySubscriptionQuery()
 
-  if (isLoading) {
+  const plans = data?.data?.data ?? []
+  const mySub = meData?.data?.data
+  // Chưa có subscription active nào (user mới, chưa từng mua) -> BE trả planCode: 'FREE' theo hợp đồng API hiện tại;
+  // nếu sau này /billing/me trả 404 cho case "chưa có gì" thì fallback FREE ở đây vẫn đúng.
+  const currentPlanCode: PlanCode = mySub?.planCode ?? 'FREE'
+  const currentPlan = plans.find((p) => p.code === currentPlanCode)
+
+  if (isLoading || isMeLoading) {
     return <div className='flex-1 flex items-center justify-center text-sm text-gray-400'>Loading plans...</div>
   }
 
@@ -33,13 +43,17 @@ export default function SubscriptionPage() {
           {(currentPlan && PLAN_COPY_EN[currentPlan.code]?.name) ?? currentPlan?.name ?? '—'}
         </span>
         .
+        {mySub?.expiresAt && mySub.isActive && (
+          <span className='text-gray-400'> Renews on {formatDate(mySub.expiresAt)}.</span>
+        )}
       </p>
 
       {/* 3 plan cards */}
       <div className='mt-6 grid grid-cols-1 md:grid-cols-3 gap-5'>
         {plans.map((plan) => {
           const { amount, period } = formatPrice(plan)
-          const isCurrent = plan.code === CURRENT_PLAN_CODE
+          const isCurrent = plan.code === currentPlanCode
+          const isDowngrade = !isCurrent && PLAN_RANK[plan.code] < PLAN_RANK[currentPlanCode]
           const isPopular = plan.code === 'PRO_STUDENT'
           const savingBadge = getYearlySavingBadge(plan, plans)
           const copy = PLAN_COPY_EN[plan.code]
@@ -85,10 +99,12 @@ export default function SubscriptionPage() {
                 className={`mt-5 w-full rounded-xl py-2.5 text-sm font-medium transition-colors ${
                   isCurrent
                     ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                    : 'bg-indigo-600 hover:bg-indigo-700 text-white'
+                    : isDowngrade
+                      ? 'border border-gray-200 text-gray-700 hover:bg-gray-50'
+                      : 'bg-indigo-600 hover:bg-indigo-700 text-white'
                 }`}
               >
-                {isCurrent ? 'Current plan' : 'Upgrade'}
+                {isCurrent ? 'Current plan' : isDowngrade ? 'Downgrade' : 'Upgrade'}
               </button>
 
               <ul className='mt-5 space-y-2.5'>
@@ -152,9 +168,9 @@ export default function SubscriptionPage() {
             Payment method
           </div>
           <p className='mt-2 text-sm text-gray-500'>
-            {currentPlan?.code === 'FREE'
+            {currentPlanCode === 'FREE'
               ? 'No payment method on file. Upgrade to unlock paid features.'
-              : 'Updating payment info...'}
+              : 'Paid via SePay (bank transfer / QR).'}
           </p>
         </div>
         <div className='rounded-2xl border border-gray-200 bg-white p-5'>
@@ -162,7 +178,20 @@ export default function SubscriptionPage() {
             <FileText className='w-4 h-4 text-gray-400' />
             Billing history
           </div>
-          <p className='mt-2 text-sm text-gray-500'>No invoices yet.</p>
+          {mySub?.latestPayment ? (
+            <div className='mt-2 text-sm text-gray-600 space-y-1'>
+              <p>
+                Order <span className='font-medium text-gray-900'>{mySub.latestPayment.orderCode}</span> ·{' '}
+                {mySub.latestPayment.amountVnd.toLocaleString('en-US')}₫
+              </p>
+              <p className='text-xs text-gray-400'>
+                {mySub.latestPayment.status}
+                {mySub.latestPayment.paidAt && ` · ${formatDate(mySub.latestPayment.paidAt)}`}
+              </p>
+            </div>
+          ) : (
+            <p className='mt-2 text-sm text-gray-500'>No invoices yet.</p>
+          )}
         </div>
       </div>
     </div>

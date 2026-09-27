@@ -1,4 +1,46 @@
-import type { BillingPlan, PlanCode } from '../types/api/Billing.type'
+import type { BillingPlan, PlanCode } from '../types/api/billing.type'
+
+import { Briefcase, ClipboardCheck, FileText, MessageSquare, Share2, type LucideIcon } from 'lucide-react'
+import { GitBranch } from 'lucide-react'
+import type { UsageFeatureCode } from '../types/api/billing.type'
+
+export const USAGE_FEATURE_META: Record<UsageFeatureCode, { title: string; subtitle: string; icon: LucideIcon }> = {
+  AI_CHAT: {
+    title: 'AI Mentor chat',
+    subtitle: 'Messages with your AI mentor',
+    icon: MessageSquare,
+  },
+  SKILL_TREE_GENERATION: {
+    title: 'Skill tree generation',
+    subtitle: 'New skill tree analyses',
+    icon: Share2,
+  },
+  GITHUB_SYNC: {
+    title: 'GitHub sync',
+    subtitle: 'Profile syncs from GitHub',
+    icon: GitBranch,
+  },
+  PDF_REPORT: {
+    title: 'PDF report',
+    subtitle: 'Exported analysis reports',
+    icon: FileText,
+  },
+  RESUME_REVIEW: {
+    title: 'Resume review',
+    subtitle: 'AI resume reviews',
+    icon: ClipboardCheck,
+  },
+  JOB_MATCHING: {
+    title: 'Job matching',
+    subtitle: 'Personalized job matches',
+    icon: Briefcase,
+  },
+}
+
+export const USAGE_WINDOW_LABEL: Record<string, string> = {
+  DAILY: 'Daily',
+  MONTHLY: 'Monthly',
+}
 
 export function formatPrice(plan: BillingPlan) {
   if (plan.priceVnd === 0) return { amount: '0₫', period: '/month' }
@@ -94,4 +136,14 @@ export const PLAN_COPY_EN: Record<PlanCode, { name: string; description: string 
     name: 'Premium',
     description: 'Top-tier plan with higher limits and priority AI processing.',
   },
+}
+
+export const PLAN_RANK: Record<PlanCode, number> = { FREE: 0, PRO_STUDENT: 1, PREMIUM: 2 }
+
+export function formatDate(iso: string) {
+  return new Intl.DateTimeFormat('en-US', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(iso))
+}
+
+export function formatCycleDate(iso: string) {
+  return new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(iso))
 }

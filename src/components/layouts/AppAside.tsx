@@ -5,6 +5,7 @@ import {
   BookOpen,
   Briefcase,
   FolderOpen,
+  Gauge,
   LayoutGrid,
   LogOut,
   Map,
@@ -50,6 +51,7 @@ const NAV_ITEMS: NavItem[] = [
 
 const ACCOUNT_ITEMS: NavItem[] = [
   { icon: Award, label: 'Subscription', to: '/subscription', roles: ['STUDENT', 'MENTOR', 'MODERATOR'] },
+  { icon: Gauge, label: 'Usage', to: '/usage', roles: ['STUDENT', 'MENTOR', 'MODERATOR'] },
   { icon: Settings, label: 'Settings', to: '/settings' }, // Tất cả role đều có settings
   { icon: Shield, label: 'Admin', to: '/admin', roles: ['ADMIN'] }, // Chỉ ADMIN thấy
 ]

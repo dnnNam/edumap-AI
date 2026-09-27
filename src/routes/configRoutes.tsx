@@ -19,6 +19,7 @@ import UploadPage from '../pages/main/UploadAndAnalyze'
 import SkillTreePage from '../pages/main/SkillTree'
 import NotificationsPage from '../pages/main/NotificationPage'
 import SubscriptionPlans from '../pages/main/BillingPage'
+import BillingUsagePage from '../pages/main/BillingUsagePage'
 
 const router = createBrowserRouter([
   {
@@ -50,7 +51,8 @@ const router = createBrowserRouter([
           { path: '/upload', Component: UploadPage },
           { path: '/skill-tree', Component: SkillTreePage },
           { path: '/notifications', Component: NotificationsPage },
-          { path: 'subscription', Component: SubscriptionPlans },
+          { path: '/subscription', Component: SubscriptionPlans },
+          { path: '/usage', Component: BillingUsagePage },
           {
             Component: AdminRoute, // gác thêm 1 lớp checkRole trước khi vào /admin
             children: [{ path: '/admin', Component: AdminPermissionsPage }],
