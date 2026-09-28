@@ -4,6 +4,7 @@ import { toast } from 'sonner'
 import { buildVietQrUrl, formatCountdown, type BillingPlan, type PaymentOrder } from '../../../types/api/billing.type'
 import { useMySubscriptionQuery } from '../../../hooks/billingQuery'
 import { formatPrice } from '../../../utils/billing'
+import { useQueryClient } from '@tanstack/react-query'
 
 interface Props {
   payment: PaymentOrder
@@ -30,9 +31,11 @@ export default function PaymentModal({ payment, plan, onClose }: Props) {
   const isPaid = !!mySub?.isActive && mySub.planCode === payment.planCode
 
   // Webhook SePay xong -> BE cập nhật subscription -> /billing/me trả gói mới -> đóng modal
+  const queryClient = useQueryClient()
   useEffect(() => {
     if (isPaid) {
       toast.success('Payment successful! Your plan has been upgraded.')
+      queryClient.invalidateQueries({ queryKey: ['profile'] }) // header + Settings + Profile cập nhật gói
       onClose()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

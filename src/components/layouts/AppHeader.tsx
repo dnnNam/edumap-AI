@@ -1,6 +1,7 @@
 import { Search, Bell, Sparkles, ChevronRight } from 'lucide-react'
 import { useNavigate } from 'react-router'
 import { useUnreadNotificationsCount } from '../../hooks/notificationQuery'
+import Avatar from '../ui/Avatar'
 
 export default function AppHeader({
   logoText = 'EduMap AI',
@@ -61,7 +62,7 @@ export default function AppHeader({
           </button>
 
           <button className='flex items-center gap-2.5 pl-1'>
-            <img src='https://i.pravatar.cc/64?img=12' alt={userName} className='w-9 h-9 rounded-full object-cover' />
+            <Avatar className='w-9 h-9' />
             <div className='hidden sm:flex flex-col items-start leading-tight'>
               <span className='text-sm font-medium text-gray-900'>{userName}</span>
               <span className='text-xs text-gray-500'>{userPlan}</span>

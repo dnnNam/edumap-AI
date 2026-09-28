@@ -8,6 +8,7 @@ import SettingsTabs, { type SettingsTab } from '../../components/ui/SettingTab'
 import { useProfileQuery, useUpdateProfileMutation } from '../../hooks/useUserQuery'
 import type { UserInfor } from '../../types/api/user.type'
 import AppLoadingSkeleton from '../../components/ui/AppLoadingSkeleton'
+import Avatar from '../../components/ui/Avatar'
 
 // ---------- tabs ----------
 
@@ -101,11 +102,7 @@ export default function SettingsPage() {
               <>
                 {/* Avatar */}
                 <div className='mt-4 flex items-center gap-4'>
-                  <img
-                    src='https://i.pravatar.cc/128?img=12'
-                    alt={fullName || 'Avatar'}
-                    className='w-16 h-16 rounded-full object-cover border border-gray-200'
-                  />
+                  <Avatar className='w-16 h-16 border border-gray-200' />
                   <div>
                     <button
                       type='button'
