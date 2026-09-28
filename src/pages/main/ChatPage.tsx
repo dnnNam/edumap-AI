@@ -7,6 +7,7 @@ import ChatUploadRequiredState from '../../components/layouts/chat/ChatUploadReq
 import ChatConverstation from '../../components/layouts/chat/ChatConverstation'
 import ChatEmptyState from '../../components/layouts/chat/ChatEmptyState'
 import NewChatState from '../../components/layouts/chat/NewChatState'
+import AppLoadingSkeleton from '../../components/ui/AppLoadingSkeleton'
 
 // Trang tổng của /chat: quản lý danh sách session + session đang mở,
 // còn việc render nội dung 1 cuộc hội thoại cụ thể giao hết cho ChatConverstation (nhận prop sessionId).
@@ -25,7 +26,7 @@ export default function ChatPage() {
   }
 
   if (isLoading) {
-    return <div className='flex-1 flex items-center justify-center text-sm text-gray-400'>Đang tải...</div>
+    return <AppLoadingSkeleton />
   }
 
   return (

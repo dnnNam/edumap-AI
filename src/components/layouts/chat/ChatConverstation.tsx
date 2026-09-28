@@ -7,6 +7,7 @@ import type { Components } from 'react-markdown'
 import { useChatSessionQuery, useDeleteChatSessionMutation, useSendChatMessageMutation } from '../../../hooks/chatQuery'
 import type { ChatMessage } from '../../../types/api/chat.types'
 import { getFullNameFromLS } from '../../../utils/auth'
+import AppLoadingSkeleton from '../../ui/AppLoadingSkeleton'
 
 const EASE = [0.22, 1, 0.36, 1] as const
 
@@ -204,11 +205,7 @@ export default function ChatConverstation({
     })
   }
 
-  if (isLoading || !session) {
-    return (
-      <div className='flex-1 flex items-center justify-center text-sm text-gray-400'>Đang tải cuộc trò chuyện...</div>
-    )
-  }
+  if (isLoading || !session) return <AppLoadingSkeleton />
 
   return (
     <>

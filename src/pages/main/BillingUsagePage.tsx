@@ -6,15 +6,14 @@ import { PLAN_COPY_EN } from '../../utils/billing'
 
 import UsageCard from '../../components/layouts/billing-usage/UsageCard'
 import StatCard from '../../components/layouts/billing-usage/StatCard'
+import AppLoadingSkeleton from '../../components/ui/AppLoadingSkeleton'
 
 export default function BillingUsagePage() {
   const { data, isLoading, isError } = useBillingUsageQuery()
   const payload = data?.data?.data
   const usage = payload?.usage ?? []
 
-  if (isLoading) {
-    return <div className='flex-1 flex items-center justify-center text-sm text-gray-400'>Loading usage...</div>
-  }
+  if (isLoading) return <AppLoadingSkeleton />
 
   if (isError || !payload) {
     return (

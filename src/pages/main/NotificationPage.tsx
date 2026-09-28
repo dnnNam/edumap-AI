@@ -9,6 +9,7 @@ import {
   useMarkAllNotificationsReadMutation,
 } from '../../hooks/notificationQuery'
 import type { Notification, NotificationType } from '../../types/api/notification.types'
+import AppLoadingSkeleton from '../../components/ui/AppLoadingSkeleton'
 
 const TYPE_CONFIG: Record<NotificationType, { label: string; icon: LucideIcon; iconClass: string; bgClass: string }> = {
   INFO: { label: 'Info', icon: Info, iconClass: 'text-blue-600', bgClass: 'bg-blue-50' },
@@ -153,7 +154,7 @@ export default function NotificationsPage() {
 
         <div className='bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden'>
           {isLoading ? (
-            <div className='p-10 text-center text-sm text-gray-400'>Đang tải thông báo...</div>
+            <AppLoadingSkeleton />
           ) : isError ? (
             <div className='p-10 text-center text-sm text-red-500'>Không thể tải thông báo. Vui lòng thử lại.</div>
           ) : filtered.length === 0 ? (

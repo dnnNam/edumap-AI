@@ -92,3 +92,44 @@ export interface BillingUsage {
 }
 
 export type BillingUsageResponse = ApiResponse<BillingUsage>
+
+export interface CreatePaymentBody {
+  planCode: Exclude<PlanCode, 'FREE'> // BE chỉ nhận PRO_STUDENT | PREMIUM
+}
+
+// data của POST /billing/payments (201)
+export interface PaymentOrder {
+  paymentId: string
+  orderCode: string
+  planCode: PlanCode
+  planName: string
+  amountVnd: number
+  status: PaymentStatus
+  provider: string
+  bankName: string
+  accountNumber: string
+  accountName: string
+  transferContent: string
+  expiredAt: string
+}
+
+export type CreatePaymentResponse = ApiResponse<PaymentOrder>
+// GET /billing/payments/{id} dùng để poll, giả định trả cùng shape
+export type PaymentDetailResponse = ApiResponse<PaymentOrder>
+
+// Ghép URL ảnh QR VietQR từ dữ liệu BE trả về
+export function buildVietQrUrl(p: PaymentOrder) {
+  const params = new URLSearchParams({
+    amount: String(p.amountVnd),
+    addInfo: p.transferContent,
+    accountName: p.accountName,
+  })
+  return `https://img.vietqr.io/image/${p.bankName}-${p.accountNumber}-compact2.png?${params.toString()}`
+}
+
+export function formatCountdown(ms: number) {
+  const total = Math.max(0, Math.floor(ms / 1000))
+  const m = String(Math.floor(total / 60)).padStart(2, '0')
+  const s = String(total % 60).padStart(2, '0')
+  return `${m}:${s}`
+}

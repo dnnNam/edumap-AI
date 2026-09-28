@@ -1,6 +1,8 @@
+import { useState } from 'react'
 import { Check, CreditCard, FileText, Minus } from 'lucide-react'
-import { useBillingPlansQuery, useMySubscriptionQuery } from '../../hooks/billingQuery'
-import { type PlanCode } from '../../types/api/billing.type'
+
+import { useBillingPlansQuery, useCreatePaymentMutation, useMySubscriptionQuery } from '../../hooks/billingQuery'
+import { type PaymentOrder, type PlanCode } from '../../types/api/billing.type'
 import {
   FEATURE_ROWS,
   formatDate,
@@ -10,10 +12,16 @@ import {
   PLAN_COPY_EN,
   PLAN_RANK,
 } from '../../utils/billing'
+import PaymentModal from '../../components/layouts/billing/PaymentModal'
+import AppLoadingSkeleton from '../../components/ui/AppLoadingSkeleton'
 
 export default function SubscriptionPage() {
   const { data, isLoading, isError } = useBillingPlansQuery()
   const { data: meData, isLoading: isMeLoading } = useMySubscriptionQuery()
+
+  // Tạo đơn thanh toán + đơn đang hiển thị trong modal QR (phải đặt trước các return sớm bên dưới)
+  const createPayment = useCreatePaymentMutation()
+  const [payment, setPayment] = useState<PaymentOrder | null>(null)
 
   const plans = data?.data?.data ?? []
   const mySub = meData?.data?.data
@@ -22,8 +30,13 @@ export default function SubscriptionPage() {
   const currentPlanCode: PlanCode = mySub?.planCode ?? 'FREE'
   const currentPlan = plans.find((p) => p.code === currentPlanCode)
 
+  const handleUpgrade = (planCode: PlanCode) => {
+    if (planCode === 'FREE') return // BE không cho tạo payment gói FREE
+    createPayment.mutate({ planCode }, { onSuccess: (res) => setPayment(res.data.data) })
+  }
+
   if (isLoading || isMeLoading) {
-    return <div className='flex-1 flex items-center justify-center text-sm text-gray-400'>Loading plans...</div>
+    return <AppLoadingSkeleton />
   }
 
   if (isError || plans.length === 0) {
@@ -57,6 +70,7 @@ export default function SubscriptionPage() {
           const isPopular = plan.code === 'PRO_STUDENT'
           const savingBadge = getYearlySavingBadge(plan, plans)
           const copy = PLAN_COPY_EN[plan.code]
+          const isCreatingThis = createPayment.isPending && createPayment.variables?.planCode === plan.code
 
           return (
             <div
@@ -95,16 +109,26 @@ export default function SubscriptionPage() {
 
               <button
                 type='button'
-                disabled={isCurrent}
+                disabled={isCurrent || createPayment.isPending}
+                onClick={() => {
+                  // Chỉ Upgrade mới tạo đơn; Downgrade giữ nguyên như cũ (chưa có API hạ gói)
+                  if (!isCurrent && !isDowngrade) handleUpgrade(plan.code)
+                }}
                 className={`mt-5 w-full rounded-xl py-2.5 text-sm font-medium transition-colors ${
                   isCurrent
                     ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                     : isDowngrade
-                      ? 'border border-gray-200 text-gray-700 hover:bg-gray-50'
-                      : 'bg-indigo-600 hover:bg-indigo-700 text-white'
+                      ? 'border border-gray-200 text-gray-700 hover:bg-gray-50 disabled:opacity-60 disabled:cursor-not-allowed'
+                      : 'bg-indigo-600 hover:bg-indigo-700 text-white disabled:opacity-60 disabled:cursor-not-allowed'
                 }`}
               >
-                {isCurrent ? 'Current plan' : isDowngrade ? 'Downgrade' : 'Upgrade'}
+                {isCurrent
+                  ? 'Current plan'
+                  : isDowngrade
+                    ? 'Downgrade'
+                    : isCreatingThis
+                      ? 'Creating order…'
+                      : 'Upgrade'}
               </button>
 
               <ul className='mt-5 space-y-2.5'>
@@ -194,6 +218,15 @@ export default function SubscriptionPage() {
           )}
         </div>
       </div>
+
+      {/* Modal QR thanh toán: tự đóng khi /billing/me trả về gói mới */}
+      {payment && (
+        <PaymentModal
+          payment={payment}
+          plan={plans.find((p) => p.code === payment.planCode)}
+          onClose={() => setPayment(null)}
+        />
+      )}
     </div>
   )
 }

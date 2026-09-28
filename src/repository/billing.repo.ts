@@ -1,5 +1,11 @@
 import http from '../config/http'
-import type { BillingPlanListResponse, BillingUsageResponse, MySubscriptionResponse } from '../types/api/billing.type'
+import type {
+  BillingPlanListResponse,
+  BillingUsageResponse,
+  CreatePaymentBody,
+  CreatePaymentResponse,
+  MySubscriptionResponse,
+} from '../types/api/billing.type'
 
 class BillingRepository {
   private readonly PREFIX = '/billing'
@@ -16,6 +22,10 @@ class BillingRepository {
 
   getUsage() {
     return http.get<BillingUsageResponse>(`${this.PREFIX}/usage`)
+  }
+
+  createPayment(body: CreatePaymentBody) {
+    return http.post<CreatePaymentResponse>(`${this.PREFIX}/payments`, body)
   }
 }
 
