@@ -38,6 +38,12 @@ class SkillResourceRepository {
       { params: { page, limit }, timeout: 60_000 },
     )
   }
+
+  recordHistory(skillResourceId: string) {
+    return http.post(`${this.PREFIX}/skill-resources/history`, {
+      skillResourceId,
+    })
+  }
 }
 
 export const skillResourceRepo = new SkillResourceRepository()

@@ -36,3 +36,13 @@ export const useFetchMoreSkillResourcesMutation = () => {
     },
   })
 }
+
+export const useRecordResourceHistoryMutation = () => {
+  return useMutation({
+    mutationFn: (skillResourceId: string) => skillResourceRepo.recordHistory(skillResourceId),
+    onError: () => {
+      // Lỗi history không quan trọng, không toast
+      console.warn('Failed to record resource history')
+    },
+  })
+}

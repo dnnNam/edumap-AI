@@ -1,6 +1,7 @@
 import { BookOpen, ExternalLink, FlaskConical, Newspaper, Play, PlayCircle, Star } from 'lucide-react'
 import { useState } from 'react'
 import type { SkillResource } from '../../types/api/skillResource.types'
+import { useRecordResourceHistoryMutation } from '../../hooks/skillResourceQuery'
 import {
   cleanTitle,
   getFaviconUrl,
@@ -80,12 +81,17 @@ function ResourceThumbnail({ resource }: { resource: SkillResource }) {
 export default function ResourceCard({ resource, skillName }: { resource: SkillResource; skillName?: string }) {
   // API /top có resource.skill; API theo skill thì truyền skillName từ trang cha
   const name = resource.skill?.name ?? skillName
-
+  const { mutate: recordHistory } = useRecordResourceHistoryMutation()
+  const handleClick = () => {
+    // ← THÊM FUNCTION NÀY
+    recordHistory(resource.id)
+  }
   return (
     <a
       href={resource.url}
       target='_blank'
       rel='noreferrer'
+      onClick={handleClick} // ← THÊM DÒNG NÀY
       className='group h-full flex flex-col rounded-2xl border border-gray-200 bg-white overflow-hidden transition hover:shadow-md hover:border-gray-300'
     >
       <ResourceThumbnail resource={resource} />
