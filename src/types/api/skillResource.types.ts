@@ -1,17 +1,11 @@
 import type { ApiResponse } from './auth.types'
 
-export type SkillResourceType =
-  | 'DOCUMENTATION'
-  | 'INTERACTIVE_LAB'
-  | 'VIDEO_COURSE'
-  // Mới thấy 3 giá trị này trong mẫu. Hỏi BE enum đầy đủ (vd: ARTICLE, BOOK, ...)
-  // rồi bổ sung. Tạm thời cho phép string khác để không vỡ type khi BE thêm loại mới.
-  | (string & {})
+export type SkillResourceType = 'DOCUMENTATION' | 'INTERACTIVE_LAB' | 'VIDEO_COURSE' | 'ARTICLE' | (string & {})
 
 export interface SkillResourceSkill {
   id: string
-  name: string // 'Node.js' | 'Redis' ...
-  category: string // 'Frameworks' | 'Databases' ...
+  name: string
+  category: string
 }
 
 export interface SkillResource {
@@ -22,10 +16,11 @@ export interface SkillResource {
   title: string
   url: string
   cost: number // 0 = miễn phí
-  rating: number // 4.8, 5, 4.9 ...
+  rating: number
   durationHours: number
-  createdAt: string // ISO
-  skill: SkillResourceSkill
+  createdAt: string
+  // Chỉ API /top có kèm skill
+  skill?: SkillResourceSkill
 }
 
 export interface GetTopSkillResourcesParams {
@@ -33,3 +28,27 @@ export interface GetTopSkillResourcesParams {
 }
 
 export type TopSkillResourcesResponse = ApiResponse<SkillResource[]>
+export type SkillResourcesResponse = ApiResponse<SkillResource[]>
+
+// ---- API /skills/:skillId/resources/grouped ----
+export interface SkillResourceGroups {
+  videos: SkillResource[]
+  documentations: SkillResource[] // gồm DOCUMENTATION + ARTICLE
+  practices: SkillResource[]
+}
+
+export interface GroupedSkillResources {
+  skillId: string
+  skillName: string
+  summary: {
+    total: number
+    hasVideo: boolean
+    hasDocs: boolean
+    hasPractice: boolean
+  }
+  data: SkillResourceGroups
+  // youtube | github | devTo | coursera | udemy
+  externalSearchLinks: Record<string, string>
+}
+
+export type GroupedSkillResourcesResponse = ApiResponse<GroupedSkillResources>

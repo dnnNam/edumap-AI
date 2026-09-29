@@ -1,11 +1,10 @@
-import { GitBranch, Sparkles } from 'lucide-react'
+import { GitBranch, Sparkles, BookOpen } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { useMySkillTreeQuery, useToggleSkillNodeMutation, useTogglingNodeIds } from '../../hooks/skillTreeQuery'
 import CategoryFilter from '../../components/layouts/skillTree/CategoryFilter'
 import SkillDetailPanel from '../../components/layouts/skillTree/SkillDetailPanel'
 import SkillTreeSummary from '../../components/layouts/skillTree/SkillTreeSummary'
-
 import { ALL_CATEGORIES, filterTreeByCategory, flattenNodes } from '../../utils/skillTree'
 import {
   SkeletonDetailPanel,
@@ -53,6 +52,10 @@ export default function SkillTreePage() {
   const visibleNodes = useMemo(() => filterTreeByCategory(rootNodes, activeCategory), [rootNodes, activeCategory])
 
   const selectedNode = allNodes.find((n) => n.id === selectedId) ?? null
+
+  const handleViewResources = (node: SkillNode) => {
+    navigate(`/resources/${node.skill.id}`)
+  }
 
   const isEmpty = !isLoading && !isError && allNodes.length === 0
 
@@ -165,8 +168,19 @@ export default function SkillTreePage() {
                 </div>
               </section>
 
-              <div className='lg:sticky lg:top-0'>
+              <div className='lg:sticky lg:top-0 space-y-3'>
                 {isLoading ? <SkeletonDetailPanel /> : <SkillDetailPanel node={selectedNode} />}
+
+                {!isLoading && selectedNode && (
+                  <button
+                    type='button'
+                    onClick={() => handleViewResources(selectedNode)}
+                    className='w-full inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2.5 transition'
+                  >
+                    <BookOpen className='w-4 h-4' />
+                    Xem tài nguyên học
+                  </button>
+                )}
               </div>
             </div>
           </>

@@ -51,7 +51,7 @@ export const getYouTubeThumbnail = (url: string) => {
   return id ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : null
 }
 
-// Logo nhỏ của website (dùng cho card không có ảnh)
+// Logo nhỏ của website (dùng cho nhãn nền tảng)
 export const getFaviconUrl = (url: string) => {
   try {
     return `https://www.google.com/s2/favicons?domain=${new URL(url).hostname}&sz=64`

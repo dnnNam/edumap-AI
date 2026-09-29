@@ -21,6 +21,7 @@ import NotificationsPage from '../pages/main/NotificationPage'
 import SubscriptionPlans from '../pages/main/BillingPage'
 import BillingUsagePage from '../pages/main/BillingUsagePage'
 import ResourcesPage from '../pages/main/ResourcesPage'
+import SkillResourcesPage from '../pages/main/SkillResourcesPage'
 
 const router = createBrowserRouter([
   {
@@ -55,6 +56,7 @@ const router = createBrowserRouter([
           { path: '/subscription', Component: SubscriptionPlans },
           { path: '/usage', Component: BillingUsagePage },
           { path: '/resources', Component: ResourcesPage },
+          { path: '/resources/:skillId', Component: SkillResourcesPage },
           {
             Component: AdminRoute, // gác thêm 1 lớp checkRole trước khi vào /admin
             children: [{ path: '/admin', Component: AdminPermissionsPage }],
