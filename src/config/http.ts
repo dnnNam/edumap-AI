@@ -8,6 +8,9 @@ interface ErrorResponse {
   // thêm các field khác nếu backend của bạn có
 }
 
+// Các endpoint "phụ", lỗi thì im lặng, không toast (vd: ghi lịch sử xem tài nguyên)
+const SILENT_ERROR_URL_SUFFIXES = ['/history']
+
 class Http {
   instance: AxiosInstance
   constructor() {
@@ -53,8 +56,12 @@ class Http {
           return Promise.reject(error) // Return luôn ở đây để không chạy xuống dưới
         }
 
-        // 2. Xử lý Toast error cho các lỗi không phải 422 và 401
-        if (error.response?.status !== HttpStatusCode.UnprocessableContent) {
+        // 2. Endpoint im lặng (history...) -> không toast
+        const url = error.config?.url ?? ''
+        const isSilent = SILENT_ERROR_URL_SUFFIXES.some((suffix) => url.endsWith(suffix))
+
+        // 3. Xử lý Toast error cho các lỗi không phải 422 và 401
+        if (!isSilent && error.response?.status !== HttpStatusCode.UnprocessableContent) {
           // TypeScript đã hiểu error.response.data là ErrorResponse, không cần dùng any
           const data = error.response?.data
           const message = data?.message || error.message

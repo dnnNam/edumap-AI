@@ -65,3 +65,17 @@ export type GroupedSkillResourcesResponse = ApiResponse<GroupedSkillResources>
 // POST /skill-resources/skills/:skillId/resources/fetch-more
 // Trả cùng cấu trúc với /grouped, chứa toàn bộ danh sách đã gộp (cũ + mới)
 export type FetchMoreSkillResourcesResponse = GroupedSkillResourcesResponse
+
+export type SkillResourceDetailResponse = ApiResponse<SkillResource>
+
+// GET /skill-resources/history
+// API structure match thực tế từ backend
+export interface ResourceHistory {
+  id: string
+  userId: string
+  skillResourceId: string // ← Tên field từ API
+  viewedAt: string // ISO timestamp
+  skillResource: SkillResource // ← Tên field từ API (không phải `resource`)
+}
+
+export type ResourceHistoryResponse = ApiResponse<ResourceHistory[]>

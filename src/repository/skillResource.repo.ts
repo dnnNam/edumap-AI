@@ -3,8 +3,10 @@ import type {
   FetchMoreSkillResourcesResponse,
   GetTopSkillResourcesParams,
   GroupedSkillResourcesResponse,
+  SkillResourceDetailResponse,
   SkillResourcesResponse,
   TopSkillResourcesResponse,
+  ResourceHistoryResponse,
 } from '../types/api/skillResource.types'
 
 class SkillResourceRepository {
@@ -42,6 +44,17 @@ class SkillResourceRepository {
   recordHistory(skillResourceId: string) {
     return http.post(`${this.PREFIX}/skill-resources/history`, {
       skillResourceId,
+    })
+  }
+
+  getById(id: string) {
+    return http.get<SkillResourceDetailResponse>(`${this.PREFIX}/skill-resources/${id}`)
+  }
+
+  // GET /api/v1/skill-resources/skill-resources/history
+  getHistory(limit = 20) {
+    return http.get<ResourceHistoryResponse>(`${this.PREFIX}/skill-resources/history`, {
+      params: { limit },
     })
   }
 }

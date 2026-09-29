@@ -1,5 +1,4 @@
-import { Navigate } from 'react-router'
-import AnimatedOutlet from '../components/motion/AnimatedOutlet'
+import { Navigate, Outlet } from 'react-router'
 import AppLoadingSkeleton from '../components/ui/AppLoadingSkeleton'
 import { useMeQuery } from '../hooks/useAuthQuery'
 import { getAccessTokenFromLS, getRoleFromLS } from '../utils/auth'
@@ -27,5 +26,5 @@ export default function AdminRoute() {
     return <Navigate to='/dashboard' replace />
   }
 
-  return <AnimatedOutlet />
+  return <Outlet />
 }

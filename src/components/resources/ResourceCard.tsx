@@ -1,5 +1,6 @@
 import { BookOpen, ExternalLink, FlaskConical, Newspaper, Play, PlayCircle, Star } from 'lucide-react'
 import { useState } from 'react'
+import { useNavigate } from 'react-router'
 import type { SkillResource } from '../../types/api/skillResource.types'
 import { useRecordResourceHistoryMutation } from '../../hooks/skillResourceQuery'
 import {
@@ -11,7 +12,6 @@ import {
   getYouTubeThumbnail,
 } from '../../utils/skillResource'
 
-// Viết đầy đủ class để Tailwind nhận diện
 const TYPE_STYLE: Record<string, { icon: typeof BookOpen; gradient: string }> = {
   DOCUMENTATION: { icon: BookOpen, gradient: 'from-sky-100 via-indigo-100 to-indigo-200 text-indigo-500' },
   INTERACTIVE_LAB: { icon: FlaskConical, gradient: 'from-emerald-100 via-teal-100 to-teal-200 text-teal-600' },
@@ -79,20 +79,25 @@ function ResourceThumbnail({ resource }: { resource: SkillResource }) {
 }
 
 export default function ResourceCard({ resource, skillName }: { resource: SkillResource; skillName?: string }) {
-  // API /top có resource.skill; API theo skill thì truyền skillName từ trang cha
   const name = resource.skill?.name ?? skillName
+  const navigate = useNavigate()
   const { mutate: recordHistory } = useRecordResourceHistoryMutation()
-  const handleClick = () => {
-    // ← THÊM FUNCTION NÀY
-    recordHistory(resource.id)
+
+  const handleCardClick = () => {
+    navigate(`/resources/detail/${resource.id}`)
   }
+
+  // Mở thẳng tài nguyên từ card: ghi history + mở tab mới, không điều hướng sang trang detail
+  const handleOpenClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    recordHistory(resource.id)
+    window.open(resource.url, '_blank', 'noopener,noreferrer')
+  }
+
   return (
-    <a
-      href={resource.url}
-      target='_blank'
-      rel='noreferrer'
-      onClick={handleClick} // ← THÊM DÒNG NÀY
-      className='group h-full flex flex-col rounded-2xl border border-gray-200 bg-white overflow-hidden transition hover:shadow-md hover:border-gray-300'
+    <div
+      onClick={handleCardClick}
+      className='group h-full flex flex-col rounded-2xl border border-gray-200 bg-white overflow-hidden transition hover:shadow-md hover:border-gray-300 cursor-pointer'
     >
       <ResourceThumbnail resource={resource} />
 
@@ -112,10 +117,17 @@ export default function ResourceCard({ resource, skillName }: { resource: SkillR
               <Star className='w-4 h-4 fill-gray-900 text-gray-900' />
               {resource.rating.toFixed(1)}
             </span>
-            <ExternalLink className='w-4 h-4 text-gray-400 group-hover:text-gray-900 transition-colors' />
+            <button
+              type='button'
+              aria-label='Mở tài nguyên'
+              onClick={handleOpenClick}
+              className='p-2 -m-2 rounded-lg text-gray-400 hover:text-gray-900 transition-colors'
+            >
+              <ExternalLink className='w-4 h-4' />
+            </button>
           </div>
         </div>
       </div>
-    </a>
+    </div>
   )
 }

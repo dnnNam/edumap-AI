@@ -3,6 +3,7 @@ import { skillResourceRepo } from '../repository/skillResource.repo'
 import { getAccessTokenFromLS } from '../utils/auth'
 
 export const GROUPED_KEY = (skillId?: string) => ['skill-resources', 'grouped', skillId]
+export const HISTORY_KEY = () => ['skill-resources', 'history']
 
 export const useTopSkillResourcesQuery = (limit = 50) => {
   return useQuery({
@@ -14,6 +15,7 @@ export const useTopSkillResourcesQuery = (limit = 50) => {
     staleTime: 5 * 60 * 1000,
   })
 }
+
 export const useGroupedSkillResourcesQuery = (skillId?: string, limit = 50) => {
   return useQuery({
     queryKey: GROUPED_KEY(skillId),
@@ -38,11 +40,38 @@ export const useFetchMoreSkillResourcesMutation = () => {
 }
 
 export const useRecordResourceHistoryMutation = () => {
+  const queryClient = useQueryClient()
+
   return useMutation({
     mutationFn: (skillResourceId: string) => skillResourceRepo.recordHistory(skillResourceId),
+    onSuccess: () => {
+      // Invalidate history cache sau khi thêm record mới
+      queryClient.invalidateQueries({ queryKey: HISTORY_KEY() })
+    },
     onError: () => {
       // Lỗi history không quan trọng, không toast
       console.warn('Failed to record resource history')
     },
+  })
+}
+
+export const useSkillResourceByIdQuery = (resourceId?: string) => {
+  return useQuery({
+    queryKey: ['skill-resources', 'by-id', resourceId],
+    queryFn: () => skillResourceRepo.getById(resourceId as string),
+    enabled: !!getAccessTokenFromLS() && !!resourceId,
+    retry: false,
+    refetchOnWindowFocus: false,
+  })
+}
+
+export const useResourceHistoryQuery = (limit = 20) => {
+  return useQuery({
+    queryKey: HISTORY_KEY(),
+    queryFn: () => skillResourceRepo.getHistory(limit),
+    enabled: !!getAccessTokenFromLS(),
+    retry: false,
+    refetchOnWindowFocus: false,
+    staleTime: 2 * 60 * 1000, // 2 min
   })
 }
