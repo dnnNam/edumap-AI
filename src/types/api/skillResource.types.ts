@@ -1,6 +1,12 @@
 import type { ApiResponse } from './auth.types'
 
-export type SkillResourceType = 'DOCUMENTATION' | 'INTERACTIVE_LAB' | 'VIDEO_COURSE' | 'ARTICLE' | (string & {})
+export type SkillResourceType =
+  | 'DOCUMENTATION'
+  | 'INTERACTIVE_LAB'
+  | 'VIDEO_COURSE'
+  | 'ARTICLE'
+  // Cho phép string khác để không vỡ type khi BE thêm loại mới
+  | (string & {})
 
 export interface SkillResourceSkill {
   id: string
@@ -27,10 +33,13 @@ export interface GetTopSkillResourcesParams {
   limit?: number
 }
 
+// GET /skill-resources/top
 export type TopSkillResourcesResponse = ApiResponse<SkillResource[]>
+
+// GET /skill-resources/skills/:skillId/resources (dạng phẳng)
 export type SkillResourcesResponse = ApiResponse<SkillResource[]>
 
-// ---- API /skills/:skillId/resources/grouped ----
+// GET /skill-resources/skills/:skillId/resources/grouped
 export interface SkillResourceGroups {
   videos: SkillResource[]
   documentations: SkillResource[] // gồm DOCUMENTATION + ARTICLE
@@ -52,3 +61,7 @@ export interface GroupedSkillResources {
 }
 
 export type GroupedSkillResourcesResponse = ApiResponse<GroupedSkillResources>
+
+// POST /skill-resources/skills/:skillId/resources/fetch-more
+// Trả cùng cấu trúc với /grouped, chứa toàn bộ danh sách đã gộp (cũ + mới)
+export type FetchMoreSkillResourcesResponse = GroupedSkillResourcesResponse

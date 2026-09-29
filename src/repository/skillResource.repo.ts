@@ -1,5 +1,6 @@
 import http from '../config/http'
 import type {
+  FetchMoreSkillResourcesResponse,
   GetTopSkillResourcesParams,
   GroupedSkillResourcesResponse,
   SkillResourcesResponse,
@@ -11,7 +12,7 @@ class SkillResourceRepository {
 
   // GET /api/v1/skill-resources/top
   getTop(params?: GetTopSkillResourcesParams) {
-    return http.get<TopSkillResourcesResponse>(`${this.PREFIX}/top`, { params })
+    return http.get<TopSkillResourcesResponse>(`${this.PREFIX}/skill-resources/top`, { params })
   }
 
   // GET /api/v1/skill-resources/skills/:skillId/resources (dạng phẳng)
@@ -21,11 +22,21 @@ class SkillResourceRepository {
     })
   }
 
-  // GET /api/v1/skill-resources/skills/:skillId/resources/grouped (đã chia nhóm cho UI)
-  getGroupedBySkill(skillId: string) {
+  getGroupedBySkill(skillId: string, limit = 50) {
+    // ← max 50
     return http.get<GroupedSkillResourcesResponse>(`${this.PREFIX}/skills/${skillId}/resources/grouped`, {
-      timeout: 60_000, // lần đầu BE phải cào dữ liệu nên có thể lâu hơn 10s
+      params: { limit },
+      timeout: 60_000,
     })
+  }
+
+  fetchMore(skillId: string, page: number, limit = 20) {
+    // ← max 20
+    return http.post<FetchMoreSkillResourcesResponse>(
+      `${this.PREFIX}/skills/${skillId}/resources/fetch-more`,
+      {},
+      { params: { page, limit }, timeout: 60_000 },
+    )
   }
 }
 

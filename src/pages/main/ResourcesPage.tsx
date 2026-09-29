@@ -67,6 +67,7 @@ export default function ResourcesPage() {
   }, [resources, search, category, platform, price])
 
   return (
+    // h-full khớp chiều cao <main>, overflow-y-auto tự sinh thanh cuộn khi nội dung dài
     <div className='h-full overflow-y-auto scrollbar-thin'>
       <div className='max-w-6xl mx-auto px-6 py-10 pb-16'>
         <h1 className='text-3xl font-semibold text-gray-900'>Learning Resources</h1>
@@ -74,6 +75,7 @@ export default function ResourcesPage() {
           {isLoading ? 'Đang tải...' : `${resources.length} tài nguyên được đánh giá cao nhất cho lộ trình của bạn.`}
         </p>
 
+        {/* Bộ lọc */}
         <div className='mt-8 rounded-3xl border border-gray-200 bg-white p-6 space-y-4'>
           <div className='relative'>
             <Search className='absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none' />
@@ -106,6 +108,7 @@ export default function ResourcesPage() {
           </div>
         </div>
 
+        {/* Danh sách */}
         <div className='mt-6'>
           {isLoading ? (
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5'>
@@ -118,6 +121,7 @@ export default function ResourcesPage() {
           ) : filtered.length === 0 ? (
             <p className='py-16 text-center text-sm text-gray-500'>Không có tài nguyên nào phù hợp bộ lọc.</p>
           ) : (
+            // key theo bộ lọc để stagger chạy lại mỗi khi kết quả thay đổi
             <MotionStaggerContainer
               key={`${search}|${category}|${platform}|${price}`}
               className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5'

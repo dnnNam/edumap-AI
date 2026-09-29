@@ -1,10 +1,11 @@
-import { ArrowLeft, BookOpen, ExternalLink, FlaskConical, PlayCircle } from 'lucide-react'
-import type { ReactNode } from 'react'
+import { ArrowLeft, BookOpen, ExternalLink, FlaskConical, Loader2, PlayCircle, Plus } from 'lucide-react'
+import { useState, type ReactNode } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import { useNavigate, useParams } from 'react-router'
+import { toast } from 'sonner'
 import { MotionFadeIn, MotionStaggerContainer, MotionStaggerItem } from '../../components/motion/MotionWrapper'
 import ResourceCard from '../../components/resources/ResourceCard'
-import { useGroupedSkillResourcesQuery } from '../../hooks/skillResourceQuery'
+import { useFetchMoreSkillResourcesMutation, useGroupedSkillResourcesQuery } from '../../hooks/skillResourceQuery'
 import type { SkillResource } from '../../types/api/skillResource.types'
 import { getFaviconUrl } from '../../utils/skillResource'
 
@@ -60,11 +61,40 @@ export default function SkillResourcesPage() {
   const { data, isLoading, isError, isFetching, refetch } = useGroupedSkillResourcesQuery(skillId)
   // axios: data.data = body { success, statusCode, data }; body.data = GroupedSkillResources
   const grouped = data?.data?.data
+  console.log('🟡 Lần đầu /grouped:', grouped?.summary.total)
+
+  const { mutate: fetchMore, isPending: isFetchingMore } = useFetchMoreSkillResourcesMutation()
+  // Trang tiếp theo cần cào. BE mặc định là 2, mỗi lần bấm xong thì tăng lên 1
+  const [nextPage, setNextPage] = useState(2)
 
   const groups = grouped?.data
   const skillName = grouped?.skillName ?? ''
   const total = grouped?.summary.total ?? 0
   const externalLinks = Object.entries(grouped?.externalSearchLinks ?? {})
+
+  const handleFetchMore = () => {
+    if (!skillId || isFetchingMore) return
+    const before = total
+    console.log(' Fetching page:', nextPage)
+
+    fetchMore(
+      { skillId, page: nextPage },
+      {
+        onSuccess: (response) => {
+          setNextPage((p) => p + 1)
+          const after = response.data.data.summary.total
+          console.log(' After:', after, '| Total tăng:', after - before)
+
+          if (after > before) {
+            toast.success(`Đã thêm ${after - before} tài nguyên mới!`)
+          } else {
+            console.log(' Hết dữ liệu hoặc chưa có thêm')
+            toast.info('Không tìm thấy thêm tài nguyên mới.')
+          }
+        },
+      },
+    )
+  }
 
   return (
     <div className='h-full overflow-y-auto scrollbar-thin'>
@@ -111,7 +141,7 @@ export default function SkillResourcesPage() {
           <>
             {total === 0 && (
               <p className='mt-10 py-10 text-center text-sm text-gray-500'>
-                Chưa có tài nguyên nào cho kỹ năng này. Bạn thử các link tìm kiếm bên dưới.
+                Chưa có tài nguyên nào cho kỹ năng này. Bạn thử bấm "Tải thêm tài nguyên" hoặc các link bên dưới.
               </p>
             )}
 
@@ -134,6 +164,21 @@ export default function SkillResourcesPage() {
               skillName={skillName}
             />
 
+            {/* Nút tải thêm */}
+            <div className='mt-10 flex flex-col items-center gap-2'>
+              <button
+                type='button'
+                onClick={handleFetchMore}
+                disabled={isFetchingMore}
+                className='inline-flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-70 disabled:cursor-not-allowed text-white text-sm font-medium px-5 py-2.5 transition'
+              >
+                {isFetchingMore ? <Loader2 className='w-4 h-4 animate-spin' /> : <Plus className='w-4 h-4' />}
+                {isFetchingMore ? 'Đang tìm thêm tài nguyên...' : 'Tải thêm tài nguyên'}
+              </button>
+              {isFetchingMore && <p className='text-xs text-gray-500'>Có thể mất vài giây, bạn đợi chút nhé.</p>}
+            </div>
+
+            {/* Link tìm kiếm mở rộng */}
             {externalLinks.length > 0 && (
               <MotionFadeIn className='mt-12 rounded-2xl border border-gray-200 bg-white p-6'>
                 <h2 className='text-[15px] font-semibold text-gray-900'>Tìm thêm ở nơi khác</h2>

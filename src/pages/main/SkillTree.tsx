@@ -53,6 +53,8 @@ export default function SkillTreePage() {
 
   const selectedNode = allNodes.find((n) => n.id === selectedId) ?? null
 
+  // Truyền id của SKILL (node.skill.id), không phải node.id (id của node trong cây)
+  // Tên skill do API /grouped trả về nên không cần truyền qua URL
   const handleViewResources = (node: SkillNode) => {
     navigate(`/resources/${node.skill.id}`)
   }
