@@ -63,9 +63,14 @@ export interface AppAsideProps {
 }
 
 function NavButton({ icon: Icon, label, to, badge }: NavItem) {
+  // NavLink với to="/resources" cần end=true để chỉ active khi exact /resources,
+  // không active khi /resources/history, /resources/:skillId, etc.
+  const isExactMatchOnly = to === '/resources'
+
   return (
     <NavLink
       to={to}
+      end={isExactMatchOnly}
       className={({ isActive }) =>
         `flex items-center justify-between gap-2 px-2.5 py-2 rounded-lg text-sm transition-colors ${
           isActive ? 'bg-gray-100 text-gray-900 font-medium' : 'text-gray-600 hover:bg-gray-50'
