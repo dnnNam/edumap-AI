@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Mail, Lock } from 'lucide-react'
 import { FcGoogle } from 'react-icons/fc'
-import { FaGithub } from 'react-icons/fa'
 import Logo from '../../components/ui/Logo'
 import StatCard from '../../components/ui/StatCard'
 import FormInput from '../../components/ui/FormInput'
@@ -32,6 +31,10 @@ export default function LoginPage() {
   })
 
   const { mutate: loginUser, isPending } = useLoginMutation()
+  const handleGoogleLogin = () => {
+    // Chuyển hướng cả trang sang backend, backend sẽ redirect tiếp sang Google
+    window.location.href = `${import.meta.env.VITE_API_URL}/auth/google`
+  }
 
   // 3. Xử lý Submit
   const onSubmit = (data: LoginPayload) => {
@@ -137,20 +140,14 @@ export default function LoginPage() {
             <div className='flex-1 h-px bg-gray-200' />
           </div>
 
-          <div className='mt-4 grid grid-cols-2 gap-3'>
+          <div className='mt-4'>
             <button
               type='button'
-              className='flex items-center justify-center gap-2 rounded-xl border border-gray-200 py-2.5 text-[15px] text-gray-700 hover:bg-gray-50 transition'
+              onClick={handleGoogleLogin}
+              className='w-full flex items-center justify-center gap-2 rounded-xl border border-gray-200 py-2.5 text-[15px] text-gray-700 hover:bg-gray-50 transition'
             >
               <FcGoogle size={18} />
-              Google
-            </button>
-            <button
-              type='button'
-              className='flex items-center justify-center gap-2 rounded-xl border border-gray-200 py-2.5 text-[15px] text-gray-700 hover:bg-gray-50 transition'
-            >
-              <FaGithub size={18} />
-              GitHub
+              Continue with Google
             </button>
           </div>
 

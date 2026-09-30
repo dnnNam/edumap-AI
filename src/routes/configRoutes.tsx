@@ -1,37 +1,37 @@
 import { createBrowserRouter } from 'react-router'
 
-import HomePage from '../pages/auth/HomePage'
 import LoginPage from '../pages/auth/LoginPage'
 import RegisterPage from '../pages/auth/RegisterPage'
 
-import DashBoard from '../pages/main/DashBoard'
 import ChatPage from '../pages/main/ChatPage'
+import DashBoard from '../pages/main/DashBoard'
 
 import AppLayouts from '../layout/AppLayouts'
 
-import PublicRoute from './PublicRoutes'
-import ProtectedRoute from './ProtectedRoute'
-import ProfilePage from '../pages/main/ProfilePage'
-import SettingsPage from '../pages/main/SettingPage'
-import AdminRoute from './AdminRoute'
+import HomeEntry from '../pages/auth/HomeEntry'
 import AdminPermissionsPage from '../pages/main/AdminPermissionPage'
-import UploadPage from '../pages/main/UploadAndAnalyze'
-import SkillTreePage from '../pages/main/SkillTree'
-import NotificationsPage from '../pages/main/NotificationPage'
 import SubscriptionPlans from '../pages/main/BillingPage'
 import BillingUsagePage from '../pages/main/BillingUsagePage'
-import ResourcesPage from '../pages/main/ResourcesPage'
-import SkillResourcesPage from '../pages/main/SkillResourcesPage'
+import JobsPage from '../pages/main/JobsPage'
+import NotificationsPage from '../pages/main/NotificationPage'
+import ProfilePage from '../pages/main/ProfilePage'
 import ResourceDetailPage from '../pages/main/ResourceDetailPage'
 import ResourceHistoryPage from '../pages/main/ResourceHistory'
-import JobsPage from '../pages/main/JobsPage'
+import ResourcesPage from '../pages/main/ResourcesPage'
+import SettingsPage from '../pages/main/SettingPage'
+import SkillResourcesPage from '../pages/main/SkillResourcesPage'
+import SkillTreePage from '../pages/main/SkillTree'
+import UploadPage from '../pages/main/UploadAndAnalyze'
+import AdminRoute from './AdminRoute'
+import ProtectedRoute from './ProtectedRoute'
+import PublicRoute from './PublicRoutes'
 
 const router = createBrowserRouter([
   {
     Component: PublicRoute,
     path: '/',
     children: [
-      { index: true, Component: HomePage },
+      { index: true, Component: HomeEntry },
       { path: '/login', Component: LoginPage },
       { path: '/register', Component: RegisterPage },
     ],
