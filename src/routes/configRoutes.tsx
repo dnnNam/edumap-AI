@@ -24,6 +24,7 @@ import ResourcesPage from '../pages/main/ResourcesPage'
 import SkillResourcesPage from '../pages/main/SkillResourcesPage'
 import ResourceDetailPage from '../pages/main/ResourceDetailPage'
 import ResourceHistoryPage from '../pages/main/ResourceHistory'
+import JobsPage from '../pages/main/JobsPage'
 
 const router = createBrowserRouter([
   {
@@ -61,6 +62,7 @@ const router = createBrowserRouter([
           { path: '/resources/history', Component: ResourceHistoryPage },
           { path: '/resources/:skillId', Component: SkillResourcesPage },
           { path: '/resources/detail/:resourceId', Component: ResourceDetailPage },
+          { path: '/jobs', Component: JobsPage },
           {
             Component: AdminRoute, // gác thêm 1 lớp checkRole trước khi vào /admin
             children: [{ path: '/admin', Component: AdminPermissionsPage }],
