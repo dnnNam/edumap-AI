@@ -25,6 +25,7 @@ import UploadPage from '../pages/main/UploadAndAnalyze'
 import AdminRoute from './AdminRoute'
 import ProtectedRoute from './ProtectedRoute'
 import PublicRoute from './PublicRoutes'
+import PortfolioPage from '../pages/main/PortfolioPage'
 
 const router = createBrowserRouter([
   {
@@ -63,6 +64,7 @@ const router = createBrowserRouter([
           { path: '/resources/:skillId', Component: SkillResourcesPage },
           { path: '/resources/detail/:resourceId', Component: ResourceDetailPage },
           { path: '/jobs', Component: JobsPage },
+          { path: '/portfolio', Component: PortfolioPage },
           {
             Component: AdminRoute, // gác thêm 1 lớp checkRole trước khi vào /admin
             children: [{ path: '/admin', Component: AdminPermissionsPage }],

@@ -1,30 +1,33 @@
 import type { ApiResponse } from './auth.types'
 
-export interface Portfolio {
-  id: string
-  userId: string
-  title: string
-  bio: string | null
-  avatarUrl: string | null
-  email: string | null
-  facebook: string | null
-  linkedin: string | null
-  github: string | null
-  skills: string[]
-  socialLinks: Record<string, string> | null
-  portfolioUrl: string
-  portfolioSlug: string
-  isPublic: boolean
-  createdAt: string
-  updatedAt: string
+export interface SocialLinks {
+  github?: string
+  linkedin?: string
 }
 
-// Backend bọc 2 lớp: { success, statusCode, data: { success, statusCode, message, data: Portfolio } }
-export interface PortfolioActionData {
+export interface Portfolio {
+  id?: string
+  userId?: string
+  portfolioUrl?: string
+  portfolioSlug?: string
+  title: string
+  bio: string
+  avatarUrl: string
+  email: string
+  facebook: string
+  linkedin: string
+  github: string
+  skills: string[]
+  socialLinks: SocialLinks | null
+  isPublic: boolean
+}
+
+export interface PortfolioBody {
   success: boolean
   statusCode: number
   message: string
   data: Portfolio
 }
 
-export type PortfolioResponse = ApiResponse<PortfolioActionData>
+// Lớp ngoài: { success, statusCode, data: PortfolioBody }
+export type PortfolioResponse = ApiResponse<PortfolioBody>
