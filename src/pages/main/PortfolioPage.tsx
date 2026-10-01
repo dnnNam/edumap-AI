@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { isAxiosError } from 'axios'
-import { Check, Download, ExternalLink, Link2, Loader2, Mail, Share2, X } from 'lucide-react'
+import { Check, Download, ExternalLink, Link2, Loader2, Mail, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useForm, type UseFormRegisterReturn } from 'react-hook-form'
 import { FaFacebook, FaGithub, FaLinkedin } from 'react-icons/fa'
@@ -358,13 +358,6 @@ function Builder({
             <p className='mt-2 text-gray-500'>Chỉnh sửa, chọn giao diện và chia sẻ portfolio của bạn.</p>
           </div>
           <div className='flex items-center gap-3'>
-            <button
-              type='button'
-              onClick={() => setTab('Share')}
-              className='flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-50 transition'
-            >
-              <Share2 className='w-4 h-4' /> Share URL
-            </button>
             <button
               type='button'
               onClick={() => window.print()}
