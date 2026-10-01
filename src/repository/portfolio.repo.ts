@@ -1,5 +1,5 @@
 import http from '../config/http'
-import type { PortfolioResponse, PublicPortfolioResponse } from '../types/api/portfolio.type'
+import type { PortfolioResponse, PublicPortfolioResponse, UpdatePortfolioBody } from '../types/api/portfolio.type'
 
 class PortfolioRepository {
   private readonly PREFIX = '/portfolios'
@@ -7,6 +7,11 @@ class PortfolioRepository {
   // GET /api/v1/portfolios/my-portfolio
   getMine() {
     return http.get<PortfolioResponse>(`${this.PREFIX}/my-portfolio`)
+  }
+
+  // PATCH /api/v1/portfolios/my-portfolio/update
+  updateMine(body: UpdatePortfolioBody) {
+    return http.patch<PortfolioResponse>(`${this.PREFIX}/my-portfolio/update`, body)
   }
 
   // GET /api/v1/portfolios/public/:slug

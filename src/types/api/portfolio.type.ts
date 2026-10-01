@@ -59,3 +59,16 @@ export interface PublicPortfolioBody {
 }
 
 export type PublicPortfolioResponse = ApiResponse<PublicPortfolioBody>
+
+export interface UpdatePortfolioBody {
+  title?: string
+  bio?: string
+  avatarUrl?: string
+  email?: string
+  facebook?: string
+  linkedin?: string
+  github?: string
+  skills?: string[]
+  socialLinks?: SocialLinks
+  isPublic?: boolean
+}
