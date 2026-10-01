@@ -26,6 +26,7 @@ import AdminRoute from './AdminRoute'
 import ProtectedRoute from './ProtectedRoute'
 import PublicRoute from './PublicRoutes'
 import PortfolioPage from '../pages/main/PortfolioPage'
+import PortfolioPublicPage from '../pages/main/PublicPortfolioPage'
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,7 @@ const router = createBrowserRouter([
       { index: true, Component: HomeEntry },
       { path: '/login', Component: LoginPage },
       { path: '/register', Component: RegisterPage },
+      { path: '/portfolio/:username', Component: PortfolioPublicPage },
     ],
   },
 
