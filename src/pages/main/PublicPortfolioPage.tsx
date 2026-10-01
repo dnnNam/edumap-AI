@@ -146,7 +146,7 @@ export default function PortfolioPublicPage() {
     )
   }
 
-  if (isError || !portfolio) {
+  if (isError || !portfolio || !portfolio.isPublic) {
     return (
       <div className='max-w-4xl mx-auto w-full px-6 py-24 text-center'>
         <h1 className='text-2xl font-semibold text-gray-900'>Không tìm thấy portfolio</h1>
