@@ -1,13 +1,13 @@
-import { Check, Download, Link2, Mail, Share2, X } from 'lucide-react'
+import { Check, Download, ExternalLink, Link2, Mail, Share2, X } from 'lucide-react'
 import { FaFacebook, FaGithub, FaLinkedin } from 'react-icons/fa'
 import { useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import { toast } from 'sonner'
 import Avatar from '../../components/ui/Avatar'
-import { useMyPortfolioQuery } from '../../hooks/portfolioQuery'
+import { useMyPortfolioQuery, usePublicPortfolioQuery } from '../../hooks/portfolioQuery'
 
 import { getFullNameFromLS } from '../../utils/auth'
-import type { Portfolio } from '../../types/api/portfolio.type'
+import type { Portfolio, PortfolioRepository } from '../../types/api/portfolio.type'
 
 const EMPTY: Portfolio = {
   title: '',
@@ -25,12 +25,32 @@ const EMPTY: Portfolio = {
 const TABS = ['Info', 'Theme', 'Share'] as const
 type Tab = (typeof TABS)[number]
 
+// Class Tailwind phải viết đầy đủ (không ghép chuỗi) để không bị purge
 const THEMES = [
-  { name: 'Indigo', banner: 'from-indigo-100 to-white' },
-  { name: 'Emerald', banner: 'from-emerald-100 to-white' },
-  { name: 'Rose', banner: 'from-rose-100 to-white' },
-  { name: 'Slate', banner: 'from-gray-200 to-white' },
+  { name: 'Indigo', banner: 'from-indigo-100 to-white', chip: 'border-indigo-100 bg-indigo-50 text-indigo-700' },
+  { name: 'Emerald', banner: 'from-emerald-100 to-white', chip: 'border-emerald-100 bg-emerald-50 text-emerald-700' },
+  { name: 'Rose', banner: 'from-rose-100 to-white', chip: 'border-rose-100 bg-rose-50 text-rose-700' },
+  { name: 'Slate', banner: 'from-gray-200 to-white', chip: 'border-gray-200 bg-gray-100 text-gray-700' },
 ]
+
+const LANGUAGE_COLORS: Record<string, string> = {
+  TypeScript: '#3178c6',
+  JavaScript: '#f1e05a',
+  Python: '#3572a5',
+  Java: '#b07219',
+  'C#': '#178600',
+  'C++': '#f34b7d',
+  Go: '#00add8',
+  Rust: '#dea584',
+  PHP: '#4f5d95',
+  HTML: '#e34c26',
+  CSS: '#563d7c',
+  Dart: '#00b4ab',
+  Kotlin: '#a97bff',
+  Swift: '#f05138',
+}
+
+const MAX_TECH_CHIPS = 5
 
 const inputCls =
   'w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-[15px] text-gray-900 placeholder-gray-400 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition'
@@ -59,7 +79,129 @@ function Field({
   )
 }
 
-function Builder({ initial }: { initial: Portfolio }) {
+function formatMonthYear(iso: string) {
+  const d = new Date(iso)
+  if (Number.isNaN(d.getTime())) return ''
+  return d.toLocaleDateString('vi-VN', { month: '2-digit', year: 'numeric' })
+}
+
+function RepoCard({ repo, chipCls }: { repo: PortfolioRepository; chipCls: string }) {
+  const tech = repo.techStack ?? []
+  const shown = tech.slice(0, MAX_TECH_CHIPS)
+  const extra = tech.length - shown.length
+  const langColor = repo.mainLanguage ? (LANGUAGE_COLORS[repo.mainLanguage] ?? '#9ca3af') : null
+
+  return (
+    <a
+      href={repo.repoUrl}
+      target='_blank'
+      rel='noreferrer'
+      className='group flex flex-col rounded-2xl border border-gray-200 bg-white p-5 transition hover:border-gray-300 hover:shadow-sm print:break-inside-avoid'
+    >
+      <div className='flex items-start justify-between gap-3'>
+        <div className='flex min-w-0 items-center gap-3'>
+          <span className='flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gray-900 text-white'>
+            <FaGithub className='h-4 w-4' />
+          </span>
+          <h4 className='truncate text-[15px] font-semibold text-gray-900' title={repo.repoName}>
+            {repo.repoName}
+          </h4>
+        </div>
+        <ExternalLink className='mt-1 h-4 w-4 shrink-0 text-gray-300 transition group-hover:text-gray-700 print:hidden' />
+      </div>
+
+      <div className='mt-4 flex items-center gap-4 text-xs text-gray-500'>
+        {repo.mainLanguage && (
+          <span className='inline-flex items-center gap-1.5'>
+            <span className='h-2.5 w-2.5 rounded-full' style={{ backgroundColor: langColor ?? undefined }} />
+            {repo.mainLanguage}
+          </span>
+        )}
+        {formatMonthYear(repo.createdAt) && <span>Cập nhật {formatMonthYear(repo.createdAt)}</span>}
+      </div>
+
+      <div className='mt-4 flex flex-1 flex-wrap content-start gap-1.5'>
+        {shown.length === 0 ? (
+          <span className='text-xs text-gray-400'>Chưa phát hiện tech stack</span>
+        ) : (
+          <>
+            {shown.map((t) => (
+              <span key={t} className={`rounded-md border px-2 py-0.5 text-xs ${chipCls}`}>
+                {t}
+              </span>
+            ))}
+            {extra > 0 && (
+              <span className='rounded-md border border-gray-200 bg-gray-50 px-2 py-0.5 text-xs text-gray-500'>
+                +{extra}
+              </span>
+            )}
+          </>
+        )}
+      </div>
+    </a>
+  )
+}
+
+function ProjectsSection({
+  repos,
+  loading,
+  hasGithubSync,
+  isPublic,
+  chipCls,
+}: {
+  repos: PortfolioRepository[]
+  loading: boolean
+  hasGithubSync: boolean
+  isPublic: boolean
+  chipCls: string
+}) {
+  return (
+    <section className='mt-10'>
+      <div className='flex items-baseline justify-between gap-3'>
+        <h3 className='text-lg font-semibold text-gray-900'>
+          Projects
+          {repos.length > 0 && <span className='ml-2 text-sm font-normal text-gray-400'>{repos.length}</span>}
+        </h3>
+        {hasGithubSync && (
+          <span className='inline-flex items-center gap-1.5 text-xs text-gray-500 print:hidden'>
+            <FaGithub className='h-3.5 w-3.5' /> Đã đồng bộ từ GitHub
+          </span>
+        )}
+      </div>
+
+      {loading ? (
+        <div className='mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2'>
+          <Skeleton height={140} borderRadius={16} />
+          <Skeleton height={140} borderRadius={16} />
+        </div>
+      ) : repos.length > 0 ? (
+        <div className='mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2'>
+          {repos.map((repo) => (
+            <RepoCard key={repo.id} repo={repo} chipCls={chipCls} />
+          ))}
+        </div>
+      ) : (
+        <p className='mt-3 rounded-xl border border-dashed border-gray-200 px-4 py-6 text-center text-sm text-gray-500'>
+          {!isPublic
+            ? 'Bật “Công khai portfolio” ở tab Share để hiển thị dự án GitHub tại đây.'
+            : 'Chưa có dự án nào. Đồng bộ GitHub để tự động thêm dự án của bạn.'}
+        </p>
+      )}
+    </section>
+  )
+}
+
+function Builder({
+  initial,
+  repositories,
+  reposLoading,
+  hasGithubSync,
+}: {
+  initial: Portfolio
+  repositories: PortfolioRepository[]
+  reposLoading: boolean
+  hasGithubSync: boolean
+}) {
   const fullName = getFullNameFromLS() || 'Your name'
   const [form, setForm] = useState<Portfolio>(initial)
   const [tab, setTab] = useState<Tab>('Info')
@@ -87,6 +229,8 @@ function Builder({ initial }: { initial: Portfolio }) {
     { icon: FaFacebook, href: form.facebook, label: 'Facebook' },
     { icon: Mail, href: form.email ? `mailto:${form.email}` : '', label: 'Email' },
   ].filter((s) => s.href)
+
+  const currentTheme = THEMES[theme]
 
   return (
     <div className='h-full overflow-y-auto scrollbar-thin'>
@@ -269,8 +413,8 @@ function Builder({ initial }: { initial: Portfolio }) {
 
           {/* Live preview */}
           <div className='rounded-3xl border border-gray-200 bg-white overflow-hidden print:border-0'>
-            <div className={`h-40 border-b border-gray-200 bg-gradient-to-br ${THEMES[theme].banner}`} />
-            <div className='px-8 pb-10'>
+            <div className={`h-40 border-b border-gray-200 bg-gradient-to-br ${currentTheme.banner}`} />
+            <div className='px-6 sm:px-8 pb-10'>
               <div className='-mt-14 w-28 h-28 rounded-full border-4 border-white bg-white overflow-hidden'>
                 {form.avatarUrl ? (
                   <img src={form.avatarUrl} alt={fullName} className='w-full h-full object-cover' />
@@ -304,18 +448,30 @@ function Builder({ initial }: { initial: Portfolio }) {
                 <Check className='w-3.5 h-3.5' /> Live preview
               </p>
 
-              <h3 className='mt-10 text-lg font-semibold text-gray-900'>Skills</h3>
-              {form.skills.length === 0 ? (
-                <p className='mt-3 text-sm text-gray-500'>Thêm kỹ năng ở tab Info để hiển thị tại đây.</p>
-              ) : (
-                <div className='mt-3 flex flex-wrap gap-2'>
-                  {form.skills.map((s) => (
-                    <span key={s} className='rounded-full border border-gray-200 px-3 py-1 text-sm text-gray-700'>
-                      {s}
-                    </span>
-                  ))}
-                </div>
-              )}
+              {/* Skills */}
+              <section className='mt-10'>
+                <h3 className='text-lg font-semibold text-gray-900'>Skills</h3>
+                {form.skills.length === 0 ? (
+                  <p className='mt-3 text-sm text-gray-500'>Thêm kỹ năng ở tab Info để hiển thị tại đây.</p>
+                ) : (
+                  <div className='mt-3 flex flex-wrap gap-2'>
+                    {form.skills.map((s) => (
+                      <span key={s} className={`rounded-full border px-3 py-1 text-sm ${currentTheme.chip}`}>
+                        {s}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </section>
+
+              {/* Projects (từ API public) */}
+              <ProjectsSection
+                repos={repositories}
+                loading={reposLoading}
+                hasGithubSync={hasGithubSync}
+                isPublic={form.isPublic}
+                chipCls={currentTheme.chip}
+              />
             </div>
           </div>
         </div>
@@ -325,7 +481,16 @@ function Builder({ initial }: { initial: Portfolio }) {
 }
 
 export default function PortfolioPage() {
+  // API 1: lấy portfolio của mình -> có portfolioSlug
   const { data, isLoading } = useMyPortfolioQuery()
+
+  // axios: data.data = body ngoài; .data = PortfolioBody; .data = Portfolio
+  const portfolio = data?.data?.data?.data
+  const slug = portfolio?.portfolioSlug
+
+  // API 2: truyền slug lấy bản public (kèm repositories). Portfolio private -> API public sẽ lỗi nên bỏ qua
+  const { data: publicRes, isLoading: publicLoading } = usePublicPortfolioQuery(slug, portfolio?.isPublic)
+  const publicData = publicRes?.data?.data?.data
 
   if (isLoading) {
     return (
@@ -340,8 +505,14 @@ export default function PortfolioPage() {
   }
 
   // Chưa có portfolio (404) -> data undefined -> dùng form trống
-  // axios: data.data = body ngoài; .data = PortfolioBody; .data = Portfolio
-  const portfolio = data?.data?.data?.data
   const initial: Portfolio = { ...EMPTY, ...portfolio, socialLinks: portfolio?.socialLinks ?? {} }
-  return <Builder initial={initial} />
+
+  return (
+    <Builder
+      initial={initial}
+      repositories={publicData?.repositories ?? []}
+      reposLoading={!!slug && !!portfolio?.isPublic && publicLoading}
+      hasGithubSync={publicData?.hasGithubSync ?? false}
+    />
+  )
 }

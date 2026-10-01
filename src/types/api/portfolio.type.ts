@@ -31,3 +31,31 @@ export interface PortfolioBody {
 
 // Lớp ngoài: { success, statusCode, data: PortfolioBody }
 export type PortfolioResponse = ApiResponse<PortfolioBody>
+
+// ───────── API public: GET /portfolios/public/:slug ─────────
+
+export interface PortfolioRepository {
+  id: string
+  githubProfileId: string
+  repoName: string
+  repoUrl: string
+  languages: Record<string, number> | null
+  mainLanguage: string | null
+  extractedSkills: string[] | null
+  techStack: string[]
+  createdAt: string
+}
+
+export interface PublicPortfolio extends Portfolio {
+  repositories: PortfolioRepository[]
+  hasGithubSync: boolean
+}
+
+export interface PublicPortfolioBody {
+  success: boolean
+  statusCode: number
+  message?: string
+  data: PublicPortfolio
+}
+
+export type PublicPortfolioResponse = ApiResponse<PublicPortfolioBody>
