@@ -134,10 +134,8 @@ function ProjectsSection({
 
 export default function PortfolioPublicPage() {
   // Route cần có param :slug, ví dụ <Route path='/p/:slug' element={<PublicPortfolioPage />} />
-  const { slug } = useParams<{ slug: string }>()
-
-  // Trang public luôn gọi API public (tham số thứ 2 = true)
-  const { data: res, isLoading, isError } = usePublicPortfolioQuery(slug, true)
+  const { username } = useParams<{ username: string }>()
+  const { data: res, isLoading, isError } = usePublicPortfolioQuery(username, true)
   const portfolio = res?.data?.data?.data
 
   if (isLoading) {
@@ -158,7 +156,7 @@ export default function PortfolioPublicPage() {
   }
 
   // TODO: đổi theo field tên thật mà API public trả về (ví dụ portfolio.fullName hoặc portfolio.user.fullName)
-  const fullName = (portfolio as { fullName?: string }).fullName || slug || 'Portfolio'
+  const fullName = (portfolio as { fullName?: string }).fullName || username || 'Portfolio'
 
   const skills = portfolio.skills ?? []
   const repositories = portfolio.repositories ?? []
