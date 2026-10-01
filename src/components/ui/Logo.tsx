@@ -1,18 +1,51 @@
-import { Sparkles } from 'lucide-react'
 import { useNavigate } from 'react-router'
+
 interface LogoProps {
   className?: string
+  showSubtitle?: boolean
+  size?: 'sm' | 'md' | 'lg'
 }
-export default function Logo({ className = '' }: LogoProps) {
+
+export default function Logo({ className = '', showSubtitle = false, size = 'md' }: LogoProps) {
   const navigate = useNavigate()
+
+  const iconSizes = {
+    sm: 'w-7 h-7 rounded-lg',
+    md: 'w-9 h-9 rounded-xl',
+    lg: 'w-11 h-11 rounded-2xl',
+  }
+
+  const textSizes = {
+    sm: 'text-sm',
+    md: 'text-base',
+    lg: 'text-xl',
+  }
+
   return (
-    <div onClick={() => navigate('/')} className={`flex items-center gap-2.5 cursor-pointer ${className}`}>
-      {' '}
-      <div className='w-9 h-9 rounded-lg bg-[#14142B] flex items-center justify-center shrink-0'>
-        {' '}
-        <Sparkles className='text-white' size={18} />{' '}
-      </div>{' '}
-      <span className='text-[15px] font-semibold text-gray-900'> EduMap AI </span>{' '}
+    <div
+      onClick={() => navigate('/')}
+      className={`flex items-center gap-2.5 cursor-pointer group select-none ${className}`}
+    >
+      <div
+        className={`${iconSizes[size]} bg-[#131428] flex items-center justify-center shrink-0 shadow-sm overflow-hidden group-hover:scale-105 transition-transform duration-200`}
+      >
+        <img
+          src='/favicon.svg'
+          alt='EduMap AI'
+          className='w-full h-full object-contain'
+        />
+      </div>
+
+      <div className='flex flex-col leading-tight'>
+        <div className={`font-black tracking-tight text-gray-900 ${textSizes[size]} group-hover:text-indigo-600 transition-colors`}>
+          EDUMAP<span className='text-indigo-600'>AI</span>
+        </div>
+        {showSubtitle && (
+          <span className='text-[8px] sm:text-[9px] tracking-wider text-gray-400 font-bold uppercase'>
+            A Roadmap for Education
+          </span>
+        )}
+      </div>
     </div>
   )
 }

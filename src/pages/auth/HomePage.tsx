@@ -154,53 +154,65 @@ export default function HomePage() {
       <PublicHeader onSignIn={() => navigate('/login')} onGetStarted={() => navigate('/register')} />
 
       <main className='flex-1'>
-        {/* Hero — phần đầu tiên user thấy ngay khi vào trang, animation chuyển
-            trang (AnimatedOutlet) đã lo phần "xuất hiện" cho tiêu đề/nút bấm rồi.
-            Nhưng "Dashboard preview visual" nằm khá thấp, user phải cuộn xuống
-            mới thấy trọn vẹn -> tách riêng để nó tự fade khi cuộn tới */}
+        {/* Hero Section */}
         <section className='bg-[#FAFAF9]'>
-          <div className='max-w-5xl mx-auto px-6 pt-24 pb-6 text-center'>
-            <div className='inline-flex items-center gap-1.5 rounded-full bg-indigo-50 text-indigo-700 text-sm px-3.5 py-1.5'>
-              <Sparkles className='w-3.5 h-3.5' />
-              New · GPT-5 powered roadmaps
+          <div className='max-w-5xl mx-auto px-4 sm:px-6 pt-16 sm:pt-24 pb-8 sm:pb-10 text-center'>
+            {/* System Logo Badge */}
+            <div className='inline-flex items-center gap-3 p-1.5 pr-4 rounded-2xl bg-white border border-gray-200 shadow-2xs mb-6 sm:mb-8 hover:border-gray-300 transition select-none'>
+              <div className='w-8 h-8 rounded-xl bg-[#131428] flex items-center justify-center shrink-0 p-1'>
+                <img src='/favicon.svg' alt='EduMap AI' className='w-full h-full object-contain' />
+              </div>
+              <div className='text-left'>
+                <div className='text-xs font-black tracking-tight text-gray-900 leading-none'>
+                  EDUMAP<span className='text-indigo-600'>AI</span>
+                </div>
+                <div className='text-[8px] font-bold tracking-wider text-gray-400 uppercase mt-0.5'>
+                  A Roadmap for Education
+                </div>
+              </div>
+              <span className='w-1 h-1 rounded-full bg-gray-300' />
+              <span className='text-xs font-semibold text-indigo-600 hidden sm:inline'>GPT-5 Powered</span>
             </div>
 
-            <h1 className='mt-6 text-5xl sm:text-6xl font-bold text-gray-900 tracking-tight leading-[1.1]'>
+            <h1 className='text-4xl sm:text-6xl font-bold text-gray-900 tracking-tight leading-[1.12] sm:leading-[1.1] max-w-4xl mx-auto'>
               Your AI career mentor,
               <br />
               for every CS student.
             </h1>
 
-            <p className='mt-6 text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed'>
+            <p className='mt-5 sm:mt-6 text-base sm:text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed'>
               Upload your transcript, GitHub and CV. EduMap AI maps your skills, spots the gaps, and builds the roadmap
               to your dream role.
             </p>
 
-            <div className='mt-8 flex items-center justify-center gap-4'>
+            <div className='mt-8 flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-4 max-w-md mx-auto sm:max-w-none'>
               <button
                 type='button'
                 onClick={() => navigate('/register')}
-                className='flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-3 text-[15px] transition'
+                className='w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-3 text-[15px] transition shadow-xs cursor-pointer'
               >
-                Get started
+                <span>Get started</span>
                 <ArrowRight className='w-4 h-4' />
               </button>
               <button
                 type='button'
-                className='flex items-center gap-2 text-gray-900 font-medium px-2 py-3 text-[15px] hover:text-gray-600 transition'
+                onClick={() => {
+                  const el = document.getElementById('preview-card')
+                  el?.scrollIntoView({ behavior: 'smooth' })
+                }}
+                className='w-full sm:w-auto flex items-center justify-center gap-2 text-gray-900 font-medium px-4 py-3 text-[15px] hover:text-gray-600 transition cursor-pointer'
               >
-                <Play className='w-4 h-4' />
-                Watch demo
+                <Play className='w-4 h-4 text-indigo-600' />
+                <span>Watch demo</span>
               </button>
             </div>
 
-            <p className='mt-4 text-sm text-gray-400'>Free for students · No credit card required</p>
+            <p className='mt-4 text-xs sm:text-sm text-gray-400'>Free for students · No credit card required</p>
 
-            {/* Dashboard preview visual: tự fade lên đúng lúc cuộn tới nó,
-                vì thường nằm ngay dưới màn hình đầu tiên (below the fold trên mobile/laptop nhỏ) */}
-            <MotionFadeIn className='mt-16 rounded-3xl border border-gray-200 bg-white shadow-sm overflow-hidden'>
-              <div className='p-8'>
-                {/* 3 StatCard đầu: hiện lần lượt so le, không cùng lúc */}
+            {/* Dashboard preview visual */}
+            <MotionFadeIn id='preview-card' className='mt-12 sm:mt-16 rounded-3xl border border-gray-200 bg-white shadow-sm overflow-hidden text-left'>
+              <div className='p-5 sm:p-8'>
+                {/* 3 StatCard đầu: hiện lần lượt so le */}
                 <MotionStaggerContainer className='grid grid-cols-1 sm:grid-cols-3 gap-4'>
                   <MotionStaggerItem>
                     <StatCard value='47/120' label='Skill Map' />
@@ -213,17 +225,19 @@ export default function HomePage() {
                   </MotionStaggerItem>
                 </MotionStaggerContainer>
 
-                <div
-                  className='mt-6 grid gap-2'
-                  style={{
-                    gridTemplateColumns: `repeat(${GRID_COLS}, minmax(0, 1fr))`,
-                  }}
-                >
-                  {Array.from({ length: GRID_ROWS }).map((_, row) =>
-                    Array.from({ length: GRID_COLS }).map((_, col) => (
-                      <div key={`${row}-${col}`} className={`h-8 rounded-md ${cellShade(row, col)}`} />
-                    )),
-                  )}
+                <div className='mt-6 overflow-x-auto [scrollbar-width:none] pb-1'>
+                  <div
+                    className='grid gap-2 min-w-[580px] sm:min-w-0'
+                    style={{
+                      gridTemplateColumns: `repeat(${GRID_COLS}, minmax(0, 1fr))`,
+                    }}
+                  >
+                    {Array.from({ length: GRID_ROWS }).map((_, row) =>
+                      Array.from({ length: GRID_COLS }).map((_, col) => (
+                        <div key={`${row}-${col}`} className={`h-8 rounded-md ${cellShade(row, col)}`} />
+                      )),
+                    )}
+                  </div>
                 </div>
               </div>
 
@@ -232,10 +246,10 @@ export default function HomePage() {
                 {BOTTOM_STATS.map((stat, i) => (
                   <MotionStaggerItem
                     key={stat.label}
-                    className={`px-6 py-6 text-center ${i > 0 ? 'border-l border-gray-200' : ''}`}
+                    className={`px-4 sm:px-6 py-5 sm:py-6 text-center ${i > 0 ? 'border-l border-gray-200' : ''}`}
                   >
-                    <div className='text-2xl font-bold text-gray-900'>{stat.value}</div>
-                    <div className='text-sm text-gray-500 mt-1'>{stat.label}</div>
+                    <div className='text-2xl sm:text-3xl font-bold text-gray-900'>{stat.value}</div>
+                    <div className='text-xs sm:text-sm text-gray-500 mt-1'>{stat.label}</div>
                   </MotionStaggerItem>
                 ))}
               </MotionStaggerContainer>
@@ -245,10 +259,10 @@ export default function HomePage() {
 
         {/* Logo strip */}
         <MotionFadeIn>
-          <section className='py-14'>
-            <div className='max-w-5xl mx-auto px-6 flex flex-wrap items-center justify-center gap-x-10 gap-y-4'>
+          <section className='py-12 sm:py-14'>
+            <div className='max-w-5xl mx-auto px-4 sm:px-6 flex flex-wrap items-center justify-center gap-x-8 sm:gap-x-10 gap-y-4'>
               {TRUSTED_LOGOS.map((name) => (
-                <span key={name} className='text-lg text-gray-400 font-medium select-none'>
+                <span key={name} className='text-base sm:text-lg text-gray-400 font-medium select-none'>
                   {name}
                 </span>
               ))}
@@ -257,20 +271,20 @@ export default function HomePage() {
         </MotionFadeIn>
 
         {/* Features */}
-        <section id='features' className='py-20'>
-          <div className='max-w-5xl mx-auto px-6'>
+        <section id='features' className='py-16 sm:py-20'>
+          <div className='max-w-5xl mx-auto px-4 sm:px-6'>
             <MotionFadeIn>
-              <p className='text-sm text-gray-500'>Features</p>
-              <h2 className='mt-2 text-4xl font-bold text-gray-900 tracking-tight'>
+              <p className='text-xs sm:text-sm text-gray-500 uppercase tracking-wider font-semibold'>Features</p>
+              <h2 className='mt-2 text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight'>
                 Everything you need to land the role.
               </h2>
-              <p className='mt-3 text-gray-500 text-[15px]'>
+              <p className='mt-3 text-gray-500 text-sm sm:text-[15px]'>
                 A complete AI career stack, designed for CS students who don't have time to waste.
               </p>
             </MotionFadeIn>
 
-            {/* 6 feature card: hiện lần lượt so le, mỗi card cách nhau 0.08s */}
-            <MotionStaggerContainer className='mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 rounded-2xl border border-gray-200 bg-white overflow-hidden'>
+            {/* 6 feature card */}
+            <MotionStaggerContainer className='mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 rounded-2xl border border-gray-200 bg-white overflow-hidden shadow-2xs'>
               {FEATURES.map((feature, i) => {
                 const Icon = feature.icon
                 const isLastCol = (i + 1) % 3 === 0
@@ -278,13 +292,13 @@ export default function HomePage() {
                 return (
                   <MotionStaggerItem
                     key={feature.title}
-                    className={`p-8 ${
+                    className={`p-6 sm:p-8 ${
                       !isLastCol ? 'sm:border-r border-gray-200' : ''
                     } ${!isLastRow ? 'border-b border-gray-200' : ''}`}
                   >
                     <Icon className='w-5 h-5 text-gray-900' />
-                    <h3 className='mt-4 font-semibold text-gray-900'>{feature.title}</h3>
-                    <p className='mt-2 text-[15px] text-gray-500 leading-relaxed'>{feature.description}</p>
+                    <h3 className='mt-4 font-semibold text-gray-900 text-base sm:text-lg'>{feature.title}</h3>
+                    <p className='mt-2 text-xs sm:text-[15px] text-gray-500 leading-relaxed'>{feature.description}</p>
                   </MotionStaggerItem>
                 )
               })}
@@ -293,21 +307,21 @@ export default function HomePage() {
         </section>
 
         {/* Testimonials */}
-        <section className='py-20'>
-          <div className='max-w-5xl mx-auto px-6'>
+        <section className='py-16 sm:py-20'>
+          <div className='max-w-5xl mx-auto px-4 sm:px-6'>
             <MotionFadeIn>
-              <p className='text-sm text-gray-500'>Customers</p>
-              <h2 className='mt-2 text-4xl font-bold text-gray-900 tracking-tight'>From classroom to FAANG.</h2>
+              <p className='text-xs sm:text-sm text-gray-500 uppercase tracking-wider font-semibold'>Customers</p>
+              <h2 className='mt-2 text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight'>From classroom to FAANG.</h2>
             </MotionFadeIn>
 
-            {/* 3 testimonial card: hiện lần lượt so le */}
+            {/* 3 testimonial card */}
             <MotionStaggerContainer className='mt-10 grid grid-cols-1 sm:grid-cols-3 gap-5'>
               {TESTIMONIALS.map((t) => (
                 <MotionStaggerItem
                   key={t.name}
-                  className='bg-white border border-gray-200 rounded-2xl p-6 flex flex-col'
+                  className='bg-white border border-gray-200 rounded-2xl p-6 flex flex-col justify-between shadow-2xs'
                 >
-                  <p className='text-[15px] text-gray-700 leading-relaxed'>"{t.quote}"</p>
+                  <p className='text-sm sm:text-[15px] text-gray-700 leading-relaxed'>"{t.quote}"</p>
                   <div className='mt-5 pt-5 border-t border-gray-100 flex items-center gap-3'>
                     <div
                       className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-semibold ${t.avatarColor}`}
@@ -319,7 +333,7 @@ export default function HomePage() {
                     </div>
                     <div>
                       <div className='text-sm font-medium text-gray-900'>{t.name}</div>
-                      <div className='text-sm text-gray-500'>{t.role}</div>
+                      <div className='text-xs sm:text-sm text-gray-500'>{t.role}</div>
                     </div>
                   </div>
                 </MotionStaggerItem>
@@ -328,14 +342,12 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Pricing — mỗi card giờ tự fade riêng theo stagger, KHÔNG bọc chung
-            1 khối to nữa. onClick vẫn hoạt động bình thường vì MotionStaggerItem
-            đã được nâng cấp để nhận onClick giống 1 div thật */}
-        <section id='pricing' className='py-20'>
-          <div className='max-w-5xl mx-auto px-6'>
+        {/* Pricing */}
+        <section id='pricing' className='py-16 sm:py-20'>
+          <div className='max-w-5xl mx-auto px-4 sm:px-6'>
             <MotionFadeIn>
-              <p className='text-sm text-gray-500'>Pricing</p>
-              <h2 className='mt-2 text-4xl font-bold text-gray-900 tracking-tight'>Plans that grow with you.</h2>
+              <p className='text-xs sm:text-sm text-gray-500 uppercase tracking-wider font-semibold'>Pricing</p>
+              <h2 className='mt-2 text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight'>Plans that grow with you.</h2>
             </MotionFadeIn>
 
             <MotionStaggerContainer className='mt-10 grid grid-cols-1 sm:grid-cols-3 gap-5 items-stretch'>
@@ -345,7 +357,7 @@ export default function HomePage() {
                   <MotionStaggerItem
                     key={plan.name}
                     onClick={() => setSelectedPlan(plan.name)}
-                    className={`relative bg-white rounded-2xl p-7 border-2 cursor-pointer transition ${
+                    className={`relative bg-white rounded-2xl p-6 sm:p-7 border-2 cursor-pointer transition ${
                       isSelected ? 'border-indigo-600 shadow-sm' : 'border-gray-200'
                     }`}
                   >
@@ -359,14 +371,14 @@ export default function HomePage() {
                       </span>
                     )}
 
-                    <h3 className='font-semibold text-gray-900'>{plan.name}</h3>
-                    <p className='mt-1 text-sm text-gray-500'>{plan.tagline}</p>
+                    <h3 className='font-semibold text-gray-900 text-base sm:text-lg'>{plan.name}</h3>
+                    <p className='mt-1 text-xs sm:text-sm text-gray-500'>{plan.tagline}</p>
 
                     <div className='mt-5 flex items-baseline gap-1.5'>
-                      <span className='text-4xl font-bold text-gray-900'>{plan.price}</span>
-                      <span className='text-gray-500 text-sm'>{plan.period}</span>
+                      <span className='text-3xl sm:text-4xl font-bold text-gray-900'>{plan.price}</span>
+                      <span className='text-gray-500 text-xs sm:text-sm'>{plan.period}</span>
                       {plan.originalPrice && (
-                        <span className='text-gray-400 text-sm line-through ml-1'>{plan.originalPrice}</span>
+                        <span className='text-gray-400 text-xs sm:text-sm line-through ml-1'>{plan.originalPrice}</span>
                       )}
                     </div>
 
@@ -376,7 +388,7 @@ export default function HomePage() {
                         e.stopPropagation()
                         navigate('/register')
                       }}
-                      className={`mt-6 w-full rounded-xl py-2.5 text-[15px] font-medium transition ${
+                      className={`mt-6 w-full rounded-xl py-2.5 text-xs sm:text-[15px] font-medium transition cursor-pointer ${
                         plan.highlighted
                           ? 'bg-indigo-600 hover:bg-indigo-700 text-white'
                           : 'border border-gray-200 text-gray-900 hover:bg-gray-50'
@@ -387,9 +399,9 @@ export default function HomePage() {
 
                     <ul className='mt-6 space-y-3'>
                       {plan.features.map((feature) => (
-                        <li key={feature} className='flex items-start gap-2 text-[15px] text-gray-600'>
+                        <li key={feature} className='flex items-start gap-2 text-xs sm:text-[15px] text-gray-600'>
                           <Check className='w-4 h-4 text-gray-900 mt-0.5 shrink-0' />
-                          {feature}
+                          <span>{feature}</span>
                         </li>
                       ))}
                     </ul>
@@ -400,13 +412,12 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* FAQ + closing CTA — mỗi câu hỏi tự fade riêng khi cuộn tới,
-            CTA cuối trang tách riêng để kích hoạt đúng lúc nó lọt vào khung nhìn */}
-        <section id='faq' className='py-20'>
-          <div className='max-w-3xl mx-auto px-6'>
+        {/* FAQ + closing CTA */}
+        <section id='faq' className='py-16 sm:py-20'>
+          <div className='max-w-3xl mx-auto px-4 sm:px-6'>
             <MotionFadeIn>
-              <p className='text-sm text-gray-500'>FAQ</p>
-              <h2 className='mt-2 text-4xl font-bold text-gray-900 tracking-tight'>Questions, answered.</h2>
+              <p className='text-xs sm:text-sm text-gray-500 uppercase tracking-wider font-semibold'>FAQ</p>
+              <h2 className='mt-2 text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight'>Questions, answered.</h2>
             </MotionFadeIn>
 
             <MotionStaggerContainer className='mt-8 border-t border-gray-200'>
@@ -417,31 +428,35 @@ export default function HomePage() {
                     <button
                       type='button'
                       onClick={() => setOpenFaq(isOpen ? null : i)}
-                      className='w-full flex items-center justify-between py-5 text-left'
+                      className='w-full flex items-center justify-between py-5 text-left cursor-pointer'
                       aria-expanded={isOpen}
                     >
-                      <span className='text-[15px] font-medium text-gray-900'>{item.question}</span>
+                      <span className='text-sm sm:text-[15px] font-medium text-gray-900'>{item.question}</span>
                       <ChevronDown
                         className={`w-4 h-4 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`}
                       />
                     </button>
-                    {isOpen && <p className='pb-5 text-[15px] text-gray-500 leading-relaxed pr-8'>{item.answer}</p>}
+                    {isOpen && <p className='pb-5 text-xs sm:text-[15px] text-gray-500 leading-relaxed pr-8'>{item.answer}</p>}
                   </MotionStaggerItem>
                 )
               })}
             </MotionStaggerContainer>
 
-            <MotionFadeIn className='mt-16 bg-white border border-gray-200 rounded-3xl px-8 py-16 text-center'>
-              <h3 className='text-3xl font-bold text-gray-900 tracking-tight'>Ready to map your career?</h3>
-              <p className='mt-3 text-gray-500 text-[15px] max-w-md mx-auto'>
+            {/* Closing Banner with Official System Logo */}
+            <MotionFadeIn className='mt-16 bg-white border border-gray-200 rounded-3xl px-6 sm:px-8 py-12 sm:py-16 text-center shadow-xs'>
+              <div className='w-12 h-12 rounded-2xl bg-[#131428] flex items-center justify-center mx-auto mb-4 p-1.5 shadow-sm'>
+                <img src='/favicon.svg' alt='EduMap AI' className='w-full h-full object-contain' />
+              </div>
+              <h3 className='text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight'>Ready to map your career?</h3>
+              <p className='mt-3 text-gray-500 text-sm sm:text-[15px] max-w-md mx-auto'>
                 Join 120,000+ students building the career they actually want — in half the time.
               </p>
               <button
                 type='button'
                 onClick={() => navigate('/register')}
-                className='mt-7 inline-flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-3 text-[15px] transition'
+                className='mt-7 inline-flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-3 text-[15px] transition cursor-pointer'
               >
-                Get started
+                <span>Get started</span>
                 <ArrowRight className='w-4 h-4' />
               </button>
             </MotionFadeIn>

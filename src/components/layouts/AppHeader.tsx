@@ -1,4 +1,4 @@
-import { Search, Bell, Sparkles, ChevronRight, Menu } from 'lucide-react'
+import { Search, Bell, ChevronRight, Menu } from 'lucide-react'
 import { useNavigate } from 'react-router'
 import { useUnreadNotificationsCount } from '../../hooks/notificationQuery'
 import Avatar from '../ui/Avatar'
@@ -37,8 +37,8 @@ export default function AppHeader({
           <Menu className='w-5 h-5' />
         </button>
 
-        <div className='w-8 h-8 rounded-lg bg-gray-900 flex items-center justify-center shrink-0'>
-          <Sparkles className='w-4 h-4 text-white' />
+        <div className='w-8 h-8 rounded-lg bg-[#131428] flex items-center justify-center shrink-0 p-1 shadow-xs'>
+          <img src='/favicon.svg' alt='EduMap AI' className='w-full h-full object-contain' />
         </div>
         <span className='font-semibold text-gray-900 text-base hidden xs:inline'>{logoText}</span>
         <span className='hidden sm:inline text-xs text-gray-500 bg-gray-100 border border-gray-200 rounded-full px-2 py-0.5'>
