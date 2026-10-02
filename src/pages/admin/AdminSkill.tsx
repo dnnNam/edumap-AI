@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react'
-import { ArrowDown, ArrowUp, ChevronLeft, ChevronRight, Plus, RefreshCw, Search } from 'lucide-react'
+import { ArrowDown, ArrowUp, ChevronLeft, ChevronRight, Pencil, Plus, RefreshCw, Search } from 'lucide-react'
 import Skeleton from 'react-loading-skeleton'
 import { useAllSkillsQuery } from '../../hooks/skillsQuery'
-import CreateSkillModal from '../../components/layouts/admin/CreateSkillModal'
+import SkillFormModal from '../../components/layouts/admin/SkillFormModal'
 import type { Skill } from '../../types/api/skills.type'
 
 const PAGE_SIZE = 20
@@ -48,7 +48,8 @@ export default function AdminSkillsPage() {
   const [sortKey, setSortKey] = useState<SortKey>('createdAt')
   const [sortDir, setSortDir] = useState<SortDir>('desc')
   const [page, setPage] = useState(1)
-  const [createOpen, setCreateOpen] = useState(false)
+  const [formOpen, setFormOpen] = useState(false)
+  const [editingSkill, setEditingSkill] = useState<Skill | null>(null)
 
   const categories = useMemo(
     () => [...new Set(skills.map((s) => s.category))].sort((a, b) => a.localeCompare(b, 'vi')),
@@ -101,7 +102,10 @@ export default function AdminSkillsPage() {
             </button>
             <button
               type='button'
-              onClick={() => setCreateOpen(true)}
+              onClick={() => {
+                setEditingSkill(null)
+                setFormOpen(true)
+              }}
               className='inline-flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 transition'
             >
               <Plus className='w-4 h-4' />
@@ -215,6 +219,7 @@ export default function AdminSkillsPage() {
                         </th>
                       )
                     })}
+                    <th className='px-4 py-3 w-12' />
                   </tr>
                 </thead>
                 <tbody>
@@ -226,11 +231,14 @@ export default function AdminSkillsPage() {
                             <Skeleton height={20} />
                           </td>
                         ))}
+                        <td className='px-4 py-3'>
+                          <Skeleton width={24} height={20} />
+                        </td>
                       </tr>
                     ))
                   ) : pageItems.length === 0 ? (
                     <tr>
-                      <td colSpan={COLUMNS.length} className='px-4 py-12 text-center text-gray-500'>
+                      <td colSpan={COLUMNS.length + 1} className='px-4 py-12 text-center text-gray-500'>
                         No skills match your filters.
                       </td>
                     </tr>
@@ -263,6 +271,19 @@ export default function AdminSkillsPage() {
                           </div>
                         </td>
                         <td className='px-4 py-3 text-gray-500 whitespace-nowrap'>{formatDate(skill.createdAt)}</td>
+                        <td className='px-4 py-3 text-right'>
+                          <button
+                            type='button'
+                            onClick={() => {
+                              setEditingSkill(skill)
+                              setFormOpen(true)
+                            }}
+                            aria-label={`Edit ${skill.name}`}
+                            className='p-1.5 rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition'
+                          >
+                            <Pencil className='w-4 h-4' />
+                          </button>
+                        </td>
                       </tr>
                     ))
                   )}
@@ -306,7 +327,7 @@ export default function AdminSkillsPage() {
         </div>
       </div>
 
-      <CreateSkillModal open={createOpen} onClose={() => setCreateOpen(false)} />
+      <SkillFormModal open={formOpen} onClose={() => setFormOpen(false)} skill={editingSkill} />
     </div>
   )
 }

@@ -1,18 +1,22 @@
-// src/components/layouts/admin/CreateSkillModal.tsx
+// src/components/layouts/admin/SkillFormModal.tsx
+// Dùng chung cho cả TẠO (skill = null) và SỬA (skill = skill cần sửa)
 import { useEffect, useMemo } from 'react'
 import type { ReactNode } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2, X } from 'lucide-react'
-import { useAllSkillsQuery, useCreateSkillMutation } from '../../../hooks/skillsQuery'
+import { toast } from 'sonner'
+import { useAllSkillsQuery, useCreateSkillMutation, useUpdateSkillMutation } from '../../../hooks/skillsQuery'
 import { createSkillSchema, type CreateSkillFormValues } from '../../../schemas/skill.schema'
+import type { Skill, UpdateSkillPayload } from '../../../types/api/skills.type'
 
 interface Props {
   open: boolean
   onClose: () => void
+  skill?: Skill | null
 }
 
-const DEFAULT_VALUES: CreateSkillFormValues = {
+const EMPTY_VALUES: CreateSkillFormValues = {
   name: '',
   category: '',
   difficultyLevel: 1,
@@ -48,7 +52,9 @@ function Field({
   )
 }
 
-export default function CreateSkillModal({ open, onClose }: Props) {
+export default function SkillFormModal({ open, onClose, skill }: Props) {
+  const isEdit = !!skill
+
   const { data: skillsRes } = useAllSkillsQuery()
   const skills = useMemo(() => skillsRes?.data?.data ?? [], [skillsRes])
   const categories = useMemo(
@@ -56,22 +62,35 @@ export default function CreateSkillModal({ open, onClose }: Props) {
     [skills],
   )
 
-  const { mutate, isPending } = useCreateSkillMutation()
+  const { mutate: createSkill, isPending: creating } = useCreateSkillMutation()
+  const { mutate: updateSkill, isPending: updating } = useUpdateSkillMutation()
+  const isPending = creating || updating
 
   const {
     register,
     handleSubmit,
     reset,
     setError,
-    formState: { errors },
+    formState: { errors, dirtyFields },
   } = useForm<CreateSkillFormValues>({
     resolver: zodResolver(createSkillSchema),
-    defaultValues: DEFAULT_VALUES,
+    defaultValues: EMPTY_VALUES,
   })
 
+  // Mỗi lần mở modal: nạp dữ liệu skill (sửa) hoặc form trống (tạo)
   useEffect(() => {
-    if (open) reset(DEFAULT_VALUES)
-  }, [open, reset])
+    if (!open) return
+    reset(
+      skill
+        ? {
+            name: skill.name,
+            category: skill.category,
+            difficultyLevel: skill.difficultyLevel,
+            demandScore: skill.demandScore,
+          }
+        : EMPTY_VALUES,
+    )
+  }, [open, skill, reset])
 
   useEffect(() => {
     if (!open) return
@@ -83,19 +102,36 @@ export default function CreateSkillModal({ open, onClose }: Props) {
   if (!open) return null
 
   const onSubmit = (values: CreateSkillFormValues) => {
-    // Danh sách hiện có nhiều skill trùng tên -> chặn tạo trùng ngay ở client
-    const duplicated = skills.some((s) => s.name.trim().toLowerCase() === values.name.toLowerCase())
+    // Chặn trùng tên (bỏ qua chính skill đang sửa)
+    const duplicated = skills.some(
+      (s) => s.id !== skill?.id && s.name.trim().toLowerCase() === values.name.toLowerCase(),
+    )
     if (duplicated) {
       setError('name', { message: 'A skill with this name already exists' })
       return
     }
 
-    mutate(values, {
+    const done = {
       onSuccess: () => {
-        reset(DEFAULT_VALUES)
+        reset(EMPTY_VALUES)
         onClose()
       },
-    })
+    }
+
+    if (!skill) {
+      createSkill(values, done)
+      return
+    }
+
+    // PATCH: chỉ gửi những field thật sự thay đổi
+    const changedKeys = Object.keys(dirtyFields) as (keyof CreateSkillFormValues)[]
+    if (changedKeys.length === 0) {
+      toast.info('No changes to save.')
+      onClose()
+      return
+    }
+    const payload = Object.fromEntries(changedKeys.map((k) => [k, values[k]])) as UpdateSkillPayload
+    updateSkill({ id: skill.id, payload }, done)
   }
 
   return (
@@ -112,7 +148,7 @@ export default function CreateSkillModal({ open, onClose }: Props) {
         className='relative w-full max-w-md max-h-[90vh] flex flex-col rounded-2xl bg-white shadow-xl'
       >
         <div className='flex items-center justify-between px-6 py-4 border-b border-gray-100'>
-          <h2 className='text-[17px] font-semibold text-gray-900'>Add skill</h2>
+          <h2 className='text-[17px] font-semibold text-gray-900'>{isEdit ? 'Edit skill' : 'Add skill'}</h2>
           <button
             type='button'
             onClick={onClose}
@@ -192,7 +228,7 @@ export default function CreateSkillModal({ open, onClose }: Props) {
               className='inline-flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 disabled:opacity-60 transition'
             >
               {isPending && <Loader2 className='w-4 h-4 animate-spin' />}
-              {isPending ? 'Creating...' : 'Create skill'}
+              {isPending ? 'Saving...' : isEdit ? 'Save changes' : 'Create skill'}
             </button>
           </div>
         </form>

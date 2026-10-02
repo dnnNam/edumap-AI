@@ -56,3 +56,5 @@ export interface CreateSkillPayload {
   difficultyLevel: number
   demandScore: number
 }
+
+export type UpdateSkillPayload = Partial<CreateSkillPayload>
