@@ -1,27 +1,48 @@
-import { Search, Bell, ChevronRight, Menu } from 'lucide-react'
+import { Bell, Menu } from 'lucide-react'
 import { useNavigate } from 'react-router'
 import { useUnreadNotificationsCount } from '../../hooks/notificationQuery'
+import { getRoleFromLS } from '../../utils/auth'
 import Avatar from '../ui/Avatar'
 
 interface AppHeaderProps {
   logoText?: string
   badgeText?: string
-  breadcrumbs?: string[]
   userName?: string
   userPlan?: string
   onToggleMenu?: () => void
 }
 
+// Tách riêng để hook đếm thông báo chỉ chạy khi component này được render (admin thì không render)
+function NotificationBell() {
+  const navigate = useNavigate()
+  const { unreadCount } = useUnreadNotificationsCount()
+
+  return (
+    <button
+      type='button'
+      onClick={() => navigate('/notifications')}
+      aria-label={unreadCount > 0 ? `Notifications, ${unreadCount} unread` : 'Notifications'}
+      className='relative w-9 h-9 flex items-center justify-center rounded-lg hover:bg-gray-50 transition-colors'
+    >
+      <Bell className='w-5 h-5 text-gray-500' />
+      {unreadCount > 0 && (
+        <span className='absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-indigo-600 text-white text-[10px] font-semibold leading-none ring-2 ring-white'>
+          {unreadCount > 9 ? '9+' : unreadCount}
+        </span>
+      )}
+    </button>
+  )
+}
+
 export default function AppHeader({
   logoText = 'EduMap AI',
   badgeText = 'Demo',
-  breadcrumbs = ['Home', 'Chat'],
   userName = 'Alex Johnson',
   userPlan = 'Free plan',
   onToggleMenu,
 }: AppHeaderProps) {
   const navigate = useNavigate()
-  const { unreadCount } = useUnreadNotificationsCount()
+  const isAdmin = getRoleFromLS() === 'ADMIN'
 
   return (
     <header className='w-full h-16 shrink-0 bg-white border-b border-gray-200 flex items-stretch'>
@@ -46,40 +67,10 @@ export default function AppHeader({
         </span>
       </div>
 
-      {/* Right: Breadcrumb + Search + Notifications + Profile */}
-      <div className='flex-1 flex items-center justify-between px-3 sm:px-6 min-w-0'>
-        <nav className='hidden sm:flex items-center gap-1.5 text-sm text-gray-500 truncate'>
-          {breadcrumbs.map((crumb, i) => (
-            <div key={crumb} className='flex items-center gap-1.5'>
-              {i > 0 && <ChevronRight className='w-3.5 h-3.5 text-gray-300' />}
-              <span className={i === breadcrumbs.length - 1 ? 'text-gray-900 font-medium' : ''}>{crumb}</span>
-            </div>
-          ))}
-        </nav>
-
-        <div className='flex items-center gap-3 sm:gap-4 ml-auto'>
-          <div className='hidden md:flex items-center gap-2 w-52 lg:w-64 h-9 rounded-lg bg-gray-50 border border-gray-200 px-3 text-gray-400 focus-within:border-gray-300'>
-            <Search className='w-4 h-4 shrink-0' />
-            <input
-              type='text'
-              placeholder='Search...'
-              className='bg-transparent outline-none text-sm text-gray-700 placeholder:text-gray-400 w-full'
-            />
-          </div>
-
-          <button
-            type='button'
-            onClick={() => navigate('/notifications')}
-            aria-label={unreadCount > 0 ? `Notifications, ${unreadCount} unread` : 'Notifications'}
-            className='relative w-9 h-9 flex items-center justify-center rounded-lg hover:bg-gray-50 transition-colors'
-          >
-            <Bell className='w-5 h-5 text-gray-500' />
-            {unreadCount > 0 && (
-              <span className='absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-indigo-600 text-white text-[10px] font-semibold leading-none ring-2 ring-white'>
-                {unreadCount > 9 ? '9+' : unreadCount}
-              </span>
-            )}
-          </button>
+      {/* Right: Notifications (user only) + Profile */}
+      <div className='flex-1 flex items-center justify-end px-3 sm:px-6 min-w-0'>
+        <div className='flex items-center gap-3 sm:gap-4'>
+          {!isAdmin && <NotificationBell />}
 
           <button
             type='button'
