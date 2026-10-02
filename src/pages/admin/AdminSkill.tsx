@@ -1,8 +1,9 @@
 import { useMemo, useState } from 'react'
-import { ArrowDown, ArrowUp, ChevronLeft, ChevronRight, RefreshCw, Search } from 'lucide-react'
+import { ArrowDown, ArrowUp, ChevronLeft, ChevronRight, Plus, RefreshCw, Search } from 'lucide-react'
 import Skeleton from 'react-loading-skeleton'
-import type { Skill } from '../../types/api/skillTree.types'
 import { useAllSkillsQuery } from '../../hooks/skillsQuery'
+import CreateSkillModal from '../../components/layouts/admin/CreateSkillModal'
+import type { Skill } from '../../types/api/skills.type'
 
 const PAGE_SIZE = 20
 const ALL = '__ALL__'
@@ -47,6 +48,7 @@ export default function AdminSkillsPage() {
   const [sortKey, setSortKey] = useState<SortKey>('createdAt')
   const [sortDir, setSortDir] = useState<SortDir>('desc')
   const [page, setPage] = useState(1)
+  const [createOpen, setCreateOpen] = useState(false)
 
   const categories = useMemo(
     () => [...new Set(skills.map((s) => s.category))].sort((a, b) => a.localeCompare(b, 'vi')),
@@ -87,15 +89,25 @@ export default function AdminSkillsPage() {
             <h1 className='text-[28px] font-bold text-gray-900'>Skills</h1>
             <p className='mt-1 text-gray-500 text-[15px]'>All skills in the system, managed by admin.</p>
           </div>
-          <button
-            type='button'
-            onClick={() => refetch()}
-            disabled={isFetching}
-            className='inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white text-gray-900 text-sm font-medium px-4 py-2 hover:bg-gray-50 disabled:opacity-60 transition'
-          >
-            <RefreshCw className={`w-4 h-4 ${isFetching ? 'animate-spin' : ''}`} />
-            Refresh
-          </button>
+          <div className='flex items-center gap-3'>
+            <button
+              type='button'
+              onClick={() => refetch()}
+              disabled={isFetching}
+              className='inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white text-gray-900 text-sm font-medium px-4 py-2 hover:bg-gray-50 disabled:opacity-60 transition'
+            >
+              <RefreshCw className={`w-4 h-4 ${isFetching ? 'animate-spin' : ''}`} />
+              Refresh
+            </button>
+            <button
+              type='button'
+              onClick={() => setCreateOpen(true)}
+              className='inline-flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 transition'
+            >
+              <Plus className='w-4 h-4' />
+              Add skill
+            </button>
+          </div>
         </div>
 
         {/* Stats */}
@@ -293,6 +305,8 @@ export default function AdminSkillsPage() {
           )}
         </div>
       </div>
+
+      <CreateSkillModal open={createOpen} onClose={() => setCreateOpen(false)} />
     </div>
   )
 }

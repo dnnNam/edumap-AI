@@ -34,3 +34,25 @@ export interface CreateSkillPayload {
   difficultyLevel: number
   demandScore: number
 }
+
+export interface Skill {
+  id: string
+  name: string
+  category: string
+  difficultyLevel: number
+  demandScore: number
+  createdAt: string
+}
+
+export interface AllSkillsResponse {
+  success: boolean
+  statusCode: number
+  data: Skill[]
+}
+
+export interface CreateSkillPayload {
+  name: string
+  category: string
+  difficultyLevel: number
+  demandScore: number
+}

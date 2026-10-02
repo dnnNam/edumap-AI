@@ -1,5 +1,6 @@
+// src/repository/skill.repo.ts
 import http from '../config/http'
-import type { AllSkillsResponse, MySkillsSummaryResponse } from '../types/api/skills.type'
+import type { AllSkillsResponse, CreateSkillPayload, MySkillsSummaryResponse } from '../types/api/skills.type'
 
 class SkillRepository {
   // Khai báo prefix chung cho toàn bộ API trong class này
@@ -9,8 +10,15 @@ class SkillRepository {
   getMySkillsSummary() {
     return http.get<MySkillsSummaryResponse>(`${this.PREFIX}/my-skills/summary`)
   }
+
+  // [ADMIN] Toàn bộ skill
   getAllSkills() {
-    return http.get<AllSkillsResponse>(`${this.PREFIX}`)
+    return http.get<AllSkillsResponse>(this.PREFIX)
+  }
+
+  // [ADMIN] Tạo kỹ năng mới
+  createSkill(payload: CreateSkillPayload) {
+    return http.post(this.PREFIX, payload)
   }
 }
 
