@@ -1,0 +1,324 @@
+import {
+  ArrowDown,
+  ArrowUp,
+  ChevronLeft,
+  ChevronRight,
+  ExternalLink,
+  Plus,
+  RefreshCw,
+  Search,
+  Star,
+} from 'lucide-react'
+import { useMemo, useState } from 'react'
+import Skeleton from 'react-loading-skeleton'
+import ResourceFormModal from '../../components/layouts/admin/ResourceFormModal'
+import { useTopSkillResourcesQuery } from '../../hooks/skillResourceQuery'
+import type { SkillResource } from '../../types/api/skillResource.types'
+import { cleanTitle, getPlatform, getPriceLabel, getResourceTypeLabel } from '../../utils/skillResource'
+
+const PAGE_SIZE = 10
+const TOP_LIMIT = 50 // BE: tối đa 50
+const ALL = '__ALL__'
+
+type SortKey = 'title' | 'skill' | 'resourceType' | 'cost' | 'rating' | 'durationHours' | 'createdAt'
+type SortDir = 'asc' | 'desc'
+
+const COLUMNS: { key: SortKey; label: string }[] = [
+  { key: 'title', label: 'Tài nguyên' },
+  { key: 'skill', label: 'Kỹ năng' },
+  { key: 'resourceType', label: 'Loại' },
+  { key: 'cost', label: 'Chi phí' },
+  { key: 'rating', label: 'Đánh giá' },
+  { key: 'durationHours', label: 'Thời lượng' },
+  { key: 'createdAt', label: 'Ngày tạo' },
+]
+
+const TYPE_STYLE: Record<string, string> = {
+  VIDEO_COURSE: 'bg-rose-50 text-rose-700 border-rose-200',
+  DOCUMENTATION: 'bg-sky-50 text-sky-700 border-sky-200',
+  INTERACTIVE_LAB: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+  ARTICLE: 'bg-amber-50 text-amber-700 border-amber-200',
+}
+
+const formatDate = (iso: string) =>
+  new Date(iso).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })
+
+const sortValue = (r: SkillResource, key: SortKey): string | number =>
+  key === 'skill' ? (r.skill?.name ?? '') : (r[key] as string | number)
+
+function compare(a: SkillResource, b: SkillResource, key: SortKey) {
+  const va = sortValue(a, key)
+  const vb = sortValue(b, key)
+  if (typeof va === 'number' && typeof vb === 'number') return va - vb
+  return String(va).localeCompare(String(vb), 'vi')
+}
+
+export default function AdminResourcesPage() {
+  const { data: response, isLoading, isError, isFetching, refetch } = useTopSkillResourcesQuery(TOP_LIMIT)
+  const resources = useMemo(() => response?.data?.data ?? [], [response])
+
+  const [keyword, setKeyword] = useState('')
+  const [type, setType] = useState(ALL)
+  const [sortKey, setSortKey] = useState<SortKey>('rating')
+  const [sortDir, setSortDir] = useState<SortDir>('desc')
+  const [page, setPage] = useState(1)
+  const [formOpen, setFormOpen] = useState(false)
+
+  const filtered = useMemo(() => {
+    const kw = keyword.trim().toLowerCase()
+    return resources
+      .filter((r) => (type === ALL ? true : r.resourceType === type))
+      .filter((r) =>
+        kw ? r.title.toLowerCase().includes(kw) || (r.skill?.name ?? '').toLowerCase().includes(kw) : true,
+      )
+      .sort((a, b) => (sortDir === 'asc' ? 1 : -1) * compare(a, b, sortKey))
+  }, [resources, keyword, type, sortKey, sortDir])
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
+  const currentPage = Math.min(page, totalPages)
+  const pageItems = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
+
+  const freeCount = resources.filter((r) => r.cost === 0).length
+  const avgRating = resources.length
+    ? (resources.reduce((sum, r) => sum + r.rating, 0) / resources.length).toFixed(1)
+    : '0.0'
+
+  const handleSort = (key: SortKey) => {
+    if (key === sortKey) setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'))
+    else {
+      setSortKey(key)
+      setSortDir('asc')
+    }
+  }
+
+  const selectClass =
+    'h-9 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 outline-none focus:border-gray-300'
+
+  return (
+    <div className='h-full overflow-y-auto [scrollbar-gutter:stable]'>
+      <div className='max-w-6xl mx-auto px-6 py-8'>
+        {/* Header */}
+        <div className='flex items-end justify-between gap-4 flex-wrap'>
+          <div>
+            <h1 className='text-[28px] font-bold text-gray-900'>Resources</h1>
+            <p className='mt-1 text-gray-500 text-[15px]'>
+              Top {TOP_LIMIT} tài nguyên được đánh giá cao nhất trên hệ thống.
+            </p>
+          </div>
+          <div className='flex items-center gap-3'>
+            <button
+              type='button'
+              onClick={() => refetch()}
+              disabled={isFetching}
+              className='inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white text-gray-900 text-sm font-medium px-4 py-2 hover:bg-gray-50 disabled:opacity-60 transition'
+            >
+              <RefreshCw className={`w-4 h-4 ${isFetching ? 'animate-spin' : ''}`} />
+              Refresh
+            </button>
+            <button
+              type='button'
+              onClick={() => setFormOpen(true)}
+              className='inline-flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 transition'
+            >
+              <Plus className='w-4 h-4' />
+              Thêm tài nguyên
+            </button>
+          </div>
+        </div>
+
+        {/* Stats */}
+        <div className='mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4'>
+          {[
+            { label: 'Tổng tài nguyên', value: resources.length },
+            { label: 'Miễn phí', value: freeCount },
+            { label: 'Đánh giá trung bình', value: avgRating },
+          ].map((s) => (
+            <div key={s.label} className='rounded-xl border border-gray-200 bg-white p-4'>
+              <p className='text-xs text-gray-500'>{s.label}</p>
+              <p className='mt-1 text-2xl font-semibold text-gray-900'>
+                {isLoading ? <Skeleton width={48} /> : s.value}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        {/* Filters */}
+        <div className='mt-5 flex flex-wrap items-center gap-3'>
+          <div className='flex items-center gap-2 h-9 w-full sm:w-72 rounded-lg bg-white border border-gray-200 px-3 text-gray-400 focus-within:border-gray-300'>
+            <Search className='w-4 h-4 shrink-0' />
+            <input
+              type='text'
+              value={keyword}
+              onChange={(e) => {
+                setKeyword(e.target.value)
+                setPage(1)
+              }}
+              placeholder='Tìm theo tiêu đề hoặc kỹ năng...'
+              className='bg-transparent outline-none text-sm text-gray-700 placeholder:text-gray-400 w-full'
+            />
+          </div>
+          <select
+            value={type}
+            onChange={(e) => {
+              setType(e.target.value)
+              setPage(1)
+            }}
+            className={selectClass}
+          >
+            <option value={ALL}>Tất cả loại</option>
+            {Object.keys(TYPE_STYLE).map((t) => (
+              <option key={t} value={t}>
+                {getResourceTypeLabel(t)}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Table */}
+        <div className='mt-5 bg-white border border-gray-200 rounded-2xl overflow-hidden'>
+          {isError && !resources.length ? (
+            <div className='p-10 text-center'>
+              <p className='text-[15px] font-medium text-gray-900'>Không tải được danh sách tài nguyên.</p>
+              <button
+                type='button'
+                onClick={() => refetch()}
+                className='mt-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 transition'
+              >
+                Thử lại
+              </button>
+            </div>
+          ) : (
+            <div className='overflow-x-auto'>
+              <table className='w-full text-sm'>
+                <thead className='bg-gray-50 border-b border-gray-200'>
+                  <tr>
+                    {COLUMNS.map((col) => {
+                      const active = sortKey === col.key
+                      return (
+                        <th key={col.key} className='text-left font-medium text-gray-500 px-4 py-3 whitespace-nowrap'>
+                          <button
+                            type='button'
+                            onClick={() => handleSort(col.key)}
+                            className={`inline-flex items-center gap-1 hover:text-gray-900 transition ${active ? 'text-gray-900' : ''}`}
+                          >
+                            {col.label}
+                            {active &&
+                              (sortDir === 'asc' ? (
+                                <ArrowUp className='w-3.5 h-3.5' />
+                              ) : (
+                                <ArrowDown className='w-3.5 h-3.5' />
+                              ))}
+                          </button>
+                        </th>
+                      )
+                    })}
+                    <th className='px-4 py-3 w-12' />
+                  </tr>
+                </thead>
+                <tbody>
+                  {isLoading ? (
+                    Array.from({ length: 8 }).map((_, i) => (
+                      <tr key={i} className='border-b border-gray-100 last:border-0'>
+                        {COLUMNS.map((c) => (
+                          <td key={c.key} className='px-4 py-3'>
+                            <Skeleton height={20} />
+                          </td>
+                        ))}
+                        <td className='px-4 py-3'>
+                          <Skeleton width={24} height={20} />
+                        </td>
+                      </tr>
+                    ))
+                  ) : pageItems.length === 0 ? (
+                    <tr>
+                      <td colSpan={COLUMNS.length + 1} className='px-4 py-12 text-center text-gray-500'>
+                        Không có tài nguyên nào khớp bộ lọc.
+                      </td>
+                    </tr>
+                  ) : (
+                    pageItems.map((r) => (
+                      <tr
+                        key={r.id}
+                        className='border-b border-gray-100 last:border-0 hover:bg-gray-50/60 transition-colors'
+                      >
+                        <td className='px-4 py-3 max-w-xs'>
+                          <p className='font-medium text-gray-900 truncate' title={r.title}>
+                            {cleanTitle(r.title)}
+                          </p>
+                          <p className='text-xs text-gray-500 truncate'>{getPlatform(r.url)}</p>
+                        </td>
+                        <td className='px-4 py-3 text-gray-600'>{r.skill?.name ?? '—'}</td>
+                        <td className='px-4 py-3'>
+                          <span
+                            className={`inline-block rounded-full border px-2 py-0.5 text-xs font-medium whitespace-nowrap ${TYPE_STYLE[r.resourceType] ?? 'bg-gray-50 text-gray-600 border-gray-200'}`}
+                          >
+                            {getResourceTypeLabel(r.resourceType)}
+                          </span>
+                        </td>
+                        <td className='px-4 py-3 text-gray-600'>{getPriceLabel(r.cost)}</td>
+                        <td className='px-4 py-3'>
+                          <span className='inline-flex items-center gap-1 text-gray-900 tabular-nums'>
+                            <Star className='w-3.5 h-3.5 fill-gray-900 text-gray-900' />
+                            {r.rating.toFixed(1)}
+                          </span>
+                        </td>
+                        <td className='px-4 py-3 text-gray-600 tabular-nums'>{r.durationHours}h</td>
+                        <td className='px-4 py-3 text-gray-500 whitespace-nowrap'>{formatDate(r.createdAt)}</td>
+                        <td className='px-4 py-3 text-right'>
+                          <a
+                            href={r.url}
+                            target='_blank'
+                            rel='noreferrer'
+                            aria-label={`Mở ${r.title}`}
+                            className='inline-flex p-1.5 rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition'
+                          >
+                            <ExternalLink className='w-4 h-4' />
+                          </a>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {/* Pagination */}
+          {!isLoading && filtered.length > 0 && (
+            <div className='flex items-center justify-between gap-4 border-t border-gray-200 px-4 py-3 text-sm text-gray-500'>
+              <span>
+                {(currentPage - 1) * PAGE_SIZE + 1}–{Math.min(currentPage * PAGE_SIZE, filtered.length)} of{' '}
+                {filtered.length}
+              </span>
+              <div className='flex items-center gap-2'>
+                <button
+                  type='button'
+                  onClick={() => setPage(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  aria-label='Previous page'
+                  className='p-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-40 disabled:hover:bg-transparent transition'
+                >
+                  <ChevronLeft className='w-4 h-4' />
+                </button>
+                <span className='tabular-nums'>
+                  {currentPage} / {totalPages}
+                </span>
+                <button
+                  type='button'
+                  onClick={() => setPage(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  aria-label='Next page'
+                  className='p-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-40 disabled:hover:bg-transparent transition'
+                >
+                  <ChevronRight className='w-4 h-4' />
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <ResourceFormModal open={formOpen} onClose={() => setFormOpen(false)} />
+    </div>
+  )
+}

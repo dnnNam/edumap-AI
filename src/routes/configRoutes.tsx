@@ -25,10 +25,12 @@ import UploadPage from '../pages/main/UploadAndAnalyze'
 import AdminRoute from './AdminRoute'
 import ProtectedRoute from './ProtectedRoute'
 import PublicRoute from './PublicRoutes'
+import UserRoute from './UserRoute'
 import PortfolioPage from '../pages/main/PortfolioPage'
 import PortfolioPublicPage from '../pages/main/PublicPortfolioPage'
 import AdminSkillsPage from '../pages/admin/AdminSkill'
 import AdminSkillTreesPage from '../pages/admin/SkillTreeAdmin'
+import AdminResourcesPage from '../pages/admin/AdminResources'
 
 const router = createBrowserRouter([
   {
@@ -48,33 +50,36 @@ const router = createBrowserRouter([
       {
         Component: AppLayouts,
         children: [
-          {
-            path: '/dashboard',
-            Component: DashBoard,
-          },
-          {
-            path: '/chat',
-            Component: ChatPage,
-          },
-          { path: '/profile', Component: ProfilePage },
+          // Admin cũng dùng được trang này
           { path: '/settings', Component: SettingsPage },
-          { path: '/upload', Component: UploadPage },
-          { path: '/skill-tree', Component: SkillTreePage },
-          { path: '/notifications', Component: NotificationsPage },
-          { path: '/subscription', Component: SubscriptionPlans },
-          { path: '/usage', Component: BillingUsagePage },
-          { path: '/resources', Component: ResourcesPage },
-          { path: '/resources/history', Component: ResourceHistoryPage },
-          { path: '/resources/:skillId', Component: SkillResourcesPage },
-          { path: '/resources/detail/:resourceId', Component: ResourceDetailPage },
-          { path: '/jobs', Component: JobsPage },
-          { path: '/portfolio', Component: PortfolioPage },
+
+          {
+            Component: UserRoute, // chặn admin khỏi các trang của học viên
+            children: [
+              { path: '/dashboard', Component: DashBoard },
+              { path: '/chat', Component: ChatPage },
+              { path: '/profile', Component: ProfilePage },
+              { path: '/upload', Component: UploadPage },
+              { path: '/skill-tree', Component: SkillTreePage },
+              { path: '/notifications', Component: NotificationsPage },
+              { path: '/subscription', Component: SubscriptionPlans },
+              { path: '/usage', Component: BillingUsagePage },
+              { path: '/resources', Component: ResourcesPage },
+              { path: '/resources/history', Component: ResourceHistoryPage },
+              { path: '/resources/:skillId', Component: SkillResourcesPage },
+              { path: '/resources/detail/:resourceId', Component: ResourceDetailPage },
+              { path: '/jobs', Component: JobsPage },
+              { path: '/portfolio', Component: PortfolioPage },
+            ],
+          },
+
           {
             Component: AdminRoute, // gác thêm 1 lớp checkRole trước khi vào /admin
             children: [
               { path: '/admin', Component: AdminPermissionsPage },
               { path: 'admin/skills', element: <AdminSkillsPage /> },
               { path: '/admin/skill-trees', element: <AdminSkillTreesPage /> },
+              { path: '/admin/resources', element: <AdminResourcesPage /> },
             ],
           },
         ],

@@ -7,6 +7,8 @@ import type {
   SkillResourcesResponse,
   TopSkillResourcesResponse,
   ResourceHistoryResponse,
+  CreateSkillResourcePayload,
+  CreateSkillResourceResponse,
 } from '../types/api/skillResource.types'
 
 class SkillResourceRepository {
@@ -56,6 +58,10 @@ class SkillResourceRepository {
     return http.get<ResourceHistoryResponse>(`${this.PREFIX}/skill-resources/history`, {
       params: { limit },
     })
+  }
+  // admin tạo
+  create(payload: CreateSkillResourcePayload) {
+    return http.post<CreateSkillResourceResponse>(`${this.PREFIX}/skill-resources`, payload)
   }
 }
 

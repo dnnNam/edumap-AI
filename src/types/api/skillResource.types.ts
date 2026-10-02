@@ -79,3 +79,16 @@ export interface ResourceHistory {
 }
 
 export type ResourceHistoryResponse = ApiResponse<ResourceHistory[]>
+
+// POST /skill-resources/skill-resources [ADMIN]
+export interface CreateSkillResourcePayload {
+  skillId: string
+  affiliateId?: string
+  resourceType: SkillResourceType
+  title: string
+  url: string
+  cost: number
+  rating: number
+  durationHours: number
+}
+export type CreateSkillResourceResponse = ApiResponse<SkillResource>

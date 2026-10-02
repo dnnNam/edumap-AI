@@ -10,6 +10,7 @@ import {
   GitBranch,
   Layers,
   LayoutGrid,
+  Library,
   LogOut,
   MessageSquare,
   Settings,
@@ -57,6 +58,7 @@ const ACCOUNT_ITEMS: NavItem[] = [
   { icon: Shield, label: 'Admin', to: '/admin', roles: ['ADMIN'] },
   { icon: Layers, label: 'Skills', to: '/admin/skills', roles: ['ADMIN'] },
   { icon: GitBranch, label: 'Skill trees', to: '/admin/skill-trees', roles: ['ADMIN'] },
+  { icon: Library, label: 'Resources', to: '/admin/resources', roles: ['ADMIN'] },
 ]
 
 export interface AppAsideProps {

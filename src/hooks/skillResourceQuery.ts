@@ -1,6 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { skillResourceRepo } from '../repository/skillResource.repo'
 import { getAccessTokenFromLS } from '../utils/auth'
+import { toast } from 'sonner'
+import type { CreateSkillResourcePayload } from '../types/api/skillResource.types'
 
 export const GROUPED_KEY = (skillId?: string) => ['skill-resources', 'grouped', skillId]
 export const HISTORY_KEY = () => ['skill-resources', 'history']
@@ -73,5 +75,17 @@ export const useResourceHistoryQuery = (limit = 20) => {
     retry: false,
     refetchOnWindowFocus: false,
     staleTime: 2 * 60 * 1000, // 2 min
+  })
+}
+
+export const useCreateSkillResourceMutation = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (payload: CreateSkillResourcePayload) => skillResourceRepo.create(payload),
+    onSuccess: () => {
+      toast.success('Đã tạo tài nguyên mới')
+      // làm mới mọi cache resource (top, grouped...) để dữ liệu mới hiện ngay
+      queryClient.invalidateQueries({ queryKey: ['skill-resources'] })
+    },
   })
 }

@@ -3,12 +3,12 @@ import { Navigate, useSearchParams } from 'react-router'
 import AnimatedOutlet from '../components/motion/AnimatedOutlet'
 import AppLoadingSkeleton from '../components/ui/AppLoadingSkeleton'
 import { useMeQuery } from '../hooks/useAuthQuery'
-import { getAccessTokenFromLS } from '../utils/auth'
+import { getAccessTokenFromLS, getRoleFromLS } from '../utils/auth'
 
 export default function PublicRoute() {
   const [params] = useSearchParams()
   const accessToken = getAccessTokenFromLS()
-  const { isLoading, isError } = useMeQuery()
+  const { data, isLoading, isError } = useMeQuery()
 
   // Đang xử lý Google callback: để GoogleCallbackPage tự lo, không redirect/skeleton chen ngang
   if (params.get('token')) {
@@ -29,6 +29,8 @@ export default function PublicRoute() {
     return <AnimatedOutlet />
   }
 
-  // Token hợp lệ → đẩy vào dashboard
-  return <Navigate to='/dashboard' replace />
+  // Token hợp lệ → admin về trang admin, còn lại về dashboard
+  // Ưu tiên role mới nhất từ API, fallback về role đã lưu trong LS
+  const role = data?.data.data.role ?? getRoleFromLS()
+  return <Navigate to={role === 'ADMIN' ? '/admin' : '/dashboard'} replace />
 }
