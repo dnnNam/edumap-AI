@@ -89,3 +89,16 @@ export const useCreateSkillResourceMutation = () => {
     },
   })
 }
+
+export const useDeleteSkillResourceMutation = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (id: string) => skillResourceRepo.remove(id),
+    onSuccess: () => {
+      toast.success('Đã xóa tài nguyên')
+      // làm mới mọi cache resource (top, grouped, history...)
+      queryClient.invalidateQueries({ queryKey: ['skill-resources'] })
+    },
+  })
+}

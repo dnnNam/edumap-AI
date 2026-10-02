@@ -4,15 +4,17 @@ import {
   ChevronLeft,
   ChevronRight,
   ExternalLink,
+  Loader2,
   Plus,
   RefreshCw,
   Search,
   Star,
+  Trash2,
 } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import ResourceFormModal from '../../components/layouts/admin/ResourceFormModal'
-import { useTopSkillResourcesQuery } from '../../hooks/skillResourceQuery'
+import { useDeleteSkillResourceMutation, useTopSkillResourcesQuery } from '../../hooks/skillResourceQuery'
 import type { SkillResource } from '../../types/api/skillResource.types'
 import { cleanTitle, getPlatform, getPriceLabel, getResourceTypeLabel } from '../../utils/skillResource'
 
@@ -63,6 +65,9 @@ export default function AdminResourcesPage() {
   const [sortDir, setSortDir] = useState<SortDir>('desc')
   const [page, setPage] = useState(1)
   const [formOpen, setFormOpen] = useState(false)
+  const [deleteTarget, setDeleteTarget] = useState<SkillResource | null>(null)
+
+  const { mutate: deleteResource, isPending: deleting } = useDeleteSkillResourceMutation()
 
   const filtered = useMemo(() => {
     const kw = keyword.trim().toLowerCase()
@@ -89,6 +94,13 @@ export default function AdminResourcesPage() {
       setSortKey(key)
       setSortDir('asc')
     }
+  }
+
+  const handleConfirmDelete = () => {
+    if (!deleteTarget) return
+    deleteResource(deleteTarget.id, {
+      onSuccess: () => setDeleteTarget(null),
+    })
   }
 
   const selectClass =
@@ -212,7 +224,7 @@ export default function AdminResourcesPage() {
                         </th>
                       )
                     })}
-                    <th className='px-4 py-3 w-12' />
+                    <th className='px-4 py-3 w-24' />
                   </tr>
                 </thead>
                 <tbody>
@@ -265,15 +277,25 @@ export default function AdminResourcesPage() {
                         <td className='px-4 py-3 text-gray-600 tabular-nums'>{r.durationHours}h</td>
                         <td className='px-4 py-3 text-gray-500 whitespace-nowrap'>{formatDate(r.createdAt)}</td>
                         <td className='px-4 py-3 text-right'>
-                          <a
-                            href={r.url}
-                            target='_blank'
-                            rel='noreferrer'
-                            aria-label={`Mở ${r.title}`}
-                            className='inline-flex p-1.5 rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition'
-                          >
-                            <ExternalLink className='w-4 h-4' />
-                          </a>
+                          <div className='flex items-center justify-end gap-1'>
+                            <a
+                              href={r.url}
+                              target='_blank'
+                              rel='noreferrer'
+                              aria-label={`Mở ${r.title}`}
+                              className='inline-flex p-1.5 rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition'
+                            >
+                              <ExternalLink className='w-4 h-4' />
+                            </a>
+                            <button
+                              type='button'
+                              onClick={() => setDeleteTarget(r)}
+                              aria-label={`Xóa ${r.title}`}
+                              className='p-1.5 rounded-lg text-gray-500 hover:text-red-600 hover:bg-red-50 transition'
+                            >
+                              <Trash2 className='w-4 h-4' />
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))
@@ -317,6 +339,45 @@ export default function AdminResourcesPage() {
           )}
         </div>
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      {deleteTarget && (
+        <div className='fixed inset-0 z-50 flex items-center justify-center p-4'>
+          <div
+            className='absolute inset-0 bg-gray-900/30 backdrop-blur-xs'
+            onClick={() => !deleting && setDeleteTarget(null)}
+            aria-hidden='true'
+          />
+          <div role='dialog' aria-modal='true' className='relative w-full max-w-sm rounded-2xl bg-white shadow-xl'>
+            <div className='px-6 py-4'>
+              <h3 className='text-[17px] font-semibold text-gray-900'>Xóa tài nguyên?</h3>
+              <p className='mt-2 text-sm text-gray-500'>
+                "<span className='font-medium text-gray-700'>{cleanTitle(deleteTarget.title)}</span>" sẽ bị xóa vĩnh
+                viễn. Hành động này không thể hoàn tác.
+              </p>
+            </div>
+            <div className='flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-100'>
+              <button
+                type='button'
+                onClick={() => setDeleteTarget(null)}
+                disabled={deleting}
+                className='rounded-xl border border-gray-200 text-gray-900 text-sm font-medium px-4 py-2 hover:bg-gray-50 disabled:opacity-60 transition'
+              >
+                Hủy
+              </button>
+              <button
+                type='button'
+                onClick={handleConfirmDelete}
+                disabled={deleting}
+                className='inline-flex items-center gap-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-sm font-medium px-4 py-2 disabled:opacity-60 transition'
+              >
+                {deleting && <Loader2 className='w-4 h-4 animate-spin' />}
+                {deleting ? 'Đang xóa...' : 'Xóa'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <ResourceFormModal open={formOpen} onClose={() => setFormOpen(false)} />
     </div>

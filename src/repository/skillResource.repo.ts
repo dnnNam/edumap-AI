@@ -63,6 +63,9 @@ class SkillResourceRepository {
   create(payload: CreateSkillResourcePayload) {
     return http.post<CreateSkillResourceResponse>(`${this.PREFIX}/skill-resources`, payload)
   }
+  remove(id: string) {
+    return http.delete(`${this.PREFIX}/skill-resources/${id}`)
+  }
 }
 
 export const skillResourceRepo = new SkillResourceRepository()
