@@ -27,6 +27,7 @@ import ProtectedRoute from './ProtectedRoute'
 import PublicRoute from './PublicRoutes'
 import PortfolioPage from '../pages/main/PortfolioPage'
 import PortfolioPublicPage from '../pages/main/PublicPortfolioPage'
+import AdminSkillsPage from '../pages/admin/AdminSkill'
 
 const router = createBrowserRouter([
   {
@@ -69,7 +70,10 @@ const router = createBrowserRouter([
           { path: '/portfolio', Component: PortfolioPage },
           {
             Component: AdminRoute, // gác thêm 1 lớp checkRole trước khi vào /admin
-            children: [{ path: '/admin', Component: AdminPermissionsPage }],
+            children: [
+              { path: '/admin', Component: AdminPermissionsPage },
+              { path: 'admin/skills', element: <AdminSkillsPage /> },
+            ],
           },
         ],
       },

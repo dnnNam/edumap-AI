@@ -1,5 +1,5 @@
 import http from '../config/http'
-import type { MySkillsSummaryResponse } from '../types/api/skills.type'
+import type { AllSkillsResponse, MySkillsSummaryResponse } from '../types/api/skills.type'
 
 class SkillRepository {
   // Khai báo prefix chung cho toàn bộ API trong class này
@@ -8,6 +8,9 @@ class SkillRepository {
   // Tổng quan kỹ năng của user hiện tại (dùng cho Dashboard)
   getMySkillsSummary() {
     return http.get<MySkillsSummaryResponse>(`${this.PREFIX}/my-skills/summary`)
+  }
+  getAllSkills() {
+    return http.get<AllSkillsResponse>(`${this.PREFIX}`)
   }
 }
 

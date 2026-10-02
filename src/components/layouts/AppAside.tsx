@@ -7,6 +7,7 @@ import {
   Clock,
   FolderOpen,
   Gauge,
+  Layers,
   LayoutGrid,
   LogOut,
   MessageSquare,
@@ -52,6 +53,7 @@ const ACCOUNT_ITEMS: NavItem[] = [
   { icon: Gauge, label: 'Usage', to: '/usage', roles: ['STUDENT', 'MENTOR', 'MODERATOR'] },
   { icon: Settings, label: 'Settings', to: '/settings' },
   { icon: Shield, label: 'Admin', to: '/admin', roles: ['ADMIN'] },
+  { icon: Layers, label: 'Skills', to: '/admin/skills', roles: ['ADMIN'] },
 ]
 
 export interface AppAsideProps {
@@ -60,7 +62,7 @@ export interface AppAsideProps {
 }
 
 function NavButton({ icon: Icon, label, to, badge, onClick }: NavItem & { onClick?: () => void }) {
-  const isExactMatchOnly = to === '/resources'
+  const isExactMatchOnly = to === '/resources' || to === '/admin'
 
   return (
     <NavLink

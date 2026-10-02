@@ -12,3 +12,25 @@ export interface MySkillsSummary {
 }
 
 export type MySkillsSummaryResponse = ApiResponse<MySkillsSummary>
+
+export interface Skill {
+  id: string
+  name: string
+  category: string
+  difficultyLevel: number
+  demandScore: number
+  createdAt: string
+}
+
+export interface AllSkillsResponse {
+  success: boolean
+  statusCode: number
+  data: Skill[]
+}
+
+export interface CreateSkillPayload {
+  name: string
+  category: string
+  difficultyLevel: number
+  demandScore: number
+}

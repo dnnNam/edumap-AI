@@ -11,3 +11,14 @@ export const useMySkillsSummaryQuery = () => {
     refetchOnWindowFocus: false,
   })
 }
+
+// Admin: lấy toàn bộ skill trong hệ thống
+export const useAllSkillsQuery = () => {
+  return useQuery({
+    queryKey: ['skills', 'all'],
+    queryFn: () => skillRepo.getAllSkills(),
+    enabled: !!getAccessTokenFromLS(),
+    retry: false,
+    refetchOnWindowFocus: false,
+  })
+}
