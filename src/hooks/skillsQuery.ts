@@ -57,3 +57,15 @@ export const useUpdateSkillMutation = () => {
     },
   })
 }
+
+export const useDeleteSkillMutation = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (id: string) => skillRepo.deleteSkill(id),
+    onSuccess: () => {
+      toast.success('Skill deleted successfully.')
+      queryClient.invalidateQueries({ queryKey: ['skills'] })
+    },
+  })
+}

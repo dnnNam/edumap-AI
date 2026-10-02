@@ -1,7 +1,18 @@
 import { useMemo, useState } from 'react'
-import { ArrowDown, ArrowUp, ChevronLeft, ChevronRight, Pencil, Plus, RefreshCw, Search } from 'lucide-react'
+import {
+  ArrowDown,
+  ArrowUp,
+  ChevronLeft,
+  ChevronRight,
+  Loader2,
+  Pencil,
+  Plus,
+  RefreshCw,
+  Search,
+  Trash2,
+} from 'lucide-react'
 import Skeleton from 'react-loading-skeleton'
-import { useAllSkillsQuery } from '../../hooks/skillsQuery'
+import { useAllSkillsQuery, useDeleteSkillMutation } from '../../hooks/skillsQuery'
 import SkillFormModal from '../../components/layouts/admin/SkillFormModal'
 import type { Skill } from '../../types/api/skills.type'
 
@@ -50,6 +61,9 @@ export default function AdminSkillsPage() {
   const [page, setPage] = useState(1)
   const [formOpen, setFormOpen] = useState(false)
   const [editingSkill, setEditingSkill] = useState<Skill | null>(null)
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null)
+
+  const { mutate: deleteSkill, isPending: deleting } = useDeleteSkillMutation()
 
   const categories = useMemo(
     () => [...new Set(skills.map((s) => s.category))].sort((a, b) => a.localeCompare(b, 'vi')),
@@ -272,17 +286,27 @@ export default function AdminSkillsPage() {
                         </td>
                         <td className='px-4 py-3 text-gray-500 whitespace-nowrap'>{formatDate(skill.createdAt)}</td>
                         <td className='px-4 py-3 text-right'>
-                          <button
-                            type='button'
-                            onClick={() => {
-                              setEditingSkill(skill)
-                              setFormOpen(true)
-                            }}
-                            aria-label={`Edit ${skill.name}`}
-                            className='p-1.5 rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition'
-                          >
-                            <Pencil className='w-4 h-4' />
-                          </button>
+                          <div className='flex items-center gap-1'>
+                            <button
+                              type='button'
+                              onClick={() => {
+                                setEditingSkill(skill)
+                                setFormOpen(true)
+                              }}
+                              aria-label={`Edit ${skill.name}`}
+                              className='p-1.5 rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition'
+                            >
+                              <Pencil className='w-4 h-4' />
+                            </button>
+                            <button
+                              type='button'
+                              onClick={() => setDeleteConfirmId(skill.id)}
+                              aria-label={`Delete ${skill.name}`}
+                              className='p-1.5 rounded-lg text-gray-500 hover:text-red-600 hover:bg-red-50 transition'
+                            >
+                              <Trash2 className='w-4 h-4' />
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))
@@ -326,6 +350,46 @@ export default function AdminSkillsPage() {
           )}
         </div>
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      {deleteConfirmId && (
+        <div className='fixed inset-0 z-50 flex items-center justify-center p-4'>
+          <div
+            className='absolute inset-0 bg-gray-900/30 backdrop-blur-xs'
+            onClick={() => !deleting && setDeleteConfirmId(null)}
+            aria-hidden='true'
+          />
+          <div role='dialog' aria-modal='true' className='relative w-full max-w-sm rounded-2xl bg-white shadow-xl'>
+            <div className='px-6 py-4'>
+              <h3 className='text-[17px] font-semibold text-gray-900'>Delete skill?</h3>
+              <p className='mt-2 text-sm text-gray-500'>This action cannot be undone.</p>
+            </div>
+            <div className='flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-100'>
+              <button
+                type='button'
+                onClick={() => setDeleteConfirmId(null)}
+                disabled={deleting}
+                className='rounded-xl border border-gray-200 text-gray-900 text-sm font-medium px-4 py-2 hover:bg-gray-50 disabled:opacity-60 transition'
+              >
+                Cancel
+              </button>
+              <button
+                type='button'
+                onClick={() => {
+                  deleteSkill(deleteConfirmId, {
+                    onSuccess: () => setDeleteConfirmId(null),
+                  })
+                }}
+                disabled={deleting}
+                className='inline-flex items-center gap-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-sm font-medium px-4 py-2 disabled:opacity-60 transition'
+              >
+                {deleting && <Loader2 className='w-4 h-4 animate-spin' />}
+                {deleting ? 'Deleting...' : 'Delete'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <SkillFormModal open={formOpen} onClose={() => setFormOpen(false)} skill={editingSkill} />
     </div>

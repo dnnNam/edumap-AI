@@ -28,6 +28,9 @@ class SkillRepository {
   updateSkill(id: string, payload: UpdateSkillPayload) {
     return http.patch(`${this.PREFIX}/${id}`, payload)
   }
+  deleteSkill(id: string) {
+    return http.delete(`${this.PREFIX}/${id}`)
+  }
 }
 
 // Khởi tạo và xuất ra MỘT đối tượng (instance) duy nhất để dùng chung cho toàn bộ app
