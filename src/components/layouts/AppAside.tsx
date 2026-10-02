@@ -7,6 +7,7 @@ import {
   Clock,
   FolderOpen,
   Gauge,
+  GitBranch,
   Layers,
   LayoutGrid,
   LogOut,
@@ -39,6 +40,7 @@ const NAV_ITEMS: NavItem[] = [
   { icon: FolderOpen, label: 'Portfolio', to: '/portfolio', roles: ['STUDENT', 'MENTOR', 'MODERATOR'] },
   { icon: Briefcase, label: 'Jobs', to: '/jobs', roles: ['STUDENT', 'MENTOR', 'MODERATOR'] },
   { icon: User, label: 'Profile', to: '/profile', roles: ['STUDENT', 'MENTOR', 'MODERATOR'] },
+
   {
     icon: Bell,
     label: 'Notifications',
@@ -54,6 +56,7 @@ const ACCOUNT_ITEMS: NavItem[] = [
   { icon: Settings, label: 'Settings', to: '/settings' },
   { icon: Shield, label: 'Admin', to: '/admin', roles: ['ADMIN'] },
   { icon: Layers, label: 'Skills', to: '/admin/skills', roles: ['ADMIN'] },
+  { icon: GitBranch, label: 'Skill trees', to: '/admin/skill-trees', roles: ['ADMIN'] },
 ]
 
 export interface AppAsideProps {
@@ -93,7 +96,7 @@ function filterByRole(items: NavItem[], userRole: string) {
   })
 }
 
-export default function AppAside({ onUpgradeClick, onClose }: AppAsideProps) {
+export default function AppAside({ onClose }: AppAsideProps) {
   const navigate = useNavigate()
   const userRole = getRoleFromLS()
 
@@ -155,7 +158,7 @@ export default function AppAside({ onUpgradeClick, onClose }: AppAsideProps) {
               type='button'
               onClick={() => {
                 onClose?.()
-                onUpgradeClick?.()
+                navigate('/subscription')
               }}
               className='w-full bg-indigo-600 text-white text-sm font-medium rounded-lg py-2 hover:bg-indigo-700 transition-colors'
             >

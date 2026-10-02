@@ -1,10 +1,18 @@
 import type { ApiResponse } from './auth.types'
 
+export interface JobPlatformLink {
+  platform: string
+  url: string
+  title: string
+}
+
 export interface TrendingRole {
   rank: number
   targetRole: string
   searchCount: number
   badge: string
+  // để optional phòng khi backend role nào đó chưa có link
+  jobPlatformLinks?: JobPlatformLink[]
 }
 
 // Phần `data` bên trong response ngoài cùng

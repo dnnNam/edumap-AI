@@ -28,6 +28,7 @@ import PublicRoute from './PublicRoutes'
 import PortfolioPage from '../pages/main/PortfolioPage'
 import PortfolioPublicPage from '../pages/main/PublicPortfolioPage'
 import AdminSkillsPage from '../pages/admin/AdminSkill'
+import AdminSkillTreesPage from '../pages/admin/SkillTreeAdmin'
 
 const router = createBrowserRouter([
   {
@@ -73,6 +74,7 @@ const router = createBrowserRouter([
             children: [
               { path: '/admin', Component: AdminPermissionsPage },
               { path: 'admin/skills', element: <AdminSkillsPage /> },
+              { path: '/admin/skill-trees', element: <AdminSkillTreesPage /> },
             ],
           },
         ],

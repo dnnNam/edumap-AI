@@ -1,8 +1,10 @@
+import { ExternalLink } from 'lucide-react'
 import type { TrendingRole } from '../../../types/api/job.types'
 import { MotionStaggerContainer, MotionStaggerItem } from '../../motion/MotionWrapper'
 
 function TrendingCard({ role, maxCount }: { role: TrendingRole; maxCount: number }) {
   const percent = maxCount > 0 ? Math.max(4, Math.round((role.searchCount / maxCount) * 100)) : 0
+  const links = role.jobPlatformLinks ?? []
 
   return (
     <div className='h-full flex flex-col rounded-3xl border border-gray-200 bg-white p-6 transition hover:shadow-md hover:border-gray-300'>
@@ -23,6 +25,28 @@ function TrendingCard({ role, maxCount }: { role: TrendingRole; maxCount: number
           </span>
         )}
       </div>
+
+      {/* Link sang các trang tuyển dụng */}
+      {links.length > 0 && (
+        <div className='mt-5'>
+          <p className='text-xs font-medium text-gray-400 mb-2'>Tìm việc trên</p>
+          <div className='flex flex-wrap gap-2'>
+            {links.map((link) => (
+              <a
+                key={link.platform}
+                href={link.url}
+                title={link.title}
+                target='_blank'
+                rel='noopener noreferrer'
+                className='inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-700 transition hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-600'
+              >
+                {link.platform}
+                <ExternalLink className='w-3.5 h-3.5' />
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className='mt-auto pt-8'>
         <div className='flex items-center justify-between text-sm'>

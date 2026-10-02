@@ -5,6 +5,7 @@ import { skillTreeRepo } from '../repository/skillTree.repo'
 import type { SkillTreeResponse } from '../types/api/skillTree.types'
 import { getAccessTokenFromLS } from '../utils/auth'
 import { flattenNodes, toggleNodeInTree } from '../utils/skillTree'
+import type { AdminSkillTreeListResponse } from '../types/api/skills.type'
 
 const SKILL_TREE_KEY = ['Skill-tree']
 
@@ -67,3 +68,13 @@ export const useTogglingNodeIds = () =>
     filters: { mutationKey: SKILL_TREE_KEY, status: 'pending' },
     select: (mutation) => (mutation.state.variables as { nodeId: string }).nodeId,
   })
+
+export const useAllSkillTreesQuery = () => {
+  return useQuery<AxiosResponse<AdminSkillTreeListResponse>>({
+    queryKey: ['Skill-trees', 'admin-all'],
+    queryFn: () => skillTreeRepo.getAllSkillTrees(),
+    enabled: !!getAccessTokenFromLS(),
+    retry: false,
+    refetchOnWindowFocus: false,
+  })
+}

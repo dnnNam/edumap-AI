@@ -11,6 +11,11 @@ class SkillTreeRepository {
   toggleNode(treeId: string, nodeId: string) {
     return http.post(`${this.PREFIX}/${treeId}/nodes/${nodeId}/toggle`)
   }
+
+  // admin: lấy danh sách tất cả skill tree của user
+  getAllSkillTrees() {
+    return http.get(this.PREFIX)
+  }
 }
 
 // Khởi tạo và xuất ra MỘT đối tượng (instance) duy nhất để dùng chung cho toàn bộ app

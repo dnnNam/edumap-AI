@@ -1,4 +1,5 @@
 import type { ApiResponse } from './auth.types'
+import type { SkillNode } from './skillTree.types'
 
 export type TopSkill = string | { id?: string; name?: string; skillName?: string }
 
@@ -58,3 +59,15 @@ export interface CreateSkillPayload {
 }
 
 export type UpdateSkillPayload = Partial<CreateSkillPayload>
+
+export interface AdminSkillTreeItem {
+  id: string
+  userId: string
+  careerPath: string
+  completionPercentage: number
+  lastAnalyzedAt: string | null
+  createdAt: string
+  nodes: SkillNode[]
+}
+
+export type AdminSkillTreeListResponse = ApiResponse<AdminSkillTreeItem[]>
