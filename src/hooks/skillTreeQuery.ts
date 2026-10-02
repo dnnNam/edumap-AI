@@ -78,3 +78,15 @@ export const useAllSkillTreesQuery = () => {
     refetchOnWindowFocus: false,
   })
 }
+
+export const useDeleteSkillTreeMutation = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (id: string) => skillTreeRepo.deleteSkillTree(id),
+    onSuccess: () => {
+      toast.success('Đã xóa cây kỹ năng!')
+      queryClient.invalidateQueries({ queryKey: ['Skill-trees', 'admin-all'] })
+    },
+  })
+}

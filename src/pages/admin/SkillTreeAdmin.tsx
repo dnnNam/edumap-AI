@@ -1,7 +1,17 @@
 import { Fragment, useMemo, useState } from 'react'
-import { ArrowDown, ArrowUp, Check, ChevronDown, ChevronLeft, ChevronRight, RefreshCw, Search } from 'lucide-react'
+import {
+  ArrowDown,
+  ArrowUp,
+  Check,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  Loader2,
+  Search,
+  Trash2,
+} from 'lucide-react'
 import Skeleton from 'react-loading-skeleton'
-import { useAllSkillTreesQuery } from '../../hooks/skillTreeQuery'
+import { useAllSkillTreesQuery, useDeleteSkillTreeMutation } from '../../hooks/skillTreeQuery'
 import type { SkillNode } from '../../types/api/skillTree.types'
 import type { AdminSkillTreeItem } from '../../types/api/skills.type'
 
@@ -19,6 +29,9 @@ const COLUMNS: { key: SortKey; label: string }[] = [
   { key: 'lastAnalyzedAt', label: 'Last analyzed' },
   { key: 'createdAt', label: 'Created' },
 ]
+
+// Cột chevron (đầu) + cột nút xóa (cuối)
+const TOTAL_COLS = COLUMNS.length + 2
 
 // Chỉ lấy node gốc, bỏ qua children
 interface Row {
@@ -102,7 +115,7 @@ function RootNodeList({ nodes }: { nodes: SkillNode[] }) {
 }
 
 export default function AdminSkillTreesPage() {
-  const { data: response, isLoading, isError, isFetching, refetch } = useAllSkillTreesQuery()
+  const { data: response, isLoading, isError, refetch } = useAllSkillTreesQuery()
   const rows = useMemo(() => (response?.data?.data ?? []).map(toRow), [response])
 
   const [keyword, setKeyword] = useState('')
@@ -111,6 +124,9 @@ export default function AdminSkillTreesPage() {
   const [sortDir, setSortDir] = useState<SortDir>('desc')
   const [page, setPage] = useState(1)
   const [expandedId, setExpandedId] = useState<string | null>(null)
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null)
+
+  const { mutate: deleteTree, isPending: deleting } = useDeleteSkillTreeMutation()
 
   const careerPaths = useMemo(
     () => [...new Set(rows.map((r) => r.careerPath))].sort((a, b) => a.localeCompare(b, 'vi')),
@@ -142,6 +158,16 @@ export default function AdminSkillTreesPage() {
     }
   }
 
+  const handleConfirmDelete = () => {
+    if (!deleteConfirmId) return
+    deleteTree(deleteConfirmId, {
+      onSuccess: () => {
+        if (expandedId === deleteConfirmId) setExpandedId(null)
+        setDeleteConfirmId(null)
+      },
+    })
+  }
+
   const selectClass =
     'h-9 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 outline-none focus:border-gray-300'
 
@@ -154,15 +180,6 @@ export default function AdminSkillTreesPage() {
             <h1 className='text-[28px] font-bold text-gray-900'>Skill trees</h1>
             <p className='mt-1 text-gray-500 text-[15px]'>Every user's skill tree. Click a row to see its nodes.</p>
           </div>
-          <button
-            type='button'
-            onClick={() => refetch()}
-            disabled={isFetching}
-            className='inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white text-gray-900 text-sm font-medium px-4 py-2 hover:bg-gray-50 disabled:opacity-60 transition'
-          >
-            <RefreshCw className={`w-4 h-4 ${isFetching ? 'animate-spin' : ''}`} />
-            Refresh
-          </button>
         </div>
 
         {/* Stats */}
@@ -255,6 +272,7 @@ export default function AdminSkillTreesPage() {
                         </th>
                       )
                     })}
+                    <th className='px-4 py-3 w-12' />
                   </tr>
                 </thead>
                 <tbody>
@@ -267,11 +285,14 @@ export default function AdminSkillTreesPage() {
                             <Skeleton height={20} />
                           </td>
                         ))}
+                        <td className='px-4 py-3'>
+                          <Skeleton width={24} height={20} />
+                        </td>
                       </tr>
                     ))
                   ) : pageItems.length === 0 ? (
                     <tr>
-                      <td colSpan={COLUMNS.length + 1} className='px-4 py-12 text-center text-gray-500'>
+                      <td colSpan={TOTAL_COLS} className='px-4 py-12 text-center text-gray-500'>
                         No skill trees match your filters.
                       </td>
                     </tr>
@@ -320,10 +341,23 @@ export default function AdminSkillTreesPage() {
                               {formatDate(row.lastAnalyzedAt)}
                             </td>
                             <td className='px-4 py-3 text-gray-500 whitespace-nowrap'>{formatDate(row.createdAt)}</td>
+                            <td className='px-4 py-3 text-right'>
+                              <button
+                                type='button'
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  setDeleteConfirmId(row.id)
+                                }}
+                                aria-label={`Delete tree of user ${row.userId}`}
+                                className='p-1.5 rounded-lg text-gray-500 hover:text-red-600 hover:bg-red-50 transition'
+                              >
+                                <Trash2 className='w-4 h-4' />
+                              </button>
+                            </td>
                           </tr>
                           {open && (
                             <tr className='border-b border-gray-100 last:border-0 bg-gray-50'>
-                              <td colSpan={COLUMNS.length + 1} className='px-6 py-4'>
+                              <td colSpan={TOTAL_COLS} className='px-6 py-4'>
                                 <RootNodeList nodes={row.rootNodes} />
                               </td>
                             </tr>
@@ -371,6 +405,44 @@ export default function AdminSkillTreesPage() {
           )}
         </div>
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      {deleteConfirmId && (
+        <div className='fixed inset-0 z-50 flex items-center justify-center p-4'>
+          <div
+            className='absolute inset-0 bg-gray-900/30 backdrop-blur-xs'
+            onClick={() => !deleting && setDeleteConfirmId(null)}
+            aria-hidden='true'
+          />
+          <div role='dialog' aria-modal='true' className='relative w-full max-w-sm rounded-2xl bg-white shadow-xl'>
+            <div className='px-6 py-4'>
+              <h3 className='text-[17px] font-semibold text-gray-900'>Delete skill tree?</h3>
+              <p className='mt-2 text-sm text-gray-500'>
+                The tree and all of its nodes will be removed. This action cannot be undone.
+              </p>
+            </div>
+            <div className='flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-100'>
+              <button
+                type='button'
+                onClick={() => setDeleteConfirmId(null)}
+                disabled={deleting}
+                className='rounded-xl border border-gray-200 text-gray-900 text-sm font-medium px-4 py-2 hover:bg-gray-50 disabled:opacity-60 transition'
+              >
+                Cancel
+              </button>
+              <button
+                type='button'
+                onClick={handleConfirmDelete}
+                disabled={deleting}
+                className='inline-flex items-center gap-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-sm font-medium px-4 py-2 disabled:opacity-60 transition'
+              >
+                {deleting && <Loader2 className='w-4 h-4 animate-spin' />}
+                {deleting ? 'Deleting...' : 'Delete'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

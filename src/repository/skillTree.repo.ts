@@ -16,6 +16,10 @@ class SkillTreeRepository {
   getAllSkillTrees() {
     return http.get(this.PREFIX)
   }
+
+  deleteSkillTree(id: string) {
+    return http.delete(`${this.PREFIX}/${id}`)
+  }
 }
 
 // Khởi tạo và xuất ra MỘT đối tượng (instance) duy nhất để dùng chung cho toàn bộ app
