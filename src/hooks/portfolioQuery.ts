@@ -16,6 +16,7 @@ export const usePublicPortfolioQuery = (slug?: string, enabled = true) =>
     queryFn: () => portfolioRepo.getPublic(slug as string),
     enabled: !!slug && enabled,
     retry: false,
+    refetchOnMount: 'always',
   })
 
 // PATCH /portfolios/my-portfolio/update
@@ -23,9 +24,14 @@ export const useUpdatePortfolioMutation = () => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: (body: UpdatePortfolioBody) => portfolioRepo.updateMine(body),
-    onSuccess: () => {
+    onSuccess: (_res, body) => {
       queryClient.invalidateQueries({ queryKey: ['my-portfolio'] })
-      queryClient.invalidateQueries({ queryKey: ['public-portfolio'] })
+      if (body.isPublic) {
+        queryClient.invalidateQueries({ queryKey: ['public-portfolio'] })
+      } else {
+        // private thì xoá cache để không còn hiện repo cũ
+        queryClient.removeQueries({ queryKey: ['public-portfolio'] })
+      }
     },
   })
 }

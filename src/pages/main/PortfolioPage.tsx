@@ -616,7 +616,7 @@ export default function PortfolioPage() {
 
   // API 2: truyền slug lấy bản public (kèm repositories). Portfolio private -> API public sẽ lỗi nên bỏ qua
   const { data: publicRes, isLoading: publicLoading } = usePublicPortfolioQuery(slug, portfolio?.isPublic)
-  const publicData = publicRes?.data?.data?.data
+  const publicData = portfolio?.isPublic ? publicRes?.data?.data?.data : undefined
 
   if (isLoading) {
     return (
