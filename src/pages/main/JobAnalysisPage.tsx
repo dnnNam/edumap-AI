@@ -8,7 +8,7 @@ import RecommendationResult from '../../components/layouts/jobs/RecommendationRe
 import { useCheckJobProfileQuery, useJobRecommendationsMutation } from '../../hooks/jobQuery'
 import { DEFAULT_LOCATION, jobRecommendationSchema, type JobRecommendationFormValues } from '../../schemas/job.schema'
 
-const QUICK_LOCATIONS = ['HCM', 'Hà Nội', 'Đà Nẵng', 'Cần Thơ', 'Remote']
+const QUICK_LOCATIONS = ['HCM', 'Hà Nội', 'Đà Nẵng', 'Cần Thơ']
 
 export default function JobAnalysisPage() {
   const { mutate, data, isPending, isError, error, reset: resetMutation } = useJobRecommendationsMutation()
