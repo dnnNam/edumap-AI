@@ -3,7 +3,6 @@ import {
   Award,
   Bell,
   BookOpen,
-  Briefcase,
   Clock,
   FolderOpen,
   Gauge,
@@ -16,6 +15,8 @@ import {
   Settings,
   Share2,
   Shield,
+  Sparkles,
+  TrendingUp,
   Upload,
   User,
   X,
@@ -39,7 +40,8 @@ const NAV_ITEMS: NavItem[] = [
   { icon: BookOpen, label: 'Resources', to: '/resources', roles: ['STUDENT', 'MENTOR', 'MODERATOR'] },
   { icon: Clock, label: 'History', to: '/resources/history', roles: ['STUDENT', 'MENTOR', 'MODERATOR'] },
   { icon: FolderOpen, label: 'Portfolio', to: '/portfolio', roles: ['STUDENT', 'MENTOR', 'MODERATOR'] },
-  { icon: Briefcase, label: 'Jobs', to: '/jobs', roles: ['STUDENT', 'MENTOR', 'MODERATOR'] },
+  { icon: TrendingUp, label: 'Job Trending', to: '/jobs/trending', roles: ['STUDENT', 'MENTOR', 'MODERATOR'] },
+  { icon: Sparkles, label: 'Job Analysis', to: '/jobs/analysis', roles: ['STUDENT', 'MENTOR', 'MODERATOR'] },
   { icon: User, label: 'Profile', to: '/profile', roles: ['STUDENT', 'MENTOR', 'MODERATOR'] },
 
   {

@@ -31,6 +31,7 @@ import PortfolioPublicPage from '../pages/main/PublicPortfolioPage'
 import AdminSkillsPage from '../pages/admin/AdminSkill'
 import AdminSkillTreesPage from '../pages/admin/SkillTreeAdmin'
 import AdminResourcesPage from '../pages/admin/AdminResources'
+import JobAnalysisPage from '../pages/main/JobAnalysisPage'
 
 const router = createBrowserRouter([
   {
@@ -69,6 +70,7 @@ const router = createBrowserRouter([
               { path: '/resources/:skillId', Component: SkillResourcesPage },
               { path: '/resources/detail/:resourceId', Component: ResourceDetailPage },
               { path: '/jobs', Component: JobsPage },
+              { path: '/jobs/analysis', Component: JobAnalysisPage },
               { path: '/portfolio', Component: PortfolioPage },
             ],
           },
