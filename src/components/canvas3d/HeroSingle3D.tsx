@@ -137,19 +137,25 @@ export default function HeroSingle3D({ className = '' }: HeroSingle3DProps) {
     const beaconMesh = new THREE.Mesh(beaconGeo, beaconMat)
     orbitGroup.add(beaconMesh)
 
-    // Tương tác chuột mượt (Lerp tilt)
-    let targetTiltX = 0
-    let targetTiltY = 0
+    // ================= XOAY KHI SCROLL UI (KHÔNG DÙNG CHUỘT) =================
+    let targetScrollY = 0
+    let targetScrollX = 0
+    let targetScrollZ = 0
 
-    const handleMouseMove = (e: MouseEvent) => {
-      const rect = container.getBoundingClientRect()
-      const x = ((e.clientX - rect.left) / rect.width) * 2 - 1
-      const y = -(((e.clientY - rect.top) / rect.height) * 2 - 1)
-      targetTiltY = x * 0.35
-      targetTiltX = -y * 0.25
+    let currentScrollY = 0
+    let currentScrollX = 0
+    let currentScrollZ = 0
+
+    const handleScroll = () => {
+      const scrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop
+      // Xoay tỉ lệ theo khoảng cách cuộn trang (mỗi px cuộn tạo góc xoay 3D)
+      targetScrollY = scrollY * 0.0045
+      targetScrollX = scrollY * 0.0028
+      targetScrollZ = scrollY * 0.0015
     }
 
-    window.addEventListener('mousemove', handleMouseMove, { passive: true })
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    handleScroll() // Cập nhật ngay vị trí cuộn hiện tại
 
     // Resize
     const handleResize = () => {
@@ -176,6 +182,8 @@ export default function HeroSingle3D({ className = '' }: HeroSingle3DProps) {
     let animationFrameId: number
     let clock = new THREE.Clock()
     let beaconAngle = 0
+    let autoRotateY = 0
+    let autoRotateX = 0
 
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate)
@@ -185,20 +193,27 @@ export default function HeroSingle3D({ className = '' }: HeroSingle3DProps) {
       const time = clock.getElapsedTime()
 
       if (!prefersReducedMotion) {
-        // Tự xoay chậm tự nhiên
-        mainGroup.rotation.y += delta * 0.22
-        mainGroup.rotation.x += delta * 0.12
-        mainGroup.position.y = Math.sin(time * 1.4) * 0.08
-
-        // Beacon di chuyển quanh quỹ đạo elip
-        beaconAngle += delta * 1.5
+        // Beacon tiếp tục chạy nhịp nhàng trên vành elip
+        beaconAngle += delta * 2.4
         beaconMesh.position.x = Math.cos(beaconAngle) * orbitRadius
         beaconMesh.position.y = Math.sin(beaconAngle) * orbitRadius
-      }
 
-      // Smooth tilt theo chuột
-      mainGroup.rotation.x += (targetTiltX - mainGroup.rotation.x) * 0.05
-      mainGroup.rotation.y += (targetTiltY - mainGroup.rotation.y) * 0.05
+        // Trôi bồng bềnh nhẹ
+        mainGroup.position.y = Math.sin(time * 1.4) * 0.06
+
+        // Lúc nào cũng xoay liên tục với tốc độ nhanh hơn, mượt mà
+        autoRotateY += delta * 0.75
+        autoRotateX += delta * 0.35
+
+        // Kết hợp xoay thêm theo thanh cuộn UI với quán tính (smooth lerp)
+        currentScrollY += (targetScrollY - currentScrollY) * 0.08
+        currentScrollX += (targetScrollX - currentScrollX) * 0.08
+        currentScrollZ += (targetScrollZ - currentScrollZ) * 0.08
+
+        mainGroup.rotation.y = autoRotateY + currentScrollY
+        mainGroup.rotation.x = autoRotateX + currentScrollX
+        mainGroup.rotation.z = currentScrollZ
+      }
 
       renderer?.render(scene, camera)
     }
@@ -207,7 +222,7 @@ export default function HeroSingle3D({ className = '' }: HeroSingle3DProps) {
 
     return () => {
       cancelAnimationFrame(animationFrameId)
-      window.removeEventListener('mousemove', handleMouseMove)
+      window.removeEventListener('scroll', handleScroll)
       window.removeEventListener('resize', handleResize)
       observer.disconnect()
 
