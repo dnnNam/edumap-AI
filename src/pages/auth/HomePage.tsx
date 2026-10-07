@@ -1,7 +1,6 @@
-import { useState } from 'react'
+import { useState, lazy, Suspense } from 'react'
 import { useNavigate } from 'react-router'
 import {
-  Sparkles,
   ArrowRight,
   Play,
   Brain,
@@ -9,21 +8,26 @@ import {
   Map,
   Target,
   Zap,
+  Sparkles,
   Check,
   ChevronDown,
   Layers,
   LayoutGrid,
 } from 'lucide-react'
 import PublicHeader from '../../components/layouts/PublicHeader'
-import StatCard from '../../components/ui/StatCard'
 import PublicFooter from '../../components/layouts/PublicFooter'
 import { MotionFadeIn, MotionStaggerContainer, MotionStaggerItem } from '../../components/motion/MotionWrapper'
 import Card3D from '../../components/motion/Card3D'
 import Coverflow3D from '../../components/motion/Coverflow3D'
 import Floating3D from '../../components/motion/Floating3D'
 import ScrollPerspective3D from '../../components/motion/ScrollPerspective3D'
+import LayeredStatDeck from '../../components/motion/LayeredStatDeck'
+import GradientBorderCard from '../../components/motion/GradientBorderCard'
 
-// ---------- data ----------
+// 1 Vật thể 3D duy nhất trên toàn trang (lazy-load)
+const HeroSingle3D = lazy(() => import('../../components/canvas3d/HeroSingle3D'))
+
+// ---------- data (GIỮ NGUYÊN 100%) ----------
 
 const TRUSTED_LOGOS = ['Google', 'Stripe', 'Vercel', 'Linear', 'Notion', 'Figma', 'OpenAI', 'GitHub']
 
@@ -172,36 +176,47 @@ export default function HomePage() {
       <PublicHeader onSignIn={() => navigate('/login')} onGetStarted={() => navigate('/register')} />
 
       <main className='flex-1 relative'>
-        {/* Lớp nền Parallax 3D tinh tế (chỉ dùng dải màu indigo có sẵn) */}
+        {/* Lớp nền Parallax nhẹ nhàng (chỉ dùng màu indigo-100/50 sẵn có) */}
         <div aria-hidden='true' className='pointer-events-none absolute inset-0 overflow-hidden'>
-          <div className='absolute -top-32 left-1/2 -translate-x-1/2 w-[720px] h-[360px] bg-gradient-to-b from-indigo-100/60 to-transparent rounded-full blur-3xl opacity-60' />
-          <div className='absolute top-96 -left-32 w-80 h-80 bg-indigo-50 rounded-full blur-2xl opacity-70' />
-          <div className='absolute top-[1200px] -right-32 w-96 h-96 bg-indigo-50 rounded-full blur-2xl opacity-60' />
+          <div className='absolute -top-32 left-1/2 -translate-x-1/2 w-[720px] h-[360px] bg-gradient-to-b from-indigo-100/50 to-transparent rounded-full blur-3xl opacity-50' />
+          <div className='absolute top-96 -left-32 w-80 h-80 bg-indigo-50 rounded-full blur-2xl opacity-60' />
         </div>
 
         {/* ================= HERO SECTION ================= */}
         <section className='relative bg-[#FAFAF9] z-10'>
-          <div className='max-w-5xl mx-auto px-4 sm:px-6 pt-16 sm:pt-24 pb-8 sm:pb-12 text-center'>
-            {/* System Logo Badge với hiệu ứng 3D Levitation */}
-            <Floating3D duration={4.5} distance={6}>
-              <div className='inline-flex items-center gap-3 p-1.5 pr-4 rounded-2xl bg-white border border-gray-200 shadow-sm mb-6 sm:mb-8 hover:border-gray-300 transition-all select-none'>
-                <div className='w-8 h-8 rounded-xl bg-[#131428] flex items-center justify-center shrink-0 p-1 shadow-xs'>
-                  <img src='/favicon.svg' alt='EduMap AI' className='w-full h-full object-contain' />
-                </div>
-                <div className='text-left'>
-                  <div className='text-xs font-black tracking-tight text-gray-900 leading-none'>
-                    EDUMAP<span className='text-indigo-600'>AI</span>
-                  </div>
-                  <div className='text-[8px] font-bold tracking-wider text-gray-400 uppercase mt-0.5'>
-                    A Roadmap for Education
-                  </div>
-                </div>
-                <span className='w-1 h-1 rounded-full bg-gray-300' />
-                <span className='text-xs font-semibold text-indigo-600 hidden sm:inline'>GPT-5 Powered</span>
+          <div className='max-w-5xl mx-auto px-4 sm:px-6 pt-16 sm:pt-24 pb-8 sm:pb-12 text-center relative'>
+            {/* Logo Badge với 3D Levitation + 1 Vật thể 3D nằm tách hẳn ra ngoài đuôi tag, không bị che */}
+            <div className='relative inline-block mb-6 sm:mb-8'>
+              {/* Vật thể 3D tách hẳn ra ngoài đuôi tag (không bị tag che) và phía trên chữ mentor */}
+              <div
+                aria-hidden='true'
+                className='absolute -top-7 sm:-top-10 md:-top-12 left-[90%] sm:left-[98%] md:left-[102%] w-24 h-24 sm:w-36 sm:h-36 md:w-44 md:h-44 pointer-events-none select-none z-10 opacity-90'
+              >
+                <Suspense fallback={null}>
+                  <HeroSingle3D className='w-full h-full' />
+                </Suspense>
               </div>
-            </Floating3D>
 
-            {/* Tiêu đề chính Hero với hiệu ứng trượt 3D */}
+              <Floating3D duration={4.5} distance={6}>
+                <div className='relative z-10 inline-flex items-center gap-3 p-1.5 pr-4 rounded-2xl bg-white border border-gray-200 shadow-sm hover:border-gray-300 transition-all select-none'>
+                  <div className='w-8 h-8 rounded-xl bg-[#131428] flex items-center justify-center shrink-0 p-1 shadow-xs'>
+                    <img src='/favicon.svg' alt='EduMap AI' className='w-full h-full object-contain' />
+                  </div>
+                  <div className='text-left'>
+                    <div className='text-xs font-black tracking-tight text-gray-900 leading-none'>
+                      EDUMAP<span className='text-indigo-600'>AI</span>
+                    </div>
+                    <div className='text-[8px] font-bold tracking-wider text-gray-400 uppercase mt-0.5'>
+                      A Roadmap for Education
+                    </div>
+                  </div>
+                  <span className='w-1 h-1 rounded-full bg-gray-300' />
+                  <span className='text-xs font-semibold text-indigo-600 hidden sm:inline'>GPT-5 Powered</span>
+                </div>
+              </Floating3D>
+            </div>
+
+            {/* Tiêu đề chính Hero */}
             <ScrollPerspective3D rotateXAmount={4}>
               <h1 className='text-4xl sm:text-6xl font-bold text-gray-900 tracking-tight leading-[1.12] sm:leading-[1.1] max-w-4xl mx-auto'>
                 Your AI career mentor,
@@ -210,13 +225,13 @@ export default function HomePage() {
               </h1>
 
               <p className='mt-5 sm:mt-6 text-base sm:text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed'>
-                Upload your transcript, GitHub and CV. EduMap AI maps your skills, spots the gaps, and builds the roadmap
-                to your dream role.
+                Upload your transcript, GitHub and CV. EduMap AI maps your skills, spots the gaps, and builds the
+                roadmap to your dream role.
               </p>
             </ScrollPerspective3D>
 
             {/* Nút bấm CTA với hiệu ứng Micro-interaction 3D */}
-            <div className='mt-8 flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-4 max-w-md mx-auto sm:max-w-none'>
+            <div className='mt-8 flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-4 max-w-md mx-auto sm:max-w-none relative z-10'>
               <button
                 type='button'
                 onClick={() => navigate('/register')}
@@ -238,24 +253,22 @@ export default function HomePage() {
               </button>
             </div>
 
-            <p className='mt-4 text-xs sm:text-sm text-gray-400'>Free for students · No credit card required</p>
+            <p className='mt-4 text-xs sm:text-sm text-gray-400 relative z-10'>
+              Free for students · No credit card required
+            </p>
 
             {/* ================= DASHBOARD PREVIEW 3D TILT CARD ================= */}
-            <div id='preview-card' className='mt-12 sm:mt-16'>
-              <Card3D maxTilt={5} scale={1.01} glare={true} className='rounded-3xl border border-gray-200 bg-white shadow-xl overflow-hidden text-left'>
+            {/* Hạng mục 2: Tilt Card + Hạng mục 3: Layered Depth Panel */}
+            <div id='preview-card' className='mt-12 sm:mt-16 relative z-10'>
+              <Card3D
+                maxTilt={6}
+                scale={1.015}
+                glare={true}
+                className='rounded-3xl border border-gray-200 bg-white shadow-xl overflow-hidden text-left'
+              >
                 <div className='p-5 sm:p-8'>
-                  {/* 3 StatCard đầu: hiển thị theo dạng 3D Layer */}
-                  <MotionStaggerContainer className='grid grid-cols-1 sm:grid-cols-3 gap-4'>
-                    <MotionStaggerItem>
-                      <StatCard value='47/120' label='Skill Map' />
-                    </MotionStaggerItem>
-                    <MotionStaggerItem>
-                      <StatCard value='87' label='Career Score' />
-                    </MotionStaggerItem>
-                    <MotionStaggerItem>
-                      <StatCard value='94%' label='Job Match' />
-                    </MotionStaggerItem>
-                  </MotionStaggerContainer>
+                  {/* Hạng mục 3: Layered Depth Panel (tách nhẹ trục Z khi hover trên desktop) */}
+                  <LayeredStatDeck />
 
                   {/* Lưới ô vuông trực quan với thanh cuộn an toàn cho mobile */}
                   <div className='mt-6 overflow-x-auto [scrollbar-width:none] pb-1'>
@@ -299,7 +312,10 @@ export default function HomePage() {
           <section className='py-12 sm:py-14 border-t border-gray-100/60'>
             <div className='max-w-5xl mx-auto px-4 sm:px-6 flex flex-wrap items-center justify-center gap-x-8 sm:gap-x-10 gap-y-4'>
               {TRUSTED_LOGOS.map((name) => (
-                <span key={name} className='text-base sm:text-lg text-gray-400 font-medium select-none hover:text-gray-600 transition-colors'>
+                <span
+                  key={name}
+                  className='text-base sm:text-lg text-gray-400 font-medium select-none hover:text-gray-600 transition-colors'
+                >
                   {name}
                 </span>
               ))}
@@ -350,7 +366,7 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Chế độ 1: 3D Swipe Coverflow Carousel (vuốt ngón tay hoặc kéo chuột mượt mà 3D) */}
+            {/* Chế độ 1: 3D Swipe Coverflow Carousel */}
             {featureViewMode === 'coverflow' ? (
               <div>
                 <p className='text-center text-xs text-gray-400 mb-2'>
@@ -381,15 +397,15 @@ export default function HomePage() {
                 />
               </div>
             ) : (
-              /* Chế độ 2: 3D Grid với hiệu ứng Tilt nghiêng nhẹ khi lướt chuột */
+              /* Chế độ 2: Hạng mục 2: Tilt Card cho các card đang có */
               <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5'>
                 {FEATURES.map((feature) => {
                   const Icon = feature.icon
                   return (
                     <Card3D
                       key={feature.title}
-                      maxTilt={8}
-                      scale={1.02}
+                      maxTilt={6}
+                      scale={1.015}
                       className='bg-white p-7 rounded-2xl border border-gray-200 shadow-xs hover:border-gray-300 transition-colors'
                     >
                       <div className='w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 mb-4'>
@@ -414,9 +430,7 @@ export default function HomePage() {
                 <h2 className='mt-2 text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight'>
                   From classroom to FAANG.
                 </h2>
-                <p className='mt-2 text-xs text-gray-400'>
-                  Vuốt ngang để xem phản hồi thực tế từ các học viên
-                </p>
+                <p className='mt-2 text-xs text-gray-400'>Vuốt ngang để xem phản hồi thực tế từ các học viên</p>
               </div>
             </ScrollPerspective3D>
 
@@ -448,7 +462,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ================= PRICING 3D CARDS ================= */}
+        {/* ================= PRICING 3D CARDS + HẠNG MỤC 4: GRADIENT BORDER ================= */}
         <section id='pricing' className='py-16 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto relative z-10'>
           <ScrollPerspective3D>
             <div className='text-center max-w-xl mx-auto mb-10 sm:mb-14'>
@@ -462,62 +476,77 @@ export default function HomePage() {
           <div className='grid grid-cols-1 sm:grid-cols-3 gap-5 items-stretch'>
             {PLANS.map((plan) => {
               const isSelected = selectedPlan === plan.name
-              return (
+              const isPro = plan.highlighted
+
+              const cardElement = (
                 <Card3D
-                  key={plan.name}
                   maxTilt={6}
-                  scale={1.02}
+                  scale={1.015}
                   onClick={() => setSelectedPlan(plan.name)}
-                  className={`relative bg-white rounded-2xl p-6 sm:p-7 border-2 cursor-pointer transition-all ${
+                  className={`relative bg-white rounded-2xl p-6 sm:p-7 border-2 cursor-pointer transition-all h-full flex flex-col justify-between ${
                     isSelected ? 'border-indigo-600 shadow-xl' : 'border-gray-200 hover:border-gray-300 shadow-xs'
                   }`}
                 >
-                  {plan.badge && (
-                    <span
-                      className={`absolute -top-3 ${
-                        plan.highlighted ? 'left-6 bg-indigo-600 text-white' : 'right-6 bg-gray-100 text-gray-700'
-                      } text-xs font-medium px-3 py-1 rounded-full shadow-xs`}
-                    >
-                      {plan.badge}
-                    </span>
-                  )}
-
-                  <h3 className='font-semibold text-gray-900 text-base sm:text-lg'>{plan.name}</h3>
-                  <p className='mt-1 text-xs sm:text-sm text-gray-500 min-h-[36px]'>{plan.tagline}</p>
-
-                  <div className='mt-5 flex items-baseline gap-1.5'>
-                    <span className='text-3xl sm:text-4xl font-bold text-gray-900'>{plan.price}</span>
-                    <span className='text-gray-500 text-xs sm:text-sm'>{plan.period}</span>
-                    {plan.originalPrice && (
-                      <span className='text-gray-400 text-xs sm:text-sm line-through ml-1'>{plan.originalPrice}</span>
+                  <div>
+                    {plan.badge && (
+                      <span
+                        className={`absolute -top-3 ${
+                          plan.highlighted ? 'left-6 bg-indigo-600 text-white' : 'right-6 bg-gray-100 text-gray-700'
+                        } text-xs font-medium px-3 py-1 rounded-full shadow-xs`}
+                      >
+                        {plan.badge}
+                      </span>
                     )}
+
+                    <h3 className='font-semibold text-gray-900 text-base sm:text-lg'>{plan.name}</h3>
+                    <p className='mt-1 text-xs sm:text-sm text-gray-500 min-h-[36px]'>{plan.tagline}</p>
+
+                    <div className='mt-5 flex items-baseline gap-1.5'>
+                      <span className='text-3xl sm:text-4xl font-bold text-gray-900'>{plan.price}</span>
+                      <span className='text-gray-500 text-xs sm:text-sm'>{plan.period}</span>
+                      {plan.originalPrice && (
+                        <span className='text-gray-400 text-xs sm:text-sm line-through ml-1'>{plan.originalPrice}</span>
+                      )}
+                    </div>
                   </div>
 
-                  <button
-                    type='button'
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      navigate('/register')
-                    }}
-                    className={`mt-6 w-full rounded-xl py-2.5 text-xs sm:text-[15px] font-medium transition cursor-pointer ${
-                      plan.highlighted
-                        ? 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs'
-                        : 'border border-gray-200 text-gray-900 hover:bg-gray-50'
-                    }`}
-                  >
-                    {plan.cta}
-                  </button>
+                  <div>
+                    <button
+                      type='button'
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        navigate('/register')
+                      }}
+                      className={`mt-6 w-full rounded-xl py-2.5 text-xs sm:text-[15px] font-medium transition cursor-pointer ${
+                        plan.highlighted
+                          ? 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs'
+                          : 'border border-gray-200 text-gray-900 hover:bg-gray-50'
+                      }`}
+                    >
+                      {plan.cta}
+                    </button>
 
-                  <ul className='mt-6 space-y-3'>
-                    {plan.features.map((feature) => (
-                      <li key={feature} className='flex items-start gap-2 text-xs sm:text-[15px] text-gray-600'>
-                        <Check className='w-4 h-4 text-gray-900 mt-0.5 shrink-0' />
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
+                    <ul className='mt-6 space-y-3'>
+                      {plan.features.map((feature) => (
+                        <li key={feature} className='flex items-start gap-2 text-xs sm:text-[15px] text-gray-600'>
+                          <Check className='w-4 h-4 text-gray-900 mt-0.5 shrink-0' />
+                          <span>{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </Card3D>
               )
+
+              if (isPro) {
+                return (
+                  <GradientBorderCard key={plan.name} rounded='rounded-2xl'>
+                    {cardElement}
+                  </GradientBorderCard>
+                )
+              }
+
+              return <div key={plan.name}>{cardElement}</div>
             })}
           </div>
         </section>
@@ -527,9 +556,7 @@ export default function HomePage() {
           <ScrollPerspective3D>
             <div className='text-center mb-10'>
               <p className='text-xs sm:text-sm text-gray-500 uppercase tracking-wider font-semibold'>FAQ</p>
-              <h2 className='mt-2 text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight'>
-                Questions, answered.
-              </h2>
+              <h2 className='mt-2 text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight'>Questions, answered.</h2>
             </div>
           </ScrollPerspective3D>
 
@@ -552,39 +579,44 @@ export default function HomePage() {
                     />
                   </button>
                   {isOpen && (
-                    <p className='pb-5 text-xs sm:text-[15px] text-gray-500 leading-relaxed pr-8'>
-                      {item.answer}
-                    </p>
+                    <p className='pb-5 text-xs sm:text-[15px] text-gray-500 leading-relaxed pr-8'>{item.answer}</p>
                   )}
                 </div>
               )
             })}
           </div>
 
-          {/* Closing Banner với hiệu ứng 3D Floating & Tilt */}
+          {/* Hạng mục 4: Gradient Border cho Closing CTA Banner */}
           <div className='mt-16'>
-            <Card3D maxTilt={4} scale={1.01} glare={true} className='bg-white border border-gray-200 rounded-3xl px-6 sm:px-8 py-12 sm:py-16 text-center shadow-lg'>
-              <Floating3D duration={5} distance={8}>
-                <div className='w-12 h-12 rounded-2xl bg-[#131428] flex items-center justify-center mx-auto mb-4 p-1.5 shadow-md'>
-                  <img src='/favicon.svg' alt='EduMap AI' className='w-full h-full object-contain' />
-                </div>
-              </Floating3D>
-
-              <h3 className='text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight'>
-                Ready to map your career?
-              </h3>
-              <p className='mt-3 text-gray-500 text-sm sm:text-[15px] max-w-md mx-auto'>
-                Join 120,000+ students building the career they actually want — in half the time.
-              </p>
-              <button
-                type='button'
-                onClick={() => navigate('/register')}
-                className='mt-7 inline-flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:scale-[0.98] text-white font-medium px-6 py-3 text-[15px] transition shadow-md hover:shadow-indigo-600/25 cursor-pointer'
+            <GradientBorderCard rounded='rounded-3xl'>
+              <Card3D
+                maxTilt={4}
+                scale={1.01}
+                glare={true}
+                className='bg-white border border-gray-200 rounded-3xl px-6 sm:px-8 py-12 sm:py-16 text-center shadow-lg'
               >
-                <span>Get started</span>
-                <ArrowRight className='w-4 h-4' />
-              </button>
-            </Card3D>
+                <Floating3D duration={5} distance={8}>
+                  <div className='w-12 h-12 rounded-2xl bg-[#131428] flex items-center justify-center mx-auto mb-4 p-1.5 shadow-md'>
+                    <img src='/favicon.svg' alt='EduMap AI' className='w-full h-full object-contain' />
+                  </div>
+                </Floating3D>
+
+                <h3 className='text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight'>
+                  Ready to map your career?
+                </h3>
+                <p className='mt-3 text-gray-500 text-sm sm:text-[15px] max-w-md mx-auto'>
+                  Join 120,000+ students building the career they actually want — in half the time.
+                </p>
+                <button
+                  type='button'
+                  onClick={() => navigate('/register')}
+                  className='mt-7 inline-flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:scale-[0.98] text-white font-medium px-6 py-3 text-[15px] transition shadow-md hover:shadow-indigo-600/25 cursor-pointer'
+                >
+                  <span>Get started</span>
+                  <ArrowRight className='w-4 h-4' />
+                </button>
+              </Card3D>
+            </GradientBorderCard>
           </div>
         </section>
       </main>

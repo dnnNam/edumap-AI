@@ -103,4 +103,3 @@ export default function Card3D({
     </motion.div>
   )
 }
-
