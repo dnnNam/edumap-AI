@@ -20,8 +20,7 @@
       (function() {
         try {
           var saved = localStorage.getItem('edumap-theme');
-          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-          if (saved === 'dark' || (!saved && prefersDark)) {
+          if (saved === 'dark') {
             document.documentElement.classList.add('dark');
             document.documentElement.setAttribute('data-theme', 'dark');
             document.documentElement.style.colorScheme = 'dark';

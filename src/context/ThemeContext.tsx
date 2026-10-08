@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
 
 type Theme = 'light' | 'dark'
@@ -26,7 +27,8 @@ function getInitialTheme(): Theme {
     return saved
   }
 
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  // Mặc định luôn là 'light'
+  return 'light'
 }
 
 function applyThemeToDOM(theme: Theme, withTransition = true) {
@@ -62,20 +64,6 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     // Đảm bảo DOM khớp với state ban đầu (không transition lúc đầu trang)
     applyThemeToDOM(theme, false)
-
-    // Lắng nghe thay đổi theme hệ thống nếu người dùng chưa chọn thủ công
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-    const handleSystemChange = (e: MediaQueryListEvent) => {
-      const hasSavedTheme = localStorage.getItem(THEME_STORAGE_KEY)
-      if (!hasSavedTheme) {
-        const newTheme: Theme = e.matches ? 'dark' : 'light'
-        setThemeState(newTheme)
-        applyThemeToDOM(newTheme, true)
-      }
-    }
-
-    mediaQuery.addEventListener('change', handleSystemChange)
-    return () => mediaQuery.removeEventListener('change', handleSystemChange)
   }, [theme])
 
   const setTheme = (newTheme: Theme) => {
@@ -110,4 +98,3 @@ export function useTheme(): ThemeContextType {
   }
   return context
 }
-
