@@ -8,13 +8,19 @@ import DashBoard from '../pages/main/DashBoard'
 
 import AppLayouts from '../layout/AppLayouts'
 
+import AdminResourcesPage from '../pages/admin/AdminResources'
+import AdminSkillsPage from '../pages/admin/AdminSkill'
+import AdminSkillTreesPage from '../pages/admin/SkillTreeAdmin'
 import HomeEntry from '../pages/auth/HomeEntry'
+import NotFoundPage from '../pages/auth/NotFoundPage'
 import AdminPermissionsPage from '../pages/main/AdminPermissionPage'
 import SubscriptionPlans from '../pages/main/BillingPage'
 import BillingUsagePage from '../pages/main/BillingUsagePage'
-import JobsPage from '../pages/main/JobsPage'
+import JobAnalysisPage from '../pages/main/JobAnalysisPage'
 import NotificationsPage from '../pages/main/NotificationPage'
+import PortfolioPage from '../pages/main/PortfolioPage'
 import ProfilePage from '../pages/main/ProfilePage'
+import PortfolioPublicPage from '../pages/main/PublicPortfolioPage'
 import ResourceDetailPage from '../pages/main/ResourceDetailPage'
 import ResourceHistoryPage from '../pages/main/ResourceHistory'
 import ResourcesPage from '../pages/main/ResourcesPage'
@@ -26,12 +32,7 @@ import AdminRoute from './AdminRoute'
 import ProtectedRoute from './ProtectedRoute'
 import PublicRoute from './PublicRoutes'
 import UserRoute from './UserRoute'
-import PortfolioPage from '../pages/main/PortfolioPage'
-import PortfolioPublicPage from '../pages/main/PublicPortfolioPage'
-import AdminSkillsPage from '../pages/admin/AdminSkill'
-import AdminSkillTreesPage from '../pages/admin/SkillTreeAdmin'
-import AdminResourcesPage from '../pages/admin/AdminResources'
-import JobAnalysisPage from '../pages/main/JobAnalysisPage'
+import JobsPage from '../pages/main/JobsPage'
 
 const router = createBrowserRouter([
   {
@@ -69,7 +70,7 @@ const router = createBrowserRouter([
               { path: '/resources/history', Component: ResourceHistoryPage },
               { path: '/resources/:skillId', Component: SkillResourcesPage },
               { path: '/resources/detail/:resourceId', Component: ResourceDetailPage },
-              { path: '/jobs', Component: JobsPage },
+              { path: '/jobs/trending', Component: JobsPage },
               { path: '/jobs/analysis', Component: JobAnalysisPage },
               { path: '/portfolio', Component: PortfolioPage },
             ],
@@ -88,6 +89,7 @@ const router = createBrowserRouter([
       },
     ],
   },
+  { path: '*', Component: NotFoundPage },
 ])
 
 export default router
