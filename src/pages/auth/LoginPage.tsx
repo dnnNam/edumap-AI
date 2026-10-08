@@ -5,6 +5,7 @@ import Logo from '../../components/ui/Logo'
 import StatCard from '../../components/ui/StatCard'
 import FormInput from '../../components/ui/FormInput'
 import PrimaryButton from '../../components/ui/PrimaryButton'
+import ThemeToggle from '../../components/ui/ThemeToggle'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Link, useNavigate } from 'react-router'
@@ -57,18 +58,23 @@ export default function LoginPage() {
   }
 
   return (
-    <div className='min-h-screen w-full flex bg-white'>
+    <div className='min-h-screen w-full flex bg-white dark:bg-[#1A191C] transition-colors relative'>
+      {/* Nút chuyển theme góc trên bên phải */}
+      <div className='absolute top-5 right-5 sm:top-6 sm:right-6 z-20'>
+        <ThemeToggle />
+      </div>
+
       {/* Left panel */}
-      <div className='hidden md:flex md:w-1/2 flex-col justify-between bg-[#FAFAF9] px-16 py-12 border-r border-gray-200'>
+      <div className='hidden md:flex md:w-1/2 flex-col justify-between bg-[#FAFAF9] dark:bg-[#121114] px-16 py-12 border-r border-gray-200 dark:border-white/10 transition-colors'>
         <Logo />
 
         <div className='max-w-md'>
-          <h1 className='text-[40px] leading-[1.15] font-bold text-gray-900 tracking-tight'>
+          <h1 className='text-[40px] leading-[1.15] font-bold text-gray-900 dark:text-[#ECE9E4] tracking-tight'>
             Welcome back.
             <br />
             Your roadmap awaits.
           </h1>
-          <p className='mt-5 text-gray-500 text-[15px] leading-relaxed'>
+          <p className='mt-5 text-gray-500 dark:text-[#B5B1BA] text-[15px] leading-relaxed'>
             Your skill tree grew while you were gone — 3 new gaps closed, 2 jobs matched.
           </p>
 
@@ -78,14 +84,14 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <div className='text-sm text-gray-400'>© EduMap AI — 120K students mentored</div>
+        <div className='text-sm text-gray-400 dark:text-[#5E5A64]'>© EduMap AI — 120K students mentored</div>
       </div>
 
       {/* Right panel */}
-      <div className='flex flex-1 items-center justify-center px-6 py-12'>
+      <div className='flex flex-1 items-center justify-center px-6 py-12 bg-white dark:bg-[#1A191C] transition-colors'>
         <div className='w-full max-w-sm'>
-          <h2 className='text-[26px] font-bold text-gray-900'>Sign in</h2>
-          <p className='mt-1.5 text-gray-500 text-[15px]'>Welcome back to your AI mentor</p>
+          <h2 className='text-[26px] font-bold text-gray-900 dark:text-[#ECE9E4]'>Sign in</h2>
+          <p className='mt-1.5 text-gray-500 dark:text-[#B5B1BA] text-[15px]'>Welcome back to your AI mentor</p>
 
           <form onSubmit={handleSubmit(onSubmit)} className='mt-8 space-y-5'>
             <div>
@@ -98,7 +104,7 @@ export default function LoginPage() {
                 {...register('email')}
               />
               {/* Hiển thị lỗi Zod */}
-              {errors.email && <p className='text-sm text-red-500 mt-1'>{errors.email.message}</p>}
+              {errors.email && <p className='text-sm text-red-500 dark:text-[#FCA5A5] mt-1'>{errors.email.message}</p>}
             </div>
             <div>
               <FormInput
@@ -109,20 +115,20 @@ export default function LoginPage() {
                 placeholder='enter your password'
                 {...register('password')} // Thay thế cho value và onChange cũ
               />
-              {errors.password && <p className='text-sm text-red-500 mt-1'>{errors.password.message}</p>}
+              {errors.password && <p className='text-sm text-red-500 dark:text-[#FCA5A5] mt-1'>{errors.password.message}</p>}
             </div>
 
             <div className='flex items-center justify-between text-sm'>
-              <label className='flex items-center gap-2 cursor-pointer select-none text-gray-700'>
+              <label className='flex items-center gap-2 cursor-pointer select-none text-gray-700 dark:text-[#ECE9E4]'>
                 <input
                   type='checkbox'
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
-                  className='w-4 h-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500'
+                  className='w-4 h-4 rounded border-gray-300 dark:border-white/20 text-indigo-600 focus:ring-indigo-500 bg-white dark:bg-[#232227]'
                 />
                 Remember me
               </label>
-              <a href='#' className='text-gray-500 hover:text-gray-800 transition'>
+              <a href='#' className='text-gray-500 dark:text-[#A29FA8] hover:text-gray-800 dark:hover:text-[#ECE9E4] transition'>
                 Forgot password?
               </a>
             </div>
@@ -131,29 +137,29 @@ export default function LoginPage() {
               Sign in
             </PrimaryButton>
 
-            <p className='text-center text-xs text-gray-400'>Demo mode · use any email + password</p>
+            <p className='text-center text-xs text-gray-400 dark:text-[#85808C]'>Demo mode · use any email + password</p>
           </form>
 
           <div className='mt-6 flex items-center gap-3'>
-            <div className='flex-1 h-px bg-gray-200' />
-            <span className='text-xs tracking-wide text-gray-400'>OR CONTINUE WITH</span>
-            <div className='flex-1 h-px bg-gray-200' />
+            <div className='flex-1 h-px bg-gray-200 dark:bg-white/10' />
+            <span className='text-xs tracking-wide text-gray-400 dark:text-[#85808C]'>OR CONTINUE WITH</span>
+            <div className='flex-1 h-px bg-gray-200 dark:bg-white/10' />
           </div>
 
           <div className='mt-4'>
             <button
               type='button'
               onClick={handleGoogleLogin}
-              className='w-full flex items-center justify-center gap-2 rounded-xl border border-gray-200 py-2.5 text-[15px] text-gray-700 hover:bg-gray-50 transition'
+              className='w-full flex items-center justify-center gap-2 rounded-xl border border-gray-200 dark:border-white/10 py-2.5 text-[15px] text-gray-700 dark:text-[#ECE9E4] hover:bg-gray-50 dark:hover:bg-white/5 transition cursor-pointer'
             >
               <FcGoogle size={18} />
               Continue with Google
             </button>
           </div>
 
-          <p className='mt-6 text-center text-sm text-gray-500'>
+          <p className='mt-6 text-center text-sm text-gray-500 dark:text-[#B5B1BA]'>
             No account?{' '}
-            <Link to='/register' className='font-medium text-gray-900 hover:underline'>
+            <Link to='/register' className='font-medium text-gray-900 dark:text-[#A99DFF] hover:underline'>
               Create one
             </Link>
           </p>

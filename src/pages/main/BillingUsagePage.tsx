@@ -33,23 +33,23 @@ export default function BillingUsagePage() {
   const totalRemaining = hasUnlimited ? null : usage.reduce((sum, u) => sum + (u.remaining ?? 0), 0)
 
   return (
-    <div className='h-full min-h-0 overflow-y-auto bg-gray-50 p-6'>
+    <div className='h-full min-h-0 overflow-y-auto bg-gray-50 dark:bg-[#121114] p-6'>
       <div className='flex items-center justify-between'>
         <Link
           to='/subscription'
-          className='inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-900 transition'
+          className='inline-flex items-center gap-1 text-sm text-gray-500 dark:text-[#A29FA8] hover:text-gray-900 dark:hover:text-[#ECE9E4] transition'
         >
           <ChevronLeft className='w-4 h-4' />
           Subscription
         </Link>
-        <span className='inline-flex items-center gap-1.5 text-xs font-medium text-indigo-700 bg-indigo-50 border border-indigo-100 rounded-full px-3 py-1'>
+        <span className='inline-flex items-center gap-1.5 text-xs font-medium text-indigo-700 dark:text-[#A99DFF] bg-indigo-50 dark:bg-[#5F2CFF]/15 border border-indigo-100 dark:border-[#5F2CFF]/20 rounded-full px-3 py-1'>
           {planLabel.toUpperCase()}
         </span>
       </div>
 
-      <h1 className='mt-4 text-2xl font-bold text-gray-900'>Billing usage</h1>
-      <p className='mt-1 text-sm text-gray-500'>
-        Track how you use your <span className='font-medium text-gray-900'>{planLabel}</span> plan allowances.
+      <h1 className='mt-4 text-2xl font-bold text-gray-900 dark:text-[#ECE9E4]'>Billing usage</h1>
+      <p className='mt-1 text-sm text-gray-500 dark:text-[#A29FA8]'>
+        Track how you use your <span className='font-medium text-gray-900 dark:text-[#ECE9E4]'>{planLabel}</span> plan allowances.
       </p>
 
       {/* 3 stat cards */}
@@ -67,14 +67,14 @@ export default function BillingUsagePage() {
       </div>
 
       {/* Upsell banner */}
-      <div className='mt-6 rounded-2xl border border-gray-200 bg-white p-5 flex items-center justify-between flex-wrap gap-3'>
+      <div className='mt-6 rounded-2xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#1A191C] p-5 flex items-center justify-between flex-wrap gap-3'>
         <div>
-          <p className='text-sm font-semibold text-gray-900'>Need more usage?</p>
-          <p className='text-sm text-gray-500'>Upgrade your plan for higher limits on every feature.</p>
+          <p className='text-sm font-semibold text-gray-900 dark:text-[#ECE9E4]'>Need more usage?</p>
+          <p className='text-sm text-gray-500 dark:text-[#A29FA8]'>Upgrade your plan for higher limits on every feature.</p>
         </div>
         <Link
           to='/subscription'
-          className='rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 transition-colors shrink-0'
+          className='rounded-lg bg-indigo-600 hover:bg-indigo-700 dark:bg-[#5F2CFF] dark:hover:bg-[#4B1FD6] text-white text-sm font-medium px-4 py-2 transition-colors shrink-0'
         >
           View plans
         </Link>

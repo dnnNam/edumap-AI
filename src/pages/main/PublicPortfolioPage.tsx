@@ -8,8 +8,8 @@ import type { PortfolioRepository } from '../../types/api/portfolio.type'
 
 // Class Tailwind phải viết đầy đủ (không ghép chuỗi) để không bị purge
 const THEME = {
-  banner: 'from-indigo-100 to-white',
-  chip: 'border-indigo-100 bg-indigo-50 text-indigo-700',
+  banner: 'from-indigo-100 to-white dark:from-indigo-950/40 dark:to-[#1A191C]',
+  chip: 'border-indigo-100 dark:border-indigo-500/20 bg-indigo-50 dark:bg-indigo-950/30 text-indigo-700 dark:text-[#A99DFF]',
 }
 
 const LANGUAGE_COLORS: Record<string, string> = {
@@ -48,21 +48,21 @@ function RepoCard({ repo, chipCls }: { repo: PortfolioRepository; chipCls: strin
       href={repo.repoUrl}
       target='_blank'
       rel='noreferrer'
-      className='group flex flex-col rounded-2xl border border-gray-200 bg-white p-5 transition hover:border-gray-300 hover:shadow-sm print:break-inside-avoid'
+      className='group flex flex-col rounded-2xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#1A191C] p-5 transition hover:border-gray-300 dark:hover:border-white/20 hover:shadow-sm print:break-inside-avoid'
     >
       <div className='flex items-start justify-between gap-3'>
         <div className='flex min-w-0 items-center gap-3'>
-          <span className='flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gray-900 text-white'>
+          <span className='flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gray-900 dark:bg-white/10 text-white'>
             <FaGithub className='h-4 w-4' />
           </span>
-          <h4 className='truncate text-[15px] font-semibold text-gray-900' title={repo.repoName}>
+          <h4 className='truncate text-[15px] font-semibold text-gray-900 dark:text-[#ECE9E4]' title={repo.repoName}>
             {repo.repoName}
           </h4>
         </div>
-        <ExternalLink className='mt-1 h-4 w-4 shrink-0 text-gray-300 transition group-hover:text-gray-700 print:hidden' />
+        <ExternalLink className='mt-1 h-4 w-4 shrink-0 text-gray-300 dark:text-[#A29FA8] transition group-hover:text-gray-700 dark:group-hover:text-white print:hidden' />
       </div>
 
-      <div className='mt-4 flex items-center gap-4 text-xs text-gray-500'>
+      <div className='mt-4 flex items-center gap-4 text-xs text-gray-500 dark:text-[#A29FA8]'>
         {repo.mainLanguage && (
           <span className='inline-flex items-center gap-1.5'>
             <span className='h-2.5 w-2.5 rounded-full' style={{ backgroundColor: langColor ?? undefined }} />
@@ -74,7 +74,7 @@ function RepoCard({ repo, chipCls }: { repo: PortfolioRepository; chipCls: strin
 
       <div className='mt-4 flex flex-1 flex-wrap content-start gap-1.5'>
         {shown.length === 0 ? (
-          <span className='text-xs text-gray-400'>Chưa phát hiện tech stack</span>
+          <span className='text-xs text-gray-400 dark:text-[#A29FA8]'>Chưa phát hiện tech stack</span>
         ) : (
           <>
             {shown.map((t) => (
@@ -83,7 +83,7 @@ function RepoCard({ repo, chipCls }: { repo: PortfolioRepository; chipCls: strin
               </span>
             ))}
             {extra > 0 && (
-              <span className='rounded-md border border-gray-200 bg-gray-50 px-2 py-0.5 text-xs text-gray-500'>
+              <span className='rounded-md border border-gray-200 dark:border-white/[0.08] bg-gray-50 dark:bg-white/5 px-2 py-0.5 text-xs text-gray-500 dark:text-[#A29FA8]'>
                 +{extra}
               </span>
             )}
@@ -106,12 +106,12 @@ function ProjectsSection({
   return (
     <section className='mt-10'>
       <div className='flex items-baseline justify-between gap-3'>
-        <h3 className='text-lg font-semibold text-gray-900'>
+        <h3 className='text-lg font-semibold text-gray-900 dark:text-[#ECE9E4]'>
           Projects
-          {repos.length > 0 && <span className='ml-2 text-sm font-normal text-gray-400'>{repos.length}</span>}
+          {repos.length > 0 && <span className='ml-2 text-sm font-normal text-gray-400 dark:text-[#A29FA8]'>{repos.length}</span>}
         </h3>
         {hasGithubSync && (
-          <span className='inline-flex items-center gap-1.5 text-xs text-gray-500 print:hidden'>
+          <span className='inline-flex items-center gap-1.5 text-xs text-gray-500 dark:text-[#A29FA8] print:hidden'>
             <FaGithub className='h-3.5 w-3.5' /> Đã đồng bộ từ GitHub
           </span>
         )}
@@ -124,7 +124,7 @@ function ProjectsSection({
           ))}
         </div>
       ) : (
-        <p className='mt-3 rounded-xl border border-dashed border-gray-200 px-4 py-6 text-center text-sm text-gray-500'>
+        <p className='mt-3 rounded-xl border border-dashed border-gray-200 dark:border-white/[0.08] px-4 py-6 text-center text-sm text-gray-500 dark:text-[#A29FA8]'>
           Chưa có dự án nào.
         </p>
       )}
@@ -149,8 +149,8 @@ export default function PortfolioPublicPage() {
   if (isError || !portfolio || !portfolio.isPublic) {
     return (
       <div className='max-w-4xl mx-auto w-full px-6 py-24 text-center'>
-        <h1 className='text-2xl font-semibold text-gray-900'>Không tìm thấy portfolio</h1>
-        <p className='mt-2 text-gray-500'>Portfolio này không tồn tại hoặc chưa được công khai.</p>
+        <h1 className='text-2xl font-semibold text-gray-900 dark:text-[#ECE9E4]'>Không tìm thấy portfolio</h1>
+        <p className='mt-2 text-gray-500 dark:text-[#A29FA8]'>Portfolio này không tồn tại hoặc chưa được công khai.</p>
       </div>
     )
   }
@@ -169,22 +169,22 @@ export default function PortfolioPublicPage() {
   ].filter((s) => s.href)
 
   return (
-    <div className='h-full overflow-y-auto scrollbar-thin'>
+    <div className='h-full overflow-y-auto scrollbar-thin bg-transparent text-gray-900 dark:text-[#ECE9E4]'>
       <div className='max-w-4xl mx-auto px-6 py-10 pb-16'>
         <div className='flex justify-end print:hidden'>
           <button
             type='button'
             onClick={() => window.print()}
-            className='flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 transition'
+            className='flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 transition cursor-pointer'
           >
             <Download className='w-4 h-4' /> Export PDF
           </button>
         </div>
 
-        <div className='mt-6 rounded-3xl border border-gray-200 bg-white overflow-hidden print:border-0'>
-          <div className={`h-40 border-b border-gray-200 bg-gradient-to-br ${THEME.banner}`} />
+        <div className='mt-6 rounded-3xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#1A191C] overflow-hidden print:border-0 shadow-sm'>
+          <div className={`h-40 border-b border-gray-200 dark:border-white/[0.08] bg-gradient-to-br ${THEME.banner}`} />
           <div className='px-6 sm:px-8 pb-10'>
-            <div className='-mt-14 w-28 h-28 rounded-full border-4 border-white bg-white overflow-hidden'>
+            <div className='-mt-14 w-28 h-28 rounded-full border-4 border-white dark:border-[#1A191C] bg-white dark:bg-[#1A191C] overflow-hidden shadow-sm'>
               {portfolio.avatarUrl ? (
                 <img src={portfolio.avatarUrl} alt={fullName} className='w-full h-full object-cover' />
               ) : (
@@ -192,10 +192,10 @@ export default function PortfolioPublicPage() {
               )}
             </div>
 
-            <h1 className='mt-4 text-3xl font-semibold text-gray-900'>{fullName}</h1>
-            {portfolio.title && <p className='mt-1 text-lg text-gray-500'>{portfolio.title}</p>}
+            <h1 className='mt-4 text-3xl font-semibold text-gray-900 dark:text-[#ECE9E4]'>{fullName}</h1>
+            {portfolio.title && <p className='mt-1 text-lg text-gray-500 dark:text-[#A29FA8]'>{portfolio.title}</p>}
             {portfolio.bio && (
-              <p className='mt-3 max-w-xl text-[15px] leading-relaxed text-gray-600'>{portfolio.bio}</p>
+              <p className='mt-3 max-w-xl text-[15px] leading-relaxed text-gray-600 dark:text-[#ECE9E4]/80'>{portfolio.bio}</p>
             )}
 
             {socials.length > 0 && (
@@ -207,7 +207,7 @@ export default function PortfolioPublicPage() {
                     aria-label={label}
                     target='_blank'
                     rel='noreferrer'
-                    className='w-10 h-10 rounded-xl border border-gray-200 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition'
+                    className='w-10 h-10 rounded-xl border border-gray-200 dark:border-white/[0.08] flex items-center justify-center text-gray-600 dark:text-[#ECE9E4] hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 transition'
                   >
                     <Icon className='w-4 h-4' />
                   </a>
@@ -217,7 +217,7 @@ export default function PortfolioPublicPage() {
 
             {skills.length > 0 && (
               <section className='mt-10'>
-                <h2 className='text-lg font-semibold text-gray-900'>Skills</h2>
+                <h2 className='text-lg font-semibold text-gray-900 dark:text-[#ECE9E4]'>Skills</h2>
                 <div className='mt-3 flex flex-wrap gap-2'>
                   {skills.map((s) => (
                     <span key={s} className={`rounded-full border px-3 py-1 text-sm ${THEME.chip}`}>

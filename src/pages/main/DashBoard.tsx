@@ -24,7 +24,7 @@ function pluralize(count: number, singular: string, plural: string) {
 
 function EmptyHint({ children }: { children: ReactNode }) {
   return (
-    <div className='rounded-xl border border-dashed border-gray-200 px-4 py-10 text-center text-sm text-gray-500'>
+    <div className='rounded-xl border border-dashed border-gray-200 dark:border-white/10 px-4 py-10 text-center text-sm text-gray-500 dark:text-[#A29FA8]'>
       {children}
     </div>
   )
@@ -50,9 +50,9 @@ export default function DashBoard() {
         {/* Header */}
         <div className='flex items-end justify-between gap-4 flex-wrap'>
           <div>
-            {fullName && <p className='text-sm text-gray-500'>Welcome back, {fullName}</p>}
-            <h1 className='mt-1 text-[32px] font-bold text-gray-900 tracking-tight'>Your learning overview</h1>
-            <p className='mt-1.5 text-[15px] text-gray-500'>
+            {fullName && <p className='text-sm text-gray-500 dark:text-[#A29FA8]'>Welcome back, {fullName}</p>}
+            <h1 className='mt-1 text-[32px] font-bold text-gray-900 dark:text-[#ECE9E4] tracking-tight'>Your learning overview</h1>
+            <p className='mt-1.5 text-[15px] text-gray-500 dark:text-[#B5B1BA]'>
               A clear summary of the skills and learning time found in your latest analysis.
             </p>
           </div>
@@ -60,7 +60,7 @@ export default function DashBoard() {
           <button
             type='button'
             onClick={() => navigate('/upload')}
-            className='flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-[15px] font-medium px-5 py-2.5 transition'
+            className='flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-[15px] font-medium px-5 py-2.5 transition cursor-pointer shadow-sm'
           >
             <Sparkles className='w-4 h-4' />
             Run new analysis
@@ -68,14 +68,14 @@ export default function DashBoard() {
         </div>
 
         {isError && !summary ? (
-          <div className='mt-6 bg-white border border-gray-200 rounded-2xl p-10 text-center'>
-            <p className='text-[15px] font-medium text-gray-900'>Couldn't load your learning summary.</p>
-            <p className='mt-1 text-sm text-gray-500'>Check your connection and try again.</p>
+          <div className='mt-6 bg-white dark:bg-[#1A191C] border border-gray-200 dark:border-white/10 rounded-2xl p-10 text-center transition-colors'>
+            <p className='text-[15px] font-medium text-gray-900 dark:text-[#ECE9E4]'>Couldn't load your learning summary.</p>
+            <p className='mt-1 text-sm text-gray-500 dark:text-[#A29FA8]'>Check your connection and try again.</p>
             <button
               type='button'
               onClick={() => refetch()}
               disabled={isFetching}
-              className='mt-5 rounded-xl border border-gray-200 text-gray-900 text-sm font-medium px-4 py-2 hover:bg-gray-50 disabled:opacity-60 transition'
+              className='mt-5 rounded-xl border border-gray-200 dark:border-white/10 text-gray-900 dark:text-[#ECE9E4] text-sm font-medium px-4 py-2 hover:bg-gray-50 dark:hover:bg-white/5 disabled:opacity-60 transition cursor-pointer'
             >
               {isFetching ? 'Loading...' : 'Try again'}
             </button>
@@ -89,7 +89,7 @@ export default function DashBoard() {
                 value={numberFormat.format(summary?.totalSkills ?? 0)}
                 hint='Skills identified across your profile'
                 icon={Tags}
-                iconClassName='bg-indigo-50 text-indigo-600'
+                iconClassName='bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-[#A99DFF]'
                 loading={isLoading}
               />
               <MetricCard
@@ -97,7 +97,7 @@ export default function DashBoard() {
                 value={numberFormat.format(summary?.totalHours ?? 0)}
                 hint='Estimated hours from completed learning'
                 icon={Clock}
-                iconClassName='bg-gray-100 text-gray-500'
+                iconClassName='bg-gray-100 dark:bg-white/10 text-gray-500 dark:text-[#A29FA8]'
                 loading={isLoading}
               />
             </div>
@@ -107,12 +107,12 @@ export default function DashBoard() {
               <Panel
                 title='Top skills'
                 description='Your strongest detected capabilities'
-                aside={<BookOpen className='w-4 h-4 text-gray-400 mt-1 shrink-0' />}
+                aside={<BookOpen className='w-4 h-4 text-gray-400 dark:text-[#85808C] mt-1 shrink-0' />}
               >
                 {isLoading ? (
                   <div className='space-y-3'>
                     {Array.from({ length: TOP_SKILLS_LIMIT }).map((_, i) => (
-                      <div key={i} className='h-[50px] rounded-xl bg-gray-100 animate-pulse' />
+                      <div key={i} className='h-[50px] rounded-xl bg-gray-100 dark:bg-white/5 animate-pulse' />
                     ))}
                   </div>
                 ) : topSkills.length === 0 ? (
@@ -126,14 +126,14 @@ export default function DashBoard() {
                     {topSkills.map((name, i) => (
                       <li
                         key={`${i}-${name}`}
-                        className='flex items-center gap-3 rounded-xl border border-gray-200 px-4 py-3'
+                        className='flex items-center gap-3 rounded-xl border border-gray-200 dark:border-white/10 px-4 py-3 bg-white dark:bg-[#1A191C] transition-colors'
                       >
-                        <span className='w-7 h-7 shrink-0 rounded-full bg-gray-100 text-xs font-medium text-gray-700 flex items-center justify-center'>
+                        <span className='w-7 h-7 shrink-0 rounded-full bg-gray-100 dark:bg-white/10 text-xs font-medium text-gray-700 dark:text-[#ECE9E4] flex items-center justify-center'>
                           {i + 1}
                         </span>
-                        <span className='flex-1 min-w-0 truncate text-[15px] font-medium text-gray-900'>{name}</span>
+                        <span className='flex-1 min-w-0 truncate text-[15px] font-medium text-gray-900 dark:text-[#ECE9E4]'>{name}</span>
                         {i === 0 && (
-                          <span className='shrink-0 text-xs text-gray-700 bg-white border border-gray-200 rounded-full px-2.5 py-1'>
+                          <span className='shrink-0 text-xs text-gray-700 dark:text-[#ECE9E4] bg-white dark:bg-[#232227] border border-gray-200 dark:border-white/10 rounded-full px-2.5 py-1'>
                             Strongest
                           </span>
                         )}
@@ -145,7 +145,7 @@ export default function DashBoard() {
                 <button
                   type='button'
                   onClick={() => navigate('/skill-tree')}
-                  className='mt-4 w-full flex items-center justify-center gap-2 rounded-xl border border-gray-200 py-2.5 text-[15px] font-medium text-gray-900 shadow-sm hover:bg-gray-50 transition-colors'
+                  className='mt-4 w-full flex items-center justify-center gap-2 rounded-xl border border-gray-200 dark:border-white/10 py-2.5 text-[15px] font-medium text-gray-900 dark:text-[#ECE9E4] shadow-xs hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer'
                 >
                   View skill tree
                   <ArrowRight className='w-4 h-4' />
@@ -158,7 +158,7 @@ export default function DashBoard() {
                 description='Skill distribution by category'
                 aside={
                   !isLoading && categories.length > 0 ? (
-                    <span className='shrink-0 text-xs text-gray-600 border border-gray-200 rounded-full px-3 py-1'>
+                    <span className='shrink-0 text-xs text-gray-600 dark:text-[#A29FA8] border border-gray-200 dark:border-white/10 rounded-full px-3 py-1'>
                       {pluralize(categories.length, 'category', 'categories')}
                     </span>
                   ) : undefined
@@ -168,8 +168,8 @@ export default function DashBoard() {
                   <div className='space-y-6'>
                     {Array.from({ length: 4 }).map((_, i) => (
                       <div key={i} className='space-y-2.5 animate-pulse'>
-                        <div className='h-4 w-40 rounded bg-gray-100' />
-                        <div className='h-2 w-full rounded-full bg-gray-100' />
+                        <div className='h-4 w-40 rounded bg-gray-100 dark:bg-white/5' />
+                        <div className='h-2 w-full rounded-full bg-gray-100 dark:bg-white/5' />
                       </div>
                     ))}
                   </div>
@@ -180,10 +180,10 @@ export default function DashBoard() {
                     {categories.map(([category, count]) => (
                       <div key={category}>
                         <div className='flex items-center justify-between gap-3 text-sm'>
-                          <span className='font-medium text-gray-900'>{category}</span>
-                          <span className='text-gray-500'>{pluralize(count, 'skill', 'skills')}</span>
+                          <span className='font-medium text-gray-900 dark:text-[#ECE9E4]'>{category}</span>
+                          <span className='text-gray-500 dark:text-[#A29FA8]'>{pluralize(count, 'skill', 'skills')}</span>
                         </div>
-                        <div className='mt-2 h-2 rounded-full bg-indigo-100 overflow-hidden'>
+                        <div className='mt-2 h-2 rounded-full bg-indigo-100 dark:bg-indigo-950/50 overflow-hidden'>
                           <div
                             className='h-full rounded-full bg-indigo-600'
                             style={{ width: `${maxCount > 0 ? (count / maxCount) * 100 : 0}%` }}

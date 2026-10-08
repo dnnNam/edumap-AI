@@ -31,7 +31,7 @@ function ResourceThumbnail({ resource }: { resource: SkillResource }) {
   const hasImage = !!thumbnail && !imgFailed
 
   return (
-    <div className='relative h-40 overflow-hidden bg-gray-100'>
+    <div className='relative h-40 overflow-hidden bg-gray-100 dark:bg-[#232227]'>
       {hasImage ? (
         <>
           <img
@@ -42,8 +42,8 @@ function ResourceThumbnail({ resource }: { resource: SkillResource }) {
             className='absolute inset-0 w-full h-full object-cover'
           />
           <div className='absolute inset-0 flex items-center justify-center bg-black/10'>
-            <span className='w-12 h-12 rounded-full bg-white/90 flex items-center justify-center shadow-sm'>
-              <Play className='w-5 h-5 text-gray-900 fill-gray-900 ml-0.5' />
+            <span className='w-12 h-12 rounded-full bg-white/90 dark:bg-[#1A191C]/90 flex items-center justify-center shadow-sm'>
+              <Play className='w-5 h-5 text-gray-900 dark:text-[#ECE9E4] fill-gray-900 dark:fill-[#ECE9E4] ml-0.5' />
             </span>
           </div>
         </>
@@ -53,7 +53,7 @@ function ResourceThumbnail({ resource }: { resource: SkillResource }) {
         </div>
       )}
 
-      <span className='absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-white/90 backdrop-blur-sm px-2.5 py-1 text-xs font-medium text-gray-800 shadow-sm'>
+      <span className='absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-white/90 dark:bg-[#1A191C]/90 backdrop-blur-sm px-2.5 py-1 text-xs font-medium text-gray-800 dark:text-[#ECE9E4] shadow-sm'>
         {favicon && !faviconFailed && (
           <img
             src={favicon}
@@ -67,11 +67,11 @@ function ResourceThumbnail({ resource }: { resource: SkillResource }) {
         {platform}
       </span>
 
-      <span className='absolute top-3 right-3 rounded-full bg-white/90 backdrop-blur-sm px-2.5 py-1 text-xs font-medium text-gray-800 shadow-sm'>
+      <span className='absolute top-3 right-3 rounded-full bg-white/90 dark:bg-[#1A191C]/90 backdrop-blur-sm px-2.5 py-1 text-xs font-medium text-gray-800 dark:text-[#ECE9E4] shadow-sm'>
         {getPriceLabel(resource.cost)}
       </span>
 
-      <span className='absolute bottom-3 right-3 rounded-md bg-gray-900/75 px-2 py-0.5 text-xs font-medium text-white'>
+      <span className='absolute bottom-3 right-3 rounded-md bg-gray-900/75 dark:bg-black/75 px-2 py-0.5 text-xs font-medium text-white'>
         {resource.durationHours}h
       </span>
     </div>
@@ -97,31 +97,31 @@ export default function ResourceCard({ resource, skillName }: { resource: SkillR
   return (
     <div
       onClick={handleCardClick}
-      className='group h-full flex flex-col rounded-2xl border border-gray-200 bg-white overflow-hidden transition hover:shadow-md hover:border-gray-300 cursor-pointer'
+      className='group h-full flex flex-col rounded-2xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#1A191C] overflow-hidden transition hover:shadow-md hover:border-gray-300 dark:hover:border-white/20 cursor-pointer'
     >
       <ResourceThumbnail resource={resource} />
 
       <div className='flex-1 flex flex-col p-5'>
-        <h3 className='font-medium text-gray-900 line-clamp-2 min-h-[3rem] group-hover:text-indigo-600 transition-colors'>
+        <h3 className='font-medium text-gray-900 dark:text-[#ECE9E4] line-clamp-2 min-h-[3rem] group-hover:text-indigo-600 dark:group-hover:text-[#A99DFF] transition-colors'>
           {cleanTitle(resource.title)}
         </h3>
-        <p className='mt-2 text-sm text-gray-500'>
+        <p className='mt-2 text-sm text-gray-500 dark:text-[#A29FA8]'>
           {[name, `${resource.durationHours}h`, getResourceTypeLabel(resource.resourceType)]
             .filter(Boolean)
             .join(' · ')}
         </p>
 
         <div className='mt-auto pt-4'>
-          <div className='pt-4 border-t border-gray-100 flex items-center justify-between'>
-            <span className='flex items-center gap-1.5 text-sm font-medium text-gray-900'>
-              <Star className='w-4 h-4 fill-gray-900 text-gray-900' />
+          <div className='pt-4 border-t border-gray-100 dark:border-white/[0.06] flex items-center justify-between'>
+            <span className='flex items-center gap-1.5 text-sm font-medium text-gray-900 dark:text-[#ECE9E4]'>
+              <Star className='w-4 h-4 fill-amber-400 text-amber-400' />
               {resource.rating.toFixed(1)}
             </span>
             <button
               type='button'
               aria-label='Mở tài nguyên'
               onClick={handleOpenClick}
-              className='p-2 -m-2 rounded-lg text-gray-400 hover:text-gray-900 transition-colors'
+              className='p-2 -m-2 rounded-lg text-gray-400 dark:text-[#A29FA8] hover:text-gray-900 dark:hover:text-[#ECE9E4] transition-colors cursor-pointer'
             >
               <ExternalLink className='w-4 h-4' />
             </button>

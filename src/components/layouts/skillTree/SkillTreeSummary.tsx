@@ -4,8 +4,8 @@ import { SkeletonStat } from './SkeletonLoader'
 
 function SummaryCard({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <div className='bg-white border border-gray-200 rounded-2xl p-6'>
-      <p className='text-xs text-gray-500'>{label}</p>
+    <div className='bg-white dark:bg-[#1A191C] border border-gray-200 dark:border-white/[0.08] rounded-2xl p-6'>
+      <p className='text-xs text-gray-500 dark:text-[#A29FA8]'>{label}</p>
       {children}
     </div>
   )
@@ -38,28 +38,28 @@ export default function SkillTreeSummary({
         <>
           <SummaryCard label='Completion'>
             <div className='mt-2 flex items-end justify-between gap-3'>
-              <p className='text-[32px] leading-none font-bold text-gray-900 tracking-tight'>{percentage}%</p>
-              <p className='text-sm text-gray-500'>
+              <p className='text-[32px] leading-none font-bold text-gray-900 dark:text-[#ECE9E4] tracking-tight'>{percentage}%</p>
+              <p className='text-sm text-gray-500 dark:text-[#A29FA8]'>
                 {completed} of {total}
               </p>
             </div>
             <div
-              className='mt-4 h-1.5 rounded-full bg-gray-100 overflow-hidden'
+              className='mt-4 h-1.5 rounded-full bg-gray-100 dark:bg-white/10 overflow-hidden'
               role='progressbar'
               aria-valuenow={percentage}
               aria-valuemin={0}
               aria-valuemax={100}
             >
               <div
-                className='h-full rounded-full bg-indigo-600 transition-[width] duration-300'
+                className='h-full rounded-full bg-indigo-600 dark:bg-[#5F2CFF] transition-[width] duration-300'
                 style={{ width: `${percentage}%` }}
               />
             </div>
           </SummaryCard>
 
           <SummaryCard label='Total nodes'>
-            <p className='mt-2 text-[32px] leading-none font-bold text-gray-900 tracking-tight'>{total}</p>
-            <p className='mt-4 text-sm text-gray-500'>
+            <p className='mt-2 text-[32px] leading-none font-bold text-gray-900 dark:text-[#ECE9E4] tracking-tight'>{total}</p>
+            <p className='mt-4 text-sm text-gray-500 dark:text-[#A29FA8]'>
               Across {categoryCount} {categoryCount === 1 ? 'category' : 'categories'}
             </p>
           </SummaryCard>
@@ -67,15 +67,15 @@ export default function SkillTreeSummary({
           <SummaryCard label='Next priority'>
             {nextPriority ? (
               <>
-                <p className='mt-2 text-xl font-semibold text-gray-900 truncate'>{nextPriority.skill.name}</p>
-                <p className='mt-4 text-sm text-gray-500'>
+                <p className='mt-2 text-xl font-semibold text-gray-900 dark:text-[#ECE9E4] truncate'>{nextPriority.skill.name}</p>
+                <p className='mt-4 text-sm text-gray-500 dark:text-[#A29FA8]'>
                   Priority rank {nextPriority.priorityRank} · Level {nextPriority.skill.difficultyLevel}
                 </p>
               </>
             ) : (
               <>
-                <p className='mt-2 text-xl font-semibold text-gray-900'>All done</p>
-                <p className='mt-4 text-sm text-gray-500'>Every skill in this tree is completed.</p>
+                <p className='mt-2 text-xl font-semibold text-gray-900 dark:text-[#ECE9E4]'>All done</p>
+                <p className='mt-4 text-sm text-gray-500 dark:text-[#A29FA8]'>Every skill in this tree is completed.</p>
               </>
             )}
           </SummaryCard>

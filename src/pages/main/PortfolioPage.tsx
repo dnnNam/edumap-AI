@@ -56,15 +56,15 @@ const LANGUAGE_COLORS: Record<string, string> = {
 const MAX_TECH_CHIPS = 5
 
 const inputCls =
-  'w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-[15px] text-gray-900 placeholder-gray-400 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition'
+  'w-full rounded-xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#232227] px-4 py-2.5 text-[15px] text-gray-900 dark:text-[#ECE9E4] placeholder-gray-400 dark:placeholder-gray-500 outline-none focus:border-indigo-500 dark:focus:border-[#5F2CFF] focus:ring-2 focus:ring-indigo-100 dark:focus:ring-[#5F2CFF]/20 transition'
 
 const inputErrCls =
-  'w-full rounded-xl border border-red-400 bg-white px-4 py-2.5 text-[15px] text-gray-900 placeholder-gray-400 outline-none focus:border-red-500 focus:ring-2 focus:ring-red-100 transition'
+  'w-full rounded-xl border border-red-400 dark:border-red-500 bg-white dark:bg-[#232227] px-4 py-2.5 text-[15px] text-gray-900 dark:text-[#ECE9E4] placeholder-gray-400 dark:placeholder-gray-500 outline-none focus:border-red-500 focus:ring-2 focus:ring-red-100 transition'
 
 function FieldError({ message }: { message?: string }) {
   if (!message) return null
   return (
-    <p role='alert' className='mt-1 text-xs text-red-600'>
+    <p role='alert' className='mt-1 text-xs text-red-600 dark:text-red-400'>
       {message}
     </p>
   )
@@ -83,7 +83,7 @@ function Field({
 }) {
   return (
     <label className='block'>
-      <span className='text-sm font-medium text-gray-900'>{label}</span>
+      <span className='text-sm font-medium text-gray-900 dark:text-[#ECE9E4]'>{label}</span>
       <input
         {...registration}
         placeholder={placeholder}
@@ -131,21 +131,21 @@ function RepoCard({ repo, chipCls }: { repo: PortfolioRepository; chipCls: strin
       href={repo.repoUrl}
       target='_blank'
       rel='noreferrer'
-      className='group flex flex-col rounded-2xl border border-gray-200 bg-white p-5 transition hover:border-gray-300 hover:shadow-sm print:break-inside-avoid'
+      className='group flex flex-col rounded-2xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#1A191C] p-5 transition hover:border-gray-300 dark:hover:border-white/20 hover:shadow-sm print:break-inside-avoid'
     >
       <div className='flex items-start justify-between gap-3'>
         <div className='flex min-w-0 items-center gap-3'>
-          <span className='flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gray-900 text-white'>
+          <span className='flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gray-900 dark:bg-[#232227] text-white'>
             <FaGithub className='h-4 w-4' />
           </span>
-          <h4 className='truncate text-[15px] font-semibold text-gray-900' title={repo.repoName}>
+          <h4 className='truncate text-[15px] font-semibold text-gray-900 dark:text-[#ECE9E4]' title={repo.repoName}>
             {repo.repoName}
           </h4>
         </div>
-        <ExternalLink className='mt-1 h-4 w-4 shrink-0 text-gray-300 transition group-hover:text-gray-700 print:hidden' />
+        <ExternalLink className='mt-1 h-4 w-4 shrink-0 text-gray-300 dark:text-[#A29FA8] transition group-hover:text-gray-700 dark:group-hover:text-[#ECE9E4] print:hidden' />
       </div>
 
-      <div className='mt-4 flex items-center gap-4 text-xs text-gray-500'>
+      <div className='mt-4 flex items-center gap-4 text-xs text-gray-500 dark:text-[#A29FA8]'>
         {repo.mainLanguage && (
           <span className='inline-flex items-center gap-1.5'>
             <span className='h-2.5 w-2.5 rounded-full' style={{ backgroundColor: langColor ?? undefined }} />
@@ -157,7 +157,7 @@ function RepoCard({ repo, chipCls }: { repo: PortfolioRepository; chipCls: strin
 
       <div className='mt-4 flex flex-1 flex-wrap content-start gap-1.5'>
         {shown.length === 0 ? (
-          <span className='text-xs text-gray-400'>Chưa phát hiện tech stack</span>
+          <span className='text-xs text-gray-400 dark:text-[#A29FA8]'>Chưa phát hiện tech stack</span>
         ) : (
           <>
             {shown.map((t) => (
@@ -166,7 +166,7 @@ function RepoCard({ repo, chipCls }: { repo: PortfolioRepository; chipCls: strin
               </span>
             ))}
             {extra > 0 && (
-              <span className='rounded-md border border-gray-200 bg-gray-50 px-2 py-0.5 text-xs text-gray-500'>
+              <span className='rounded-md border border-gray-200 dark:border-white/[0.08] bg-gray-50 dark:bg-[#232227] px-2 py-0.5 text-xs text-gray-500 dark:text-[#A29FA8]'>
                 +{extra}
               </span>
             )}
@@ -193,12 +193,12 @@ function ProjectsSection({
   return (
     <section className='mt-10'>
       <div className='flex items-baseline justify-between gap-3'>
-        <h3 className='text-lg font-semibold text-gray-900'>
+        <h3 className='text-lg font-semibold text-gray-900 dark:text-[#ECE9E4]'>
           Projects
-          {repos.length > 0 && <span className='ml-2 text-sm font-normal text-gray-400'>{repos.length}</span>}
+          {repos.length > 0 && <span className='ml-2 text-sm font-normal text-gray-400 dark:text-[#A29FA8]'>{repos.length}</span>}
         </h3>
         {hasGithubSync && (
-          <span className='inline-flex items-center gap-1.5 text-xs text-gray-500 print:hidden'>
+          <span className='inline-flex items-center gap-1.5 text-xs text-gray-500 dark:text-[#A29FA8] print:hidden'>
             <FaGithub className='h-3.5 w-3.5' /> Đã đồng bộ từ GitHub
           </span>
         )}
@@ -216,7 +216,7 @@ function ProjectsSection({
           ))}
         </div>
       ) : (
-        <p className='mt-3 rounded-xl border border-dashed border-gray-200 px-4 py-6 text-center text-sm text-gray-500'>
+        <p className='mt-3 rounded-xl border border-dashed border-gray-200 dark:border-white/[0.08] px-4 py-6 text-center text-sm text-gray-500 dark:text-[#A29FA8]'>
           {!isPublic
             ? 'Bật “Công khai portfolio” ở tab Share để hiển thị dự án GitHub tại đây.'
             : 'Chưa có dự án nào. Đồng bộ GitHub để tự động thêm dự án của bạn.'}
@@ -354,14 +354,14 @@ function Builder({
         {/* Header */}
         <div className='flex flex-wrap items-start justify-between gap-4 print:hidden'>
           <div>
-            <h1 className='text-3xl font-semibold text-gray-900'>Portfolio Builder</h1>
-            <p className='mt-2 text-gray-500'>Chỉnh sửa, chọn giao diện và chia sẻ portfolio của bạn.</p>
+            <h1 className='text-3xl font-semibold text-gray-900 dark:text-[#ECE9E4]'>Portfolio Builder</h1>
+            <p className='mt-2 text-gray-500 dark:text-[#A29FA8]'>Chỉnh sửa, chọn giao diện và chia sẻ portfolio của bạn.</p>
           </div>
           <div className='flex items-center gap-3'>
             <button
               type='button'
               onClick={() => window.print()}
-              className='flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 transition'
+              className='flex items-center gap-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 dark:bg-[#5F2CFF] dark:hover:bg-[#4B1FD6] px-4 py-2 text-sm font-medium text-white transition cursor-pointer'
             >
               <Download className='w-4 h-4' /> Export PDF
             </button>
@@ -373,16 +373,18 @@ function Builder({
           <form
             onSubmit={onFormSubmit}
             noValidate
-            className='rounded-3xl border border-gray-200 bg-white p-6 print:hidden'
+            className='rounded-3xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#1A191C] p-6 print:hidden'
           >
-            <div className='grid grid-cols-3 rounded-xl bg-gray-100 p-1'>
+            <div className='grid grid-cols-3 rounded-xl bg-gray-100 dark:bg-[#232227] p-1'>
               {TABS.map((t) => (
                 <button
                   key={t}
                   type='button'
                   onClick={() => setTab(t)}
-                  className={`rounded-lg py-2 text-sm transition ${
-                    tab === t ? 'bg-white text-gray-900 font-medium shadow-sm' : 'text-gray-500 hover:text-gray-900'
+                  className={`rounded-lg py-2 text-sm transition cursor-pointer ${
+                    tab === t
+                      ? 'bg-white dark:bg-[#1A191C] text-gray-900 dark:text-[#ECE9E4] font-medium shadow-sm'
+                      : 'text-gray-500 dark:text-[#A29FA8] hover:text-gray-900 dark:hover:text-[#ECE9E4]'
                   }`}
                 >
                   {t}
@@ -400,7 +402,7 @@ function Builder({
                     placeholder='Junior Full-stack Developer'
                   />
                   <label className='block'>
-                    <span className='text-sm font-medium text-gray-900'>Bio</span>
+                    <span className='text-sm font-medium text-gray-900 dark:text-[#ECE9E4]'>Bio</span>
                     <textarea
                       {...register('bio')}
                       rows={3}
@@ -436,7 +438,7 @@ function Builder({
                   />
 
                   <div>
-                    <span className='text-sm font-medium text-gray-900'>Skills</span>
+                    <span className='text-sm font-medium text-gray-900 dark:text-[#ECE9E4]'>Skills</span>
                     <div className='mt-1.5 flex gap-2'>
                       <input
                         value={skillInput}
@@ -454,7 +456,7 @@ function Builder({
                         type='button'
                         onClick={commitSkill}
                         disabled={!pendingSkill}
-                        className='shrink-0 rounded-xl border border-gray-200 px-4 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 transition'
+                        className='shrink-0 rounded-xl border border-gray-200 dark:border-white/[0.08] px-4 text-sm font-medium text-gray-700 dark:text-[#ECE9E4] hover:bg-gray-50 dark:hover:bg-[#232227] disabled:opacity-50 transition cursor-pointer'
                       >
                         Thêm
                       </button>
@@ -464,14 +466,14 @@ function Builder({
                       {form.skills.map((s) => (
                         <span
                           key={s}
-                          className='inline-flex items-center gap-1 rounded-full border border-gray-200 bg-gray-50 pl-3 pr-1.5 py-1 text-sm text-gray-700'
+                          className='inline-flex items-center gap-1 rounded-full border border-gray-200 dark:border-white/[0.08] bg-gray-50 dark:bg-[#232227] pl-3 pr-1.5 py-1 text-sm text-gray-700 dark:text-[#ECE9E4]'
                         >
                           {s}
                           <button
                             type='button'
                             aria-label={`Xóa ${s}`}
                             onClick={() => removeSkill(s)}
-                            className='rounded-full p-0.5 text-gray-400 hover:text-gray-900'
+                            className='rounded-full p-0.5 text-gray-400 dark:text-[#A29FA8] hover:text-gray-900 dark:hover:text-[#ECE9E4] cursor-pointer'
                           >
                             <X className='w-3.5 h-3.5' />
                           </button>
@@ -489,12 +491,14 @@ function Builder({
                       key={t.name}
                       type='button'
                       onClick={() => setTheme(i)}
-                      className={`rounded-xl border p-3 text-left text-sm transition ${
-                        theme === i ? 'border-indigo-500 ring-2 ring-indigo-100' : 'border-gray-200 hover:bg-gray-50'
+                      className={`rounded-xl border p-3 text-left text-sm transition cursor-pointer ${
+                        theme === i
+                          ? 'border-indigo-500 dark:border-[#5F2CFF] ring-2 ring-indigo-100 dark:ring-[#5F2CFF]/20'
+                          : 'border-gray-200 dark:border-white/[0.08] hover:bg-gray-50 dark:hover:bg-[#232227]'
                       }`}
                     >
-                      <div className={`h-10 rounded-lg bg-gradient-to-br ${t.banner} border border-gray-100`} />
-                      <span className='mt-2 block text-gray-900'>{t.name}</span>
+                      <div className={`h-10 rounded-lg bg-gradient-to-br ${t.banner} border border-gray-100 dark:border-white/[0.06]`} />
+                      <span className='mt-2 block text-gray-900 dark:text-[#ECE9E4]'>{t.name}</span>
                     </button>
                   ))}
                 </div>
@@ -502,23 +506,23 @@ function Builder({
 
               {tab === 'Share' && (
                 <>
-                  <label className='flex items-center justify-between gap-4 rounded-xl border border-gray-200 p-4 cursor-pointer'>
+                  <label className='flex items-center justify-between gap-4 rounded-xl border border-gray-200 dark:border-white/[0.08] p-4 cursor-pointer'>
                     <span>
-                      <span className='block text-sm font-medium text-gray-900'>Công khai portfolio</span>
-                      <span className='block text-xs text-gray-500 mt-0.5'>
+                      <span className='block text-sm font-medium text-gray-900 dark:text-[#ECE9E4]'>Công khai portfolio</span>
+                      <span className='block text-xs text-gray-500 dark:text-[#A29FA8] mt-0.5'>
                         Bất kỳ ai có link đều xem được. Nhấn “Lưu thay đổi” để áp dụng.
                       </span>
                     </span>
-                    <input type='checkbox' {...register('isPublic')} className='w-5 h-5 accent-indigo-600' />
+                    <input type='checkbox' {...register('isPublic')} className='w-5 h-5 accent-indigo-600 dark:accent-[#5F2CFF]' />
                   </label>
                   <div className='flex gap-2'>
-                    <input readOnly value={shareUrl} className={`${inputCls} text-gray-500`} />
+                    <input readOnly value={shareUrl} className={`${inputCls} text-gray-500 dark:text-[#A29FA8]`} />
                     <button
                       type='button'
                       onClick={copyUrl}
                       disabled={!initial.isPublic || !shareUrl}
                       aria-label='Sao chép link'
-                      className='shrink-0 rounded-xl border border-gray-200 px-3 text-gray-700 hover:bg-gray-50 disabled:opacity-50 transition'
+                      className='shrink-0 rounded-xl border border-gray-200 dark:border-white/[0.08] px-3 text-gray-700 dark:text-[#ECE9E4] hover:bg-gray-50 dark:hover:bg-[#232227] disabled:opacity-50 transition cursor-pointer'
                     >
                       <Link2 className='w-4 h-4' />
                     </button>
@@ -530,7 +534,7 @@ function Builder({
             <button
               type='submit'
               disabled={(!isDirty && !pendingSkill) || isPending}
-              className='mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 py-2.5 text-sm font-medium text-white transition hover:bg-indigo-700 disabled:opacity-50'
+              className='mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 dark:bg-[#5F2CFF] dark:hover:bg-[#4B1FD6] py-2.5 text-sm font-medium text-white transition disabled:opacity-50 cursor-pointer'
             >
               {isPending && <Loader2 className='h-4 w-4 animate-spin' />}
               {isPending ? 'Đang lưu...' : 'Lưu thay đổi'}
@@ -538,10 +542,10 @@ function Builder({
           </form>
 
           {/* Live preview */}
-          <div className='rounded-3xl border border-gray-200 bg-white overflow-hidden print:border-0'>
-            <div className={`h-40 border-b border-gray-200 bg-gradient-to-br ${currentTheme.banner}`} />
+          <div className='rounded-3xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#1A191C] overflow-hidden print:border-0'>
+            <div className={`h-40 border-b border-gray-200 dark:border-white/[0.08] bg-gradient-to-br ${currentTheme.banner}`} />
             <div className='px-6 sm:px-8 pb-10'>
-              <div className='-mt-14 w-28 h-28 rounded-full border-4 border-white bg-white overflow-hidden'>
+              <div className='-mt-14 w-28 h-28 rounded-full border-4 border-white dark:border-[#1A191C] bg-white dark:bg-[#1A191C] overflow-hidden'>
                 {form.avatarUrl ? (
                   <img src={form.avatarUrl} alt={fullName} className='w-full h-full object-cover' />
                 ) : (
@@ -549,9 +553,9 @@ function Builder({
                 )}
               </div>
 
-              <h2 className='mt-4 text-3xl font-semibold text-gray-900'>{fullName}</h2>
-              {form.title && <p className='mt-1 text-lg text-gray-500'>{form.title}</p>}
-              {form.bio && <p className='mt-3 max-w-xl text-[15px] leading-relaxed text-gray-600'>{form.bio}</p>}
+              <h2 className='mt-4 text-3xl font-semibold text-gray-900 dark:text-[#ECE9E4]'>{fullName}</h2>
+              {form.title && <p className='mt-1 text-lg text-gray-500 dark:text-[#A29FA8]'>{form.title}</p>}
+              {form.bio && <p className='mt-3 max-w-xl text-[15px] leading-relaxed text-gray-600 dark:text-[#B5B1BA]'>{form.bio}</p>}
 
               {socials.length > 0 && (
                 <div className='mt-5 flex gap-2'>
@@ -562,7 +566,7 @@ function Builder({
                       aria-label={label}
                       target='_blank'
                       rel='noreferrer'
-                      className='w-10 h-10 rounded-xl border border-gray-200 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition'
+                      className='w-10 h-10 rounded-xl border border-gray-200 dark:border-white/[0.08] flex items-center justify-center text-gray-600 dark:text-[#A29FA8] hover:text-gray-900 dark:hover:text-[#ECE9E4] hover:bg-gray-50 dark:hover:bg-[#232227] transition'
                     >
                       <Icon className='w-4 h-4' />
                     </a>
@@ -570,15 +574,15 @@ function Builder({
                 </div>
               )}
 
-              <p className='mt-5 inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1 text-xs text-gray-600 print:hidden'>
+              <p className='mt-5 inline-flex items-center gap-1.5 rounded-full bg-gray-100 dark:bg-white/10 px-3 py-1 text-xs text-gray-600 dark:text-[#ECE9E4] print:hidden'>
                 <Check className='w-3.5 h-3.5' /> Live preview
               </p>
 
               {/* Skills */}
               <section className='mt-10'>
-                <h3 className='text-lg font-semibold text-gray-900'>Skills</h3>
+                <h3 className='text-lg font-semibold text-gray-900 dark:text-[#ECE9E4]'>Skills</h3>
                 {form.skills.length === 0 ? (
-                  <p className='mt-3 text-sm text-gray-500'>Thêm kỹ năng ở tab Info để hiển thị tại đây.</p>
+                  <p className='mt-3 text-sm text-gray-500 dark:text-[#A29FA8]'>Thêm kỹ năng ở tab Info để hiển thị tại đây.</p>
                 ) : (
                   <div className='mt-3 flex flex-wrap gap-2'>
                     {form.skills.map((s) => (

@@ -17,15 +17,15 @@ export default function ChatUploadRequiredState() {
           <UploadCloud className='w-6 h-6 text-white' />
         </div>
 
-        <h2 className='mt-5 text-xl font-semibold text-gray-900'>Chưa có dữ liệu để AI tư vấn</h2>
-        <p className='mt-2 text-sm text-gray-500 leading-relaxed max-w-md mx-auto'>
+        <h2 className='mt-5 text-xl font-semibold text-gray-900 dark:text-[#ECE9E4]'>Chưa có dữ liệu để AI tư vấn</h2>
+        <p className='mt-2 text-sm text-gray-500 dark:text-[#A29FA8] leading-relaxed max-w-md mx-auto'>
           Hãy upload dữ liệu của bạn để AI phân tích hồ sơ trước khi bắt đầu trò chuyện.
         </p>
 
         <button
           type='button'
           onClick={() => navigate('/upload')}
-          className='mt-6 inline-flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-5 py-2.5 transition'
+          className='mt-6 inline-flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-5 py-2.5 transition cursor-pointer shadow-xs'
         >
           <UploadCloud className='w-4 h-4' />
           Upload ngay
@@ -35,9 +35,9 @@ export default function ChatUploadRequiredState() {
           {SOURCES.map(({ icon: Icon, label }) => (
             <span
               key={label}
-              className='inline-flex items-center gap-2 rounded-full border border-gray-200 bg-gray-50/60 px-3.5 py-1.5 text-xs font-medium text-gray-600'
+              className='inline-flex items-center gap-2 rounded-full border border-gray-200 dark:border-white/[0.08] bg-gray-50/60 dark:bg-[#1A191C] px-3.5 py-1.5 text-xs font-medium text-gray-600 dark:text-[#ECE9E4] transition-colors'
             >
-              <Icon className='w-3.5 h-3.5 text-indigo-600' />
+              <Icon className='w-3.5 h-3.5 text-indigo-600 dark:text-[#A99DFF]' />
               {label}
             </span>
           ))}

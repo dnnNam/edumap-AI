@@ -78,7 +78,9 @@ function NavButton({ icon: Icon, label, to, badge, onClick }: NavItem & { onClic
       onClick={onClick}
       className={({ isActive }) =>
         `flex items-center justify-between gap-2 px-2.5 py-2 rounded-lg text-sm transition-colors ${
-          isActive ? 'bg-gray-100 text-gray-900 font-medium' : 'text-gray-600 hover:bg-gray-50'
+          isActive
+            ? 'bg-gray-100 text-gray-900 dark:bg-white/10 dark:text-[#ECE9E4] font-medium'
+            : 'text-gray-600 hover:bg-gray-50 dark:text-[#A29FA8] dark:hover:bg-white/5 dark:hover:text-[#ECE9E4]'
         }`
       }
     >
@@ -87,7 +89,9 @@ function NavButton({ icon: Icon, label, to, badge, onClick }: NavItem & { onClic
         {label}
       </span>
       {badge !== undefined && (
-        <span className='text-[11px] bg-gray-200 text-gray-600 rounded-full px-1.5 py-0.5 leading-none'>{badge}</span>
+        <span className='text-[11px] bg-gray-200 text-gray-600 dark:bg-white/10 dark:text-[#ECE9E4] rounded-full px-1.5 py-0.5 leading-none'>
+          {badge}
+        </span>
       )}
     </NavLink>
   )
@@ -113,15 +117,15 @@ export default function AppAside({ onClose }: AppAsideProps) {
   }
 
   return (
-    <aside className='w-60 shrink-0 border-r border-gray-200 bg-white flex flex-col h-full'>
+    <aside className='w-60 shrink-0 border-r border-gray-200 dark:border-white/10 bg-white dark:bg-[#1A191C] flex flex-col h-full transition-colors'>
       {/* Mobile close bar */}
-      <div className='lg:hidden flex items-center justify-between px-3.5 py-3 border-b border-gray-100'>
-        <span className='text-xs font-semibold text-gray-500 uppercase tracking-wider'>Menu</span>
+      <div className='lg:hidden flex items-center justify-between px-3.5 py-3 border-b border-gray-100 dark:border-white/10'>
+        <span className='text-xs font-semibold text-gray-500 dark:text-[#A29FA8] uppercase tracking-wider'>Menu</span>
         <button
           type='button'
           onClick={onClose}
           aria-label='Close menu'
-          className='p-1 rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition'
+          className='p-1 rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-100 dark:text-[#A29FA8] dark:hover:text-[#ECE9E4] dark:hover:bg-white/5 transition'
         >
           <X className='w-4 h-4' />
         </button>
@@ -131,7 +135,7 @@ export default function AppAside({ onClose }: AppAsideProps) {
       <div className='flex-1 overflow-y-auto px-3 py-4'>
         {visibleNavItems.length > 0 && (
           <>
-            <p className='px-2 text-[11px] font-medium text-gray-400 mb-2'>Workspace</p>
+            <p className='px-2 text-[11px] font-medium text-gray-400 dark:text-[#5E5A64] mb-2'>Workspace</p>
             <nav className='flex flex-col gap-0.5 mb-6'>
               {visibleNavItems.map((item) => (
                 <NavButton key={item.label} {...item} onClick={onClose} />
@@ -142,7 +146,7 @@ export default function AppAside({ onClose }: AppAsideProps) {
 
         {visibleAccountItems.length > 0 && (
           <>
-            <p className='px-2 text-[11px] font-medium text-gray-400 mb-2'>Account</p>
+            <p className='px-2 text-[11px] font-medium text-gray-400 dark:text-[#5E5A64] mb-2'>Account</p>
             <nav className='flex flex-col gap-0.5'>
               {visibleAccountItems.map((item) => (
                 <NavButton key={item.label} {...item} onClick={onClose} />
@@ -155,16 +159,16 @@ export default function AppAside({ onClose }: AppAsideProps) {
       {/* Upgrade card */}
       {userRole !== 'ADMIN' && (
         <div className='mt-5 p-2.5 shrink-0'>
-          <div className='rounded-xl border border-gray-200 bg-white p-4'>
-            <p className='text-sm font-semibold text-gray-900 mb-1'>Upgrade to Pro</p>
-            <p className='text-xs text-gray-500 mb-3'>Unlimited AI mentor and analytics.</p>
+          <div className='rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-[#232227] p-4 transition-colors'>
+            <p className='text-sm font-semibold text-gray-900 dark:text-[#ECE9E4] mb-1'>Upgrade to Pro</p>
+            <p className='text-xs text-gray-500 dark:text-[#A29FA8] mb-3'>Unlimited AI mentor and analytics.</p>
             <button
               type='button'
               onClick={() => {
                 onClose?.()
                 navigate('/subscription')
               }}
-              className='w-full bg-indigo-600 text-white text-sm font-medium rounded-lg py-2 hover:bg-indigo-700 transition-colors'
+              className='w-full bg-indigo-600 text-white text-sm font-medium rounded-lg py-2 hover:bg-indigo-700 transition-colors cursor-pointer'
             >
               Upgrade
             </button>
@@ -176,7 +180,7 @@ export default function AppAside({ onClose }: AppAsideProps) {
         <button
           type='button'
           onClick={handleSignOut}
-          className='flex items-center gap-2.5 px-2.5 py-2 w-full rounded-lg text-sm text-gray-600 hover:bg-gray-50 transition-colors mt-1'
+          className='flex items-center gap-2.5 px-2.5 py-2 w-full rounded-lg text-sm text-gray-600 hover:bg-gray-50 dark:text-[#A29FA8] dark:hover:bg-white/5 dark:hover:text-[#ECE9E4] transition-colors mt-1 cursor-pointer'
         >
           <LogOut className='w-4 h-4' />
           Sign out

@@ -1,8 +1,9 @@
 import { Mail, Lock, User } from 'lucide-react'
 import Logo from '../../components/ui/Logo'
+import StatCard from '../../components/ui/StatCard'
 import FormInput from '../../components/ui/FormInput'
 import PrimaryButton from '../../components/ui/PrimaryButton'
-import StatCard from '../../components/ui/StatCard'
+import ThemeToggle from '../../components/ui/ThemeToggle'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Link, useNavigate } from 'react-router'
@@ -13,6 +14,7 @@ import { toast } from 'sonner'
 export default function RegisterPage() {
   const navigate = useNavigate()
 
+  // 1. Khởi tạo React Hook Form kết hợp Zod Resolver
   const {
     register,
     handleSubmit,
@@ -27,10 +29,12 @@ export default function RegisterPage() {
     },
   })
 
+  // 2. Khởi tạo mutation đăng ký từ React Query
   const { mutate: registerUser, isPending } = useRegisterMutation()
 
+  // 3. Xử lý logic submit form
   const onSubmit = (data: RegisterFormPayload) => {
-    // Bỏ confirmPassword trước khi gửi lên backend
+    // confirmPassword chỉ dùng để validate ở client, ta chỉ gửi data mà backend cần
     const { email, password, fullName } = data
 
     registerUser(
@@ -46,14 +50,19 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className='min-h-screen w-full flex bg-white'>
+    <div className='min-h-screen w-full flex bg-white dark:bg-[#1A191C] transition-colors relative'>
+      {/* Nút chuyển theme góc trên bên phải */}
+      <div className='absolute top-5 right-5 sm:top-6 sm:right-6 z-20'>
+        <ThemeToggle />
+      </div>
+
       {/* Left panel: the form */}
-      <div className='flex flex-1 md:w-1/2 flex-col px-6 md:px-16 py-12'>
+      <div className='flex flex-1 md:w-1/2 flex-col px-6 md:px-16 py-12 bg-white dark:bg-[#1A191C] transition-colors'>
         <Logo />
 
         <div className='w-full max-w-md mt-10'>
-          <h2 className='text-[26px] font-bold text-gray-900'>Create your account</h2>
-          <p className='mt-1.5 text-gray-500 text-[15px]'>90-second setup. Free forever for students.</p>
+          <h2 className='text-[26px] font-bold text-gray-900 dark:text-[#ECE9E4]'>Create your account</h2>
+          <p className='mt-1.5 text-gray-500 dark:text-[#B5B1BA] text-[15px]'>90-second setup. Free forever for students.</p>
 
           <form onSubmit={handleSubmit(onSubmit)} className='mt-8 space-y-5'>
             <div>
@@ -64,7 +73,7 @@ export default function RegisterPage() {
                 placeholder='Alex Johnson'
                 {...register('fullName')}
               />
-              {errors.fullName && <p className='text-sm text-red-500 mt-1'>{errors.fullName.message}</p>}
+              {errors.fullName && <p className='text-sm text-red-500 dark:text-[#FCA5A5] mt-1'>{errors.fullName.message}</p>}
             </div>
 
             <div>
@@ -76,7 +85,7 @@ export default function RegisterPage() {
                 placeholder='you@university.edu'
                 {...register('email')}
               />
-              {errors.email && <p className='text-sm text-red-500 mt-1'>{errors.email.message}</p>}
+              {errors.email && <p className='text-sm text-red-500 dark:text-[#FCA5A5] mt-1'>{errors.email.message}</p>}
             </div>
 
             <div className='grid grid-cols-2 gap-4'>
@@ -89,7 +98,7 @@ export default function RegisterPage() {
                   placeholder='••••••••'
                   {...register('password')}
                 />
-                {errors.password && <p className='text-sm text-red-500 mt-1'>{errors.password.message}</p>}
+                {errors.password && <p className='text-sm text-red-500 dark:text-[#FCA5A5] mt-1'>{errors.password.message}</p>}
               </div>
               <div>
                 <FormInput
@@ -101,7 +110,7 @@ export default function RegisterPage() {
                   {...register('confirmPassword')}
                 />
                 {errors.confirmPassword && (
-                  <p className='text-sm text-red-500 mt-1'>{errors.confirmPassword.message}</p>
+                  <p className='text-sm text-red-500 dark:text-[#FCA5A5] mt-1'>{errors.confirmPassword.message}</p>
                 )}
               </div>
             </div>
@@ -110,22 +119,22 @@ export default function RegisterPage() {
               Create account
             </PrimaryButton>
 
-            <p className='text-center text-xs text-gray-400'>
+            <p className='text-center text-xs text-gray-400 dark:text-[#85808C]'>
               By signing up you agree to our{' '}
-              <a href='#' className='underline hover:text-gray-600'>
+              <a href='#' className='underline hover:text-gray-600 dark:hover:text-[#ECE9E4]'>
                 Terms
               </a>{' '}
               &{' '}
-              <a href='#' className='underline hover:text-gray-600'>
+              <a href='#' className='underline hover:text-gray-600 dark:hover:text-[#ECE9E4]'>
                 Privacy
               </a>
               .
             </p>
           </form>
 
-          <p className='mt-4 text-center text-sm text-gray-500'>
+          <p className='mt-4 text-center text-sm text-gray-500 dark:text-[#B5B1BA]'>
             Already have an account?{' '}
-            <Link to='/login' className='font-medium text-gray-900 hover:underline'>
+            <Link to='/login' className='font-medium text-gray-900 dark:text-[#A99DFF] hover:underline'>
               Sign in
             </Link>
           </p>
@@ -133,15 +142,15 @@ export default function RegisterPage() {
       </div>
 
       {/* Right panel: marketing content */}
-      <div className='hidden md:flex md:w-1/2 flex-col justify-between bg-[#FAFAF9] px-16 py-12 border-l border-gray-200'>
+      <div className='hidden md:flex md:w-1/2 flex-col justify-between bg-[#FAFAF9] dark:bg-[#121114] px-16 py-12 border-l border-gray-200 dark:border-white/10 transition-colors'>
         <div />
         <div className='max-w-lg self-end text-right'>
-          <h1 className='text-[40px] leading-[1.15] font-bold text-gray-900 tracking-tight'>
+          <h1 className='text-[40px] leading-[1.15] font-bold text-gray-900 dark:text-[#ECE9E4] tracking-tight'>
             Map your career.
             <br />
             In under a minute.
           </h1>
-          <p className='mt-5 text-gray-500 text-[15px] leading-relaxed'>
+          <p className='mt-5 text-gray-500 dark:text-[#B5B1BA] text-[15px] leading-relaxed'>
             Get a personalized roadmap, skill tree and job matches the moment you sign up.
           </p>
         </div>

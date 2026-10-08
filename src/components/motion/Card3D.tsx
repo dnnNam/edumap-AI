@@ -90,13 +90,13 @@ export default function Card3D({
         {children}
       </div>
 
-      {/* Ánh sáng 3D Glare lướt theo chuột */}
+      {/* Ánh sáng 3D Glare lướt theo chuột (tinh tế hơn trên Dark Mode) */}
       {glare && !shouldReduceMotion && (
         <div
-          className='pointer-events-none absolute inset-0 rounded-[inherit] transition-opacity duration-300'
+          className='pointer-events-none absolute inset-0 rounded-[inherit] transition-opacity duration-300 dark:opacity-40'
           style={{
             opacity: glarePos.opacity,
-            background: `radial-gradient(circle 250px at ${glarePos.x}% ${glarePos.y}%, rgba(255,255,255,0.8), transparent 70%)`,
+            background: `radial-gradient(circle 250px at ${glarePos.x}% ${glarePos.y}%, var(--card-glare, rgba(255,255,255,0.8)), transparent 70%)`,
           }}
         />
       )}

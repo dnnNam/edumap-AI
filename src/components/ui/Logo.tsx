@@ -27,7 +27,7 @@ export default function Logo({ className = '', showSubtitle = false, size = 'md'
       className={`flex items-center gap-2.5 cursor-pointer group select-none ${className}`}
     >
       <div
-        className={`${iconSizes[size]} bg-[#131428] flex items-center justify-center shrink-0 shadow-sm overflow-hidden group-hover:scale-105 transition-transform duration-200`}
+        className={`${iconSizes[size]} bg-[#131428] dark:border dark:border-white/10 flex items-center justify-center shrink-0 shadow-sm overflow-hidden group-hover:scale-105 transition-transform duration-200`}
       >
         <img
           src='/favicon.svg'
@@ -37,11 +37,11 @@ export default function Logo({ className = '', showSubtitle = false, size = 'md'
       </div>
 
       <div className='flex flex-col leading-tight'>
-        <div className={`font-black tracking-tight text-gray-900 ${textSizes[size]} group-hover:text-indigo-600 transition-colors`}>
-          EDUMAP<span className='text-indigo-600'>AI</span>
+        <div className={`font-black tracking-tight text-gray-900 dark:text-[#ECE9E4] ${textSizes[size]} group-hover:text-indigo-600 dark:group-hover:text-[#A99DFF] transition-colors`}>
+          EDUMAP<span className='text-indigo-600 dark:text-[#A99DFF]'>AI</span>
         </div>
         {showSubtitle && (
-          <span className='text-[8px] sm:text-[9px] tracking-wider text-gray-400 font-bold uppercase'>
+          <span className='text-[8px] sm:text-[9px] tracking-wider text-gray-400 dark:text-[#85808C] font-bold uppercase'>
             A Roadmap for Education
           </span>
         )}

@@ -29,7 +29,7 @@ export default function AppLayouts() {
   const closeSidebar = useCallback(() => setSidebarOpen(false), [])
 
   return (
-    <div className='flex flex-col h-screen w-full bg-gray-50'>
+    <div className='flex flex-col h-screen w-full bg-gray-50 dark:bg-[#121114]'>
       <AppHeader
         userName={fullName}
         userPlan={ROLE_LABEL[role] ?? planLabel}
@@ -39,7 +39,7 @@ export default function AppLayouts() {
         {/* Mobile backdrop overlay */}
         {sidebarOpen && (
           <div
-            className='fixed inset-0 z-40 bg-gray-900/30 backdrop-blur-xs lg:hidden transition-opacity'
+            className='fixed inset-0 z-40 bg-gray-900/30 dark:bg-black/60 backdrop-blur-xs lg:hidden transition-opacity'
             onClick={closeSidebar}
             aria-hidden='true'
           />
@@ -57,7 +57,7 @@ export default function AppLayouts() {
           <AppAside onClose={closeSidebar} />
         </div>
 
-        <main className='flex-1 min-h-0 flex flex-col overflow-y-auto min-w-0 bg-gray-50'>
+        <main className='flex-1 min-h-0 flex flex-col overflow-y-auto min-w-0 bg-gray-50 dark:bg-[#121114]'>
           <AnimatedOutlet />
         </main>
       </div>
