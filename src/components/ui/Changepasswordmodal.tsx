@@ -70,41 +70,41 @@ export default function ChangePasswordModal({
 
   return (
     <div className='fixed inset-0 z-50 flex items-center justify-center px-4'>
-      <div className='absolute inset-0 bg-gray-900/40 backdrop-blur-[2px]' onClick={handleClose} />
+      <div className='absolute inset-0 bg-black/60 backdrop-blur-[2px]' onClick={handleClose} />
 
-      <div className='relative w-full max-w-md bg-white rounded-2xl border border-gray-200 shadow-lg p-6'>
+      <div className='relative w-full max-w-md bg-white dark:bg-[#1A191C] rounded-2xl border border-gray-200 dark:border-white/[0.08] shadow-lg p-6'>
         <button
           type='button'
           onClick={handleClose}
-          className='absolute top-5 right-5 text-gray-400 hover:text-gray-600 transition-colors'
+          className='absolute top-5 right-5 text-gray-400 dark:text-[#A29FA8] hover:text-gray-600 dark:hover:text-[#ECE9E4] transition-colors cursor-pointer'
           aria-label='Close'
         >
           <X className='w-4.5 h-4.5' />
         </button>
 
         <div className='flex items-center gap-2'>
-          <KeyRound className='w-4.5 h-4.5 text-gray-900' />
-          <h2 className='text-lg font-semibold text-gray-900'>Change password</h2>
+          <KeyRound className='w-4.5 h-4.5 text-gray-900 dark:text-[#ECE9E4]' />
+          <h2 className='text-lg font-semibold text-gray-900 dark:text-[#ECE9E4]'>Change password</h2>
         </div>
-        <p className='mt-1.5 text-sm text-gray-500'>Choose a strong password you haven't used before.</p>
+        <p className='mt-1.5 text-sm text-gray-500 dark:text-[#A29FA8]'>Choose a strong password you haven't used before.</p>
 
         <form onSubmit={submit} className='mt-6 space-y-4'>
           {/* Form input Current Password */}
           <div>
-            <label htmlFor='oldPassword' className='block text-sm font-medium text-gray-800 mb-1.5'>
+            <label htmlFor='oldPassword' className='block text-sm font-medium text-gray-800 dark:text-[#ECE9E4] mb-1.5'>
               Current password
             </label>
             <div className='relative'>
               <input
                 id='oldPassword'
                 type={showCurrent ? 'text' : 'password'}
-                className='w-full rounded-xl border border-gray-200 pl-4 pr-11 py-2.5 text-[15px] text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition'
+                className='w-full rounded-xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#232227] pl-4 pr-11 py-2.5 text-[15px] text-gray-900 dark:text-[#ECE9E4] outline-none focus:border-indigo-500 dark:focus:border-[#5F2CFF] focus:ring-2 focus:ring-indigo-100 dark:focus:ring-[#5F2CFF]/20 transition'
                 {...register('oldPassword')}
               />
               <button
                 type='button'
                 onClick={() => setShowCurrent((v) => !v)}
-                className='absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors'
+                className='absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 dark:text-[#A29FA8] hover:text-gray-600 dark:hover:text-[#ECE9E4] transition-colors cursor-pointer'
               >
                 {showCurrent ? <EyeOff className='w-4 h-4' /> : <Eye className='w-4 h-4' />}
               </button>
@@ -114,20 +114,20 @@ export default function ChangePasswordModal({
 
           {/* Form input New Password */}
           <div>
-            <label htmlFor='newPassword' className='block text-sm font-medium text-gray-800 mb-1.5'>
+            <label htmlFor='newPassword' className='block text-sm font-medium text-gray-800 dark:text-[#ECE9E4] mb-1.5'>
               New password
             </label>
             <div className='relative'>
               <input
                 id='newPassword'
                 type={showNew ? 'text' : 'password'}
-                className='w-full rounded-xl border border-gray-200 pl-4 pr-11 py-2.5 text-[15px] text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition'
+                className='w-full rounded-xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#232227] pl-4 pr-11 py-2.5 text-[15px] text-gray-900 dark:text-[#ECE9E4] outline-none focus:border-indigo-500 dark:focus:border-[#5F2CFF] focus:ring-2 focus:ring-indigo-100 dark:focus:ring-[#5F2CFF]/20 transition'
                 {...register('newPassword')}
               />
               <button
                 type='button'
                 onClick={() => setShowNew((v) => !v)}
-                className='absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors'
+                className='absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 dark:text-[#A29FA8] hover:text-gray-600 dark:hover:text-[#ECE9E4] transition-colors cursor-pointer'
               >
                 {showNew ? <EyeOff className='w-4 h-4' /> : <Eye className='w-4 h-4' />}
               </button>
@@ -137,20 +137,20 @@ export default function ChangePasswordModal({
 
           {/* Form input Confirm Password */}
           <div>
-            <label htmlFor='confirmNewPassword' className='block text-sm font-medium text-gray-800 mb-1.5'>
+            <label htmlFor='confirmNewPassword' className='block text-sm font-medium text-gray-800 dark:text-[#ECE9E4] mb-1.5'>
               Confirm new password
             </label>
             <div className='relative'>
               <input
                 id='confirmNewPassword'
                 type={showConfirm ? 'text' : 'password'}
-                className='w-full rounded-xl border border-gray-200 pl-4 pr-11 py-2.5 text-[15px] text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition'
+                className='w-full rounded-xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#232227] pl-4 pr-11 py-2.5 text-[15px] text-gray-900 dark:text-[#ECE9E4] outline-none focus:border-indigo-500 dark:focus:border-[#5F2CFF] focus:ring-2 focus:ring-indigo-100 dark:focus:ring-[#5F2CFF]/20 transition'
                 {...register('confirmNewPassword')}
               />
               <button
                 type='button'
                 onClick={() => setShowConfirm((v) => !v)}
-                className='absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors'
+                className='absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 dark:text-[#A29FA8] hover:text-gray-600 dark:hover:text-[#ECE9E4] transition-colors cursor-pointer'
               >
                 {showConfirm ? <EyeOff className='w-4 h-4' /> : <Eye className='w-4 h-4' />}
               </button>
@@ -164,14 +164,14 @@ export default function ChangePasswordModal({
             <button
               type='button'
               onClick={handleClose}
-              className='rounded-xl border border-gray-200 text-gray-900 text-[15px] font-medium px-4 py-2.5 hover:bg-gray-50 transition'
+              className='rounded-xl border border-gray-200 dark:border-white/[0.08] text-gray-900 dark:text-[#ECE9E4] text-[15px] font-medium px-4 py-2.5 hover:bg-gray-50 dark:hover:bg-[#232227] transition cursor-pointer'
             >
               Cancel
             </button>
             <button
               type='submit'
               disabled={isSubmitting}
-              className='rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-70 text-white text-[15px] font-medium px-5 py-2.5 transition'
+              className='rounded-xl bg-indigo-600 hover:bg-indigo-700 dark:bg-[#5F2CFF] dark:hover:bg-[#4B1FD6] disabled:opacity-70 text-white text-[15px] font-medium px-5 py-2.5 transition cursor-pointer'
             >
               {isSubmitting ? 'Updating...' : 'Update password'}
             </button>

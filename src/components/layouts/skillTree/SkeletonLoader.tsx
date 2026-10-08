@@ -5,7 +5,7 @@ import 'react-loading-skeleton/dist/skeleton.css'
 
 export function SkeletonCard({ lines = 2 }: { lines?: number }) {
   return (
-    <div className='bg-white border border-gray-200 rounded-2xl p-6'>
+    <div className='bg-white dark:bg-[#1A191C] border border-gray-200 dark:border-white/[0.08] rounded-2xl p-6 transition-colors'>
       <Skeleton width='60%' height={14} />
       <div className='mt-3 space-y-2'>
         {Array.from({ length: lines }).map((_, i) => (
@@ -20,7 +20,7 @@ export function SkeletonCard({ lines = 2 }: { lines?: number }) {
 
 export function SkeletonStat() {
   return (
-    <div className='bg-white border border-gray-200 rounded-2xl p-6'>
+    <div className='bg-white dark:bg-[#1A191C] border border-gray-200 dark:border-white/[0.08] rounded-2xl p-6 transition-colors'>
       <Skeleton width='40%' height={12} />
       <div className='mt-3'>
         <Skeleton height={32} width='50%' />
@@ -36,7 +36,7 @@ export function SkeletonStat() {
 
 export function SkeletonTreeRow() {
   return (
-    <div className='flex items-center gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3'>
+    <div className='flex items-center gap-3 rounded-xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#1A191C] px-4 py-3 transition-colors'>
       <Skeleton width={24} height={24} />
       <div className='flex flex-1 min-w-0 items-center gap-3'>
         <Skeleton circle width={32} height={32} />
@@ -54,7 +54,7 @@ export function SkeletonTreeRow() {
 
 export function SkeletonDetailPanel() {
   return (
-    <div className='bg-white border border-gray-200 rounded-2xl p-6'>
+    <div className='bg-white dark:bg-[#1A191C] border border-gray-200 dark:border-white/[0.08] rounded-2xl p-6 transition-colors'>
       <Skeleton height={16} width='60%' />
       <Skeleton height={12} width='40%' className='mt-2' />
       <div className='mt-5 space-y-3'>

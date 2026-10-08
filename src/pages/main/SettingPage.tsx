@@ -74,43 +74,43 @@ export default function SettingsPage() {
     <div className='flex-1 min-h-0 overflow-y-auto p-6'>
       <div className='max-w-5xl mx-auto'>
         {/* Page header */}
-        <h1 className='text-[28px] font-bold text-gray-900'>Settings</h1>
-        <p className='mt-1 text-gray-500 text-[15px]'>Manage your account, preferences and privacy.</p>
+        <h1 className='text-[28px] font-bold text-gray-900 dark:text-[#ECE9E4]'>Settings</h1>
+        <p className='mt-1 text-gray-500 dark:text-[#A29FA8] text-[15px]'>Manage your account, preferences and privacy.</p>
 
         {/* Tabs */}
         <SettingsTabs className='mt-6' tabs={TABS} activeTab={activeTab} onChange={setActiveTab} />
 
         {/* Tab content */}
         {activeTab === 'account' && (
-          <div className='mt-5 bg-white border border-gray-200 rounded-2xl p-6'>
-            <h2 className='text-[15px] font-semibold text-gray-900'>Profile</h2>
+          <div className='mt-5 bg-white dark:bg-[#1A191C] border border-gray-200 dark:border-white/[0.08] rounded-2xl p-6'>
+            <h2 className='text-[15px] font-semibold text-gray-900 dark:text-[#ECE9E4]'>Profile</h2>
 
             {isLoading ? (
               <div className='mt-4 animate-pulse space-y-5'>
                 <div className='flex items-center gap-4'>
-                  <div className='w-16 h-16 rounded-full bg-gray-100' />
-                  <div className='h-8 w-28 rounded-lg bg-gray-100' />
+                  <div className='w-16 h-16 rounded-full bg-gray-100 dark:bg-white/10' />
+                  <div className='h-8 w-28 rounded-lg bg-gray-100 dark:bg-white/10' />
                 </div>
                 <div className='grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-5'>
-                  <div className='h-11 rounded-xl bg-gray-100' />
-                  <div className='h-11 rounded-xl bg-gray-100' />
-                  <div className='h-11 rounded-xl bg-gray-100' />
-                  <div className='h-11 rounded-xl bg-gray-100' />
+                  <div className='h-11 rounded-xl bg-gray-100 dark:bg-white/10' />
+                  <div className='h-11 rounded-xl bg-gray-100 dark:bg-white/10' />
+                  <div className='h-11 rounded-xl bg-gray-100 dark:bg-white/10' />
+                  <div className='h-11 rounded-xl bg-gray-100 dark:bg-white/10' />
                 </div>
               </div>
             ) : (
               <>
                 {/* Avatar */}
                 <div className='mt-4 flex items-center gap-4'>
-                  <Avatar className='w-16 h-16 border border-gray-200' />
+                  <Avatar className='w-16 h-16 border border-gray-200 dark:border-white/[0.08]' />
                   <div>
                     <button
                       type='button'
-                      className='rounded-lg border border-gray-200 text-gray-900 text-sm font-medium px-3.5 py-1.5 hover:bg-gray-50 transition'
+                      className='rounded-lg border border-gray-200 dark:border-white/[0.08] text-gray-900 dark:text-[#ECE9E4] text-sm font-medium px-3.5 py-1.5 hover:bg-gray-50 dark:hover:bg-[#232227] transition cursor-pointer'
                     >
                       Upload new
                     </button>
-                    <p className='mt-1.5 text-xs text-gray-400'>PNG or JPG, max 2MB</p>
+                    <p className='mt-1.5 text-xs text-gray-400 dark:text-[#A29FA8]'>PNG or JPG, max 2MB</p>
                   </div>
                 </div>
 
@@ -140,7 +140,6 @@ export default function SettingsPage() {
                     label='GitHub username'
                     value={githubUsername}
                     onChange={(e) => setGithubUsername(e.target.value)}
-                    // Đã xóa className='sm:col-span-2' ở đây
                   />
                 </div>
 
@@ -150,7 +149,7 @@ export default function SettingsPage() {
                     type='button'
                     onClick={handleSave}
                     disabled={updateProfileMutation.isPending}
-                    className='rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-70 text-white text-[15px] font-medium px-5 py-2.5 transition'
+                    className='rounded-xl bg-indigo-600 hover:bg-indigo-700 dark:bg-[#5F2CFF] dark:hover:bg-[#4B1FD6] disabled:opacity-70 text-white text-[15px] font-medium px-5 py-2.5 transition cursor-pointer'
                   >
                     {updateProfileMutation.isPending ? 'Saving...' : 'Save changes'}
                   </button>
@@ -161,11 +160,11 @@ export default function SettingsPage() {
         )}
 
         {activeTab !== 'account' && (
-          <div className='mt-5 bg-white border border-gray-200 rounded-2xl p-10 flex flex-col items-center justify-center text-center'>
-            <div className='w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center'>
-              <UserIcon className='w-5 h-5 text-gray-400' />
+          <div className='mt-5 bg-white dark:bg-[#1A191C] border border-gray-200 dark:border-white/[0.08] rounded-2xl p-10 flex flex-col items-center justify-center text-center'>
+            <div className='w-10 h-10 rounded-full bg-gray-100 dark:bg-white/10 flex items-center justify-center'>
+              <UserIcon className='w-5 h-5 text-gray-400 dark:text-[#A29FA8]' />
             </div>
-            <p className='mt-3 text-sm text-gray-500'>
+            <p className='mt-3 text-sm text-gray-500 dark:text-[#A29FA8]'>
               {TABS.find((t) => t.key === activeTab)?.label} settings coming soon.
             </p>
           </div>

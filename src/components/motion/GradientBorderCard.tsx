@@ -8,9 +8,8 @@ interface GradientBorderCardProps {
 
 /**
  * GradientBorderCard: Bọc khối/card với viền conic-gradient mảnh xoay chậm
- * - Dùng 100% màu sẵn có: indigo-600 (#4F46E5), indigo-400 (#818CF8), indigo-100 (#E0E7FF)
- * - Nền card bên trong giữ nguyên hoàn toàn
- * - Rất nhẹ, 60fps mượt mà
+ * - Light mode: opacity-70, màu indigo-600 / indigo-400 / indigo-100
+ * - Dark mode: opacity-35, ánh tím mảnh tinh tế dịu nhẹ, không rực
  */
 export default function GradientBorderCard({
   children,
@@ -22,10 +21,10 @@ export default function GradientBorderCard({
       {/* Lớp viền gradient xoay chậm (conic-gradient) */}
       <div
         aria-hidden='true'
-        className='absolute inset-[-150%] animate-[spin_10s_linear_infinite] opacity-70 pointer-events-none'
+        className='absolute inset-[-150%] animate-[spin_10s_linear_infinite] opacity-70 dark:opacity-35 pointer-events-none'
         style={{
           background:
-            'conic-gradient(from 0deg, #4F46E5 0deg, #818CF8 90deg, #E0E7FF 180deg, #4F46E5 360deg)',
+            'var(--conic-gradient, conic-gradient(from 0deg, #4F46E5 0deg, #818CF8 90deg, #E0E7FF 180deg, #4F46E5 360deg))',
         }}
       />
 
@@ -36,4 +35,3 @@ export default function GradientBorderCard({
     </div>
   )
 }
-

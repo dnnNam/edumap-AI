@@ -12,10 +12,10 @@ import type { Notification, NotificationType } from '../../types/api/notificatio
 import AppLoadingSkeleton from '../../components/ui/AppLoadingSkeleton'
 
 const TYPE_CONFIG: Record<NotificationType, { label: string; icon: LucideIcon; iconClass: string; bgClass: string }> = {
-  INFO: { label: 'Info', icon: Info, iconClass: 'text-blue-600', bgClass: 'bg-blue-50' },
-  SUCCESS: { label: 'Success', icon: CheckCircle2, iconClass: 'text-emerald-600', bgClass: 'bg-emerald-50' },
-  WARNING: { label: 'Warning', icon: AlertTriangle, iconClass: 'text-amber-600', bgClass: 'bg-amber-50' },
-  ERROR: { label: 'Error', icon: XCircle, iconClass: 'text-red-600', bgClass: 'bg-red-50' },
+  INFO: { label: 'Info', icon: Info, iconClass: 'text-blue-600 dark:text-blue-400', bgClass: 'bg-blue-50 dark:bg-blue-500/10' },
+  SUCCESS: { label: 'Success', icon: CheckCircle2, iconClass: 'text-emerald-600 dark:text-emerald-400', bgClass: 'bg-emerald-50 dark:bg-emerald-500/10' },
+  WARNING: { label: 'Warning', icon: AlertTriangle, iconClass: 'text-amber-600 dark:text-amber-400', bgClass: 'bg-amber-50 dark:bg-amber-500/10' },
+  ERROR: { label: 'Error', icon: XCircle, iconClass: 'text-red-600 dark:text-red-400', bgClass: 'bg-red-50 dark:bg-red-500/10' },
 }
 
 const TABS: Array<{ key: 'ALL' | NotificationType; label: string }> = [
@@ -115,12 +115,12 @@ export default function NotificationsPage() {
   }
 
   return (
-    <div className='h-full min-h-0 overflow-y-auto bg-gray-50 p-6'>
+    <div className='h-full min-h-0 overflow-y-auto bg-gray-50 dark:bg-[#121114] p-6'>
       <div className='max-w-3xl mx-auto'>
         <div className='flex items-start justify-between gap-4 mb-6'>
           <div>
-            <h1 className='text-xl font-semibold text-gray-900'>Notifications</h1>
-            <p className='mt-1 text-sm text-gray-500'>
+            <h1 className='text-xl font-semibold text-gray-900 dark:text-[#ECE9E4]'>Notifications</h1>
+            <p className='mt-1 text-sm text-gray-500 dark:text-[#A29FA8]'>
               {unreadCount} chưa đọc · {meta?.total ?? withReadState.length} tổng cộng
             </p>
           </div>
@@ -128,7 +128,7 @@ export default function NotificationsPage() {
             type='button'
             onClick={handleMarkAllRead}
             disabled={unreadCount === 0}
-            className='rounded-xl border border-gray-200 bg-white text-sm font-medium text-gray-900 px-4 py-2 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shrink-0'
+            className='rounded-xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#1A191C] text-sm font-medium text-gray-900 dark:text-[#ECE9E4] px-4 py-2 hover:bg-gray-50 dark:hover:bg-[#232227] disabled:opacity-50 disabled:cursor-not-allowed transition-colors shrink-0 cursor-pointer'
           >
             Mark all read
           </button>
@@ -140,10 +140,10 @@ export default function NotificationsPage() {
               key={tab.key}
               type='button'
               onClick={() => setActiveTab(tab.key)}
-              className={`shrink-0 rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors ${
+              className={`shrink-0 rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors cursor-pointer ${
                 activeTab === tab.key
-                  ? 'bg-gray-900 text-white'
-                  : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
+                  ? 'bg-gray-900 dark:bg-[#5F2CFF] text-white'
+                  : 'bg-white dark:bg-[#1A191C] border border-gray-200 dark:border-white/[0.08] text-gray-600 dark:text-[#A29FA8] hover:bg-gray-50 dark:hover:bg-[#232227]'
               }`}
             >
               {tab.label}
@@ -152,21 +152,21 @@ export default function NotificationsPage() {
           ))}
         </div>
 
-        <div className='bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden'>
+        <div className='bg-white dark:bg-[#1A191C] border border-gray-200 dark:border-white/[0.08] rounded-2xl shadow-sm overflow-hidden'>
           {isLoading ? (
             <AppLoadingSkeleton />
           ) : isError ? (
             <div className='p-10 text-center text-sm text-red-500'>Không thể tải thông báo. Vui lòng thử lại.</div>
           ) : filtered.length === 0 ? (
             <div className='flex flex-col items-center justify-center py-16 px-6 text-center'>
-              <div className='w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center'>
-                <Bell className='w-5 h-5 text-gray-400' />
+              <div className='w-12 h-12 rounded-xl bg-gray-100 dark:bg-white/10 flex items-center justify-center'>
+                <Bell className='w-5 h-5 text-gray-400 dark:text-[#A29FA8]' />
               </div>
-              <p className='mt-4 text-sm font-medium text-gray-900'>Không có thông báo</p>
-              <p className='mt-1 text-xs text-gray-500'>Bạn sẽ thấy thông báo mới ở đây.</p>
+              <p className='mt-4 text-sm font-medium text-gray-900 dark:text-[#ECE9E4]'>Không có thông báo</p>
+              <p className='mt-1 text-xs text-gray-500 dark:text-[#A29FA8]'>Bạn sẽ thấy thông báo mới ở đây.</p>
             </div>
           ) : (
-            <div className='divide-y divide-gray-100'>
+            <div className='divide-y divide-gray-100 dark:divide-white/[0.06]'>
               {filtered.map((n) => {
                 const config = TYPE_CONFIG[n.type]
                 const Icon = config.icon
@@ -175,8 +175,8 @@ export default function NotificationsPage() {
                     key={n.id}
                     type='button'
                     onClick={() => handleItemClick(n)}
-                    className={`w-full flex items-start gap-3 px-5 py-4 text-left transition-colors hover:bg-gray-50 ${
-                      !n.isRead ? 'bg-indigo-50/30' : ''
+                    className={`w-full flex items-start gap-3 px-5 py-4 text-left transition-colors hover:bg-gray-50 dark:hover:bg-[#232227] cursor-pointer ${
+                      !n.isRead ? 'bg-indigo-50/30 dark:bg-[#5F2CFF]/10' : ''
                     }`}
                   >
                     <div className={`w-9 h-9 shrink-0 rounded-lg flex items-center justify-center ${config.bgClass}`}>
@@ -186,15 +186,15 @@ export default function NotificationsPage() {
                       <div className='flex items-center gap-2'>
                         <p
                           className={`text-sm truncate ${
-                            !n.isRead ? 'font-semibold text-gray-900' : 'font-medium text-gray-700'
+                            !n.isRead ? 'font-semibold text-gray-900 dark:text-[#ECE9E4]' : 'font-medium text-gray-700 dark:text-[#B5B1BA]'
                           }`}
                         >
                           {n.title}
                         </p>
-                        {!n.isRead && <span className='w-1.5 h-1.5 rounded-full bg-indigo-600 shrink-0' />}
+                        {!n.isRead && <span className='w-1.5 h-1.5 rounded-full bg-indigo-600 dark:bg-[#5F2CFF] shrink-0' />}
                       </div>
-                      <p className='mt-0.5 text-sm text-gray-500 line-clamp-2'>{n.message}</p>
-                      <p className='mt-1 text-xs text-gray-400'>{formatRelativeTime(n.createdAt)}</p>
+                      <p className='mt-0.5 text-sm text-gray-500 dark:text-[#A29FA8] line-clamp-2'>{n.message}</p>
+                      <p className='mt-1 text-xs text-gray-400 dark:text-[#A29FA8]'>{formatRelativeTime(n.createdAt)}</p>
                     </div>
                   </button>
                 )
@@ -208,7 +208,7 @@ export default function NotificationsPage() {
             <button
               type='button'
               onClick={() => setLimit((l) => l + 20)}
-              className='rounded-xl border border-gray-200 bg-white text-sm font-medium text-gray-700 px-5 py-2.5 hover:bg-gray-50 transition-colors'
+              className='rounded-xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#1A191C] text-sm font-medium text-gray-700 dark:text-[#ECE9E4] px-5 py-2.5 hover:bg-gray-50 dark:hover:bg-[#232227] transition-colors cursor-pointer'
             >
               Tải thêm
             </button>
@@ -221,7 +221,7 @@ export default function NotificationsPage() {
         {selected && (
           <motion.div
             key='backdrop'
-            className='fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4'
+            className='fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4'
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -229,7 +229,7 @@ export default function NotificationsPage() {
             onClick={handleCloseDetail}
           >
             <motion.div
-              className='w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden'
+              className='w-full max-w-md bg-white dark:bg-[#1A191C] border border-gray-200 dark:border-white/[0.08] rounded-2xl shadow-xl overflow-hidden'
               initial={{ opacity: 0, y: 16, scale: 0.97 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 16, scale: 0.97 }}
@@ -249,28 +249,28 @@ export default function NotificationsPage() {
                       </div>
                       <div className='min-w-0 flex-1'>
                         <span className={`text-xs font-medium ${config.iconClass}`}>{config.label}</span>
-                        <h2 className='text-base font-semibold text-gray-900 mt-0.5'>{selected.title}</h2>
+                        <h2 className='text-base font-semibold text-gray-900 dark:text-[#ECE9E4] mt-0.5'>{selected.title}</h2>
                       </div>
                       <button
                         type='button'
                         onClick={handleCloseDetail}
-                        className='shrink-0 rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-colors'
+                        className='shrink-0 rounded-lg p-1.5 text-gray-400 dark:text-[#A29FA8] hover:bg-gray-100 dark:hover:bg-white/10 hover:text-gray-600 dark:hover:text-[#ECE9E4] transition-colors cursor-pointer'
                       >
                         <X className='w-4 h-4' />
                       </button>
                     </div>
 
                     <div className='px-5 py-4'>
-                      <p className='text-sm text-gray-700 whitespace-pre-wrap'>{selected.message}</p>
-                      <p className='mt-3 text-xs text-gray-400'>{formatFullDateTime(selected.createdAt)}</p>
+                      <p className='text-sm text-gray-700 dark:text-[#ECE9E4] whitespace-pre-wrap'>{selected.message}</p>
+                      <p className='mt-3 text-xs text-gray-400 dark:text-[#A29FA8]'>{formatFullDateTime(selected.createdAt)}</p>
                     </div>
 
-                    <div className='flex items-center justify-end gap-2 px-5 py-4 border-t border-gray-100 bg-gray-50'>
+                    <div className='flex items-center justify-end gap-2 px-5 py-4 border-t border-gray-100 dark:border-white/[0.06] bg-gray-50 dark:bg-[#232227]'>
                       {selected.link && (
                         <button
                           type='button'
                           onClick={handleGoToLink}
-                          className='inline-flex items-center gap-1.5 rounded-xl bg-gray-900 text-white text-sm font-medium px-4 py-2 hover:bg-gray-800 transition-colors'
+                          className='inline-flex items-center gap-1.5 rounded-xl bg-gray-900 dark:bg-[#5F2CFF] hover:bg-gray-800 dark:hover:bg-[#4B1FD6] text-white text-sm font-medium px-4 py-2 transition-colors cursor-pointer'
                         >
                           Đi tới liên kết
                           <ExternalLink className='w-3.5 h-3.5' />
@@ -279,7 +279,7 @@ export default function NotificationsPage() {
                       <button
                         type='button'
                         onClick={handleCloseDetail}
-                        className='rounded-xl border border-gray-200 bg-white text-sm font-medium text-gray-700 px-4 py-2 hover:bg-gray-50 transition-colors'
+                        className='rounded-xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#1A191C] text-sm font-medium text-gray-700 dark:text-[#ECE9E4] px-4 py-2 hover:bg-gray-50 dark:hover:bg-[#232227] transition-colors cursor-pointer'
                       >
                         Đóng
                       </button>

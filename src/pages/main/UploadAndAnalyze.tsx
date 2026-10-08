@@ -157,8 +157,8 @@ export default function UploadPage() {
     <div className='h-full overflow-y-auto flex flex-col [scrollbar-gutter:stable]'>
       <div className='flex-1 w-full max-w-5xl mx-auto px-6 pt-6 pb-6'>
         {/* Page header */}
-        <h1 className='text-[28px] font-bold text-gray-900'>Upload &amp; Analyze</h1>
-        <p className='mt-1 text-gray-500 text-[15px]'>
+        <h1 className='text-[28px] font-bold text-gray-900 dark:text-[#ECE9E4]'>Upload &amp; Analyze</h1>
+        <p className='mt-1 text-gray-500 dark:text-[#A29FA8] text-[15px]'>
           Choose an analysis mode and give the AI everything it needs to build your career map.
         </p>
 
@@ -172,33 +172,35 @@ export default function UploadPage() {
                 type='button'
                 onClick={() => handleChangeMode(key)}
                 aria-pressed={isActive}
-                className={`relative text-left rounded-2xl border p-5 transition-colors ${
-                  isActive ? 'border-indigo-600 bg-indigo-50/60' : 'border-gray-200 bg-white hover:border-gray-300'
+                className={`relative text-left rounded-2xl border p-5 transition-colors cursor-pointer ${
+                  isActive
+                    ? 'border-indigo-600 bg-indigo-50/60 dark:border-[#5F2CFF] dark:bg-[#5F2CFF]/15'
+                    : 'border-gray-200 bg-white hover:border-gray-300 dark:border-white/[0.08] dark:bg-[#1A191C] dark:hover:border-white/20'
                 }`}
               >
                 <div className='flex items-start justify-between'>
                   <div
                     className={`w-9 h-9 rounded-lg flex items-center justify-center ${
-                      isActive ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700'
+                      isActive ? 'bg-indigo-600 dark:bg-[#5F2CFF] text-white' : 'bg-gray-100 dark:bg-white/10 text-gray-700 dark:text-[#ECE9E4]'
                     }`}
                   >
                     <Icon className='w-4 h-4' />
                   </div>
                   {recommended && (
-                    <span className='text-xs text-gray-700 bg-white border border-gray-200 rounded-full px-2.5 py-1'>
+                    <span className='text-xs text-gray-700 dark:text-[#ECE9E4] bg-white dark:bg-[#232227] border border-gray-200 dark:border-white/[0.08] rounded-full px-2.5 py-1'>
                       Recommended
                     </span>
                   )}
                 </div>
-                <p className='mt-4 font-semibold text-gray-900'>{title}</p>
-                <p className='mt-0.5 text-sm text-gray-500'>{description}</p>
+                <p className='mt-4 font-semibold text-gray-900 dark:text-[#ECE9E4]'>{title}</p>
+                <p className='mt-0.5 text-sm text-gray-500 dark:text-[#A29FA8]'>{description}</p>
               </button>
             )
           })}
         </div>
 
         <form id='analyze-form' onSubmit={handleSubmit(onSubmit)} noValidate className='mt-5'>
-          <div className='bg-white border border-gray-200 rounded-2xl p-6'>
+          <div className='bg-white dark:bg-[#1A191C] border border-gray-200 dark:border-white/[0.08] rounded-2xl p-6'>
             {/* Target role — bắt buộc ở cả 3 mode */}
             <div>
               <FormSelect
@@ -213,7 +215,7 @@ export default function UploadPage() {
 
             {/* Academic transcript → academicForm */}
             {showAcademic && (
-              <section className='mt-6 pt-6 border-t border-gray-100'>
+              <section className='mt-6 pt-6 border-t border-gray-100 dark:border-white/[0.06]'>
                 <SectionHeader icon={FileText} title='Academic transcript' tag='academicForm' />
 
                 <div className='mt-4 grid grid-cols-1 sm:grid-cols-[1fr_260px] gap-x-4 gap-y-5'>
@@ -237,11 +239,11 @@ export default function UploadPage() {
                 </div>
 
                 <div className='mt-6 flex items-center justify-between'>
-                  <p className='text-sm font-medium text-gray-800'>Core courses &amp; grades</p>
+                  <p className='text-sm font-medium text-gray-800 dark:text-[#ECE9E4]'>Core courses &amp; grades</p>
                   <button
                     type='button'
                     onClick={handleAddCourse}
-                    className='flex items-center gap-1.5 rounded-lg border border-gray-200 text-gray-900 text-sm font-medium px-3.5 py-2 hover:bg-gray-50 transition-colors'
+                    className='flex items-center gap-1.5 rounded-lg border border-gray-200 dark:border-white/[0.08] text-gray-900 dark:text-[#ECE9E4] text-sm font-medium px-3.5 py-2 hover:bg-gray-50 dark:hover:bg-[#232227] transition-colors cursor-pointer'
                   >
                     <Plus className='w-4 h-4' />
                     Add course
@@ -268,7 +270,7 @@ export default function UploadPage() {
                                 type='text'
                                 aria-label={`Course ${index + 1} name`}
                                 placeholder='Cơ sở dữ liệu'
-                                className='flex-1 min-w-0 rounded-xl border border-gray-200 px-4 py-2.5 text-[15px] text-gray-900 placeholder-gray-400 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition'
+                                className='flex-1 min-w-0 rounded-xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#232227] px-4 py-2.5 text-[15px] text-gray-900 dark:text-[#ECE9E4] placeholder-gray-400 dark:placeholder-gray-500 outline-none focus:border-indigo-500 dark:focus:border-[#5F2CFF] focus:ring-2 focus:ring-indigo-100 dark:focus:ring-[#5F2CFF]/20 transition'
                                 {...register(`coreCourses.${index}.courseName`, {
                                   onChange: () => clearErrors(`coreCourses.${index}.courseName`),
                                 })}
@@ -277,7 +279,7 @@ export default function UploadPage() {
                               <div className='relative w-24 shrink-0'>
                                 <select
                                   aria-label={`Course ${index + 1} grade`}
-                                  className='w-full appearance-none rounded-xl border border-gray-200 bg-white pl-3.5 pr-9 py-2.5 text-[15px] text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition'
+                                  className='w-full appearance-none rounded-xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#232227] pl-3.5 pr-9 py-2.5 text-[15px] text-gray-900 dark:text-[#ECE9E4] outline-none focus:border-indigo-500 dark:focus:border-[#5F2CFF] focus:ring-2 focus:ring-indigo-100 dark:focus:ring-[#5F2CFF]/20 transition'
                                   {...register(`coreCourses.${index}.grade`)}
                                 >
                                   {GRADE_OPTIONS.map((g) => (
@@ -286,7 +288,7 @@ export default function UploadPage() {
                                     </option>
                                   ))}
                                 </select>
-                                <ChevronDown className='absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none' />
+                                <ChevronDown className='absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-[#A29FA8] pointer-events-none' />
                               </div>
 
                               <button
@@ -294,7 +296,7 @@ export default function UploadPage() {
                                 onClick={() => remove(index)}
                                 disabled={fields.length === 1}
                                 aria-label={`Remove course ${index + 1}`}
-                                className='w-9 h-9 shrink-0 flex items-center justify-center rounded-lg text-gray-400 hover:text-red-500 hover:bg-gray-50 disabled:opacity-40 disabled:hover:text-gray-400 disabled:hover:bg-transparent disabled:cursor-not-allowed transition-colors'
+                                className='w-9 h-9 shrink-0 flex items-center justify-center rounded-lg text-gray-400 dark:text-[#A29FA8] hover:text-red-500 hover:bg-gray-50 dark:hover:bg-white/10 disabled:opacity-40 disabled:hover:text-gray-400 disabled:hover:bg-transparent disabled:cursor-not-allowed transition-colors cursor-pointer'
                               >
                                 <Trash2 className='w-4 h-4' />
                               </button>
@@ -311,27 +313,27 @@ export default function UploadPage() {
 
             {/* GitHub profile → githubUsername */}
             {showGithub && (
-              <section className='mt-6 pt-6 border-t border-gray-100'>
+              <section className='mt-6 pt-6 border-t border-gray-100 dark:border-white/[0.06]'>
                 <SectionHeader icon={FaGithub} title='GitHub profile' tag='githubUsername' />
 
                 <div className='mt-4'>
-                  <label htmlFor='githubUsername' className='block text-sm font-medium text-gray-800 mb-1.5'>
+                  <label htmlFor='githubUsername' className='block text-sm font-medium text-gray-800 dark:text-[#ECE9E4] mb-1.5'>
                     GitHub username
                   </label>
-                  <div className='flex items-center max-w-xs rounded-xl border border-gray-200 focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-100 transition'>
-                    <span className='pl-4 text-[15px] text-gray-400 select-none'>github.com/</span>
+                  <div className='flex items-center max-w-xs rounded-xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#232227] focus-within:border-indigo-500 dark:focus-within:border-[#5F2CFF] focus-within:ring-2 focus-within:ring-indigo-100 dark:focus-within:ring-[#5F2CFF]/20 transition'>
+                    <span className='pl-4 text-[15px] text-gray-400 dark:text-[#A29FA8] select-none'>github.com/</span>
                     <input
                       id='githubUsername'
                       type='text'
                       placeholder='octocat'
-                      className='flex-1 min-w-0 bg-transparent py-2.5 pr-4 text-[15px] text-gray-900 placeholder-gray-400 outline-none'
+                      className='flex-1 min-w-0 bg-transparent py-2.5 pr-4 text-[15px] text-gray-900 dark:text-[#ECE9E4] placeholder-gray-400 dark:placeholder-gray-500 outline-none'
                       {...register('githubUsername', { onChange: () => clearErrors('githubUsername') })}
                     />
                   </div>
                   {errors.githubUsername && (
                     <p className='text-sm text-red-500 mt-1'>{errors.githubUsername.message}</p>
                   )}
-                  <p className='mt-2 text-xs text-gray-500'>
+                  <p className='mt-2 text-xs text-gray-500 dark:text-[#A29FA8]'>
                     We scan your top repos, languages and contribution activity.
                   </p>
                 </div>
@@ -343,14 +345,14 @@ export default function UploadPage() {
 
       {/* Action bar dính đáy: dù form dài đến đâu nút Start luôn nhìn thấy.
           Nút nằm ngoài <form> nên liên kết bằng thuộc tính form='analyze-form' */}
-      <div className='sticky bottom-0 z-10 shrink-0 border-t border-gray-200 bg-white/90 backdrop-blur'>
+      <div className='sticky bottom-0 z-10 shrink-0 border-t border-gray-200 dark:border-white/[0.08] bg-white/90 dark:bg-[#121114]/90 backdrop-blur'>
         <div className='max-w-5xl mx-auto px-6 py-3 flex items-center justify-between gap-4'>
-          <p className='text-sm text-gray-500 truncate'>{summary}</p>
+          <p className='text-sm text-gray-500 dark:text-[#A29FA8] truncate'>{summary}</p>
           <button
             type='submit'
             form='analyze-form'
             disabled={isPending}
-            className='shrink-0 flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-70 text-white text-[15px] font-medium px-6 py-2.5 transition'
+            className='shrink-0 flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 dark:bg-[#5F2CFF] dark:hover:bg-[#4B1FD6] disabled:opacity-70 text-white text-[15px] font-medium px-6 py-2.5 transition cursor-pointer'
           >
             {isPending ? <Loader2 className='w-4 h-4 animate-spin' /> : <Sparkles className='w-4 h-4' />}
             {isPending ? 'Analyzing...' : 'Start AI analysis'}
@@ -361,14 +363,14 @@ export default function UploadPage() {
       {/* Overlay trong lúc AI đang phân tích  */}
       {isPending && (
         <div
-          className='fixed inset-0 z-50 flex items-center justify-center bg-white/70 backdrop-blur-[2px] px-4'
+          className='fixed inset-0 z-50 flex items-center justify-center bg-white/70 dark:bg-[#121114]/80 backdrop-blur-[2px] px-4'
           role='status'
           aria-live='polite'
         >
-          <div className='w-full max-w-sm bg-white border border-gray-200 rounded-2xl shadow-lg p-6 text-center'>
-            <Loader2 className='w-6 h-6 mx-auto text-indigo-600 animate-spin' />
-            <p className='mt-4 text-[15px] font-semibold text-gray-900'>AI đang phân tích hồ sơ của bạn</p>
-            <p className='mt-1.5 text-sm text-gray-500'>
+          <div className='w-full max-w-sm bg-white dark:bg-[#1A191C] border border-gray-200 dark:border-white/[0.08] rounded-2xl shadow-lg p-6 text-center'>
+            <Loader2 className='w-6 h-6 mx-auto text-indigo-600 dark:text-[#5F2CFF] animate-spin' />
+            <p className='mt-4 text-[15px] font-semibold text-gray-900 dark:text-[#ECE9E4]'>AI đang phân tích hồ sơ của bạn</p>
+            <p className='mt-1.5 text-sm text-gray-500 dark:text-[#A29FA8]'>
               Quá trình này có thể mất vài chục giây. Vui lòng không đóng trang.
             </p>
           </div>

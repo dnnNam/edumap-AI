@@ -20,21 +20,21 @@ const HIGHLIGHTS = [
 
 export default function ChatEmptyState({ onNewChat }: { onNewChat: () => void }) {
   return (
-    <div className='flex-1 min-h-0 flex items-center justify-center p-6'>
+    <div className='flex-1 min-h-0 flex items-center justify-center p-6 bg-white dark:bg-[#1A191C] transition-colors'>
       <div className='w-full max-w-xl text-center'>
         <div className='w-14 h-14 mx-auto rounded-2xl bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center shadow-sm'>
           <MessageSquare className='w-6 h-6 text-white' />
         </div>
 
-        <h2 className='mt-5 text-xl font-semibold text-gray-900'>Chưa có cuộc trò chuyện nào</h2>
-        <p className='mt-2 text-sm text-gray-500 leading-relaxed'>
+        <h2 className='mt-5 text-xl font-semibold text-gray-900 dark:text-[#ECE9E4]'>Chưa có cuộc trò chuyện nào</h2>
+        <p className='mt-2 text-sm text-gray-500 dark:text-[#B5B1BA] leading-relaxed'>
           Bắt đầu trò chuyện với AI Mentor để nhận tư vấn lộ trình.
         </p>
 
         <button
           type='button'
           onClick={onNewChat}
-          className='mt-6 inline-flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-5 py-2.5 transition'
+          className='mt-6 inline-flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-5 py-2.5 transition cursor-pointer shadow-xs'
         >
           <Sparkles className='w-4 h-4' />
           Bắt đầu trò chuyện
@@ -42,12 +42,12 @@ export default function ChatEmptyState({ onNewChat }: { onNewChat: () => void })
 
         <div className='mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4 text-left'>
           {HIGHLIGHTS.map(({ icon: Icon, title, description }) => (
-            <div key={title} className='rounded-xl border border-gray-100 bg-gray-50/60 p-4'>
-              <div className='w-8 h-8 rounded-lg bg-white border border-gray-200 flex items-center justify-center'>
-                <Icon className='w-4 h-4 text-indigo-600' />
+            <div key={title} className='rounded-xl border border-gray-100 dark:border-white/10 bg-gray-50/60 dark:bg-white/5 p-4 transition-colors'>
+              <div className='w-8 h-8 rounded-lg bg-white dark:bg-[#232227] border border-gray-200 dark:border-white/10 flex items-center justify-center'>
+                <Icon className='w-4 h-4 text-indigo-600 dark:text-[#A99DFF]' />
               </div>
-              <p className='mt-3 text-sm font-medium text-gray-900'>{title}</p>
-              <p className='mt-1 text-xs text-gray-500 leading-relaxed'>{description}</p>
+              <p className='mt-3 text-sm font-medium text-gray-900 dark:text-[#ECE9E4]'>{title}</p>
+              <p className='mt-1 text-xs text-gray-500 dark:text-[#A29FA8] leading-relaxed'>{description}</p>
             </div>
           ))}
         </div>

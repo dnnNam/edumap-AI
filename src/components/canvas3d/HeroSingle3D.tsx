@@ -84,6 +84,33 @@ export default function HeroSingle3D({ className = '' }: HeroSingle3DProps) {
     fillLight.position.set(2, -3, 3)
     scene.add(fillLight)
 
+    // Hàm điều chỉnh ánh sáng Dark / Light mode tinh tế
+    const updateThemeLights = (isDark: boolean) => {
+      if (isDark) {
+        ambientLight.intensity = 0.85
+        keyLight.intensity = 1.6
+        rimLight.color.setHex(0xa99dff) // lavender rim light dịu
+        rimLight.intensity = 2.8
+        fillLight.intensity = 1.4
+      } else {
+        ambientLight.intensity = 1.1
+        keyLight.intensity = 2.5
+        rimLight.color.setHex(0x818cf8)
+        rimLight.intensity = 4.0
+        fillLight.intensity = 2.2
+      }
+    }
+
+    const isCurrentDark = document.documentElement.classList.contains('dark')
+    updateThemeLights(isCurrentDark)
+
+    const handleThemeChange = (e: Event) => {
+      const customEvt = e as CustomEvent<{ theme: 'light' | 'dark' }>
+      const isDark = customEvt.detail?.theme === 'dark' || document.documentElement.classList.contains('dark')
+      updateThemeLights(isDark)
+    }
+    window.addEventListener('edumap-theme-changed', handleThemeChange)
+
     // ================= 1 VẬT THỂ 3D DUY NHẤT (PHÓNG TO 1.35x) =================
     const mainGroup = new THREE.Group()
     scene.add(mainGroup)
@@ -224,6 +251,7 @@ export default function HeroSingle3D({ className = '' }: HeroSingle3DProps) {
       cancelAnimationFrame(animationFrameId)
       window.removeEventListener('scroll', handleScroll)
       window.removeEventListener('resize', handleResize)
+      window.removeEventListener('edumap-theme-changed', handleThemeChange)
       observer.disconnect()
 
       geo.dispose()
@@ -250,12 +278,13 @@ export default function HeroSingle3D({ className = '' }: HeroSingle3DProps) {
         className={`pointer-events-none select-none flex items-center justify-center ${className}`}
         aria-hidden='true'
       >
-        <svg className='w-32 h-32 text-indigo-400/40 animate-pulse' viewBox='0 0 100 100' fill='none'>
+        <svg className='w-32 h-32 text-indigo-400/40 dark:text-[#A99DFF]/30 animate-pulse' viewBox='0 0 100 100' fill='none'>
           <polygon
             points='50,15 85,32 85,68 50,85 15,68 15,32'
             stroke='currentColor'
             strokeWidth='1.5'
             fill='rgba(79, 70, 229, 0.08)'
+            className='dark:fill-[rgba(169,157,255,0.08)]'
           />
           <circle cx='50' cy='50' r='16' fill='currentColor' opacity='0.25' />
         </svg>

@@ -39,8 +39,10 @@ function SkillNodeRow({ node, ...shared }: { node: SkillNode } & SharedProps) {
   return (
     <div>
       <div
-        className={`flex items-center gap-3 rounded-xl border bg-white px-4 py-3 transition ${
-          isSelected ? 'border-indigo-600 ring-2 ring-indigo-100' : 'border-gray-200 hover:border-gray-300'
+        className={`flex items-center gap-3 rounded-xl border bg-white dark:bg-[#1A191C] px-4 py-3 transition ${
+          isSelected
+            ? 'border-indigo-600 dark:border-[#5F2CFF] ring-2 ring-indigo-100 dark:ring-[#5F2CFF]/20'
+            : 'border-gray-200 dark:border-white/[0.08] hover:border-gray-300 dark:hover:border-white/20'
         } ${isDimmed ? 'opacity-50' : ''}`}
       >
         {/* Ô chevron: có con -> nút thu/mở, không có con -> chấm tròn giữ thẳng hàng */}
@@ -50,13 +52,13 @@ function SkillNodeRow({ node, ...shared }: { node: SkillNode } & SharedProps) {
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
             aria-label={open ? `Collapse ${node.skill.name}` : `Expand ${node.skill.name}`}
-            className='w-6 h-6 shrink-0 flex items-center justify-center rounded-md text-gray-500 hover:bg-gray-100 transition-colors'
+            className='w-6 h-6 shrink-0 flex items-center justify-center rounded-md text-gray-500 dark:text-[#A29FA8] hover:bg-gray-100 dark:hover:bg-white/10 transition-colors'
           >
             <ChevronDown className={`w-4 h-4 transition-transform ${open ? '' : '-rotate-90'}`} />
           </button>
         ) : (
           <span className='w-6 h-6 shrink-0 flex items-center justify-center' aria-hidden>
-            <span className='w-2.5 h-2.5 rounded-full bg-gray-300' />
+            <span className='w-2.5 h-2.5 rounded-full bg-gray-300 dark:bg-white/20' />
           </span>
         )}
 
@@ -68,18 +70,18 @@ function SkillNodeRow({ node, ...shared }: { node: SkillNode } & SharedProps) {
           className='flex flex-1 min-w-0 items-center gap-3 text-left'
         >
           {showCompleted ? (
-            <span className='w-8 h-8 shrink-0 rounded-lg bg-indigo-600 text-white flex items-center justify-center'>
+            <span className='w-8 h-8 shrink-0 rounded-lg bg-indigo-600 dark:bg-[#5F2CFF] text-white flex items-center justify-center'>
               <Check className='w-4 h-4' />
             </span>
           ) : (
-            <span className='w-8 h-8 shrink-0 rounded-full bg-gray-100 text-xs font-medium text-gray-700 flex items-center justify-center'>
+            <span className='w-8 h-8 shrink-0 rounded-full bg-gray-100 dark:bg-white/10 text-xs font-medium text-gray-700 dark:text-[#ECE9E4] flex items-center justify-center'>
               {node.priorityRank}
             </span>
           )}
 
           <span className='min-w-0'>
-            <span className='block truncate text-[15px] font-medium text-gray-900'>{node.skill.name}</span>
-            <span className='block truncate text-xs text-gray-500'>
+            <span className='block truncate text-[15px] font-medium text-gray-900 dark:text-[#ECE9E4]'>{node.skill.name}</span>
+            <span className='block truncate text-xs text-gray-500 dark:text-[#A29FA8]'>
               {node.skill.category} · Level {node.skill.difficultyLevel}
             </span>
           </span>
@@ -87,7 +89,7 @@ function SkillNodeRow({ node, ...shared }: { node: SkillNode } & SharedProps) {
 
         {/* Node gốc không có children -> label "Mastered" */}
         {isMastered && (
-          <span className='shrink-0 inline-flex items-center gap-1 rounded-full border border-emerald-100 bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700'>
+          <span className='shrink-0 inline-flex items-center gap-1 rounded-full border border-emerald-100 dark:border-emerald-500/20 bg-emerald-50 dark:bg-emerald-500/10 px-2.5 py-1 text-xs font-medium text-emerald-700 dark:text-emerald-400'>
             <Check className='w-3 h-3' />
             Mastered
           </span>
@@ -108,7 +110,7 @@ function SkillNodeRow({ node, ...shared }: { node: SkillNode } & SharedProps) {
       <AnimatePresence initial={false}>
         {hasChildren && open && (
           <motion.div key='children' {...LIST_ITEM} className='overflow-hidden'>
-            <div className='ml-5 mt-2 pl-4 border-l border-gray-200'>
+            <div className='ml-5 mt-2 pl-4 border-l border-gray-200 dark:border-white/[0.08]'>
               <SkillNodeTree nodes={node.children} {...shared} />
             </div>
           </motion.div>

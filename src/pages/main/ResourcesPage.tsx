@@ -16,8 +16,10 @@ function Chip({ label, active, onClick }: { label: string; active: boolean; onCl
     <button
       type='button'
       onClick={onClick}
-      className={`rounded-lg px-3.5 py-1.5 text-sm font-medium transition-colors ${
-        active ? 'bg-indigo-600 text-white' : 'bg-gray-50 text-gray-700 border border-gray-200 hover:bg-gray-100'
+      className={`rounded-lg px-3.5 py-1.5 text-sm font-medium transition-colors cursor-pointer ${
+        active
+          ? 'bg-indigo-600 dark:bg-[#5F2CFF] text-white'
+          : 'bg-gray-50 dark:bg-[#232227] text-gray-700 dark:text-[#ECE9E4] border border-gray-200 dark:border-white/[0.08] hover:bg-gray-100 dark:hover:bg-white/10'
       }`}
     >
       {label}
@@ -30,8 +32,10 @@ function TextChip({ label, active, onClick }: { label: string; active: boolean; 
     <button
       type='button'
       onClick={onClick}
-      className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-        active ? 'bg-gray-100 text-gray-900' : 'text-gray-600 hover:text-gray-900'
+      className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors cursor-pointer ${
+        active
+          ? 'bg-gray-100 dark:bg-white/10 text-gray-900 dark:text-[#ECE9E4]'
+          : 'text-gray-600 dark:text-[#A29FA8] hover:text-gray-900 dark:hover:text-[#ECE9E4]'
       }`}
     >
       {label}
@@ -70,21 +74,21 @@ export default function ResourcesPage() {
     // h-full khớp chiều cao <main>, overflow-y-auto tự sinh thanh cuộn khi nội dung dài
     <div className='h-full overflow-y-auto scrollbar-thin'>
       <div className='max-w-6xl mx-auto px-6 py-10 pb-16'>
-        <h1 className='text-3xl font-semibold text-gray-900'>Learning Resources</h1>
-        <p className='mt-2 text-gray-500'>
+        <h1 className='text-3xl font-semibold text-gray-900 dark:text-[#ECE9E4]'>Learning Resources</h1>
+        <p className='mt-2 text-gray-500 dark:text-[#A29FA8]'>
           {isLoading ? 'Đang tải...' : `${resources.length} tài nguyên được đánh giá cao nhất cho lộ trình của bạn.`}
         </p>
 
         {/* Bộ lọc */}
-        <div className='mt-8 rounded-3xl border border-gray-200 bg-white p-6 space-y-4'>
+        <div className='mt-8 rounded-3xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#1A191C] p-6 space-y-4'>
           <div className='relative'>
-            <Search className='absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none' />
+            <Search className='absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-[#A29FA8] pointer-events-none' />
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               type='text'
               placeholder={`Search ${resources.length || ''} resources...`}
-              className='w-full rounded-xl border border-gray-200 pl-12 pr-4 py-3 text-[15px] text-gray-900 placeholder-gray-400 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition'
+              className='w-full rounded-xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#232227] pl-12 pr-4 py-3 text-[15px] text-gray-900 dark:text-[#ECE9E4] placeholder-gray-400 dark:placeholder-gray-500 outline-none focus:border-indigo-500 dark:focus:border-[#5F2CFF] focus:ring-2 focus:ring-indigo-100 dark:focus:ring-[#5F2CFF]/20 transition'
             />
           </div>
 

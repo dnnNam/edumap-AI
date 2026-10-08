@@ -9,8 +9,8 @@ export interface SkillDetailPanelProps {
 function InfoRow({ label, value }: { label: string; value: string }) {
   return (
     <div className='flex items-center justify-between text-sm'>
-      <dt className='text-gray-500'>{label}</dt>
-      <dd className='font-medium text-gray-900'>{value}</dd>
+      <dt className='text-gray-500 dark:text-[#A29FA8]'>{label}</dt>
+      <dd className='font-medium text-gray-900 dark:text-[#ECE9E4]'>{value}</dd>
     </div>
   )
 }
@@ -18,9 +18,9 @@ function InfoRow({ label, value }: { label: string; value: string }) {
 // Ô nhỏ hiển thị 1 chỉ số (Difficulty / Demand)
 function StatBox({ label, value }: { label: string; value: string }) {
   return (
-    <div className='flex-1 rounded-xl border border-gray-200 bg-gray-50 px-3.5 py-3'>
-      <p className='text-xs text-gray-500'>{label}</p>
-      <p className='mt-0.5 text-[15px] font-semibold text-gray-900'>{value}</p>
+    <div className='flex-1 rounded-xl border border-gray-200 dark:border-white/[0.08] bg-gray-50 dark:bg-[#232227] px-3.5 py-3'>
+      <p className='text-xs text-gray-500 dark:text-[#A29FA8]'>{label}</p>
+      <p className='mt-0.5 text-[15px] font-semibold text-gray-900 dark:text-[#ECE9E4]'>{value}</p>
     </div>
   )
 }
@@ -43,27 +43,27 @@ function getStatus(node: SkillNode): StatusConfig {
     return {
       label: 'Mastered',
       icon: BadgeCheck,
-      className: 'bg-emerald-50 text-emerald-700 border-emerald-100',
+      className: 'bg-emerald-50 text-emerald-700 border-emerald-100 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20',
     }
   }
   if (!hasChildren) {
     return {
       label: 'To learn',
       icon: Circle,
-      className: 'bg-gray-100 text-gray-600 border-gray-200',
+      className: 'bg-gray-100 text-gray-600 border-gray-200 dark:bg-white/10 dark:text-[#A29FA8] dark:border-white/[0.08]',
     }
   }
   if (node.isCompleted) {
     return {
       label: 'Completed',
       icon: CircleCheck,
-      className: 'bg-indigo-50 text-indigo-700 border-indigo-100',
+      className: 'bg-indigo-50 text-indigo-700 border-indigo-100 dark:bg-[#5F2CFF]/15 dark:text-[#A99DFF] dark:border-[#5F2CFF]/20',
     }
   }
   return {
     label: 'Not completed',
     icon: Circle,
-    className: 'bg-gray-100 text-gray-600 border-gray-200',
+    className: 'bg-gray-100 text-gray-600 border-gray-200 dark:bg-white/10 dark:text-[#A29FA8] dark:border-white/[0.08]',
   }
 }
 
@@ -88,24 +88,24 @@ function StatusRow({ node }: { node: SkillNode }) {
 export default function SkillDetailPanel({ node }: SkillDetailPanelProps) {
   if (!node) {
     return (
-      <aside className='bg-white border border-gray-200 rounded-2xl px-6 py-14 text-center'>
-        <Sparkles className='w-5 h-5 mx-auto text-gray-400' />
-        <p className='mt-3 text-[15px] font-semibold text-gray-900'>Select a skill</p>
-        <p className='mt-1 text-sm text-gray-500'>View its details.</p>
+      <aside className='bg-white dark:bg-[#1A191C] border border-gray-200 dark:border-white/[0.08] rounded-2xl px-6 py-14 text-center'>
+        <Sparkles className='w-5 h-5 mx-auto text-gray-400 dark:text-[#A29FA8]' />
+        <p className='mt-3 text-[15px] font-semibold text-gray-900 dark:text-[#ECE9E4]'>Select a skill</p>
+        <p className='mt-1 text-sm text-gray-500 dark:text-[#A29FA8]'>View its details.</p>
       </aside>
     )
   }
 
   return (
-    <aside className='bg-white border border-gray-200 rounded-2xl p-6'>
+    <aside className='bg-white dark:bg-[#1A191C] border border-gray-200 dark:border-white/[0.08] rounded-2xl p-6'>
       {/* Category */}
-      <span className='inline-block text-xs font-medium text-gray-700 bg-gray-100 rounded-full px-2.5 py-1'>
+      <span className='inline-block text-xs font-medium text-gray-700 dark:text-[#ECE9E4] bg-gray-100 dark:bg-white/10 rounded-full px-2.5 py-1'>
         {node.skill.category}
       </span>
 
       {/* Tên + priority */}
-      <h3 className='mt-3 text-xl font-bold text-gray-900'>{node.skill.name}</h3>
-      <p className='mt-0.5 text-sm text-gray-500'>Priority #{node.priorityRank}</p>
+      <h3 className='mt-3 text-xl font-bold text-gray-900 dark:text-[#ECE9E4]'>{node.skill.name}</h3>
+      <p className='mt-0.5 text-sm text-gray-500 dark:text-[#A29FA8]'>Priority #{node.priorityRank}</p>
 
       {/* Difficulty / Demand */}
       <div className='mt-4 flex gap-3'>
@@ -114,7 +114,7 @@ export default function SkillDetailPanel({ node }: SkillDetailPanelProps) {
       </div>
 
       {/* Thông tin còn lại */}
-      <dl className='mt-5 space-y-3 pt-5 border-t border-gray-100'>
+      <dl className='mt-5 space-y-3 pt-5 border-t border-gray-100 dark:border-white/[0.06]'>
         <StatusRow node={node} />
         <InfoRow label='Node level' value={String(node.nodeLevel)} />
         <InfoRow label='Children' value={String(node.children.length)} />

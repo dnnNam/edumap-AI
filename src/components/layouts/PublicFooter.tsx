@@ -21,12 +21,12 @@ export default function PublicFooter() {
   const year = new Date().getFullYear()
 
   return (
-    <footer className='bg-[#FAFAF9] border-t border-gray-200'>
+    <footer className='bg-[#FAFAF9] dark:bg-[#121114] border-t border-gray-200 dark:border-white/10 transition-colors'>
       <div className='max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16'>
         <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr] gap-8 sm:gap-12'>
           <div>
             <Logo />
-            <p className='mt-4 text-[15px] text-gray-500 leading-relaxed max-w-xs'>
+            <p className='mt-4 text-[15px] text-gray-500 dark:text-[#A29FA8] leading-relaxed max-w-xs'>
               Your AI-powered career mentor. Built for the next generation of engineers.
             </p>
             <div className='mt-5 flex items-center gap-3'>
@@ -37,7 +37,7 @@ export default function PublicFooter() {
                   aria-label={label}
                   target='_blank'
                   rel='noreferrer'
-                  className='w-9 h-9 rounded-full border border-gray-200 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:border-gray-300 transition'
+                  className='w-9 h-9 rounded-full border border-gray-200 dark:border-white/10 flex items-center justify-center text-gray-600 dark:text-[#A29FA8] hover:text-gray-900 dark:hover:text-[#ECE9E4] hover:border-gray-300 dark:hover:border-white/20 transition'
                 >
                   <Icon />
                 </a>
@@ -47,7 +47,7 @@ export default function PublicFooter() {
 
           {COLUMNS.map((col) => (
             <div key={col.title}>
-              <h3 className='text-sm font-semibold text-gray-900'>
+              <h3 className='text-sm font-semibold text-gray-900 dark:text-[#ECE9E4]'>
                 {col.title}
               </h3>
               <ul className='mt-4 space-y-3'>
@@ -55,7 +55,7 @@ export default function PublicFooter() {
                   <li key={link}>
                     <a
                       href='#'
-                      className='text-[15px] text-gray-500 hover:text-gray-900 transition'
+                      className='text-[15px] text-gray-500 dark:text-[#A29FA8] hover:text-gray-900 dark:hover:text-[#ECE9E4] transition'
                     >
                       {link}
                     </a>
@@ -66,7 +66,7 @@ export default function PublicFooter() {
           ))}
         </div>
 
-        <div className='mt-12 sm:mt-14 pt-6 border-t border-gray-200 text-center text-sm text-gray-400'>
+        <div className='mt-12 sm:mt-14 pt-6 border-t border-gray-200 dark:border-white/10 text-center text-sm text-gray-400 dark:text-[#5E5A64]'>
           © {year} EduMap AI · Crafted with intent in San Francisco
         </div>
       </div>
