@@ -1,121 +1,152 @@
-import type { BillingPlan, PlanCode } from '../types/api/billing.type'
+import { Briefcase, ClipboardCheck, FileText, GitBranch, MessageSquare, Share2, type LucideIcon } from 'lucide-react'
+import i18n from '../i18n'
+import type { BillingPlan, PlanCode, UsageFeatureCode } from '../types/api/billing.type'
+import { getLocale } from './locale'
 
-import { Briefcase, ClipboardCheck, FileText, MessageSquare, Share2, type LucideIcon } from 'lucide-react'
-import { GitBranch } from 'lucide-react'
-import type { UsageFeatureCode } from '../types/api/billing.type'
+export const USAGE_FEATURE_META: Record<UsageFeatureCode, { titleKey: string; subtitleKey: string; icon: LucideIcon }> =
+  {
+    AI_CHAT: {
+      titleKey: 'billing.usageFeature.AI_CHAT.title',
+      subtitleKey: 'billing.usageFeature.AI_CHAT.subtitle',
+      icon: MessageSquare,
+    },
+    SKILL_TREE_GENERATION: {
+      titleKey: 'billing.usageFeature.SKILL_TREE_GENERATION.title',
+      subtitleKey: 'billing.usageFeature.SKILL_TREE_GENERATION.subtitle',
+      icon: Share2,
+    },
+    GITHUB_SYNC: {
+      titleKey: 'billing.usageFeature.GITHUB_SYNC.title',
+      subtitleKey: 'billing.usageFeature.GITHUB_SYNC.subtitle',
+      icon: GitBranch,
+    },
+    PDF_REPORT: {
+      titleKey: 'billing.usageFeature.PDF_REPORT.title',
+      subtitleKey: 'billing.usageFeature.PDF_REPORT.subtitle',
+      icon: FileText,
+    },
+    RESUME_REVIEW: {
+      titleKey: 'billing.usageFeature.RESUME_REVIEW.title',
+      subtitleKey: 'billing.usageFeature.RESUME_REVIEW.subtitle',
+      icon: ClipboardCheck,
+    },
+    JOB_MATCHING: {
+      titleKey: 'billing.usageFeature.JOB_MATCHING.title',
+      subtitleKey: 'billing.usageFeature.JOB_MATCHING.subtitle',
+      icon: Briefcase,
+    },
+  }
 
-export const USAGE_FEATURE_META: Record<UsageFeatureCode, { title: string; subtitle: string; icon: LucideIcon }> = {
-  AI_CHAT: {
-    title: 'AI Mentor chat',
-    subtitle: 'Messages with your AI mentor',
-    icon: MessageSquare,
-  },
-  SKILL_TREE_GENERATION: {
-    title: 'Skill tree generation',
-    subtitle: 'New skill tree analyses',
-    icon: Share2,
-  },
-  GITHUB_SYNC: {
-    title: 'GitHub sync',
-    subtitle: 'Profile syncs from GitHub',
-    icon: GitBranch,
-  },
-  PDF_REPORT: {
-    title: 'PDF report',
-    subtitle: 'Exported analysis reports',
-    icon: FileText,
-  },
-  RESUME_REVIEW: {
-    title: 'Resume review',
-    subtitle: 'AI resume reviews',
-    icon: ClipboardCheck,
-  },
-  JOB_MATCHING: {
-    title: 'Job matching',
-    subtitle: 'Personalized job matches',
-    icon: Briefcase,
-  },
+export const USAGE_WINDOW_KEY: Record<string, string> = {
+  DAILY: 'billing.window.DAILY',
+  MONTHLY: 'billing.window.MONTHLY',
 }
 
-export const USAGE_WINDOW_LABEL: Record<string, string> = {
-  DAILY: 'Daily',
-  MONTHLY: 'Monthly',
-}
+// Các hàm dưới đây được gọi trong lúc render của component có dùng useTranslation,
+// nên đổi ngôn ngữ thì component re-render và giá trị tự cập nhật theo.
+export const getPlanName = (code: PlanCode, fallback?: string) =>
+  i18n.t(`billing.plans.${code}.name`, { defaultValue: fallback ?? code })
+
+export const getPlanDescription = (code: PlanCode, fallback?: string) =>
+  i18n.t(`billing.plans.${code}.description`, { defaultValue: fallback ?? '' })
 
 export function formatPrice(plan: BillingPlan) {
-  if (plan.priceVnd === 0) return { amount: '0₫', period: '/month' }
-  if (plan.durationDays === 365) return { amount: `${plan.priceVnd.toLocaleString('en-US')}₫`, period: '/year' }
-  if (plan.durationDays === 30) return { amount: `${plan.priceVnd.toLocaleString('en-US')}₫`, period: '/month' }
-  return { amount: `${plan.priceVnd.toLocaleString('en-US')}₫`, period: `/${plan.durationDays} days` }
+  const money = `${plan.priceVnd.toLocaleString('en-US')}₫`
+  if (plan.priceVnd === 0) return { amount: '0₫', period: i18n.t('billing.perMonth') }
+  if (plan.durationDays === 365) return { amount: money, period: i18n.t('billing.perYear') }
+  if (plan.durationDays === 30) return { amount: money, period: i18n.t('billing.perMonth') }
+  return { amount: money, period: i18n.t('billing.perDays', { count: plan.durationDays ?? 0 }) }
 }
 
-export const FEATURE_ROWS: { label: string; render: (p: BillingPlan) => string }[] = [
+export const FEATURE_ROWS: { labelKey: string; render: (p: BillingPlan) => string }[] = [
   {
-    label: 'AI mentor chats',
+    labelKey: 'billing.row.aiChats',
     render: (p) =>
       p.limits.aiChatPerDay >= 100
-        ? 'Unlimited' + (p.features.priorityAiAnalysis ? ' + priority' : '')
-        : `${p.limits.aiChatPerDay}/day`,
+        ? i18n.t('billing.row.unlimited') + (p.features.priorityAiAnalysis ? i18n.t('billing.row.plusPriority') : '')
+        : i18n.t('billing.row.perDay', { count: p.limits.aiChatPerDay }),
   },
   {
-    label: 'Skill tree',
-    render: (p) => `${p.features.skillTree === 'FULL' ? 'Full' : 'Basic'} · up to ${p.limits.skillTreeMaxNodes} nodes`,
+    labelKey: 'billing.row.skillTree',
+    render: (p) =>
+      i18n.t('billing.row.treeValue', {
+        type: p.features.skillTree === 'FULL' ? i18n.t('billing.row.full') : i18n.t('billing.row.basic'),
+        nodes: p.limits.skillTreeMaxNodes,
+      }),
   },
   {
-    label: 'Skill tree generation',
-    render: (p) => `${p.limits.skillTreeGenerationsPerMonth}/month`,
+    labelKey: 'billing.row.skillTreeGeneration',
+    render: (p) => i18n.t('billing.row.perMonth', { count: p.limits.skillTreeGenerationsPerMonth }),
   },
   {
-    label: 'Job matching',
-    render: (p) => (p.features.jobMatching ? `${p.limits.jobMatchingPerMonth}/month` : '—'),
+    labelKey: 'billing.row.jobMatching',
+    render: (p) =>
+      p.features.jobMatching ? i18n.t('billing.row.perMonth', { count: p.limits.jobMatchingPerMonth }) : '—',
   },
   {
-    label: 'Resume review',
-    render: (p) => (p.features.resumeReview ? `${p.limits.resumeReviewPerMonth}/month` : '—'),
+    labelKey: 'billing.row.resumeReview',
+    render: (p) =>
+      p.features.resumeReview ? i18n.t('billing.row.perMonth', { count: p.limits.resumeReviewPerMonth }) : '—',
   },
   {
-    label: 'PDF export',
-    render: (p) => (p.features.pdfReport ? `${p.limits.pdfReportPerMonth}/month` : '—'),
+    labelKey: 'billing.row.pdfExport',
+    render: (p) => (p.features.pdfReport ? i18n.t('billing.row.perMonth', { count: p.limits.pdfReportPerMonth }) : '—'),
   },
   {
-    label: 'GitHub sync',
+    labelKey: 'billing.row.githubSync',
     render: (p) => {
       if (p.limits.githubSyncPerDay > 0)
-        return `${p.limits.githubSyncPerDay}/day · up to ${p.limits.githubMaxRepositoriesPerSync} repos`
+        return i18n.t('billing.row.githubDay', {
+          count: p.limits.githubSyncPerDay,
+          repos: p.limits.githubMaxRepositoriesPerSync,
+        })
       if (p.limits.githubSyncPerWeek)
-        return `${p.limits.githubSyncPerWeek}/week · up to ${p.limits.githubMaxRepositoriesPerSync} repos`
+        return i18n.t('billing.row.githubWeek', {
+          count: p.limits.githubSyncPerWeek,
+          repos: p.limits.githubMaxRepositoriesPerSync,
+        })
       return '—'
     },
   },
   {
-    label: 'Priority AI Analysis',
-    render: (p) => (p.features.priorityAiAnalysis ? 'Yes · faster processing' : '—'),
+    labelKey: 'billing.row.priorityAi',
+    render: (p) => (p.features.priorityAiAnalysis ? i18n.t('billing.row.yesFaster') : '—'),
   },
   {
-    label: 'Hide EduMap branding',
-    render: (p) => (p.features.hideEduMapBranding ? 'Yes' : '—'),
+    labelKey: 'billing.row.hideBranding',
+    render: (p) => (p.features.hideEduMapBranding ? i18n.t('billing.row.yes') : '—'),
   },
   {
-    label: 'Support',
-    render: (p) => (p.features.prioritySupport ? 'Priority' : 'Community'),
+    labelKey: 'billing.row.support',
+    render: (p) =>
+      p.features.prioritySupport ? i18n.t('billing.row.supportPriority') : i18n.t('billing.row.supportCommunity'),
   },
 ]
 
-// A few short highlights shown directly on each card (not the full comparison table below)
+// Vài điểm nổi bật hiển thị trực tiếp trên mỗi card
 export function getCardHighlights(plan: BillingPlan): string[] {
   const items: string[] = []
-  items.push(plan.features.skillTree === 'FULL' ? 'Full skill tree' : 'Basic skill tree')
-  items.push(plan.limits.aiChatPerDay >= 100 ? 'Unlimited AI mentor' : `${plan.limits.aiChatPerDay} AI chats/day`)
-  items.push(plan.features.publicCourses ? 'Public courses' : '')
-  if (plan.features.jobMatching) items.push('Job matching')
-  if (plan.features.resumeReview) items.push('Resume review')
-  if (plan.features.priorityAiAnalysis) items.push('Priority AI Analysis')
-  items.push(plan.features.prioritySupport ? 'Priority support' : 'Community support')
-  return items.filter(Boolean)
+  items.push(
+    plan.features.skillTree === 'FULL' ? i18n.t('billing.highlight.fullTree') : i18n.t('billing.highlight.basicTree'),
+  )
+  items.push(
+    plan.limits.aiChatPerDay >= 100
+      ? i18n.t('billing.highlight.unlimitedAi')
+      : i18n.t('billing.highlight.aiPerDay', { count: plan.limits.aiChatPerDay }),
+  )
+  if (plan.features.publicCourses) items.push(i18n.t('billing.highlight.publicCourses'))
+  if (plan.features.jobMatching) items.push(i18n.t('billing.highlight.jobMatching'))
+  if (plan.features.resumeReview) items.push(i18n.t('billing.highlight.resumeReview'))
+  if (plan.features.priorityAiAnalysis) items.push(i18n.t('billing.highlight.priorityAi'))
+  items.push(
+    plan.features.prioritySupport
+      ? i18n.t('billing.highlight.prioritySupport')
+      : i18n.t('billing.highlight.communitySupport'),
+  )
+  return items
 }
 
-// Compares a yearly plan against the "nearest" monthly plan x12, to show a
-// "Save X%" badge similar to the "Save $4 · 17% OFF" badge in the mock.
+// So gói năm với gói tháng gần nhất x12 để hiện badge "Tiết kiệm X%"
 export function getYearlySavingBadge(plan: BillingPlan, allPlans: BillingPlan[]): string | null {
   if (plan.durationDays !== 365) return null
   const monthlyRef = allPlans.find((p) => p.durationDays === 30 && p.priceVnd > 0)
@@ -123,27 +154,15 @@ export function getYearlySavingBadge(plan: BillingPlan, allPlans: BillingPlan[])
   const yearIfMonthly = monthlyRef.priceVnd * 12
   if (yearIfMonthly <= plan.priceVnd) return null
   const percent = Math.round(((yearIfMonthly - plan.priceVnd) / yearIfMonthly) * 100)
-  return `Save ${percent}% vs monthly billing`
-}
-
-export const PLAN_COPY_EN: Record<PlanCode, { name: string; description: string }> = {
-  FREE: { name: 'Free', description: 'Free plan for students just getting started.' },
-  PRO_STUDENT: {
-    name: 'Pro Student',
-    description: 'For students building an in-depth roadmap and portfolio.',
-  },
-  PREMIUM: {
-    name: 'Premium',
-    description: 'Top-tier plan with higher limits and priority AI processing.',
-  },
+  return i18n.t('billing.save', { percent })
 }
 
 export const PLAN_RANK: Record<PlanCode, number> = { FREE: 0, PRO_STUDENT: 1, PREMIUM: 2 }
 
 export function formatDate(iso: string) {
-  return new Intl.DateTimeFormat('en-US', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(iso))
+  return new Intl.DateTimeFormat(getLocale(), { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(iso))
 }
 
 export function formatCycleDate(iso: string) {
-  return new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(iso))
+  return new Intl.DateTimeFormat(getLocale(), { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(iso))
 }

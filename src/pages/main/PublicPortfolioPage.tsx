@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next'
+import { getLocale } from '../../utils/locale'
 import { Download, ExternalLink, Mail } from 'lucide-react'
 import { FaFacebook, FaGithub, FaLinkedin } from 'react-icons/fa'
 import Skeleton from 'react-loading-skeleton'
@@ -34,10 +36,11 @@ const MAX_TECH_CHIPS = 5
 function formatMonthYear(iso: string) {
   const d = new Date(iso)
   if (Number.isNaN(d.getTime())) return ''
-  return d.toLocaleDateString('vi-VN', { month: '2-digit', year: 'numeric' })
+  return d.toLocaleDateString(getLocale(), { month: '2-digit', year: 'numeric' })
 }
 
 function RepoCard({ repo, chipCls }: { repo: PortfolioRepository; chipCls: string }) {
+  const { t } = useTranslation()
   const tech = repo.techStack ?? []
   const shown = tech.slice(0, MAX_TECH_CHIPS)
   const extra = tech.length - shown.length
@@ -69,12 +72,14 @@ function RepoCard({ repo, chipCls }: { repo: PortfolioRepository; chipCls: strin
             {repo.mainLanguage}
           </span>
         )}
-        {formatMonthYear(repo.createdAt) && <span>Cập nhật {formatMonthYear(repo.createdAt)}</span>}
+        {formatMonthYear(repo.createdAt) && (
+          <span>{t('portfolio.updated', { date: formatMonthYear(repo.createdAt) })}</span>
+        )}
       </div>
 
       <div className='mt-4 flex flex-1 flex-wrap content-start gap-1.5'>
         {shown.length === 0 ? (
-          <span className='text-xs text-gray-400 dark:text-[#A29FA8]'>Chưa phát hiện tech stack</span>
+          <span className='text-xs text-gray-400 dark:text-[#A29FA8]'>{t('portfolio.noTech')}</span>
         ) : (
           <>
             {shown.map((t) => (
@@ -103,16 +108,19 @@ function ProjectsSection({
   hasGithubSync: boolean
   chipCls: string
 }) {
+  const { t } = useTranslation()
   return (
     <section className='mt-10'>
       <div className='flex items-baseline justify-between gap-3'>
         <h3 className='text-lg font-semibold text-gray-900 dark:text-[#ECE9E4]'>
-          Projects
-          {repos.length > 0 && <span className='ml-2 text-sm font-normal text-gray-400 dark:text-[#A29FA8]'>{repos.length}</span>}
+          {t('portfolio.projects')}
+          {repos.length > 0 && (
+            <span className='ml-2 text-sm font-normal text-gray-400 dark:text-[#A29FA8]'>{repos.length}</span>
+          )}
         </h3>
         {hasGithubSync && (
           <span className='inline-flex items-center gap-1.5 text-xs text-gray-500 dark:text-[#A29FA8] print:hidden'>
-            <FaGithub className='h-3.5 w-3.5' /> Đã đồng bộ từ GitHub
+            <FaGithub className='h-3.5 w-3.5' /> {t('portfolio.synced')}
           </span>
         )}
       </div>
@@ -125,7 +133,7 @@ function ProjectsSection({
         </div>
       ) : (
         <p className='mt-3 rounded-xl border border-dashed border-gray-200 dark:border-white/[0.08] px-4 py-6 text-center text-sm text-gray-500 dark:text-[#A29FA8]'>
-          Chưa có dự án nào.
+          {t('portfolio.empty')}
         </p>
       )}
     </section>
@@ -133,6 +141,7 @@ function ProjectsSection({
 }
 
 export default function PortfolioPublicPage() {
+  const { t } = useTranslation()
   // Route cần có param :slug, ví dụ <Route path='/p/:slug' element={<PublicPortfolioPage />} />
   const { username } = useParams<{ username: string }>()
   const { data: res, isLoading, isError } = usePublicPortfolioQuery(username, true)
@@ -149,8 +158,8 @@ export default function PortfolioPublicPage() {
   if (isError || !portfolio || !portfolio.isPublic) {
     return (
       <div className='max-w-4xl mx-auto w-full px-6 py-24 text-center'>
-        <h1 className='text-2xl font-semibold text-gray-900 dark:text-[#ECE9E4]'>Không tìm thấy portfolio</h1>
-        <p className='mt-2 text-gray-500 dark:text-[#A29FA8]'>Portfolio này không tồn tại hoặc chưa được công khai.</p>
+        <h1 className='text-2xl font-semibold text-gray-900 dark:text-[#ECE9E4]'>{t('portfolio.notFound')}</h1>
+        <p className='mt-2 text-gray-500 dark:text-[#A29FA8]'>{t('portfolio.notFoundDesc')}</p>
       </div>
     )
   }
@@ -177,7 +186,7 @@ export default function PortfolioPublicPage() {
             onClick={() => window.print()}
             className='flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 transition cursor-pointer'
           >
-            <Download className='w-4 h-4' /> Export PDF
+            <Download className='w-4 h-4' /> {t('common.exportPdf')}
           </button>
         </div>
 
@@ -195,7 +204,9 @@ export default function PortfolioPublicPage() {
             <h1 className='mt-4 text-3xl font-semibold text-gray-900 dark:text-[#ECE9E4]'>{fullName}</h1>
             {portfolio.title && <p className='mt-1 text-lg text-gray-500 dark:text-[#A29FA8]'>{portfolio.title}</p>}
             {portfolio.bio && (
-              <p className='mt-3 max-w-xl text-[15px] leading-relaxed text-gray-600 dark:text-[#ECE9E4]/80'>{portfolio.bio}</p>
+              <p className='mt-3 max-w-xl text-[15px] leading-relaxed text-gray-600 dark:text-[#ECE9E4]/80'>
+                {portfolio.bio}
+              </p>
             )}
 
             {socials.length > 0 && (
@@ -217,7 +228,7 @@ export default function PortfolioPublicPage() {
 
             {skills.length > 0 && (
               <section className='mt-10'>
-                <h2 className='text-lg font-semibold text-gray-900 dark:text-[#ECE9E4]'>Skills</h2>
+                <h2 className='text-lg font-semibold text-gray-900 dark:text-[#ECE9E4]'>{t('portfolio.skills')}</h2>
                 <div className='mt-3 flex flex-wrap gap-2'>
                   {skills.map((s) => (
                     <span key={s} className={`rounded-full border px-3 py-1 text-sm ${THEME.chip}`}>

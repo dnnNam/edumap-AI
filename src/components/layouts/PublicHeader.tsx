@@ -1,12 +1,14 @@
 import { useState } from 'react'
 import { Menu, X } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import Logo from '../ui/Logo'
+import LanguageToggle from '../ui/LanguageToggle'
 import ThemeToggle from '../ui/ThemeToggle'
 
 const NAV_LINKS = [
-  { label: 'Features', href: '#features' },
-  { label: 'Pricing', href: '#pricing' },
-  { label: 'FAQ', href: '#faq' },
+  { labelKey: 'public.features', href: '#features' },
+  { labelKey: 'public.pricing', href: '#pricing' },
+  { labelKey: 'public.faq', href: '#faq' },
 ]
 
 interface HeaderProps {
@@ -15,6 +17,7 @@ interface HeaderProps {
 }
 
 export default function PublicHeader({ onSignIn, onGetStarted }: HeaderProps) {
+  const { t } = useTranslation()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
@@ -25,18 +28,18 @@ export default function PublicHeader({ onSignIn, onGetStarted }: HeaderProps) {
           <nav className='hidden md:flex items-center gap-8'>
             {NAV_LINKS.map((link) => (
               <a
-                key={link.label}
+                key={link.labelKey}
                 href={link.href}
                 className='text-[15px] text-gray-500 hover:text-gray-900 dark:text-[#A29FA8] dark:hover:text-[#ECE9E4] transition'
               >
-                {link.label}
+                {t(link.labelKey)}
               </a>
             ))}
           </nav>
         </div>
 
         <div className='flex items-center gap-2.5 sm:gap-4'>
-          {/* Theme Toggle Button */}
+          <LanguageToggle />
           <ThemeToggle />
 
           <button
@@ -44,21 +47,21 @@ export default function PublicHeader({ onSignIn, onGetStarted }: HeaderProps) {
             onClick={onSignIn}
             className='hidden sm:inline-block text-[15px] text-gray-900 hover:text-gray-600 dark:text-[#ECE9E4] dark:hover:text-white transition'
           >
-            Sign in
+            {t('common.signIn')}
           </button>
           <button
             type='button'
             onClick={onGetStarted}
             className='rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-sm sm:text-[15px] font-medium px-3.5 sm:px-4 py-2 transition'
           >
-            Get started
+            {t('common.getStarted')}
           </button>
 
           {/* Mobile hamburger menu button */}
           <button
             type='button'
             onClick={() => setMobileMenuOpen((v) => !v)}
-            aria-label='Toggle menu'
+            aria-label={t('header.toggleMenu')}
             className='md:hidden p-1.5 rounded-lg border border-gray-200 dark:border-white/10 text-gray-700 dark:text-[#ECE9E4] hover:bg-gray-100 dark:hover:bg-white/5 transition min-w-[40px] min-h-[40px] flex items-center justify-center'
           >
             {mobileMenuOpen ? <X className='w-5 h-5' /> : <Menu className='w-5 h-5' />}
@@ -72,12 +75,12 @@ export default function PublicHeader({ onSignIn, onGetStarted }: HeaderProps) {
           <nav className='flex flex-col gap-1'>
             {NAV_LINKS.map((link) => (
               <a
-                key={link.label}
+                key={link.labelKey}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
                 className='text-[15px] text-gray-600 hover:text-gray-900 dark:text-[#A29FA8] dark:hover:text-[#ECE9E4] hover:bg-gray-100/70 dark:hover:bg-white/5 px-3 py-2 rounded-lg transition'
               >
-                {link.label}
+                {t(link.labelKey)}
               </a>
             ))}
           </nav>
@@ -90,7 +93,7 @@ export default function PublicHeader({ onSignIn, onGetStarted }: HeaderProps) {
               }}
               className='w-full text-left text-[15px] text-gray-900 dark:text-[#ECE9E4] px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/5 transition'
             >
-              Sign in
+              {t('common.signIn')}
             </button>
             <button
               type='button'
@@ -100,7 +103,7 @@ export default function PublicHeader({ onSignIn, onGetStarted }: HeaderProps) {
               }}
               className='w-full rounded-lg bg-indigo-600 text-white text-[15px] font-medium py-2.5 transition'
             >
-              Get started
+              {t('common.getStarted')}
             </button>
           </div>
         </div>

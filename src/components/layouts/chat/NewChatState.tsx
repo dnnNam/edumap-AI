@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import type { AxiosError } from 'axios'
 import { Loader2, MessageSquare, Sparkles, X } from 'lucide-react'
 import { useState } from 'react'
+import { Trans, useTranslation } from 'react-i18next'
 import { useCreateChatSessionMutation } from '../../../hooks/chatQuery'
 import type { ChatSession } from '../../../types/api/chat.types'
 
@@ -20,7 +21,11 @@ export default function NewChatState({
   onCreated: (session: ChatSession) => void
   onBlocked: () => void
 }) {
-  const suggestedTitle = careerPath ? `Tư vấn lộ trình ${careerPath}` : 'Tư vấn lộ trình của bạn'
+  const { t } = useTranslation()
+
+  const suggestedTitle = careerPath
+    ? t('chat.new.suggestedWithPath', { path: careerPath })
+    : t('chat.new.suggestedDefault')
 
   const [title, setTitle] = useState('')
   const { mutate: createSession, isPending } = useCreateChatSessionMutation()
@@ -78,7 +83,7 @@ export default function NewChatState({
               type='button'
               onClick={handleClose}
               className='absolute top-5 right-5 text-gray-400 dark:text-[#85808C] hover:text-gray-600 dark:hover:text-[#ECE9E4] transition-colors cursor-pointer'
-              aria-label='Close'
+              aria-label={t('common.close')}
             >
               <X className='w-4.5 h-4.5' />
             </button>
@@ -86,16 +91,19 @@ export default function NewChatState({
             <div className='w-10 h-10 rounded-xl bg-gray-100 dark:bg-white/5 flex items-center justify-center'>
               <MessageSquare className='w-5 h-5 text-gray-500 dark:text-[#A29FA8]' />
             </div>
-            <h2 className='mt-4 text-[17px] font-semibold text-gray-900 dark:text-[#ECE9E4]'>Bắt đầu cuộc trò chuyện mới</h2>
+            <h2 className='mt-4 text-[17px] font-semibold text-gray-900 dark:text-[#ECE9E4]'>{t('chat.new.title')}</h2>
             <p className='mt-1.5 text-sm text-gray-500 dark:text-[#B5B1BA]'>
-              Đặt tiêu đề cho phiên chat với AI Mentor dựa trên lộ trình{' '}
-              {careerPath ? <span className='font-medium text-gray-900 dark:text-[#ECE9E4]'>{careerPath}</span> : 'của bạn'}.
+              <Trans
+                i18nKey={careerPath ? 'chat.new.descWithPath' : 'chat.new.descNoPath'}
+                values={{ path: careerPath }}
+                components={{ b: <span className='font-medium text-gray-900 dark:text-[#ECE9E4]' /> }}
+              />
             </p>
 
             <input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleStart()}
+              onKeyDown={(e) => e.key === 'Enter' && !e.nativeEvent.isComposing && handleStart()}
               type='text'
               placeholder={suggestedTitle}
               autoFocus
@@ -109,7 +117,7 @@ export default function NewChatState({
                 disabled={isPending}
                 className='rounded-xl border border-gray-200 dark:border-white/10 text-gray-900 dark:text-[#ECE9E4] text-sm font-medium px-4 py-2.5 hover:bg-gray-50 dark:hover:bg-white/5 disabled:opacity-60 transition cursor-pointer'
               >
-                Hủy
+                {t('common.cancel')}
               </button>
               <button
                 type='button'
@@ -118,7 +126,7 @@ export default function NewChatState({
                 className='flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-70 text-white text-sm font-medium px-4 py-2.5 transition cursor-pointer shadow-xs'
               >
                 {isPending ? <Loader2 className='w-4 h-4 animate-spin' /> : <Sparkles className='w-4 h-4' />}
-                Bắt đầu trò chuyện
+                {t('chat.empty.cta')}
               </button>
             </div>
           </motion.div>

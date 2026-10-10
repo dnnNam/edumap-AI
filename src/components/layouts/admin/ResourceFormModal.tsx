@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2, X } from 'lucide-react'
 import { useEffect, useMemo, type ReactNode } from 'react'
@@ -38,18 +39,20 @@ function Field({
   className?: string
   children: ReactNode
 }) {
+  const { t } = useTranslation()
   return (
     <div className={className}>
       <label className='block text-sm font-medium text-gray-700 mb-1.5'>
         {label} {required && <span className='text-red-500'>*</span>}
       </label>
       {children}
-      {error && <p className='mt-1 text-xs text-red-600'>{error}</p>}
+      {error && <p className='mt-1 text-xs text-red-600'>{t(error)}</p>}
     </div>
   )
 }
 
 export default function ResourceFormModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const { t } = useTranslation()
   const { data: skillsRes } = useAllSkillsQuery()
   const skills = useMemo(
     () => [...(skillsRes?.data?.data ?? [])].sort((a, b) => a.name.localeCompare(b.name, 'vi')),
@@ -91,12 +94,12 @@ export default function ResourceFormModal({ open, onClose }: { open: boolean; on
         className='relative w-full max-w-xl max-h-[90vh] flex flex-col rounded-2xl bg-white shadow-xl'
       >
         <div className='flex items-center justify-between px-6 py-4 border-b border-gray-100'>
-          <h3 className='text-[17px] font-semibold text-gray-900'>Thêm tài nguyên</h3>
+          <h3 className='text-[17px] font-semibold text-gray-900'>{t('admin.resources.form.addTitle')}</h3>
           <button
             type='button'
             onClick={onClose}
             disabled={isPending}
-            aria-label='Close'
+            aria-label={t('common.close')}
             className='p-1.5 rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition'
           >
             <X className='w-4 h-4' />
@@ -105,9 +108,14 @@ export default function ResourceFormModal({ open, onClose }: { open: boolean; on
 
         <form onSubmit={handleSubmit(onSubmit)} noValidate className='flex flex-col min-h-0'>
           <div className='overflow-y-auto px-6 py-5 grid grid-cols-1 sm:grid-cols-2 gap-4'>
-            <Field label='Kỹ năng' required error={errors.skillId?.message} className='sm:col-span-2'>
+            <Field
+              label={t('admin.resources.form.skill')}
+              required
+              error={errors.skillId?.message}
+              className='sm:col-span-2'
+            >
               <select {...register('skillId')} className={inputClass}>
-                <option value=''>-- Chọn kỹ năng --</option>
+                <option value=''>{t('admin.resources.form.selectSkill')}</option>
                 {skills.map((s) => (
                   <option key={s.id} value={s.id}>
                     {s.name} ({s.category})
@@ -116,29 +124,42 @@ export default function ResourceFormModal({ open, onClose }: { open: boolean; on
               </select>
             </Field>
 
-            <Field label='Tiêu đề' required error={errors.title?.message} className='sm:col-span-2'>
-              <input {...register('title')} placeholder='VD: Node.js Crash Course' className={inputClass} />
+            <Field
+              label={t('admin.resources.form.title')}
+              required
+              error={errors.title?.message}
+              className='sm:col-span-2'
+            >
+              <input
+                {...register('title')}
+                placeholder={t('admin.resources.form.titlePlaceholder')}
+                className={inputClass}
+              />
             </Field>
 
             <Field label='URL' required error={errors.url?.message} className='sm:col-span-2'>
               <input {...register('url')} placeholder='https://...' className={inputClass} />
             </Field>
 
-            <Field label='Loại tài nguyên' required error={errors.resourceType?.message}>
+            <Field label={t('admin.resources.form.type')} required error={errors.resourceType?.message}>
               <select {...register('resourceType')} className={inputClass}>
-                {RESOURCE_TYPES.map((t) => (
-                  <option key={t} value={t}>
-                    {getResourceTypeLabel(t)}
+                {RESOURCE_TYPES.map((type) => (
+                  <option key={type} value={type}>
+                    {getResourceTypeLabel(type)}
                   </option>
                 ))}
               </select>
             </Field>
 
             <Field label='Affiliate ID' error={errors.affiliateId?.message}>
-              <input {...register('affiliateId')} placeholder='Không bắt buộc' className={inputClass} />
+              <input
+                {...register('affiliateId')}
+                placeholder={t('admin.resources.form.optional')}
+                className={inputClass}
+              />
             </Field>
 
-            <Field label='Chi phí ($, 0 = miễn phí)' required error={errors.cost?.message}>
+            <Field label={t('admin.resources.form.cost')} required error={errors.cost?.message}>
               <input
                 type='number'
                 step='any'
@@ -148,7 +169,7 @@ export default function ResourceFormModal({ open, onClose }: { open: boolean; on
               />
             </Field>
 
-            <Field label='Đánh giá (0 - 5)' required error={errors.rating?.message}>
+            <Field label={t('admin.resources.form.rating')} required error={errors.rating?.message}>
               <input
                 type='number'
                 step='0.1'
@@ -159,7 +180,7 @@ export default function ResourceFormModal({ open, onClose }: { open: boolean; on
               />
             </Field>
 
-            <Field label='Thời lượng (giờ)' required error={errors.durationHours?.message}>
+            <Field label={t('admin.resources.form.duration')} required error={errors.durationHours?.message}>
               <input
                 type='number'
                 step='any'
@@ -177,7 +198,7 @@ export default function ResourceFormModal({ open, onClose }: { open: boolean; on
               disabled={isPending}
               className='rounded-xl border border-gray-200 text-gray-900 text-sm font-medium px-4 py-2 hover:bg-gray-50 disabled:opacity-60 transition'
             >
-              Hủy
+              {t('common.cancel')}
             </button>
             <button
               type='submit'
@@ -185,7 +206,7 @@ export default function ResourceFormModal({ open, onClose }: { open: boolean; on
               className='inline-flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 disabled:opacity-60 transition'
             >
               {isPending && <Loader2 className='w-4 h-4 animate-spin' />}
-              {isPending ? 'Đang tạo...' : 'Tạo tài nguyên'}
+              {isPending ? t('admin.resources.form.creating') : t('admin.resources.form.create')}
             </button>
           </div>
         </form>

@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next'
+import { getLocale } from '../../utils/locale'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { isAxiosError } from 'axios'
 import { Check, Download, ExternalLink, Link2, Loader2, Mail, X } from 'lucide-react'
@@ -62,10 +64,11 @@ const inputErrCls =
   'w-full rounded-xl border border-red-400 dark:border-red-500 bg-white dark:bg-[#232227] px-4 py-2.5 text-[15px] text-gray-900 dark:text-[#ECE9E4] placeholder-gray-400 dark:placeholder-gray-500 outline-none focus:border-red-500 focus:ring-2 focus:ring-red-100 transition'
 
 function FieldError({ message }: { message?: string }) {
+  const { t } = useTranslation()
   if (!message) return null
   return (
     <p role='alert' className='mt-1 text-xs text-red-600 dark:text-red-400'>
-      {message}
+      {t(message)}
     </p>
   )
 }
@@ -117,10 +120,11 @@ const toRequestBody = (v: PortfolioFormValues): UpdatePortfolioBody => ({
 function formatMonthYear(iso: string) {
   const d = new Date(iso)
   if (Number.isNaN(d.getTime())) return ''
-  return d.toLocaleDateString('vi-VN', { month: '2-digit', year: 'numeric' })
+  return d.toLocaleDateString(getLocale(), { month: '2-digit', year: 'numeric' })
 }
 
 function RepoCard({ repo, chipCls }: { repo: PortfolioRepository; chipCls: string }) {
+  const { t } = useTranslation()
   const tech = repo.techStack ?? []
   const shown = tech.slice(0, MAX_TECH_CHIPS)
   const extra = tech.length - shown.length
@@ -152,12 +156,14 @@ function RepoCard({ repo, chipCls }: { repo: PortfolioRepository; chipCls: strin
             {repo.mainLanguage}
           </span>
         )}
-        {formatMonthYear(repo.createdAt) && <span>Cập nhật {formatMonthYear(repo.createdAt)}</span>}
+        {formatMonthYear(repo.createdAt) && (
+          <span>{t('portfolio.updated', { date: formatMonthYear(repo.createdAt) })}</span>
+        )}
       </div>
 
       <div className='mt-4 flex flex-1 flex-wrap content-start gap-1.5'>
         {shown.length === 0 ? (
-          <span className='text-xs text-gray-400 dark:text-[#A29FA8]'>Chưa phát hiện tech stack</span>
+          <span className='text-xs text-gray-400 dark:text-[#A29FA8]'>{t('portfolio.noTech')}</span>
         ) : (
           <>
             {shown.map((t) => (
@@ -190,16 +196,19 @@ function ProjectsSection({
   isPublic: boolean
   chipCls: string
 }) {
+  const { t } = useTranslation()
   return (
     <section className='mt-10'>
       <div className='flex items-baseline justify-between gap-3'>
         <h3 className='text-lg font-semibold text-gray-900 dark:text-[#ECE9E4]'>
-          Projects
-          {repos.length > 0 && <span className='ml-2 text-sm font-normal text-gray-400 dark:text-[#A29FA8]'>{repos.length}</span>}
+          {t('portfolio.projects')}
+          {repos.length > 0 && (
+            <span className='ml-2 text-sm font-normal text-gray-400 dark:text-[#A29FA8]'>{repos.length}</span>
+          )}
         </h3>
         {hasGithubSync && (
           <span className='inline-flex items-center gap-1.5 text-xs text-gray-500 dark:text-[#A29FA8] print:hidden'>
-            <FaGithub className='h-3.5 w-3.5' /> Đã đồng bộ từ GitHub
+            <FaGithub className='h-3.5 w-3.5' /> {t('portfolio.synced')}
           </span>
         )}
       </div>
@@ -217,9 +226,7 @@ function ProjectsSection({
         </div>
       ) : (
         <p className='mt-3 rounded-xl border border-dashed border-gray-200 dark:border-white/[0.08] px-4 py-6 text-center text-sm text-gray-500 dark:text-[#A29FA8]'>
-          {!isPublic
-            ? 'Bật “Công khai portfolio” ở tab Share để hiển thị dự án GitHub tại đây.'
-            : 'Chưa có dự án nào. Đồng bộ GitHub để tự động thêm dự án của bạn.'}
+          {!isPublic ? t('portfolio.emptyPrivate') : t('portfolio.emptySynced')}
         </p>
       )}
     </section>
@@ -237,7 +244,8 @@ function Builder({
   reposLoading: boolean
   hasGithubSync: boolean
 }) {
-  const fullName = getFullNameFromLS() || 'Your name'
+  const { t } = useTranslation()
+  const fullName = getFullNameFromLS() || t('portfolio.yourName')
   const [tab, setTab] = useState<Tab>('Info')
   const [theme, setTheme] = useState(0)
   const [skillInput, setSkillInput] = useState('')
@@ -276,15 +284,15 @@ function Builder({
     const current = getValues('skills') ?? []
 
     if (s.length > MAX_SKILL_LENGTH) {
-      toast.error(`Mỗi kỹ năng tối đa ${MAX_SKILL_LENGTH} ký tự`)
+      toast.error(t('portfolio.skillTooLong', { max: MAX_SKILL_LENGTH }))
       return false
     }
     if (current.some((x) => x.toLowerCase() === s.toLowerCase())) {
-      toast.error(`Kỹ năng "${s}" đã có`)
+      toast.error(t('portfolio.skillExists', { name: s }))
       return false
     }
     if (current.length >= MAX_SKILLS) {
-      toast.error(`Tối đa ${MAX_SKILLS} kỹ năng`)
+      toast.error(t('portfolio.skillsMax', { max: MAX_SKILLS }))
       return false
     }
 
@@ -303,21 +311,21 @@ function Builder({
   const onSubmit = (values: PortfolioFormValues) => {
     updatePortfolio(toRequestBody(values), {
       onSuccess: () => {
-        toast.success('Đã lưu portfolio')
+        toast.success(t('portfolio.saved'))
         reset(values) // đặt lại trạng thái "chưa chỉnh sửa"
       },
       onError: (err) => {
         // http.ts không toast lỗi 422 nên xử lý ở đây
         if (isAxiosError<{ message?: string | string[] }>(err) && err.response?.status === 422) {
           const msg = err.response.data?.message
-          toast.error((Array.isArray(msg) ? msg.join(', ') : msg) || 'Dữ liệu không hợp lệ')
+          toast.error((Array.isArray(msg) ? msg.join(', ') : msg) || t('portfolio.invalid'))
         }
       },
     })
   }
 
   const onInvalid = () => {
-    toast.error('Vui lòng kiểm tra lại các trường bị lỗi')
+    toast.error(t('portfolio.fixErrors'))
     setTab('Info')
   }
 
@@ -332,7 +340,7 @@ function Builder({
   const shareUrl = (initial.portfolioUrl ?? '').replace(/([^:])\/{2,}/g, '$1/')
   const copyUrl = async () => {
     await navigator.clipboard.writeText(shareUrl)
-    toast.success('Đã sao chép link')
+    toast.success(t('portfolio.copied'))
   }
 
   const socials = [
@@ -354,8 +362,8 @@ function Builder({
         {/* Header */}
         <div className='flex flex-wrap items-start justify-between gap-4 print:hidden'>
           <div>
-            <h1 className='text-3xl font-semibold text-gray-900 dark:text-[#ECE9E4]'>Portfolio Builder</h1>
-            <p className='mt-2 text-gray-500 dark:text-[#A29FA8]'>Chỉnh sửa, chọn giao diện và chia sẻ portfolio của bạn.</p>
+            <h1 className='text-3xl font-semibold text-gray-900 dark:text-[#ECE9E4]'>{t('portfolio.title')}</h1>
+            <p className='mt-2 text-gray-500 dark:text-[#A29FA8]'>{t('portfolio.desc')}</p>
           </div>
           <div className='flex items-center gap-3'>
             <button
@@ -363,7 +371,7 @@ function Builder({
               onClick={() => window.print()}
               className='flex items-center gap-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 dark:bg-[#5F2CFF] dark:hover:bg-[#4B1FD6] px-4 py-2 text-sm font-medium text-white transition cursor-pointer'
             >
-              <Download className='w-4 h-4' /> Export PDF
+              <Download className='w-4 h-4' /> {t('common.exportPdf')}
             </button>
           </div>
         </div>
@@ -376,18 +384,18 @@ function Builder({
             className='rounded-3xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#1A191C] p-6 print:hidden'
           >
             <div className='grid grid-cols-3 rounded-xl bg-gray-100 dark:bg-[#232227] p-1'>
-              {TABS.map((t) => (
+              {TABS.map((tabKey) => (
                 <button
-                  key={t}
+                  key={tabKey}
                   type='button'
-                  onClick={() => setTab(t)}
+                  onClick={() => setTab(tabKey)}
                   className={`rounded-lg py-2 text-sm transition cursor-pointer ${
-                    tab === t
+                    tab === tabKey
                       ? 'bg-white dark:bg-[#1A191C] text-gray-900 dark:text-[#ECE9E4] font-medium shadow-sm'
                       : 'text-gray-500 dark:text-[#A29FA8] hover:text-gray-900 dark:hover:text-[#ECE9E4]'
                   }`}
                 >
-                  {t}
+                  {t(`portfolio.tab.${tabKey}`)}
                 </button>
               ))}
             </div>
@@ -396,13 +404,13 @@ function Builder({
               {tab === 'Info' && (
                 <>
                   <Field
-                    label='Headline'
+                    label={t('portfolio.headline')}
                     registration={register('title')}
                     error={errors.title?.message}
                     placeholder='Junior Full-stack Developer'
                   />
                   <label className='block'>
-                    <span className='text-sm font-medium text-gray-900 dark:text-[#ECE9E4]'>Bio</span>
+                    <span className='text-sm font-medium text-gray-900 dark:text-[#ECE9E4]'>{t('portfolio.bio')}</span>
                     <textarea
                       {...register('bio')}
                       rows={3}
@@ -412,7 +420,7 @@ function Builder({
                     <FieldError message={errors.bio?.message} />
                   </label>
                   <Field
-                    label='Avatar URL'
+                    label={t('portfolio.avatarUrl')}
                     registration={register('avatarUrl')}
                     error={errors.avatarUrl?.message}
                     placeholder='https://...'
@@ -438,7 +446,9 @@ function Builder({
                   />
 
                   <div>
-                    <span className='text-sm font-medium text-gray-900 dark:text-[#ECE9E4]'>Skills</span>
+                    <span className='text-sm font-medium text-gray-900 dark:text-[#ECE9E4]'>
+                      {t('portfolio.skills')}
+                    </span>
                     <div className='mt-1.5 flex gap-2'>
                       <input
                         value={skillInput}
@@ -449,7 +459,7 @@ function Builder({
                             commitSkill()
                           }
                         }}
-                        placeholder={`Nhập kỹ năng rồi nhấn Enter (tối đa ${MAX_SKILLS})`}
+                        placeholder={t('portfolio.skillPlaceholder', { max: MAX_SKILLS })}
                         className={skillsError ? inputErrCls : inputCls}
                       />
                       <button
@@ -458,7 +468,7 @@ function Builder({
                         disabled={!pendingSkill}
                         className='shrink-0 rounded-xl border border-gray-200 dark:border-white/[0.08] px-4 text-sm font-medium text-gray-700 dark:text-[#ECE9E4] hover:bg-gray-50 dark:hover:bg-[#232227] disabled:opacity-50 transition cursor-pointer'
                       >
-                        Thêm
+                        {t('common.add')}
                       </button>
                     </div>
                     <FieldError message={skillsError} />
@@ -471,7 +481,7 @@ function Builder({
                           {s}
                           <button
                             type='button'
-                            aria-label={`Xóa ${s}`}
+                            aria-label={t('portfolio.removeAria', { name: s })}
                             onClick={() => removeSkill(s)}
                             className='rounded-full p-0.5 text-gray-400 dark:text-[#A29FA8] hover:text-gray-900 dark:hover:text-[#ECE9E4] cursor-pointer'
                           >
@@ -497,7 +507,9 @@ function Builder({
                           : 'border-gray-200 dark:border-white/[0.08] hover:bg-gray-50 dark:hover:bg-[#232227]'
                       }`}
                     >
-                      <div className={`h-10 rounded-lg bg-gradient-to-br ${t.banner} border border-gray-100 dark:border-white/[0.06]`} />
+                      <div
+                        className={`h-10 rounded-lg bg-gradient-to-br ${t.banner} border border-gray-100 dark:border-white/[0.06]`}
+                      />
                       <span className='mt-2 block text-gray-900 dark:text-[#ECE9E4]'>{t.name}</span>
                     </button>
                   ))}
@@ -508,12 +520,18 @@ function Builder({
                 <>
                   <label className='flex items-center justify-between gap-4 rounded-xl border border-gray-200 dark:border-white/[0.08] p-4 cursor-pointer'>
                     <span>
-                      <span className='block text-sm font-medium text-gray-900 dark:text-[#ECE9E4]'>Công khai portfolio</span>
+                      <span className='block text-sm font-medium text-gray-900 dark:text-[#ECE9E4]'>
+                        {t('portfolio.public')}
+                      </span>
                       <span className='block text-xs text-gray-500 dark:text-[#A29FA8] mt-0.5'>
-                        Bất kỳ ai có link đều xem được. Nhấn “Lưu thay đổi” để áp dụng.
+                        {t('portfolio.publicHint')}
                       </span>
                     </span>
-                    <input type='checkbox' {...register('isPublic')} className='w-5 h-5 accent-indigo-600 dark:accent-[#5F2CFF]' />
+                    <input
+                      type='checkbox'
+                      {...register('isPublic')}
+                      className='w-5 h-5 accent-indigo-600 dark:accent-[#5F2CFF]'
+                    />
                   </label>
                   <div className='flex gap-2'>
                     <input readOnly value={shareUrl} className={`${inputCls} text-gray-500 dark:text-[#A29FA8]`} />
@@ -521,7 +539,7 @@ function Builder({
                       type='button'
                       onClick={copyUrl}
                       disabled={!initial.isPublic || !shareUrl}
-                      aria-label='Sao chép link'
+                      aria-label={t('portfolio.copyLink')}
                       className='shrink-0 rounded-xl border border-gray-200 dark:border-white/[0.08] px-3 text-gray-700 dark:text-[#ECE9E4] hover:bg-gray-50 dark:hover:bg-[#232227] disabled:opacity-50 transition cursor-pointer'
                     >
                       <Link2 className='w-4 h-4' />
@@ -537,13 +555,15 @@ function Builder({
               className='mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 dark:bg-[#5F2CFF] dark:hover:bg-[#4B1FD6] py-2.5 text-sm font-medium text-white transition disabled:opacity-50 cursor-pointer'
             >
               {isPending && <Loader2 className='h-4 w-4 animate-spin' />}
-              {isPending ? 'Đang lưu...' : 'Lưu thay đổi'}
+              {isPending ? t('common.saving') : t('common.save')}
             </button>
           </form>
 
           {/* Live preview */}
           <div className='rounded-3xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#1A191C] overflow-hidden print:border-0'>
-            <div className={`h-40 border-b border-gray-200 dark:border-white/[0.08] bg-gradient-to-br ${currentTheme.banner}`} />
+            <div
+              className={`h-40 border-b border-gray-200 dark:border-white/[0.08] bg-gradient-to-br ${currentTheme.banner}`}
+            />
             <div className='px-6 sm:px-8 pb-10'>
               <div className='-mt-14 w-28 h-28 rounded-full border-4 border-white dark:border-[#1A191C] bg-white dark:bg-[#1A191C] overflow-hidden'>
                 {form.avatarUrl ? (
@@ -555,7 +575,11 @@ function Builder({
 
               <h2 className='mt-4 text-3xl font-semibold text-gray-900 dark:text-[#ECE9E4]'>{fullName}</h2>
               {form.title && <p className='mt-1 text-lg text-gray-500 dark:text-[#A29FA8]'>{form.title}</p>}
-              {form.bio && <p className='mt-3 max-w-xl text-[15px] leading-relaxed text-gray-600 dark:text-[#B5B1BA]'>{form.bio}</p>}
+              {form.bio && (
+                <p className='mt-3 max-w-xl text-[15px] leading-relaxed text-gray-600 dark:text-[#B5B1BA]'>
+                  {form.bio}
+                </p>
+              )}
 
               {socials.length > 0 && (
                 <div className='mt-5 flex gap-2'>
@@ -575,14 +599,14 @@ function Builder({
               )}
 
               <p className='mt-5 inline-flex items-center gap-1.5 rounded-full bg-gray-100 dark:bg-white/10 px-3 py-1 text-xs text-gray-600 dark:text-[#ECE9E4] print:hidden'>
-                <Check className='w-3.5 h-3.5' /> Live preview
+                <Check className='w-3.5 h-3.5' /> {t('portfolio.livePreview')}
               </p>
 
               {/* Skills */}
               <section className='mt-10'>
-                <h3 className='text-lg font-semibold text-gray-900 dark:text-[#ECE9E4]'>Skills</h3>
+                <h3 className='text-lg font-semibold text-gray-900 dark:text-[#ECE9E4]'>{t('portfolio.skills')}</h3>
                 {form.skills.length === 0 ? (
-                  <p className='mt-3 text-sm text-gray-500 dark:text-[#A29FA8]'>Thêm kỹ năng ở tab Info để hiển thị tại đây.</p>
+                  <p className='mt-3 text-sm text-gray-500 dark:text-[#A29FA8]'>{t('portfolio.addSkillsHint')}</p>
                 ) : (
                   <div className='mt-3 flex flex-wrap gap-2'>
                     {form.skills.map((s) => (

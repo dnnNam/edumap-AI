@@ -1,3 +1,12 @@
+import { useTranslation } from 'react-i18next'
+import { useBillingPlansQuery } from '../../hooks/billingQuery'
+import {
+  formatPrice,
+  getCardHighlights,
+  getPlanDescription,
+  getPlanName,
+  getYearlySavingBadge,
+} from '../../utils/billing'
 import { useState, lazy, Suspense } from 'react'
 import { useNavigate } from 'react-router'
 import {
@@ -31,125 +40,23 @@ const HeroSingle3D = lazy(() => import('../../components/canvas3d/HeroSingle3D')
 
 const TRUSTED_LOGOS = ['Google', 'Stripe', 'Vercel', 'Linear', 'Notion', 'Figma', 'OpenAI', 'GitHub']
 
-const FEATURES = [
-  {
-    icon: Brain,
-    title: 'AI Career Mentor',
-    description:
-      'Chat with an AI that knows your transcript, GitHub and goals. Like having a senior engineer on speed dial.',
-  },
-  {
-    icon: GitBranch,
-    title: 'Dynamic Skill Tree',
-    description: 'Beautiful interactive visualization of every skill you have, are learning, and should learn next.',
-  },
-  {
-    icon: Map,
-    title: 'Personalized Roadmap',
-    description: 'Auto-generated week-by-week plan that adapts as you complete tasks and unlock new skills.',
-  },
-  {
-    icon: Target,
-    title: 'Job Matching',
-    description: 'Real-time matching against thousands of internships and roles, with the exact gaps to close.',
-  },
-  {
-    icon: Zap,
-    title: 'Portfolio Builder',
-    description: 'Turn your projects into a stunning portfolio site that recruiters actually remember.',
-  },
-  {
-    icon: Sparkles,
-    title: 'Smart Resources',
-    description:
-      'Curated courses, articles and docs hand-picked for your exact next step. No more YouTube rabbit holes.',
-  },
-]
+const FEATURE_ICONS = [Brain, GitBranch, Map, Target, Zap, Sparkles]
 
-const TESTIMONIALS = [
+const TESTIMONIAL_META = [
   {
-    quote: 'EduMap AI turned my chaotic learning into a clear weekly plan. Landed my Stripe internship in 4 months.',
     name: 'Sarah Kim',
     role: 'CS @ Stanford',
     avatarColor: 'bg-sky-100 dark:bg-sky-950/60 text-sky-700 dark:text-sky-300',
   },
   {
-    quote: 'The skill tree visualization is genius. I finally saw the gaps holding me back from FAANG offers.',
     name: 'David Chen',
     role: 'SE Intern @ Google',
     avatarColor: 'bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300',
   },
   {
-    quote:
-      "The AI mentor reads my GitHub and tells me exactly what to build next. It's like a senior engineer in my pocket.",
     name: 'Priya Patel',
     role: 'ML @ CMU',
     avatarColor: 'bg-rose-100 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300',
-  },
-]
-
-const PLANS = [
-  {
-    name: 'Free',
-    tagline: 'Get started for free',
-    price: '$0',
-    period: '/month',
-    cta: 'Start free',
-    features: ['Skill tree (basic)', '5 AI chats/day', 'Public courses', 'Community support'],
-  },
-  {
-    name: 'Pro Student',
-    tagline: 'Everything you need to land internships',
-    price: '$12',
-    period: '/month',
-    originalPrice: '$20',
-    cta: 'Upgrade to Pro',
-    highlighted: true,
-    badge: 'Most popular',
-    features: [
-      'Unlimited AI career chats',
-      'Full dynamic skill DAG',
-      'Daily job matching & gap analysis',
-      'Custom portfolio site generator',
-      'Priority support',
-    ],
-  },
-  {
-    name: 'Campus',
-    tagline: 'For university cohorts & clubs',
-    price: '$49',
-    period: '/month',
-    cta: 'Contact sales',
-    features: [
-      'Up to 25 student seats',
-      'Cohort analytics dashboard',
-      'Shared resources library',
-      'Dedicated mentor agent',
-      'Admin controls',
-    ],
-  },
-]
-
-const FAQS = [
-  {
-    question: 'How does EduMap AI analyze my profile?',
-    answer:
-      "You connect your transcript, GitHub and CV. Our AI reads them, maps every skill you already have, and compares it against the role you're targeting to find the gaps.",
-  },
-  {
-    question: 'Is my data private?',
-    answer:
-      'Yes. Your transcript, code and personal data are encrypted and never sold or shared with third parties. You can delete your data at any time from settings.',
-  },
-  {
-    question: 'Do schools get access?',
-    answer:
-      'Only if you explicitly opt in to a school partnership program. By default your account and roadmap are visible to you alone.',
-  },
-  {
-    question: 'Can I use the free plan forever?',
-    answer:
-      'Yes — the Free plan has no time limit. You can upgrade to Pro Student or Premium any time you want more AI chats, job matching or priority support.',
   },
 ]
 
@@ -168,10 +75,10 @@ function cellShade(row: number, col: number): string {
 }
 
 const BOTTOM_STATS = [
-  { value: '120K+', label: 'Students mentored' },
-  { value: '412', label: 'Universities' },
-  { value: '94%', label: 'Internship rate' },
-  { value: '4.9★', label: 'Avg rating' },
+  { value: '120K+', labelKey: 'home.stats.students' },
+  { value: '412', labelKey: 'home.stats.universities' },
+  { value: '94%', labelKey: 'home.stats.internship' },
+  { value: '4.9★', labelKey: 'home.stats.rating' },
 ]
 
 // ---------- page ----------
@@ -181,6 +88,18 @@ export default function HomePage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null)
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null)
   const [featureViewMode, setFeatureViewMode] = useState<'coverflow' | 'grid'>('coverflow')
+  const { t } = useTranslation()
+
+  const featureItems = t('home.features.items', { returnObjects: true }) as { title: string; description: string }[]
+  const features = FEATURE_ICONS.map((icon, i) => ({ icon, ...featureItems[i] }))
+
+  const testimonialItems = t('home.testimonials.items', { returnObjects: true }) as { quote: string }[]
+  const testimonials = TESTIMONIAL_META.map((m, i) => ({ ...m, quote: testimonialItems[i]?.quote ?? '' }))
+
+  const { data: plansRes, isLoading: plansLoading, isError: plansError } = useBillingPlansQuery()
+  const plans = plansRes?.data?.data ?? []
+
+  const faqs = t('home.faq.items', { returnObjects: true }) as { question: string; answer: string }[]
 
   return (
     <div className='min-h-screen flex flex-col bg-[#FAFAF9] dark:bg-[#121114] overflow-x-hidden selection:bg-indigo-600 selection:text-white transition-colors'>
@@ -218,11 +137,13 @@ export default function HomePage() {
                       EDUMAP<span className='text-indigo-600 dark:text-[#A99DFF]'>AI</span>
                     </div>
                     <div className='text-[8px] font-bold tracking-wider text-gray-400 dark:text-[#85808C] uppercase mt-0.5'>
-                      A Roadmap for Education
+                      {t('brand.tagline')}
                     </div>
                   </div>
                   <span className='w-1 h-1 rounded-full bg-gray-300 dark:bg-white/20' />
-                  <span className='text-xs font-semibold text-indigo-600 dark:text-[#A99DFF] hidden sm:inline'>GPT-5 Powered</span>
+                  <span className='text-xs font-semibold text-indigo-600 dark:text-[#A99DFF] hidden sm:inline'>
+                    {t('home.poweredBy')}
+                  </span>
                 </div>
               </Floating3D>
             </div>
@@ -230,14 +151,13 @@ export default function HomePage() {
             {/* Tiêu đề chính Hero */}
             <ScrollPerspective3D rotateXAmount={4}>
               <h1 className='text-4xl sm:text-6xl font-bold text-gray-900 dark:text-[#ECE9E4] tracking-tight leading-[1.12] sm:leading-[1.1] max-w-4xl mx-auto'>
-                Your AI career mentor,
+                {t('home.hero.title1')}
                 <br />
-                for every CS student.
+                {t('home.hero.title2')}
               </h1>
 
               <p className='mt-5 sm:mt-6 text-base sm:text-lg text-gray-500 dark:text-[#B5B1BA] max-w-2xl mx-auto leading-relaxed'>
-                Upload your transcript, GitHub and CV. EduMap AI maps your skills, spots the gaps, and builds the
-                roadmap to your dream role.
+                {t('home.hero.desc')}
               </p>
             </ScrollPerspective3D>
 
@@ -248,7 +168,7 @@ export default function HomePage() {
                 onClick={() => navigate('/register')}
                 className='w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:scale-[0.98] text-white font-medium px-6 py-3 text-[15px] transition-all shadow-md hover:shadow-indigo-600/25 cursor-pointer'
               >
-                <span>Get started</span>
+                <span>{t('common.getStarted')}</span>
                 <ArrowRight className='w-4 h-4' />
               </button>
               <button
@@ -260,12 +180,12 @@ export default function HomePage() {
                 className='w-full sm:w-auto flex items-center justify-center gap-2 text-gray-900 dark:text-[#ECE9E4] font-medium px-4 py-3 text-[15px] hover:text-gray-600 dark:hover:text-white active:scale-[0.98] transition cursor-pointer'
               >
                 <Play className='w-4 h-4 text-indigo-600 dark:text-[#A99DFF]' />
-                <span>Watch demo</span>
+                <span>{t('home.hero.watchDemo')}</span>
               </button>
             </div>
 
             <p className='mt-4 text-xs sm:text-sm text-gray-400 dark:text-[#85808C] relative z-10'>
-              Free for students · No credit card required
+              {t('home.hero.freeNote')}
             </p>
 
             {/* ================= DASHBOARD PREVIEW 3D TILT CARD ================= */}
@@ -305,11 +225,15 @@ export default function HomePage() {
                 <MotionStaggerContainer className='grid grid-cols-2 sm:grid-cols-4 border-t border-gray-200 dark:border-white/10 bg-white dark:bg-[#1A191C]'>
                   {BOTTOM_STATS.map((stat, i) => (
                     <MotionStaggerItem
-                      key={stat.label}
+                      key={stat.labelKey}
                       className={`px-4 sm:px-6 py-5 sm:py-6 text-center ${i > 0 ? 'border-l border-gray-200 dark:border-white/10' : ''}`}
                     >
-                      <div className='text-2xl sm:text-3xl font-bold text-gray-900 dark:text-[#ECE9E4]'>{stat.value}</div>
-                      <div className='text-xs sm:text-sm text-gray-500 dark:text-[#A29FA8] mt-1'>{stat.label}</div>
+                      <div className='text-2xl sm:text-3xl font-bold text-gray-900 dark:text-[#ECE9E4]'>
+                        {stat.value}
+                      </div>
+                      <div className='text-xs sm:text-sm text-gray-500 dark:text-[#A29FA8] mt-1'>
+                        {t(stat.labelKey)}
+                      </div>
                     </MotionStaggerItem>
                   ))}
                 </MotionStaggerContainer>
@@ -339,12 +263,14 @@ export default function HomePage() {
           <div className='max-w-5xl mx-auto px-4 sm:px-6'>
             <div className='flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 sm:mb-12'>
               <div>
-                <p className='text-xs sm:text-sm text-gray-500 dark:text-[#A29FA8] uppercase tracking-wider font-semibold'>Features</p>
+                <p className='text-xs sm:text-sm text-gray-500 dark:text-[#A29FA8] uppercase tracking-wider font-semibold'>
+                  {t('home.features.label')}
+                </p>
                 <h2 className='mt-2 text-3xl sm:text-4xl font-bold text-gray-900 dark:text-[#ECE9E4] tracking-tight'>
-                  Everything you need to land the role.
+                  {t('home.features.title')}
                 </h2>
                 <p className='mt-2 text-gray-500 dark:text-[#B5B1BA] text-sm sm:text-[15px]'>
-                  A complete AI career stack, designed for CS students who don't have time to waste.
+                  {t('home.features.subtitle')}
                 </p>
               </div>
 
@@ -360,7 +286,7 @@ export default function HomePage() {
                   }`}
                 >
                   <Layers className='w-3.5 h-3.5' />
-                  <span>3D Swipe</span>
+                  <span>{t('home.features.swipe')}</span>
                 </button>
                 <button
                   type='button'
@@ -372,7 +298,7 @@ export default function HomePage() {
                   }`}
                 >
                   <LayoutGrid className='w-3.5 h-3.5' />
-                  <span>Grid</span>
+                  <span>{t('home.features.grid')}</span>
                 </button>
               </div>
             </div>
@@ -381,10 +307,10 @@ export default function HomePage() {
             {featureViewMode === 'coverflow' ? (
               <div>
                 <p className='text-center text-xs text-gray-400 dark:text-[#85808C] mb-2'>
-                  ← Kéo hoặc vuốt ngang để xem tính năng với góc nhìn 3D →
+                  {t('home.features.swipeHint')}
                 </p>
                 <Coverflow3D
-                  items={FEATURES.map((feature) => {
+                  items={features.map((feature) => {
                     const Icon = feature.icon
                     return (
                       <div
@@ -395,11 +321,15 @@ export default function HomePage() {
                           <div className='w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-800/40 flex items-center justify-center text-indigo-600 dark:text-[#A99DFF] mb-4'>
                             <Icon className='w-5 h-5' />
                           </div>
-                          <h3 className='font-bold text-gray-900 dark:text-[#ECE9E4] text-lg sm:text-xl'>{feature.title}</h3>
-                          <p className='mt-2.5 text-sm text-gray-500 dark:text-[#B5B1BA] leading-relaxed'>{feature.description}</p>
+                          <h3 className='font-bold text-gray-900 dark:text-[#ECE9E4] text-lg sm:text-xl'>
+                            {feature.title}
+                          </h3>
+                          <p className='mt-2.5 text-sm text-gray-500 dark:text-[#B5B1BA] leading-relaxed'>
+                            {feature.description}
+                          </p>
                         </div>
                         <div className='text-xs font-semibold text-indigo-600 dark:text-[#A99DFF] flex items-center gap-1'>
-                          <span>Explore feature</span>
+                          <span>{t('home.features.explore')}</span>
                           <ArrowRight className='w-3.5 h-3.5' />
                         </div>
                       </div>
@@ -410,7 +340,7 @@ export default function HomePage() {
             ) : (
               /* Chế độ 2: Hạng mục 2: Tilt Card cho các card đang có */
               <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5'>
-                {FEATURES.map((feature) => {
+                {features.map((feature) => {
                   const Icon = feature.icon
                   return (
                     <Card3D
@@ -422,8 +352,12 @@ export default function HomePage() {
                       <div className='w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-800/40 flex items-center justify-center text-indigo-600 dark:text-[#A99DFF] mb-4'>
                         <Icon className='w-5 h-5' />
                       </div>
-                      <h3 className='font-semibold text-gray-900 dark:text-[#ECE9E4] text-base sm:text-lg'>{feature.title}</h3>
-                      <p className='mt-2 text-xs sm:text-[15px] text-gray-500 dark:text-[#B5B1BA] leading-relaxed'>{feature.description}</p>
+                      <h3 className='font-semibold text-gray-900 dark:text-[#ECE9E4] text-base sm:text-lg'>
+                        {feature.title}
+                      </h3>
+                      <p className='mt-2 text-xs sm:text-[15px] text-gray-500 dark:text-[#B5B1BA] leading-relaxed'>
+                        {feature.description}
+                      </p>
                     </Card3D>
                   )
                 })}
@@ -437,22 +371,26 @@ export default function HomePage() {
           <div className='max-w-5xl mx-auto px-4 sm:px-6'>
             <ScrollPerspective3D>
               <div className='text-center max-w-xl mx-auto mb-8'>
-                <p className='text-xs sm:text-sm text-gray-500 dark:text-[#A29FA8] uppercase tracking-wider font-semibold'>Customers</p>
+                <p className='text-xs sm:text-sm text-gray-500 dark:text-[#A29FA8] uppercase tracking-wider font-semibold'>
+                  {t('home.testimonials.label')}
+                </p>
                 <h2 className='mt-2 text-3xl sm:text-4xl font-bold text-gray-900 dark:text-[#ECE9E4] tracking-tight'>
-                  From classroom to FAANG.
+                  {t('home.testimonials.title')}
                 </h2>
-                <p className='mt-2 text-xs text-gray-400 dark:text-[#85808C]'>Vuốt ngang để xem phản hồi thực tế từ các học viên</p>
+                <p className='mt-2 text-xs text-gray-400 dark:text-[#85808C]'>{t('home.testimonials.hint')}</p>
               </div>
             </ScrollPerspective3D>
 
             {/* 3D Coverflow cho Testimonials */}
             <Coverflow3D
-              items={TESTIMONIALS.map((t) => (
+              items={testimonials.map((t) => (
                 <div
                   key={t.name}
                   className='bg-[#FAFAF9] dark:bg-[#232227] border border-gray-200 dark:border-white/10 rounded-2xl p-7 sm:p-8 flex flex-col justify-between h-[250px] transition-colors'
                 >
-                  <p className='text-sm sm:text-[15px] text-gray-700 dark:text-[#ECE9E4] leading-relaxed italic'>"{t.quote}"</p>
+                  <p className='text-sm sm:text-[15px] text-gray-700 dark:text-[#ECE9E4] leading-relaxed italic'>
+                    "{t.quote}"
+                  </p>
                   <div className='mt-4 pt-4 border-t border-gray-200/80 dark:border-white/10 flex items-center gap-3'>
                     <div
                       className={`w-10 h-10 rounded-full flex items-center justify-center text-xs font-semibold ${t.avatarColor}`}
@@ -477,104 +415,131 @@ export default function HomePage() {
         <section id='pricing' className='py-16 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto relative z-10'>
           <ScrollPerspective3D>
             <div className='text-center max-w-xl mx-auto mb-10 sm:mb-14'>
-              <p className='text-xs sm:text-sm text-gray-500 dark:text-[#A29FA8] uppercase tracking-wider font-semibold'>Pricing</p>
+              <p className='text-xs sm:text-sm text-gray-500 dark:text-[#A29FA8] uppercase tracking-wider font-semibold'>
+                {t('home.plans.label')}
+              </p>
               <h2 className='mt-2 text-3xl sm:text-4xl font-bold text-gray-900 dark:text-[#ECE9E4] tracking-tight'>
-                Plans that grow with you.
+                {t('home.plans.title')}
               </h2>
             </div>
           </ScrollPerspective3D>
 
-          <div className='grid grid-cols-1 sm:grid-cols-3 gap-5 items-stretch'>
-            {PLANS.map((plan) => {
-              const isSelected = selectedPlan === plan.name
-              const isPro = plan.highlighted
+          {plansLoading ? (
+            <div className='grid grid-cols-1 sm:grid-cols-3 gap-5'>
+              {Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} className='h-[460px] rounded-2xl bg-gray-100 dark:bg-white/5 animate-pulse' />
+              ))}
+            </div>
+          ) : plansError || plans.length === 0 ? (
+            <p className='text-center text-sm text-red-500'>{t('billing.subscription.loadError')}</p>
+          ) : (
+            <div className='grid grid-cols-1 md:grid-cols-3 gap-5 items-stretch'>
+              {plans.map((plan) => {
+                const { amount, period } = formatPrice(plan)
+                const isPopular = plan.code === 'PRO_STUDENT'
+                const isSelected = selectedPlan === plan.id
+                const savingBadge = getYearlySavingBadge(plan, plans)
 
-              const cardElement = (
-                <Card3D
-                  maxTilt={6}
-                  scale={1.015}
-                  onClick={() => setSelectedPlan(plan.name)}
-                  className={`relative bg-white dark:bg-[#1A191C] rounded-2xl p-6 sm:p-7 border-2 cursor-pointer transition-all h-full flex flex-col justify-between ${
-                    isSelected
-                      ? 'border-indigo-600 dark:border-[#818CF8] shadow-xl'
-                      : 'border-gray-200 dark:border-white/10 hover:border-gray-300 dark:hover:border-white/20 shadow-xs'
-                  }`}
-                >
-                  <div>
-                    {plan.badge && (
-                      <span
-                        className={`absolute -top-3 ${
-                          plan.highlighted ? 'left-6 bg-indigo-600 text-white' : 'right-6 bg-gray-100 dark:bg-white/10 text-gray-700 dark:text-[#ECE9E4]'
-                        } text-xs font-medium px-3 py-1 rounded-full shadow-xs`}
-                      >
-                        {plan.badge}
-                      </span>
-                    )}
+                const cardElement = (
+                  <Card3D
+                    maxTilt={6}
+                    scale={1.015}
+                    onClick={() => setSelectedPlan(plan.id)}
+                    className={`relative bg-white dark:bg-[#1A191C] rounded-2xl p-6 border-2 cursor-pointer transition-all h-full flex flex-col justify-between ${
+                      isSelected
+                        ? 'border-indigo-600 dark:border-[#818CF8] shadow-xl'
+                        : 'border-gray-200 dark:border-white/10 hover:border-gray-300 dark:hover:border-white/20 shadow-xs'
+                    }`}
+                  >
+                    <div>
+                      <div className='mb-3 flex h-6 items-center justify-between'>
+                        {isPopular ? (
+                          <span className='bg-indigo-600 text-white text-[11px] font-medium px-3 py-1 rounded-full'>
+                            {t('billing.subscription.mostPopular')}
+                          </span>
+                        ) : (
+                          <span />
+                        )}
+                        {savingBadge && (
+                          <span className='bg-amber-100 dark:bg-amber-500/15 text-amber-700 dark:text-amber-300 text-[11px] font-medium px-3 py-1 rounded-full'>
+                            {savingBadge}
+                          </span>
+                        )}
+                      </div>
 
-                    <h3 className='font-semibold text-gray-900 dark:text-[#ECE9E4] text-base sm:text-lg'>{plan.name}</h3>
-                    <p className='mt-1 text-xs sm:text-sm text-gray-500 dark:text-[#B5B1BA] min-h-[36px]'>{plan.tagline}</p>
+                      <h3 className='text-[17px] font-semibold text-gray-900 dark:text-[#ECE9E4]'>
+                        {getPlanName(plan.code, plan.name)}
+                      </h3>
+                      <p className='mt-1 text-sm text-gray-500 dark:text-[#A29FA8] leading-5 min-h-[40px]'>
+                        {getPlanDescription(plan.code, plan.description)}
+                      </p>
 
-                    <div className='mt-5 flex items-baseline gap-1.5'>
-                      <span className='text-3xl sm:text-4xl font-bold text-gray-900 dark:text-[#ECE9E4]'>{plan.price}</span>
-                      <span className='text-gray-500 dark:text-[#A29FA8] text-xs sm:text-sm'>{plan.period}</span>
-                      {plan.originalPrice && (
-                        <span className='text-gray-400 dark:text-[#5E5A64] text-xs sm:text-sm line-through ml-1'>{plan.originalPrice}</span>
-                      )}
+                      <div className='mt-4 flex items-baseline gap-1'>
+                        <span className='text-3xl font-bold text-gray-900 dark:text-[#ECE9E4]'>{amount}</span>
+                        <span className='text-sm text-gray-400 dark:text-[#A29FA8]'>{period}</span>
+                      </div>
                     </div>
-                  </div>
 
-                  <div>
-                    <button
-                      type='button'
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        navigate('/register')
-                      }}
-                      className={`mt-6 w-full rounded-xl py-2.5 text-xs sm:text-[15px] font-medium transition cursor-pointer ${
-                        plan.highlighted
-                          ? 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs'
-                          : 'border border-gray-200 dark:border-white/10 text-gray-900 dark:text-[#ECE9E4] hover:bg-gray-50 dark:hover:bg-white/5'
-                      }`}
-                    >
-                      {plan.cta}
-                    </button>
+                    <div>
+                      <button
+                        type='button'
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          navigate('/register')
+                        }}
+                        className={`mt-5 w-full rounded-xl py-2.5 text-sm font-medium transition cursor-pointer ${
+                          isPopular
+                            ? 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs'
+                            : 'border border-gray-200 dark:border-white/10 text-gray-900 dark:text-[#ECE9E4] hover:bg-gray-50 dark:hover:bg-white/5'
+                        }`}
+                      >
+                        {plan.priceVnd === 0 ? t('common.getStarted') : t('billing.subscription.upgrade')}
+                      </button>
 
-                    <ul className='mt-6 space-y-3'>
-                      {plan.features.map((feature) => (
-                        <li key={feature} className='flex items-start gap-2 text-xs sm:text-[15px] text-gray-600 dark:text-[#B5B1BA]'>
-                          <Check className='w-4 h-4 text-gray-900 dark:text-[#ECE9E4] mt-0.5 shrink-0' />
-                          <span>{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </Card3D>
-              )
-
-              if (isPro) {
-                return (
-                  <GradientBorderCard key={plan.name} rounded='rounded-2xl'>
-                    {cardElement}
-                  </GradientBorderCard>
+                      <ul className='mt-5 space-y-2.5'>
+                        {getCardHighlights(plan).map((label) => (
+                          <li key={label} className='flex items-center gap-2 text-sm text-gray-600 dark:text-[#ECE9E4]'>
+                            <Check className='w-4 h-4 text-indigo-600 dark:text-[#A99DFF] shrink-0' />
+                            {label}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </Card3D>
                 )
-              }
 
-              return <div key={plan.name}>{cardElement}</div>
-            })}
-          </div>
+                if (isPopular) {
+                  return (
+                    <GradientBorderCard key={plan.id} rounded='rounded-2xl'>
+                      {cardElement}
+                    </GradientBorderCard>
+                  )
+                }
+                return (
+                  <div key={plan.id} className='h-full'>
+                    {cardElement}
+                  </div>
+                )
+              })}
+            </div>
+          )}
         </section>
 
         {/* ================= FAQ + CLOSING CTA ================= */}
         <section id='faq' className='py-16 sm:py-24 px-4 sm:px-6 max-w-3xl mx-auto relative z-10'>
           <ScrollPerspective3D>
             <div className='text-center mb-10'>
-              <p className='text-xs sm:text-sm text-gray-500 dark:text-[#A29FA8] uppercase tracking-wider font-semibold'>FAQ</p>
-              <h2 className='mt-2 text-3xl sm:text-4xl font-bold text-gray-900 dark:text-[#ECE9E4] tracking-tight'>Questions, answered.</h2>
+              <p className='text-xs sm:text-sm text-gray-500 dark:text-[#A29FA8] uppercase tracking-wider font-semibold'>
+                {t('home.faq.label')}
+              </p>
+              <h2 className='mt-2 text-3xl sm:text-4xl font-bold text-gray-900 dark:text-[#ECE9E4] tracking-tight'>
+                {t('home.faq.title')}
+              </h2>
             </div>
           </ScrollPerspective3D>
 
           <div className='border-t border-gray-200 dark:border-white/10'>
-            {FAQS.map((item, i) => {
+            {faqs.map((item, i) => {
               const isOpen = openFaq === i
               return (
                 <div key={item.question} className='border-b border-gray-200 dark:border-white/10'>
@@ -584,7 +549,9 @@ export default function HomePage() {
                     className='w-full flex items-center justify-between py-5 text-left cursor-pointer'
                     aria-expanded={isOpen}
                   >
-                    <span className='text-sm sm:text-[15px] font-medium text-gray-900 dark:text-[#ECE9E4]'>{item.question}</span>
+                    <span className='text-sm sm:text-[15px] font-medium text-gray-900 dark:text-[#ECE9E4]'>
+                      {item.question}
+                    </span>
                     <ChevronDown
                       className={`w-4 h-4 text-gray-400 dark:text-[#85808C] transition-transform duration-200 ${
                         isOpen ? 'rotate-180 text-indigo-600 dark:text-[#A99DFF]' : ''
@@ -592,7 +559,9 @@ export default function HomePage() {
                     />
                   </button>
                   {isOpen && (
-                    <p className='pb-5 text-xs sm:text-[15px] text-gray-500 dark:text-[#B5B1BA] leading-relaxed pr-8'>{item.answer}</p>
+                    <p className='pb-5 text-xs sm:text-[15px] text-gray-500 dark:text-[#B5B1BA] leading-relaxed pr-8'>
+                      {item.answer}
+                    </p>
                   )}
                 </div>
               )
@@ -615,17 +584,17 @@ export default function HomePage() {
                 </Floating3D>
 
                 <h3 className='text-2xl sm:text-3xl font-bold text-gray-900 dark:text-[#ECE9E4] tracking-tight'>
-                  Ready to map your career?
+                  {t('home.cta.title')}
                 </h3>
                 <p className='mt-3 text-gray-500 dark:text-[#B5B1BA] text-sm sm:text-[15px] max-w-md mx-auto'>
-                  Join 120,000+ students building the career they actually want — in half the time.
+                  {t('home.cta.desc')}
                 </p>
                 <button
                   type='button'
                   onClick={() => navigate('/register')}
                   className='mt-7 inline-flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:scale-[0.98] text-white font-medium px-6 py-3 text-[15px] transition shadow-md hover:shadow-indigo-600/25 cursor-pointer'
                 >
-                  <span>Get started</span>
+                  <span>{t('common.getStarted')}</span>
                   <ArrowRight className='w-4 h-4' />
                 </button>
               </Card3D>

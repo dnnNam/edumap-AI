@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next'
+import { getLocale } from '../../utils/locale'
 import {
   ArrowDown,
   ArrowUp,
@@ -25,14 +27,14 @@ const ALL = '__ALL__'
 type SortKey = 'title' | 'skill' | 'resourceType' | 'cost' | 'rating' | 'durationHours' | 'createdAt'
 type SortDir = 'asc' | 'desc'
 
-const COLUMNS: { key: SortKey; label: string }[] = [
-  { key: 'title', label: 'Tài nguyên' },
-  { key: 'skill', label: 'Kỹ năng' },
-  { key: 'resourceType', label: 'Loại' },
-  { key: 'cost', label: 'Chi phí' },
-  { key: 'rating', label: 'Đánh giá' },
-  { key: 'durationHours', label: 'Thời lượng' },
-  { key: 'createdAt', label: 'Ngày tạo' },
+const COLUMNS: { key: SortKey; labelKey: string }[] = [
+  { key: 'title', labelKey: 'admin.resources.cols.title' },
+  { key: 'skill', labelKey: 'admin.resources.cols.skill' },
+  { key: 'resourceType', labelKey: 'admin.resources.cols.type' },
+  { key: 'cost', labelKey: 'admin.resources.cols.cost' },
+  { key: 'rating', labelKey: 'admin.resources.cols.rating' },
+  { key: 'durationHours', labelKey: 'admin.resources.cols.duration' },
+  { key: 'createdAt', labelKey: 'admin.resources.cols.created' },
 ]
 
 const TYPE_STYLE: Record<string, string> = {
@@ -43,7 +45,7 @@ const TYPE_STYLE: Record<string, string> = {
 }
 
 const formatDate = (iso: string) =>
-  new Date(iso).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })
+  new Date(iso).toLocaleDateString(getLocale(), { day: '2-digit', month: '2-digit', year: 'numeric' })
 
 const sortValue = (r: SkillResource, key: SortKey): string | number =>
   key === 'skill' ? (r.skill?.name ?? '') : (r[key] as string | number)
@@ -56,6 +58,7 @@ function compare(a: SkillResource, b: SkillResource, key: SortKey) {
 }
 
 export default function AdminResourcesPage() {
+  const { t } = useTranslation()
   const { data: response, isLoading, isError, isFetching, refetch } = useTopSkillResourcesQuery(TOP_LIMIT)
   const resources = useMemo(() => response?.data?.data ?? [], [response])
 
@@ -112,9 +115,9 @@ export default function AdminResourcesPage() {
         {/* Header */}
         <div className='flex items-end justify-between gap-4 flex-wrap'>
           <div>
-            <h1 className='text-[28px] font-bold text-gray-900 dark:text-[#ECE9E4]'>Resources</h1>
+            <h1 className='text-[28px] font-bold text-gray-900 dark:text-[#ECE9E4]'>{t('nav.resources')}</h1>
             <p className='mt-1 text-gray-500 dark:text-[#A29FA8] text-[15px]'>
-              Top {TOP_LIMIT} tài nguyên được đánh giá cao nhất trên hệ thống.
+              {t('admin.resources.desc', { limit: TOP_LIMIT })}
             </p>
           </div>
           <div className='flex items-center gap-3'>
@@ -125,7 +128,7 @@ export default function AdminResourcesPage() {
               className='inline-flex items-center gap-2 rounded-xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#232227] text-gray-900 dark:text-[#ECE9E4] text-sm font-medium px-4 py-2 hover:bg-gray-50 dark:hover:bg-white/5 disabled:opacity-60 transition cursor-pointer'
             >
               <RefreshCw className={`w-4 h-4 ${isFetching ? 'animate-spin' : ''}`} />
-              Refresh
+              {t('common.refresh')}
             </button>
             <button
               type='button'
@@ -133,7 +136,7 @@ export default function AdminResourcesPage() {
               className='inline-flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 transition cursor-pointer shadow-xs'
             >
               <Plus className='w-4 h-4' />
-              Thêm tài nguyên
+              {t('admin.resources.add')}
             </button>
           </div>
         </div>
@@ -141,11 +144,14 @@ export default function AdminResourcesPage() {
         {/* Stats */}
         <div className='mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4'>
           {[
-            { label: 'Tổng tài nguyên', value: resources.length },
-            { label: 'Miễn phí', value: freeCount },
-            { label: 'Đánh giá trung bình', value: avgRating },
+            { label: t('admin.resources.total'), value: resources.length },
+            { label: t('admin.resources.free'), value: freeCount },
+            { label: t('admin.resources.avgRating'), value: avgRating },
           ].map((s) => (
-            <div key={s.label} className='rounded-xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#1A191C] p-4 transition-colors'>
+            <div
+              key={s.label}
+              className='rounded-xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#1A191C] p-4 transition-colors'
+            >
               <p className='text-xs text-gray-500 dark:text-[#A29FA8]'>{s.label}</p>
               <p className='mt-1 text-2xl font-semibold text-gray-900 dark:text-[#ECE9E4]'>
                 {isLoading ? <Skeleton width={48} /> : s.value}
@@ -165,7 +171,7 @@ export default function AdminResourcesPage() {
                 setKeyword(e.target.value)
                 setPage(1)
               }}
-              placeholder='Tìm theo tiêu đề hoặc kỹ năng...'
+              placeholder={t('admin.resources.search')}
               className='bg-transparent outline-none text-sm text-gray-700 dark:text-[#ECE9E4] placeholder:text-gray-400 dark:placeholder:text-[#A29FA8]/60 w-full'
             />
           </div>
@@ -177,10 +183,10 @@ export default function AdminResourcesPage() {
             }}
             className={selectClass}
           >
-            <option value={ALL}>Tất cả loại</option>
-            {Object.keys(TYPE_STYLE).map((t) => (
-              <option key={t} value={t}>
-                {getResourceTypeLabel(t)}
+            <option value={ALL}>{t('admin.resources.allTypes')}</option>
+            {Object.keys(TYPE_STYLE).map((type) => (
+              <option key={type} value={type}>
+                {getResourceTypeLabel(type)}
               </option>
             ))}
           </select>
@@ -190,13 +196,15 @@ export default function AdminResourcesPage() {
         <div className='mt-5 bg-white dark:bg-[#1A191C] border border-gray-200 dark:border-white/[0.08] rounded-2xl overflow-hidden transition-colors'>
           {isError && !resources.length ? (
             <div className='p-10 text-center'>
-              <p className='text-[15px] font-medium text-gray-900 dark:text-[#ECE9E4]'>Không tải được danh sách tài nguyên.</p>
+              <p className='text-[15px] font-medium text-gray-900 dark:text-[#ECE9E4]'>
+                {t('admin.resources.loadError')}
+              </p>
               <button
                 type='button'
                 onClick={() => refetch()}
                 className='mt-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 transition cursor-pointer shadow-xs'
               >
-                Thử lại
+                {t('common.retry')}
               </button>
             </div>
           ) : (
@@ -207,13 +215,16 @@ export default function AdminResourcesPage() {
                     {COLUMNS.map((col) => {
                       const active = sortKey === col.key
                       return (
-                        <th key={col.key} className='text-left font-medium text-gray-500 dark:text-[#A29FA8] px-4 py-3 whitespace-nowrap'>
+                        <th
+                          key={col.key}
+                          className='text-left font-medium text-gray-500 dark:text-[#A29FA8] px-4 py-3 whitespace-nowrap'
+                        >
                           <button
                             type='button'
                             onClick={() => handleSort(col.key)}
                             className={`inline-flex items-center gap-1 hover:text-gray-900 dark:hover:text-[#ECE9E4] transition cursor-pointer ${active ? 'text-gray-900 dark:text-[#ECE9E4]' : ''}`}
                           >
-                            {col.label}
+                            {t(col.labelKey)}
                             {active &&
                               (sortDir === 'asc' ? (
                                 <ArrowUp className='w-3.5 h-3.5' />
@@ -243,8 +254,11 @@ export default function AdminResourcesPage() {
                     ))
                   ) : pageItems.length === 0 ? (
                     <tr>
-                      <td colSpan={COLUMNS.length + 1} className='px-4 py-12 text-center text-gray-500 dark:text-[#A29FA8]'>
-                        Không có tài nguyên nào khớp bộ lọc.
+                      <td
+                        colSpan={COLUMNS.length + 1}
+                        className='px-4 py-12 text-center text-gray-500 dark:text-[#A29FA8]'
+                      >
+                        {t('admin.resources.empty')}
                       </td>
                     </tr>
                   ) : (
@@ -274,15 +288,19 @@ export default function AdminResourcesPage() {
                             {r.rating.toFixed(1)}
                           </span>
                         </td>
-                        <td className='px-4 py-3 text-gray-600 dark:text-[#ECE9E4]/80 tabular-nums'>{r.durationHours}h</td>
-                        <td className='px-4 py-3 text-gray-500 dark:text-[#A29FA8] whitespace-nowrap'>{formatDate(r.createdAt)}</td>
+                        <td className='px-4 py-3 text-gray-600 dark:text-[#ECE9E4]/80 tabular-nums'>
+                          {r.durationHours}h
+                        </td>
+                        <td className='px-4 py-3 text-gray-500 dark:text-[#A29FA8] whitespace-nowrap'>
+                          {formatDate(r.createdAt)}
+                        </td>
                         <td className='px-4 py-3 text-right'>
                           <div className='flex items-center justify-end gap-1'>
                             <a
                               href={r.url}
                               target='_blank'
                               rel='noreferrer'
-                              aria-label={`Mở ${r.title}`}
+                              aria-label={t('admin.resources.openAria', { title: r.title })}
                               className='inline-flex p-1.5 rounded-lg text-gray-500 dark:text-[#A29FA8] hover:text-gray-900 dark:hover:text-[#ECE9E4] hover:bg-gray-100 dark:hover:bg-white/10 transition'
                             >
                               <ExternalLink className='w-4 h-4' />
@@ -290,7 +308,7 @@ export default function AdminResourcesPage() {
                             <button
                               type='button'
                               onClick={() => setDeleteTarget(r)}
-                              aria-label={`Xóa ${r.title}`}
+                              aria-label={t('admin.resources.deleteAria', { title: r.title })}
                               className='p-1.5 rounded-lg text-gray-500 dark:text-[#A29FA8] hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition cursor-pointer'
                             >
                               <Trash2 className='w-4 h-4' />
@@ -309,15 +327,18 @@ export default function AdminResourcesPage() {
           {!isLoading && filtered.length > 0 && (
             <div className='flex items-center justify-between gap-4 border-t border-gray-200 dark:border-white/[0.08] px-4 py-3 text-sm text-gray-500 dark:text-[#A29FA8] transition-colors'>
               <span>
-                {(currentPage - 1) * PAGE_SIZE + 1}–{Math.min(currentPage * PAGE_SIZE, filtered.length)} of{' '}
-                {filtered.length}
+                {t('common.range', {
+                  from: (currentPage - 1) * PAGE_SIZE + 1,
+                  to: Math.min(currentPage * PAGE_SIZE, filtered.length),
+                  total: filtered.length,
+                })}
               </span>
               <div className='flex items-center gap-2'>
                 <button
                   type='button'
                   onClick={() => setPage(currentPage - 1)}
                   disabled={currentPage === 1}
-                  aria-label='Previous page'
+                  aria-label={t('common.previousPage')}
                   className='p-1.5 rounded-lg border border-gray-200 dark:border-white/[0.08] hover:bg-gray-50 dark:hover:bg-white/5 disabled:opacity-40 disabled:hover:bg-transparent transition cursor-pointer'
                 >
                   <ChevronLeft className='w-4 h-4' />
@@ -329,7 +350,7 @@ export default function AdminResourcesPage() {
                   type='button'
                   onClick={() => setPage(currentPage + 1)}
                   disabled={currentPage === totalPages}
-                  aria-label='Next page'
+                  aria-label={t('common.nextPage')}
                   className='p-1.5 rounded-lg border border-gray-200 dark:border-white/[0.08] hover:bg-gray-50 dark:hover:bg-white/5 disabled:opacity-40 disabled:hover:bg-transparent transition cursor-pointer'
                 >
                   <ChevronRight className='w-4 h-4' />
@@ -348,12 +369,18 @@ export default function AdminResourcesPage() {
             onClick={() => !deleting && setDeleteTarget(null)}
             aria-hidden='true'
           />
-          <div role='dialog' aria-modal='true' className='relative w-full max-w-sm rounded-2xl bg-white dark:bg-[#1A191C] border border-transparent dark:border-white/[0.08] shadow-xl transition-colors'>
+          <div
+            role='dialog'
+            aria-modal='true'
+            className='relative w-full max-w-sm rounded-2xl bg-white dark:bg-[#1A191C] border border-transparent dark:border-white/[0.08] shadow-xl transition-colors'
+          >
             <div className='px-6 py-4'>
-              <h3 className='text-[17px] font-semibold text-gray-900 dark:text-[#ECE9E4]'>Xóa tài nguyên?</h3>
+              <h3 className='text-[17px] font-semibold text-gray-900 dark:text-[#ECE9E4]'>
+                {t('admin.resources.deleteTitle')}
+              </h3>
               <p className='mt-2 text-sm text-gray-500 dark:text-[#A29FA8]'>
-                "<span className='font-medium text-gray-700 dark:text-[#ECE9E4]'>{cleanTitle(deleteTarget.title)}</span>" sẽ bị xóa vĩnh
-                viễn. Hành động này không thể hoàn tác.
+                "<span className='font-medium text-gray-700 dark:text-[#ECE9E4]'>{cleanTitle(deleteTarget.title)}</span>
+                " {t('admin.resources.deleteDesc')}
               </p>
             </div>
             <div className='flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-100 dark:border-white/[0.08] transition-colors'>
@@ -363,7 +390,7 @@ export default function AdminResourcesPage() {
                 disabled={deleting}
                 className='rounded-xl border border-gray-200 dark:border-white/[0.08] text-gray-900 dark:text-[#ECE9E4] text-sm font-medium px-4 py-2 hover:bg-gray-50 dark:hover:bg-white/5 disabled:opacity-60 transition cursor-pointer'
               >
-                Hủy
+                {t('common.cancel')}
               </button>
               <button
                 type='button'
@@ -372,7 +399,7 @@ export default function AdminResourcesPage() {
                 className='inline-flex items-center gap-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-sm font-medium px-4 py-2 disabled:opacity-60 transition cursor-pointer shadow-xs'
               >
                 {deleting && <Loader2 className='w-4 h-4 animate-spin' />}
-                {deleting ? 'Đang xóa...' : 'Xóa'}
+                {deleting ? t('common.deleting') : t('common.delete')}
               </button>
             </div>
           </div>

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { BookOpen, ChevronDown, FileText, Layers, Loader2, Plus, Sparkles, Trash2 } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -19,16 +20,22 @@ import SectionHeader from '../../components/layouts/uploadAndAnalyze/SectionHead
 
 interface ModeOption {
   key: AnalysisMode
-  title: string
-  description: string
+  titleKey: string
+  descKey: string
   icon: ElementType
   recommended?: boolean
 }
 
 const MODES: ModeOption[] = [
-  { key: 'ACADEMIC', title: 'Academic Only', description: 'Transcript & grades', icon: BookOpen },
-  { key: 'GITHUB', title: 'GitHub Only', description: 'Repos & activity', icon: FaGithub },
-  { key: 'HYBRID', title: 'Hybrid', description: 'Transcript + repos', icon: Layers, recommended: true },
+  { key: 'ACADEMIC', titleKey: 'upload.mode.ACADEMIC.title', descKey: 'upload.mode.ACADEMIC.desc', icon: BookOpen },
+  { key: 'GITHUB', titleKey: 'upload.mode.GITHUB.title', descKey: 'upload.mode.GITHUB.desc', icon: FaGithub },
+  {
+    key: 'HYBRID',
+    titleKey: 'upload.mode.HYBRID.title',
+    descKey: 'upload.mode.HYBRID.desc',
+    icon: Layers,
+    recommended: true,
+  },
 ]
 
 const TARGET_ROLES = [
@@ -75,6 +82,7 @@ function buildPayload(data: AnalyzeFormValues): GenerateSkillTreePayload {
 // ---------- page ----------
 
 export default function UploadPage() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
 
   const {
@@ -105,8 +113,9 @@ export default function UploadPage() {
   const listRef = useRef<HTMLDivElement>(null)
   const showAcademic = mode !== 'GITHUB'
   const showGithub = mode !== 'ACADEMIC'
-  const modeTitle = MODES.find((m) => m.key === mode)?.title ?? ''
-  const summary = showAcademic ? `${modeTitle} · ${fields.length} course${fields.length > 1 ? 's' : ''}` : modeTitle
+  const modeTitleKey = MODES.find((m) => m.key === mode)?.titleKey
+  const modeTitle = modeTitleKey ? t(modeTitleKey) : ''
+  const summary = showAcademic ? t('upload.summary', { mode: modeTitle, count: fields.length }) : modeTitle
 
   const { mutate: generateSkillTree, isPending } = useGenerateSkillTreeMutation()
 
@@ -147,7 +156,7 @@ export default function UploadPage() {
   const onSubmit = (data: AnalyzeFormValues) => {
     generateSkillTree(buildPayload(data), {
       onSuccess: () => {
-        toast.success('Phân tích hoàn tất!')
+        toast.success(t('upload.done'))
         navigate('/skill-tree')
       },
     })
@@ -157,14 +166,12 @@ export default function UploadPage() {
     <div className='h-full overflow-y-auto flex flex-col [scrollbar-gutter:stable]'>
       <div className='flex-1 w-full max-w-5xl mx-auto px-6 pt-6 pb-6'>
         {/* Page header */}
-        <h1 className='text-[28px] font-bold text-gray-900 dark:text-[#ECE9E4]'>Upload &amp; Analyze</h1>
-        <p className='mt-1 text-gray-500 dark:text-[#A29FA8] text-[15px]'>
-          Choose an analysis mode and give the AI everything it needs to build your career map.
-        </p>
+        <h1 className='text-[28px] font-bold text-gray-900 dark:text-[#ECE9E4]'>{t('upload.title')}</h1>
+        <p className='mt-1 text-gray-500 dark:text-[#A29FA8] text-[15px]'>{t('upload.subtitle')}</p>
 
         {/* Mode cards */}
         <div className='mt-6 grid grid-cols-1 md:grid-cols-3 gap-4'>
-          {MODES.map(({ key, title, description, icon: Icon, recommended }) => {
+          {MODES.map(({ key, titleKey, descKey, icon: Icon, recommended }) => {
             const isActive = mode === key
             return (
               <button
@@ -181,19 +188,21 @@ export default function UploadPage() {
                 <div className='flex items-start justify-between'>
                   <div
                     className={`w-9 h-9 rounded-lg flex items-center justify-center ${
-                      isActive ? 'bg-indigo-600 dark:bg-[#5F2CFF] text-white' : 'bg-gray-100 dark:bg-white/10 text-gray-700 dark:text-[#ECE9E4]'
+                      isActive
+                        ? 'bg-indigo-600 dark:bg-[#5F2CFF] text-white'
+                        : 'bg-gray-100 dark:bg-white/10 text-gray-700 dark:text-[#ECE9E4]'
                     }`}
                   >
                     <Icon className='w-4 h-4' />
                   </div>
                   {recommended && (
                     <span className='text-xs text-gray-700 dark:text-[#ECE9E4] bg-white dark:bg-[#232227] border border-gray-200 dark:border-white/[0.08] rounded-full px-2.5 py-1'>
-                      Recommended
+                      {t('upload.recommended')}
                     </span>
                   )}
                 </div>
-                <p className='mt-4 font-semibold text-gray-900 dark:text-[#ECE9E4]'>{title}</p>
-                <p className='mt-0.5 text-sm text-gray-500 dark:text-[#A29FA8]'>{description}</p>
+                <p className='mt-4 font-semibold text-gray-900 dark:text-[#ECE9E4]'>{t(titleKey)}</p>
+                <p className='mt-0.5 text-sm text-gray-500 dark:text-[#A29FA8]'>{t(descKey)}</p>
               </button>
             )
           })}
@@ -205,48 +214,48 @@ export default function UploadPage() {
             <div>
               <FormSelect
                 id='targetRole'
-                label='Target role'
+                label={t('upload.targetRole')}
                 options={TARGET_ROLES}
                 className='max-w-xs'
                 {...register('targetRole')}
               />
-              {errors.targetRole && <p className='text-sm text-red-500 mt-1'>{errors.targetRole.message}</p>}
+              {errors.targetRole && <p className='text-sm text-red-500 mt-1'>{t(errors.targetRole.message ?? '')}</p>}
             </div>
 
             {/* Academic transcript → academicForm */}
             {showAcademic && (
               <section className='mt-6 pt-6 border-t border-gray-100 dark:border-white/[0.06]'>
-                <SectionHeader icon={FileText} title='Academic transcript' tag='academicForm' />
+                <SectionHeader icon={FileText} title={t('upload.academic')} tag='academicForm' />
 
                 <div className='mt-4 grid grid-cols-1 sm:grid-cols-[1fr_260px] gap-x-4 gap-y-5'>
                   <div>
                     <FormInput
                       id='universityName'
-                      label='University name'
-                      placeholder='Đại học Bách Khoa'
+                      label={t('upload.universityName')}
+                      placeholder={t('upload.uniPlaceholder')}
                       {...register('universityName', { onChange: () => clearErrors('universityName') })}
                     />
                     {errors.universityName && (
-                      <p className='text-sm text-red-500 mt-1'>{errors.universityName.message}</p>
+                      <p className='text-sm text-red-500 mt-1'>{t(errors.universityName.message ?? '')}</p>
                     )}
                   </div>
                   <FormSelect
                     id='currentYear'
-                    label='Current year'
+                    label={t('upload.currentYear')}
                     options={YEAR_OPTIONS}
                     {...register('currentYear', { valueAsNumber: true })}
                   />
                 </div>
 
                 <div className='mt-6 flex items-center justify-between'>
-                  <p className='text-sm font-medium text-gray-800 dark:text-[#ECE9E4]'>Core courses &amp; grades</p>
+                  <p className='text-sm font-medium text-gray-800 dark:text-[#ECE9E4]'>{t('upload.coreCourses')}</p>
                   <button
                     type='button'
                     onClick={handleAddCourse}
                     className='flex items-center gap-1.5 rounded-lg border border-gray-200 dark:border-white/[0.08] text-gray-900 dark:text-[#ECE9E4] text-sm font-medium px-3.5 py-2 hover:bg-gray-50 dark:hover:bg-[#232227] transition-colors cursor-pointer'
                   >
                     <Plus className='w-4 h-4' />
-                    Add course
+                    {t('upload.addCourse')}
                   </button>
                 </div>
 
@@ -268,8 +277,8 @@ export default function UploadPage() {
                             <div className='flex items-center gap-3'>
                               <input
                                 type='text'
-                                aria-label={`Course ${index + 1} name`}
-                                placeholder='Cơ sở dữ liệu'
+                                aria-label={t('upload.courseName', { n: index + 1 })}
+                                placeholder={t('upload.coursePlaceholder')}
                                 className='flex-1 min-w-0 rounded-xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#232227] px-4 py-2.5 text-[15px] text-gray-900 dark:text-[#ECE9E4] placeholder-gray-400 dark:placeholder-gray-500 outline-none focus:border-indigo-500 dark:focus:border-[#5F2CFF] focus:ring-2 focus:ring-indigo-100 dark:focus:ring-[#5F2CFF]/20 transition'
                                 {...register(`coreCourses.${index}.courseName`, {
                                   onChange: () => clearErrors(`coreCourses.${index}.courseName`),
@@ -278,7 +287,7 @@ export default function UploadPage() {
 
                               <div className='relative w-24 shrink-0'>
                                 <select
-                                  aria-label={`Course ${index + 1} grade`}
+                                  aria-label={t('upload.courseGrade', { n: index + 1 })}
                                   className='w-full appearance-none rounded-xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#232227] pl-3.5 pr-9 py-2.5 text-[15px] text-gray-900 dark:text-[#ECE9E4] outline-none focus:border-indigo-500 dark:focus:border-[#5F2CFF] focus:ring-2 focus:ring-indigo-100 dark:focus:ring-[#5F2CFF]/20 transition'
                                   {...register(`coreCourses.${index}.grade`)}
                                 >
@@ -295,13 +304,13 @@ export default function UploadPage() {
                                 type='button'
                                 onClick={() => remove(index)}
                                 disabled={fields.length === 1}
-                                aria-label={`Remove course ${index + 1}`}
+                                aria-label={t('upload.removeCourse', { n: index + 1 })}
                                 className='w-9 h-9 shrink-0 flex items-center justify-center rounded-lg text-gray-400 dark:text-[#A29FA8] hover:text-red-500 hover:bg-gray-50 dark:hover:bg-white/10 disabled:opacity-40 disabled:hover:text-gray-400 disabled:hover:bg-transparent disabled:cursor-not-allowed transition-colors cursor-pointer'
                               >
                                 <Trash2 className='w-4 h-4' />
                               </button>
                             </div>
-                            {courseError && <p className='text-sm text-red-500 mt-1'>{courseError.message}</p>}
+                            {courseError && <p className='text-sm text-red-500 mt-1'>{t(courseError.message ?? '')}</p>}
                           </div>
                         </motion.div>
                       )
@@ -314,11 +323,14 @@ export default function UploadPage() {
             {/* GitHub profile → githubUsername */}
             {showGithub && (
               <section className='mt-6 pt-6 border-t border-gray-100 dark:border-white/[0.06]'>
-                <SectionHeader icon={FaGithub} title='GitHub profile' tag='githubUsername' />
+                <SectionHeader icon={FaGithub} title={t('upload.githubProfile')} tag='githubUsername' />
 
                 <div className='mt-4'>
-                  <label htmlFor='githubUsername' className='block text-sm font-medium text-gray-800 dark:text-[#ECE9E4] mb-1.5'>
-                    GitHub username
+                  <label
+                    htmlFor='githubUsername'
+                    className='block text-sm font-medium text-gray-800 dark:text-[#ECE9E4] mb-1.5'
+                  >
+                    {t('upload.githubUsername')}
                   </label>
                   <div className='flex items-center max-w-xs rounded-xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#232227] focus-within:border-indigo-500 dark:focus-within:border-[#5F2CFF] focus-within:ring-2 focus-within:ring-indigo-100 dark:focus-within:ring-[#5F2CFF]/20 transition'>
                     <span className='pl-4 text-[15px] text-gray-400 dark:text-[#A29FA8] select-none'>github.com/</span>
@@ -331,11 +343,9 @@ export default function UploadPage() {
                     />
                   </div>
                   {errors.githubUsername && (
-                    <p className='text-sm text-red-500 mt-1'>{errors.githubUsername.message}</p>
+                    <p className='text-sm text-red-500 mt-1'>{t(errors.githubUsername.message ?? '')}</p>
                   )}
-                  <p className='mt-2 text-xs text-gray-500 dark:text-[#A29FA8]'>
-                    We scan your top repos, languages and contribution activity.
-                  </p>
+                  <p className='mt-2 text-xs text-gray-500 dark:text-[#A29FA8]'>{t('upload.githubHint')}</p>
                 </div>
               </section>
             )}
@@ -355,7 +365,7 @@ export default function UploadPage() {
             className='shrink-0 flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 dark:bg-[#5F2CFF] dark:hover:bg-[#4B1FD6] disabled:opacity-70 text-white text-[15px] font-medium px-6 py-2.5 transition cursor-pointer'
           >
             {isPending ? <Loader2 className='w-4 h-4 animate-spin' /> : <Sparkles className='w-4 h-4' />}
-            {isPending ? 'Analyzing...' : 'Start AI analysis'}
+            {isPending ? t('upload.analyzing') : t('upload.start')}
           </button>
         </div>
       </div>
@@ -369,10 +379,10 @@ export default function UploadPage() {
         >
           <div className='w-full max-w-sm bg-white dark:bg-[#1A191C] border border-gray-200 dark:border-white/[0.08] rounded-2xl shadow-lg p-6 text-center'>
             <Loader2 className='w-6 h-6 mx-auto text-indigo-600 dark:text-[#5F2CFF] animate-spin' />
-            <p className='mt-4 text-[15px] font-semibold text-gray-900 dark:text-[#ECE9E4]'>AI đang phân tích hồ sơ của bạn</p>
-            <p className='mt-1.5 text-sm text-gray-500 dark:text-[#A29FA8]'>
-              Quá trình này có thể mất vài chục giây. Vui lòng không đóng trang.
+            <p className='mt-4 text-[15px] font-semibold text-gray-900 dark:text-[#ECE9E4]'>
+              {t('upload.overlayTitle')}
             </p>
+            <p className='mt-1.5 text-sm text-gray-500 dark:text-[#A29FA8]'>{t('upload.overlayDesc')}</p>
           </div>
         </div>
       )}

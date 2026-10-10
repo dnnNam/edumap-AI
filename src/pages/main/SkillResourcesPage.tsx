@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { ArrowLeft, BookOpen, ExternalLink, FlaskConical, Loader2, PlayCircle, Plus } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import Skeleton from 'react-loading-skeleton'
@@ -55,6 +56,7 @@ function Section({
 }
 
 export default function SkillResourcesPage() {
+  const { t } = useTranslation()
   const { skillId } = useParams<{ skillId: string }>()
   const navigate = useNavigate()
 
@@ -86,10 +88,10 @@ export default function SkillResourcesPage() {
           console.log(' After:', after, '| Total tăng:', after - before)
 
           if (after > before) {
-            toast.success(`Đã thêm ${after - before} tài nguyên mới!`)
+            toast.success(t('resources.skill.added', { count: after - before }))
           } else {
             console.log(' Hết dữ liệu hoặc chưa có thêm')
-            toast.info('Không tìm thấy thêm tài nguyên mới.')
+            toast.info(t('resources.skill.noMore'))
           }
         },
       },
@@ -105,18 +107,14 @@ export default function SkillResourcesPage() {
           className='mb-4 inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-[#A29FA8] hover:text-gray-900 dark:hover:text-[#ECE9E4] transition-colors cursor-pointer'
         >
           <ArrowLeft className='w-4 h-4' />
-          Quay lại
+          {t('common.back')}
         </button>
 
         <h1 className='text-3xl font-semibold text-gray-900 dark:text-[#ECE9E4]'>
-          {skillName ? `Tài nguyên học ${skillName}` : 'Tài nguyên học'}
+          {skillName ? t('resources.skill.title', { skill: skillName }) : t('resources.skill.titleDefault')}
         </h1>
         <p className='mt-2 text-gray-500 dark:text-[#A29FA8]'>
-          {isLoading
-            ? 'Đang tìm tài nguyên cho kỹ năng này, có thể mất vài giây...'
-            : isError
-              ? ''
-              : `${total} tài nguyên, được chia theo video, tài liệu và thực hành.`}
+          {isLoading ? t('resources.skill.loading') : isError ? '' : t('resources.skill.summary', { count: total })}
         </p>
 
         {isLoading ? (
@@ -127,39 +125,41 @@ export default function SkillResourcesPage() {
           </div>
         ) : isError || !grouped || !groups ? (
           <div className='mt-8 bg-white dark:bg-[#1A191C] border border-gray-200 dark:border-white/[0.08] rounded-2xl p-10 text-center'>
-            <p className='text-[15px] font-medium text-gray-900 dark:text-[#ECE9E4]'>Không tải được tài nguyên của kỹ năng này.</p>
+            <p className='text-[15px] font-medium text-gray-900 dark:text-[#ECE9E4]'>
+              {t('resources.skill.loadError')}
+            </p>
             <button
               type='button'
               onClick={() => refetch()}
               disabled={isFetching}
               className='mt-5 rounded-xl border border-gray-200 dark:border-white/[0.08] text-gray-900 dark:text-[#ECE9E4] text-sm font-medium px-4 py-2 hover:bg-gray-50 dark:hover:bg-[#232227] disabled:opacity-60 transition cursor-pointer'
             >
-              {isFetching ? 'Đang tải...' : 'Thử lại'}
+              {isFetching ? t('common.loading') : t('common.retry')}
             </button>
           </div>
         ) : (
           <>
             {total === 0 && (
               <p className='mt-10 py-10 text-center text-sm text-gray-500 dark:text-[#A29FA8]'>
-                Chưa có tài nguyên nào cho kỹ năng này. Bạn thử bấm "Tải thêm tài nguyên" hoặc các link bên dưới.
+                {t('resources.skill.empty')}
               </p>
             )}
 
             <Section
               icon={<PlayCircle className='w-4 h-4' />}
-              title='Video'
+              title={t('resources.skill.video')}
               items={groups.videos}
               skillName={skillName}
             />
             <Section
               icon={<BookOpen className='w-4 h-4' />}
-              title='Tài liệu & bài viết'
+              title={t('resources.skill.docs')}
               items={groups.documentations}
               skillName={skillName}
             />
             <Section
               icon={<FlaskConical className='w-4 h-4' />}
-              title='Thực hành'
+              title={t('resources.skill.practice')}
               items={groups.practices}
               skillName={skillName}
             />
@@ -173,16 +173,22 @@ export default function SkillResourcesPage() {
                 className='inline-flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 dark:bg-[#5F2CFF] dark:hover:bg-[#4B1FD6] disabled:opacity-70 disabled:cursor-not-allowed text-white text-sm font-medium px-5 py-2.5 transition cursor-pointer'
               >
                 {isFetchingMore ? <Loader2 className='w-4 h-4 animate-spin' /> : <Plus className='w-4 h-4' />}
-                {isFetchingMore ? 'Đang tìm thêm tài nguyên...' : 'Tải thêm tài nguyên'}
+                {isFetchingMore ? t('resources.skill.loadingMore') : t('resources.skill.loadMore')}
               </button>
-              {isFetchingMore && <p className='text-xs text-gray-500 dark:text-[#A29FA8]'>Có thể mất vài giây, bạn đợi chút nhé.</p>}
+              {isFetchingMore && (
+                <p className='text-xs text-gray-500 dark:text-[#A29FA8]'>{t('resources.skill.wait')}</p>
+              )}
             </div>
 
             {/* Link tìm kiếm mở rộng */}
             {externalLinks.length > 0 && (
               <MotionFadeIn className='mt-12 rounded-2xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#1A191C] p-6'>
-                <h2 className='text-[15px] font-semibold text-gray-900 dark:text-[#ECE9E4]'>Tìm thêm ở nơi khác</h2>
-                <p className='mt-1 text-sm text-gray-500 dark:text-[#A29FA8]'>Mở kết quả tìm kiếm {skillName} trên các nền tảng.</p>
+                <h2 className='text-[15px] font-semibold text-gray-900 dark:text-[#ECE9E4]'>
+                  {t('resources.skill.searchElsewhere')}
+                </h2>
+                <p className='mt-1 text-sm text-gray-500 dark:text-[#A29FA8]'>
+                  {t('resources.skill.searchElsewhereDesc', { skill: skillName })}
+                </p>
                 <div className='mt-4 flex flex-wrap gap-2.5'>
                   {externalLinks.map(([key, url]) => {
                     const favicon = getFaviconUrl(url)

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { useState, useEffect } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import StatCard from '../ui/StatCard'
@@ -12,6 +13,7 @@ interface LayeredStatDeckProps {
  * - Mobile: Thu gọn thành bố cục bình thường, không hiệu ứng tách tầng
  */
 export default function LayeredStatDeck({ className = '' }: LayeredStatDeckProps) {
+  const { t } = useTranslation()
   const [isHovered, setIsHovered] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
   const shouldReduceMotion = useReducedMotion()
@@ -26,9 +28,9 @@ export default function LayeredStatDeck({ className = '' }: LayeredStatDeckProps
   }, [])
 
   const stats = [
-    { value: '47/120', label: 'Skill Map' },
-    { value: '87', label: 'Career Score' },
-    { value: '94%', label: 'Job Match' },
+    { value: '47/120', label: t('home.deck.skillMap') },
+    { value: '87', label: t('home.deck.careerScore') },
+    { value: '94%', label: t('home.deck.jobMatch') },
   ]
 
   if (isMobile) {
@@ -57,7 +59,7 @@ export default function LayeredStatDeck({ className = '' }: LayeredStatDeckProps
                 ? {}
                 : {
                     rotateZ: isHovered ? 0 : (idx - 1) * 2.5,
-                    z: isHovered ? 26 : (idx === 1 ? 16 : 0),
+                    z: isHovered ? 26 : idx === 1 ? 16 : 0,
                     scale: isHovered ? 1.02 : 1,
                   }
             }
@@ -78,4 +80,3 @@ export default function LayeredStatDeck({ className = '' }: LayeredStatDeckProps
     </div>
   )
 }
-

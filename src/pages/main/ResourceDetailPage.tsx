@@ -1,9 +1,11 @@
+import { useTranslation } from 'react-i18next'
 import { ArrowLeft, ExternalLink, Star } from 'lucide-react'
 import { useNavigate, useParams } from 'react-router'
 import { useRecordResourceHistoryMutation, useSkillResourceByIdQuery } from '../../hooks/skillResourceQuery'
 import { cleanTitle, getPlatform, getResourceTypeLabel } from '../../utils/skillResource'
 
 export default function ResourceDetailPage() {
+  const { t } = useTranslation()
   const { resourceId } = useParams<{ resourceId: string }>()
   const navigate = useNavigate()
   const { data, isLoading, isError } = useSkillResourceByIdQuery(resourceId)
@@ -12,14 +14,14 @@ export default function ResourceDetailPage() {
   // axios: data.data = body { success, statusCode, data }; body.data = SkillResource
   const resource = data?.data?.data
 
-  if (isLoading) return <div className='p-8 text-center'>Đang tải...</div>
+  if (isLoading) return <div className='p-8 text-center'>{t('common.loading')}</div>
 
   if (isError || !resource) {
     return (
       <div className='p-8 text-center'>
-        <p className='text-red-500 mb-4'>Không tìm thấy tài nguyên</p>
+        <p className='text-red-500 mb-4'>{t('resources.detail.notFound')}</p>
         <button onClick={() => navigate(-1)} className='text-indigo-600 hover:text-indigo-700'>
-          Quay lại
+          {t('common.back')}
         </button>
       </div>
     )
@@ -39,7 +41,7 @@ export default function ResourceDetailPage() {
           className='mb-6 inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-700 dark:text-[#A99DFF] dark:hover:text-[#BFAFFF] cursor-pointer'
         >
           <ArrowLeft className='w-4 h-4' />
-          Quay lại
+          {t('common.back')}
         </button>
 
         {/* Header */}
@@ -66,28 +68,32 @@ export default function ResourceDetailPage() {
           {/* Left: Details */}
           <div className='lg:col-span-2 space-y-6'>
             <div className='bg-white dark:bg-[#1A191C] rounded-2xl border border-gray-200 dark:border-white/[0.08] p-6'>
-              <h2 className='text-lg font-semibold text-gray-900 dark:text-[#ECE9E4] mb-4'>Thông tin</h2>
+              <h2 className='text-lg font-semibold text-gray-900 dark:text-[#ECE9E4] mb-4'>
+                {t('resources.detail.info')}
+              </h2>
               <dl className='space-y-4'>
                 <div>
-                  <dt className='text-sm text-gray-500 dark:text-[#A29FA8] mb-1'>Loại</dt>
+                  <dt className='text-sm text-gray-500 dark:text-[#A29FA8] mb-1'>{t('resources.detail.type')}</dt>
                   <dd className='text-gray-900 dark:text-[#ECE9E4]'>{getResourceTypeLabel(resource.resourceType)}</dd>
                 </div>
                 <div>
-                  <dt className='text-sm text-gray-500 dark:text-[#A29FA8] mb-1'>Nền tảng</dt>
+                  <dt className='text-sm text-gray-500 dark:text-[#A29FA8] mb-1'>{t('resources.detail.platform')}</dt>
                   <dd className='text-gray-900 dark:text-[#ECE9E4]'>{getPlatform(resource.url)}</dd>
                 </div>
                 <div>
-                  <dt className='text-sm text-gray-500 dark:text-[#A29FA8] mb-1'>Thời lượng</dt>
-                  <dd className='text-gray-900 dark:text-[#ECE9E4]'>{resource.durationHours} giờ</dd>
-                </div>
-                <div>
-                  <dt className='text-sm text-gray-500 dark:text-[#A29FA8] mb-1'>Giá</dt>
-                  <dd className='text-gray-900 dark:text-[#ECE9E4] font-medium'>
-                    {resource.cost === 0 ? '🎉 Miễn phí' : `$${resource.cost}`}
+                  <dt className='text-sm text-gray-500 dark:text-[#A29FA8] mb-1'>{t('resources.detail.duration')}</dt>
+                  <dd className='text-gray-900 dark:text-[#ECE9E4]'>
+                    {t('resources.detail.hours', { count: resource.durationHours })}
                   </dd>
                 </div>
                 <div>
-                  <dt className='text-sm text-gray-500 dark:text-[#A29FA8] mb-1'>Đánh giá</dt>
+                  <dt className='text-sm text-gray-500 dark:text-[#A29FA8] mb-1'>{t('resources.detail.price')}</dt>
+                  <dd className='text-gray-900 dark:text-[#ECE9E4] font-medium'>
+                    {resource.cost === 0 ? t('resources.detail.free') : `$${resource.cost}`}
+                  </dd>
+                </div>
+                <div>
+                  <dt className='text-sm text-gray-500 dark:text-[#A29FA8] mb-1'>{t('resources.detail.rating')}</dt>
                   <dd className='text-gray-900 dark:text-[#ECE9E4]'>
                     <div className='flex items-center gap-2'>
                       <div className='flex'>
@@ -95,7 +101,9 @@ export default function ResourceDetailPage() {
                           <Star
                             key={i}
                             className={`w-4 h-4 ${
-                              i < Math.round(resource.rating) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300 dark:text-gray-600'
+                              i < Math.round(resource.rating)
+                                ? 'fill-yellow-400 text-yellow-400'
+                                : 'text-gray-300 dark:text-gray-600'
                             }`}
                           />
                         ))}
@@ -119,7 +127,7 @@ export default function ResourceDetailPage() {
                 className='w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 dark:bg-[#5F2CFF] dark:hover:bg-[#4B1FD6] text-white font-medium py-3 px-4 rounded-xl transition cursor-pointer'
               >
                 <ExternalLink className='w-5 h-5' />
-                Truy cập tài nguyên
+                {t('resources.detail.visit')}
               </a>
 
               <div className='mt-6 pt-6 border-t border-gray-200 dark:border-white/[0.08] space-y-3 text-sm'>
@@ -138,7 +146,7 @@ export default function ResourceDetailPage() {
 
                 {resource.skill && (
                   <div>
-                    <p className='text-gray-500 dark:text-[#A29FA8] mb-1'>Kỹ năng</p>
+                    <p className='text-gray-500 dark:text-[#A29FA8] mb-1'>{t('resources.detail.skill')}</p>
                     <p className='text-gray-900 dark:text-[#ECE9E4] font-medium'>{resource.skill.name}</p>
                     <p className='text-gray-500 dark:text-[#A29FA8] text-xs'>{resource.skill.category}</p>
                   </div>

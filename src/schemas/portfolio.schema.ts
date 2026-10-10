@@ -2,13 +2,15 @@ import { z } from 'zod'
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
 
+// LƯU Ý: các `message` là KEY dịch (i18n), hiển thị bằng t(message)
+
 // Cho phép để trống (xóa link). Nếu có giá trị thì phải là URL http/https
 // và (tuỳ chọn) đúng domain của mạng xã hội tương ứng
-const optionalUrl = (label: string, hosts?: string[]) =>
+const optionalUrl = (invalidKey: string, hosts?: string[]) =>
   z
     .string()
     .trim()
-    .max(500, { message: `${label} tối đa 500 ký tự` })
+    .max(500, { message: 'validation.urlMax' })
     .refine(
       (value) => {
         if (value === '') return true
@@ -22,34 +24,34 @@ const optionalUrl = (label: string, hosts?: string[]) =>
           return false
         }
       },
-      { message: hosts ? `${label} không hợp lệ (ví dụ: https://${hosts[0]}/username)` : `${label} không hợp lệ` },
+      { message: invalidKey },
     )
 
 export const MAX_SKILLS = 20
 export const MAX_SKILL_LENGTH = 30
 
 export const portfolioSchema = z.object({
-  title: z.string().trim().max(100, { message: 'Headline tối đa 100 ký tự' }),
-  bio: z.string().trim().max(500, { message: 'Bio tối đa 500 ký tự' }),
-  avatarUrl: optionalUrl('Avatar URL'),
+  title: z.string().trim().max(100, { message: 'validation.headlineMax' }),
+  bio: z.string().trim().max(500, { message: 'validation.bioMax' }),
+  avatarUrl: optionalUrl('validation.avatarInvalid'),
   email: z
     .string()
     .trim()
-    .refine((v) => v === '' || emailRegex.test(v), { message: 'Email không đúng định dạng' }),
-  facebook: optionalUrl('Link Facebook', ['facebook.com', 'fb.com']),
-  linkedin: optionalUrl('Link LinkedIn', ['linkedin.com']),
-  github: optionalUrl('Link GitHub', ['github.com']),
+    .refine((v) => v === '' || emailRegex.test(v), { message: 'validation.emailInvalid' }),
+  facebook: optionalUrl('validation.facebookInvalid', ['facebook.com', 'fb.com']),
+  linkedin: optionalUrl('validation.linkedinInvalid', ['linkedin.com']),
+  github: optionalUrl('validation.githubInvalid', ['github.com']),
   skills: z
     .array(
       z
         .string()
         .trim()
-        .min(1, { message: 'Kỹ năng không được để trống' })
-        .max(MAX_SKILL_LENGTH, { message: `Mỗi kỹ năng tối đa ${MAX_SKILL_LENGTH} ký tự` }),
+        .min(1, { message: 'validation.skillEmpty' })
+        .max(MAX_SKILL_LENGTH, { message: 'validation.skillTooLong' }),
     )
-    .max(MAX_SKILLS, { message: `Tối đa ${MAX_SKILLS} kỹ năng` })
+    .max(MAX_SKILLS, { message: 'validation.skillsMax' })
     .refine((arr) => new Set(arr.map((s) => s.toLowerCase())).size === arr.length, {
-      message: 'Kỹ năng bị trùng',
+      message: 'validation.skillsDuplicate',
     }),
   isPublic: z.boolean(),
 })

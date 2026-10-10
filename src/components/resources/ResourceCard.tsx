@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { BookOpen, ExternalLink, FlaskConical, Newspaper, Play, PlayCircle, Star } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
@@ -79,6 +80,7 @@ function ResourceThumbnail({ resource }: { resource: SkillResource }) {
 }
 
 export default function ResourceCard({ resource, skillName }: { resource: SkillResource; skillName?: string }) {
+  const { t } = useTranslation()
   const name = resource.skill?.name ?? skillName
   const navigate = useNavigate()
   const { mutate: recordHistory } = useRecordResourceHistoryMutation()
@@ -119,7 +121,7 @@ export default function ResourceCard({ resource, skillName }: { resource: SkillR
             </span>
             <button
               type='button'
-              aria-label='Mở tài nguyên'
+              aria-label={t('resources.open')}
               onClick={handleOpenClick}
               className='p-2 -m-2 rounded-lg text-gray-400 dark:text-[#A29FA8] hover:text-gray-900 dark:hover:text-[#ECE9E4] transition-colors cursor-pointer'
             >

@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next'
+import { getLocale } from '../../utils/locale'
 import { ExternalLink } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
@@ -9,6 +11,7 @@ import { cleanTitle, getPlatform, getResourceTypeLabel } from '../../utils/skill
 const LIMIT = 50
 
 export default function ResourceHistoryPage() {
+  const { t } = useTranslation()
   const { data, isLoading, isError, refetch } = useResourceHistoryQuery(LIMIT)
   const history = useMemo(() => data?.data?.data ?? [], [data])
 
@@ -19,8 +22,8 @@ export default function ResourceHistoryPage() {
       <div className='h-full overflow-y-auto scrollbar-thin'>
         <div className='max-w-6xl mx-auto px-6 py-10 pb-16'>
           <div className='mb-6'>
-            <h1 className='text-3xl font-semibold text-gray-900'>Lịch sử xem</h1>
-            <p className='mt-2 text-gray-500'>Đang tải...</p>
+            <h1 className='text-3xl font-semibold text-gray-900'>{t('resources.history.title')}</h1>
+            <p className='mt-2 text-gray-500'>{t('common.loading')}</p>
           </div>
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5'>
             {Array.from({ length: 6 }).map((_, i) => (
@@ -37,16 +40,16 @@ export default function ResourceHistoryPage() {
       <div className='h-full overflow-y-auto scrollbar-thin'>
         <div className='max-w-6xl mx-auto px-6 py-10 pb-16'>
           <div className='mb-6'>
-            <h1 className='text-3xl font-semibold text-gray-900'>Lịch sử xem</h1>
+            <h1 className='text-3xl font-semibold text-gray-900'>{t('resources.history.title')}</h1>
           </div>
           <div className='bg-white border border-gray-200 rounded-2xl p-10 text-center'>
-            <p className='text-[15px] font-medium text-gray-900 mb-4'>Không tải được lịch sử xem.</p>
+            <p className='text-[15px] font-medium text-gray-900 mb-4'>{t('resources.history.loadError')}</p>
             <button
               type='button'
               onClick={() => refetch()}
               className='rounded-xl border border-gray-200 text-gray-900 text-sm font-medium px-4 py-2 hover:bg-gray-50 transition'
             >
-              Thử lại
+              {t('common.retry')}
             </button>
           </div>
         </div>
@@ -61,9 +64,13 @@ export default function ResourceHistoryPage() {
         <MotionFadeIn className='mb-8'>
           <div className='flex items-start justify-between gap-4'>
             <div>
-              <h1 className='text-3xl font-semibold text-gray-900 dark:text-[#ECE9E4]'>Lịch sử xem</h1>
+              <h1 className='text-3xl font-semibold text-gray-900 dark:text-[#ECE9E4]'>
+                {t('resources.history.title')}
+              </h1>
               <p className='mt-2 text-gray-500 dark:text-[#A29FA8]'>
-                {history.length === 0 ? 'Bạn chưa xem tài nguyên nào.' : `${history.length} tài nguyên đã xem`}
+                {history.length === 0
+                  ? t('resources.history.none')
+                  : t('resources.history.count', { count: history.length })}
               </p>
             </div>
 
@@ -73,19 +80,23 @@ export default function ResourceHistoryPage() {
                 type='button'
                 onClick={() => setViewType('list')}
                 className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors cursor-pointer ${
-                  viewType === 'list' ? 'bg-indigo-100 dark:bg-[#5F2CFF]/20 text-indigo-600 dark:text-[#A99DFF]' : 'text-gray-600 dark:text-[#A29FA8] hover:bg-gray-50 dark:hover:bg-[#232227]'
+                  viewType === 'list'
+                    ? 'bg-indigo-100 dark:bg-[#5F2CFF]/20 text-indigo-600 dark:text-[#A99DFF]'
+                    : 'text-gray-600 dark:text-[#A29FA8] hover:bg-gray-50 dark:hover:bg-[#232227]'
                 }`}
               >
-                Danh sách
+                {t('resources.history.viewList')}
               </button>
               <button
                 type='button'
                 onClick={() => setViewType('card')}
                 className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors cursor-pointer ${
-                  viewType === 'card' ? 'bg-indigo-100 dark:bg-[#5F2CFF]/20 text-indigo-600 dark:text-[#A99DFF]' : 'text-gray-600 dark:text-[#A29FA8] hover:bg-gray-50 dark:hover:bg-[#232227]'
+                  viewType === 'card'
+                    ? 'bg-indigo-100 dark:bg-[#5F2CFF]/20 text-indigo-600 dark:text-[#A99DFF]'
+                    : 'text-gray-600 dark:text-[#A29FA8] hover:bg-gray-50 dark:hover:bg-[#232227]'
                 }`}
               >
-                Card
+                {t('resources.history.viewCard')}
               </button>
             </div>
           </div>
@@ -93,7 +104,7 @@ export default function ResourceHistoryPage() {
 
         {history.length === 0 ? (
           <MotionFadeIn className='text-center py-16'>
-            <p className='text-gray-500 dark:text-[#A29FA8]'>Bạn chưa xem bất kỳ tài nguyên nào.</p>
+            <p className='text-gray-500 dark:text-[#A29FA8]'>{t('resources.history.emptyBody')}</p>
           </MotionFadeIn>
         ) : viewType === 'card' ? (
           // View card
@@ -112,12 +123,24 @@ export default function ResourceHistoryPage() {
                 <table className='w-full'>
                   <thead>
                     <tr className='border-b border-gray-200 dark:border-white/[0.08] bg-gray-50 dark:bg-[#232227]'>
-                      <th className='text-left px-6 py-4 text-sm font-semibold text-gray-900 dark:text-[#ECE9E4]'>Tài nguyên</th>
-                      <th className='text-left px-6 py-4 text-sm font-semibold text-gray-900 dark:text-[#ECE9E4]'>Kỹ năng</th>
-                      <th className='text-left px-6 py-4 text-sm font-semibold text-gray-900 dark:text-[#ECE9E4]'>Loại</th>
-                      <th className='text-left px-6 py-4 text-sm font-semibold text-gray-900 dark:text-[#ECE9E4]'>Nền tảng</th>
-                      <th className='text-left px-6 py-4 text-sm font-semibold text-gray-900 dark:text-[#ECE9E4]'>Ngày xem</th>
-                      <th className='text-center px-6 py-4 text-sm font-semibold text-gray-900 dark:text-[#ECE9E4]'>Hành động</th>
+                      <th className='text-left px-6 py-4 text-sm font-semibold text-gray-900 dark:text-[#ECE9E4]'>
+                        {t('resources.history.cols.resource')}
+                      </th>
+                      <th className='text-left px-6 py-4 text-sm font-semibold text-gray-900 dark:text-[#ECE9E4]'>
+                        {t('resources.history.cols.skill')}
+                      </th>
+                      <th className='text-left px-6 py-4 text-sm font-semibold text-gray-900 dark:text-[#ECE9E4]'>
+                        {t('resources.history.cols.type')}
+                      </th>
+                      <th className='text-left px-6 py-4 text-sm font-semibold text-gray-900 dark:text-[#ECE9E4]'>
+                        {t('resources.history.cols.platform')}
+                      </th>
+                      <th className='text-left px-6 py-4 text-sm font-semibold text-gray-900 dark:text-[#ECE9E4]'>
+                        {t('resources.history.cols.viewedAt')}
+                      </th>
+                      <th className='text-center px-6 py-4 text-sm font-semibold text-gray-900 dark:text-[#ECE9E4]'>
+                        {t('resources.history.cols.action')}
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -138,22 +161,26 @@ export default function ResourceHistoryPage() {
                             {cleanTitle(item.skillResource.title)}
                           </a>
                         </td>
-                        <td className='px-6 py-4 text-sm text-gray-600 dark:text-[#A29FA8]'>{item.skillResource.skill?.name ?? '—'}</td>
+                        <td className='px-6 py-4 text-sm text-gray-600 dark:text-[#A29FA8]'>
+                          {item.skillResource.skill?.name ?? '—'}
+                        </td>
                         <td className='px-6 py-4 text-sm'>
                           <span className='inline-block rounded-full bg-blue-100 dark:bg-blue-500/15 text-blue-700 dark:text-blue-300 px-2.5 py-1 text-xs font-medium'>
                             {getResourceTypeLabel(item.skillResource.resourceType)}
                           </span>
                         </td>
-                        <td className='px-6 py-4 text-sm text-gray-600 dark:text-[#A29FA8]'>{getPlatform(item.skillResource.url)}</td>
                         <td className='px-6 py-4 text-sm text-gray-600 dark:text-[#A29FA8]'>
-                          {new Date(item.viewedAt).toLocaleString('vi-VN')}
+                          {getPlatform(item.skillResource.url)}
+                        </td>
+                        <td className='px-6 py-4 text-sm text-gray-600 dark:text-[#A29FA8]'>
+                          {new Date(item.viewedAt).toLocaleString(getLocale())}
                         </td>
                         <td className='px-6 py-4 text-center'>
                           <a
                             href={item.skillResource.url}
                             target='_blank'
                             rel='noopener noreferrer'
-                            aria-label='Mở tài nguyên'
+                            aria-label={t('resources.open')}
                             className='inline-block p-2 -m-2 rounded-lg text-gray-400 dark:text-[#A29FA8] hover:text-gray-900 dark:hover:text-[#ECE9E4] transition-colors'
                           >
                             <ExternalLink className='w-4 h-4' />

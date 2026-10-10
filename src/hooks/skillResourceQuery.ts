@@ -1,3 +1,4 @@
+import i18n from '../i18n'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { skillResourceRepo } from '../repository/skillResource.repo'
 import { getAccessTokenFromLS } from '../utils/auth'
@@ -83,7 +84,7 @@ export const useCreateSkillResourceMutation = () => {
   return useMutation({
     mutationFn: (payload: CreateSkillResourcePayload) => skillResourceRepo.create(payload),
     onSuccess: () => {
-      toast.success('Đã tạo tài nguyên mới')
+      toast.success(i18n.t('toast.resourceCreated'))
       // làm mới mọi cache resource (top, grouped...) để dữ liệu mới hiện ngay
       queryClient.invalidateQueries({ queryKey: ['skill-resources'] })
     },
@@ -96,7 +97,7 @@ export const useDeleteSkillResourceMutation = () => {
   return useMutation({
     mutationFn: (id: string) => skillResourceRepo.remove(id),
     onSuccess: () => {
-      toast.success('Đã xóa tài nguyên')
+      toast.success(i18n.t('toast.resourceDeleted'))
       // làm mới mọi cache resource (top, grouped, history...)
       queryClient.invalidateQueries({ queryKey: ['skill-resources'] })
     },

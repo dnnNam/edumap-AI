@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { useState, type ReactNode } from 'react'
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
@@ -13,6 +14,7 @@ interface Coverflow3DProps {
  * Hỗ trợ vuốt chạm (touch swipe), kéo chuột (drag) và nút bấm điều hướng.
  */
 export default function Coverflow3D({ items, className = '', initialIndex = 0 }: Coverflow3DProps) {
+  const { t } = useTranslation()
   const [currentIndex, setCurrentIndex] = useState(initialIndex)
   const shouldReduceMotion = useReducedMotion()
 
@@ -122,7 +124,7 @@ export default function Coverflow3D({ items, className = '', initialIndex = 0 }:
         <button
           type='button'
           onClick={handlePrev}
-          aria-label='Previous slide'
+          aria-label={t('common.previousSlide')}
           className='w-10 h-10 rounded-full border border-gray-200 bg-white shadow-xs flex items-center justify-center text-gray-700 hover:text-gray-900 hover:border-gray-300 hover:scale-105 active:scale-95 transition cursor-pointer'
         >
           <ChevronLeft className='w-5 h-5' />
@@ -134,7 +136,7 @@ export default function Coverflow3D({ items, className = '', initialIndex = 0 }:
               key={idx}
               type='button'
               onClick={() => setCurrentIndex(idx)}
-              aria-label={`Go to slide ${idx + 1}`}
+              aria-label={t('common.goToSlide', { n: idx + 1 })}
               className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
                 idx === currentIndex ? 'w-8 bg-indigo-600' : 'w-2.5 bg-gray-200 hover:bg-gray-300'
               }`}
@@ -145,7 +147,7 @@ export default function Coverflow3D({ items, className = '', initialIndex = 0 }:
         <button
           type='button'
           onClick={handleNext}
-          aria-label='Next slide'
+          aria-label={t('common.nextSlide')}
           className='w-10 h-10 rounded-full border border-gray-200 bg-white shadow-xs flex items-center justify-center text-gray-700 hover:text-gray-900 hover:border-gray-300 hover:scale-105 active:scale-95 transition cursor-pointer'
         >
           <ChevronRight className='w-5 h-5' />
@@ -154,4 +156,3 @@ export default function Coverflow3D({ items, className = '', initialIndex = 0 }:
     </div>
   )
 }
-

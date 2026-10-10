@@ -1,3 +1,5 @@
+import i18n from '../i18n'
+
 export const getPlatform = (url: string) => {
   try {
     const host = new URL(url).hostname.replace('www.', '')
@@ -13,16 +15,9 @@ export const getPlatform = (url: string) => {
   }
 }
 
-export const getPriceLabel = (cost: number) => (cost === 0 ? 'Free' : `$${cost}`)
+export const getPriceLabel = (cost: number) => (cost === 0 ? i18n.t('resources.price.free') : `$${cost}`)
 
-const RESOURCE_TYPE_LABEL: Record<string, string> = {
-  DOCUMENTATION: 'Documentation',
-  INTERACTIVE_LAB: 'Interactive lab',
-  VIDEO_COURSE: 'Video course',
-  ARTICLE: 'Article',
-}
-
-export const getResourceTypeLabel = (type: string) => RESOURCE_TYPE_LABEL[type] ?? type
+export const getResourceTypeLabel = (type: string) => i18n.t(`resources.type.${type}`, { defaultValue: type })
 
 // Bỏ hashtag trong tiêu đề, vd: "Node JS Advanced #nodejs #nodejsadvanced"
 export const cleanTitle = (title: string) => title.replace(/\s#\S+/g, '').trim()

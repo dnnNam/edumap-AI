@@ -1,28 +1,27 @@
 import { useState, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import AppAside from '../components/layouts/AppAside'
 import AppHeader from '../components/layouts/AppHeader'
 import AnimatedOutlet from '../components/motion/AnimatedOutlet'
 import { useMySubscriptionQuery } from '../hooks/billingQuery'
 import { useProfileQuery } from '../hooks/useUserQuery'
 import { getFullNameFromLS, getRoleFromLS } from '../utils/auth'
-import { PLAN_COPY_EN } from '../utils/billing'
+import { getPlanName } from '../utils/billing'
 
 // Chỉ role đặc biệt mới hiện role, STUDENT hiện tên gói
-const ROLE_LABEL: Record<string, string> = {
-  ADMIN: 'Admin',
-  MODERATOR: 'Moderator',
-  MENTOR: 'Mentor',
-}
+const SPECIAL_ROLES = ['ADMIN', 'MODERATOR', 'MENTOR']
 
 export default function AppLayouts() {
+  const { t } = useTranslation()
   const role = getRoleFromLS()
   const { data: profileRes } = useProfileQuery()
   const { data: subRes } = useMySubscriptionQuery()
 
-  const fullName = profileRes?.data?.data?.fullName || getFullNameFromLS() || 'Guest'
+  const fullName = profileRes?.data?.data?.fullName || getFullNameFromLS() || t('common.guest')
 
   const planCode = subRes?.data?.data?.planCode ?? 'FREE'
-  const planLabel = `${PLAN_COPY_EN[planCode]?.name ?? 'Free'} plan`
+  const planLabel = t('plan.label', { name: getPlanName(planCode) })
+  const userPlan = SPECIAL_ROLES.includes(role) ? t(`roles.${role}`) : planLabel
 
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const toggleSidebar = useCallback(() => setSidebarOpen((v) => !v), [])
@@ -30,11 +29,7 @@ export default function AppLayouts() {
 
   return (
     <div className='flex flex-col h-screen w-full bg-gray-50 dark:bg-[#121114]'>
-      <AppHeader
-        userName={fullName}
-        userPlan={ROLE_LABEL[role] ?? planLabel}
-        onToggleMenu={toggleSidebar}
-      />
+      <AppHeader userName={fullName} userPlan={userPlan} onToggleMenu={toggleSidebar} />
       <div className='flex flex-1 min-h-0 relative overflow-hidden'>
         {/* Mobile backdrop overlay */}
         {sidebarOpen && (

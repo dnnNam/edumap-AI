@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { isAxiosError } from 'axios'
 import { AlertCircle, CheckCircle2, MapPin, Search } from 'lucide-react'
@@ -11,6 +12,7 @@ import { DEFAULT_LOCATION, jobRecommendationSchema, type JobRecommendationFormVa
 const QUICK_LOCATIONS = ['HCM', 'Hà Nội', 'Đà Nẵng', 'Cần Thơ']
 
 export default function JobAnalysisPage() {
+  const { t } = useTranslation()
   const { mutate, data, isPending, isError, error, reset: resetMutation } = useJobRecommendationsMutation()
 
   const profileQuery = useCheckJobProfileQuery()
@@ -43,8 +45,8 @@ export default function JobAnalysisPage() {
   return (
     <div className='h-full overflow-y-auto scrollbar-thin'>
       <div className='max-w-6xl mx-auto px-6 py-10 pb-16'>
-        <h1 className='text-3xl font-semibold text-gray-900 dark:text-[#ECE9E4]'>Job Analysis</h1>
-        <p className='mt-2 text-gray-500 dark:text-[#A29FA8]'>Phân tích thị trường và gợi ý việc làm dựa trên kỹ năng và dự án của bạn.</p>
+        <h1 className='text-3xl font-semibold text-gray-900 dark:text-[#ECE9E4]'>{t('jobs.analysis.title')}</h1>
+        <p className='mt-2 text-gray-500 dark:text-[#A29FA8]'>{t('jobs.analysis.desc')}</p>
 
         {/* Trạng thái hồ sơ kỹ năng */}
         <div className='mt-6'>
@@ -54,15 +56,17 @@ export default function JobAnalysisPage() {
             <div className='flex flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl border border-green-200 dark:border-emerald-500/20 bg-green-50 dark:bg-emerald-500/10 px-4 py-3 text-sm text-green-800 dark:text-emerald-300'>
               <CheckCircle2 className='w-4 h-4 shrink-0' />
               <span>
-                Hướng nghề nghiệp: <strong className='font-medium'>{profile.careerPath}</strong>
+                {t('jobs.analysis.careerPath')} <strong className='font-medium'>{profile.careerPath}</strong>
               </span>
-              <span className='text-green-700 dark:text-emerald-400'>{profile.totalSkills} kỹ năng trong hồ sơ</span>
+              <span className='text-green-700 dark:text-emerald-400'>
+                {t('jobs.analysis.totalSkills', { count: profile.totalSkills })}
+              </span>
             </div>
           ) : (
             <div className='flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-amber-200 dark:border-amber-500/20 bg-amber-50 dark:bg-amber-500/10 px-4 py-3 text-sm text-amber-900 dark:text-amber-200'>
               <span className='flex items-center gap-2'>
                 <AlertCircle className='w-4 h-4 shrink-0' />
-                {profile?.message ?? profileError ?? 'Chưa kiểm tra được hồ sơ kỹ năng của bạn.'}
+                {profile?.message ?? profileError ?? t('jobs.analysis.unchecked')}
               </span>
               <span className='flex items-center gap-2'>
                 <button
@@ -71,13 +75,13 @@ export default function JobAnalysisPage() {
                   disabled={profileQuery.isFetching}
                   className='rounded-lg border border-amber-300 dark:border-amber-500/30 bg-white dark:bg-[#232227] px-3 py-1.5 font-medium hover:bg-amber-100 dark:hover:bg-amber-500/20 disabled:opacity-60 transition cursor-pointer'
                 >
-                  {profileQuery.isFetching ? 'Đang kiểm tra...' : 'Kiểm tra lại'}
+                  {profileQuery.isFetching ? t('jobs.analysis.rechecking') : t('jobs.analysis.recheck')}
                 </button>
                 <Link
                   to='/profile'
                   className='rounded-lg bg-amber-600 px-3 py-1.5 font-medium text-white hover:bg-amber-700 transition'
                 >
-                  Cập nhật hồ sơ
+                  {t('jobs.analysis.updateProfile')}
                 </Link>
               </span>
             </div>
@@ -85,9 +89,13 @@ export default function JobAnalysisPage() {
         </div>
 
         {/* Form địa chỉ */}
-        <form onSubmit={onSubmit} noValidate className='mt-8 rounded-3xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#1A191C] p-6'>
+        <form
+          onSubmit={onSubmit}
+          noValidate
+          className='mt-8 rounded-3xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#1A191C] p-6'
+        >
           <label htmlFor='location' className='block text-sm font-medium text-gray-800 dark:text-[#ECE9E4] mb-1.5'>
-            Bạn đang ở đâu?
+            {t('jobs.analysis.where')}
           </label>
           <div className='flex flex-col sm:flex-row gap-3'>
             <div className='relative flex-1'>
@@ -95,7 +103,7 @@ export default function JobAnalysisPage() {
               <input
                 id='location'
                 type='text'
-                placeholder={`Mặc định: ${DEFAULT_LOCATION}`}
+                placeholder={t('jobs.analysis.placeholder', { loc: DEFAULT_LOCATION })}
                 aria-invalid={!!errors.location}
                 className={`w-full rounded-xl border pl-12 pr-4 py-3 text-[15px] text-gray-900 dark:text-[#ECE9E4] bg-white dark:bg-[#232227] placeholder-gray-400 dark:placeholder-gray-500 outline-none focus:ring-2 transition ${
                   errors.location
@@ -111,11 +119,11 @@ export default function JobAnalysisPage() {
               className='inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 dark:bg-[#5F2CFF] dark:hover:bg-[#4B1FD6] disabled:opacity-60 disabled:cursor-not-allowed text-white text-[15px] font-medium px-6 py-3 transition cursor-pointer'
             >
               <Search className='w-4 h-4' />
-              {isPending ? 'Đang phân tích...' : 'Phân tích'}
+              {isPending ? t('jobs.analysis.analyzing') : t('jobs.analysis.analyze')}
             </button>
           </div>
 
-          {errors.location && <p className='text-sm text-red-500 mt-1.5'>{errors.location.message}</p>}
+          {errors.location && <p className='text-sm text-red-500 mt-1.5'>{t(errors.location.message ?? '')}</p>}
 
           <div className='mt-4 flex flex-wrap gap-2'>
             {QUICK_LOCATIONS.map((loc) => {
@@ -142,31 +150,29 @@ export default function JobAnalysisPage() {
         <div className='mt-6'>
           {isPending ? (
             <div className='space-y-5' aria-busy='true'>
-              <p className='text-sm text-gray-500 dark:text-[#A29FA8]'>AI đang phân tích thị trường, có thể mất 10–30 giây.</p>
+              <p className='text-sm text-gray-500 dark:text-[#A29FA8]'>{t('jobs.analysis.thinking')}</p>
               <Skeleton height={160} borderRadius={24} />
               <Skeleton height={90} borderRadius={24} />
               <Skeleton height={200} borderRadius={24} />
             </div>
           ) : isError ? (
             <div className='rounded-3xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#1A191C] p-10 text-center'>
-              <p className='text-[15px] font-medium text-gray-900 dark:text-[#ECE9E4]'>Không tạo được phân tích.</p>
+              <p className='text-[15px] font-medium text-gray-900 dark:text-[#ECE9E4]'>{t('jobs.analysis.failed')}</p>
               <p className='mt-1.5 text-sm text-gray-500 dark:text-[#A29FA8]'>
-                {errorMessage ?? 'Vui lòng kiểm tra hồ sơ kỹ năng của bạn rồi thử lại.'}
+                {errorMessage ?? t('jobs.analysis.failedHint')}
               </p>
               <button
                 type='button'
                 onClick={() => resetMutation()}
                 className='mt-5 rounded-xl border border-gray-200 dark:border-white/[0.08] text-gray-900 dark:text-[#ECE9E4] text-sm font-medium px-4 py-2 hover:bg-gray-50 dark:hover:bg-[#232227] transition cursor-pointer'
               >
-                Đóng
+                {t('jobs.analysis.close')}
               </button>
             </div>
           ) : result ? (
             <RecommendationResult result={result} />
           ) : (
-            <p className='py-16 text-center text-sm text-gray-500 dark:text-[#A29FA8]'>
-              Nhập địa chỉ rồi bấm “Phân tích” để xem gợi ý việc làm.
-            </p>
+            <p className='py-16 text-center text-sm text-gray-500 dark:text-[#A29FA8]'>{t('jobs.analysis.hint')}</p>
           )}
         </div>
       </div>

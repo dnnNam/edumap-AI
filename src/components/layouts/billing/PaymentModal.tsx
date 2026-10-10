@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Copy, Download, X } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { buildVietQrUrl, formatCountdown, type BillingPlan, type PaymentOrder } from '../../../types/api/billing.type'
 import { useMySubscriptionQuery } from '../../../hooks/billingQuery'
@@ -13,14 +14,15 @@ interface Props {
 }
 
 export default function PaymentModal({ payment, plan, onClose }: Props) {
+  const { t } = useTranslation()
   const qrUrl = buildVietQrUrl(payment)
   const expiredAtMs = new Date(payment.expiredAt).getTime()
 
   // Đồng hồ đếm ngược theo expiredAt của BE
   const [remaining, setRemaining] = useState(() => expiredAtMs - Date.now())
   useEffect(() => {
-    const t = setInterval(() => setRemaining(expiredAtMs - Date.now()), 1000)
-    return () => clearInterval(t)
+    const timer = setInterval(() => setRemaining(expiredAtMs - Date.now()), 1000)
+    return () => clearInterval(timer)
   }, [expiredAtMs])
 
   const isExpired = remaining <= 0
@@ -34,7 +36,7 @@ export default function PaymentModal({ payment, plan, onClose }: Props) {
   const queryClient = useQueryClient()
   useEffect(() => {
     if (isPaid) {
-      toast.success('Payment successful! Your plan has been upgraded.')
+      toast.success(t('billing.payment.success'))
       queryClient.invalidateQueries({ queryKey: ['profile'] }) // header + Settings + Profile cập nhật gói
       onClose()
     }
@@ -47,9 +49,9 @@ export default function PaymentModal({ payment, plan, onClose }: Props) {
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(payment.transferContent)
-      toast.success('Transfer content copied')
+      toast.success(t('billing.payment.copied'))
     } catch {
-      toast.error('Could not copy. Please copy it manually.')
+      toast.error(t('billing.payment.copyFailed'))
     }
   }
 
@@ -67,13 +69,16 @@ export default function PaymentModal({ payment, plan, onClose }: Props) {
   }
 
   const rows: [string, string, boolean?][] = [
-    ['Plan', payment.planName],
-    ['Amount', amountLabel, true],
-    ['Billing period', plan?.durationDays === 365 ? 'Yearly' : 'Monthly'],
-    ['Payment ID', payment.orderCode],
-    ['Account name', payment.accountName],
-    ['Bank', payment.bankName],
-    ['Description', payment.transferContent],
+    [t('billing.payment.plan'), payment.planName],
+    [t('billing.payment.amount'), amountLabel, true],
+    [
+      t('billing.payment.period'),
+      plan?.durationDays === 365 ? t('billing.payment.yearly') : t('billing.payment.monthly'),
+    ],
+    [t('billing.payment.paymentId'), payment.orderCode],
+    [t('billing.payment.accountName'), payment.accountName],
+    [t('billing.payment.bank'), payment.bankName],
+    [t('billing.payment.description'), payment.transferContent],
   ]
 
   return (
@@ -85,7 +90,7 @@ export default function PaymentModal({ payment, plan, onClose }: Props) {
         <button
           type='button'
           onClick={onClose}
-          aria-label='Close'
+          aria-label={t('common.close')}
           className='absolute right-3 top-3 rounded-lg p-1.5 text-gray-400 dark:text-[#A29FA8] hover:bg-gray-100 dark:hover:bg-white/10 transition-colors'
         >
           <X className='w-4 h-4' />
@@ -94,10 +99,20 @@ export default function PaymentModal({ payment, plan, onClose }: Props) {
         {/* QR */}
         <div className='mt-4 rounded-2xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#232227] p-5 text-center transition-colors'>
           <div className='mx-auto w-56 rounded-2xl bg-white p-2 shadow-sm'>
-            <img src={qrUrl} alt='Payment QR' className={`w-full ${isExpired ? 'opacity-30 grayscale' : ''}`} />
+            <img
+              src={qrUrl}
+              alt={t('billing.payment.qrAlt')}
+              className={`w-full ${isExpired ? 'opacity-30 grayscale' : ''}`}
+            />
           </div>
-          <p className='mt-4 text-xs text-gray-500 dark:text-[#A29FA8]'>{isExpired ? 'This QR has expired' : 'Expires in'}</p>
-          {!isExpired && <p className='mt-1 font-mono text-xl font-bold text-gray-900 dark:text-[#ECE9E4]'>{formatCountdown(remaining)}</p>}
+          <p className='mt-4 text-xs text-gray-500 dark:text-[#A29FA8]'>
+            {isExpired ? t('billing.payment.expired') : t('billing.payment.expiresIn')}
+          </p>
+          {!isExpired && (
+            <p className='mt-1 font-mono text-xl font-bold text-gray-900 dark:text-[#ECE9E4]'>
+              {formatCountdown(remaining)}
+            </p>
+          )}
         </div>
 
         {/* Thông tin đơn */}
@@ -105,7 +120,9 @@ export default function PaymentModal({ payment, plan, onClose }: Props) {
           {rows.map(([label, value, bold]) => (
             <div key={label} className='flex items-center justify-between gap-4 px-4 py-3 text-sm'>
               <span className='text-gray-500 dark:text-[#A29FA8]'>{label}</span>
-              <span className={`text-right break-all text-gray-900 dark:text-[#ECE9E4] ${bold ? 'font-bold' : 'font-medium'}`}>
+              <span
+                className={`text-right break-all text-gray-900 dark:text-[#ECE9E4] ${bold ? 'font-bold' : 'font-medium'}`}
+              >
                 {value}
               </span>
             </div>
@@ -118,21 +135,19 @@ export default function PaymentModal({ payment, plan, onClose }: Props) {
             onClick={handleCopy}
             className='flex items-center justify-center gap-2 rounded-xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#232227] py-2.5 text-sm text-gray-700 dark:text-[#ECE9E4] hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer'
           >
-            <Copy className='w-4 h-4' /> Copy content
+            <Copy className='w-4 h-4' /> {t('billing.payment.copy')}
           </button>
           <button
             type='button'
             onClick={handleDownload}
             className='flex items-center justify-center gap-2 rounded-xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#232227] py-2.5 text-sm text-gray-700 dark:text-[#ECE9E4] hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer'
           >
-            <Download className='w-4 h-4' /> Download QR
+            <Download className='w-4 h-4' /> {t('billing.payment.download')}
           </button>
         </div>
 
         <p className='mt-4 text-center text-xs text-gray-400 dark:text-[#A29FA8]'>
-          {isExpired
-            ? 'Close this window and click Upgrade again to create a new order.'
-            : 'Waiting for payment… This window will close automatically once we receive your transfer.'}
+          {isExpired ? t('billing.payment.expiredHint') : t('billing.payment.waiting')}
         </p>
       </div>
     </div>

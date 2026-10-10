@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Check, CreditCard, FileText, Minus } from 'lucide-react'
+import { Trans, useTranslation } from 'react-i18next'
 
 import { useBillingPlansQuery, useCreatePaymentMutation, useMySubscriptionQuery } from '../../hooks/billingQuery'
 import { type PaymentOrder, type PlanCode } from '../../types/api/billing.type'
@@ -8,14 +9,16 @@ import {
   formatDate,
   formatPrice,
   getCardHighlights,
+  getPlanDescription,
+  getPlanName,
   getYearlySavingBadge,
-  PLAN_COPY_EN,
   PLAN_RANK,
 } from '../../utils/billing'
 import PaymentModal from '../../components/layouts/billing/PaymentModal'
 import AppLoadingSkeleton from '../../components/ui/AppLoadingSkeleton'
 
 export default function SubscriptionPage() {
+  const { t } = useTranslation()
   const { data, isLoading, isError } = useBillingPlansQuery()
   const { data: meData, isLoading: isMeLoading } = useMySubscriptionQuery()
 
@@ -25,8 +28,6 @@ export default function SubscriptionPage() {
 
   const plans = data?.data?.data ?? []
   const mySub = meData?.data?.data
-  // Chưa có subscription active nào (user mới, chưa từng mua) -> BE trả planCode: 'FREE' theo hợp đồng API hiện tại;
-  // nếu sau này /billing/me trả 404 cho case "chưa có gì" thì fallback FREE ở đây vẫn đúng.
   const currentPlanCode: PlanCode = mySub?.planCode ?? 'FREE'
   const currentPlan = plans.find((p) => p.code === currentPlanCode)
 
@@ -42,22 +43,24 @@ export default function SubscriptionPage() {
   if (isError || plans.length === 0) {
     return (
       <div className='flex-1 flex items-center justify-center text-sm text-red-500'>
-        Couldn't load the plan list. Please try again.
+        {t('billing.subscription.loadError')}
       </div>
     )
   }
 
   return (
     <div className='h-full min-h-0 overflow-y-auto bg-gray-50 dark:bg-[#121114] p-6'>
-      <h1 className='text-2xl font-bold text-gray-900 dark:text-[#ECE9E4]'>Subscription</h1>
+      <h1 className='text-2xl font-bold text-gray-900 dark:text-[#ECE9E4]'>{t('billing.subscription.title')}</h1>
       <p className='mt-1 text-sm text-gray-500 dark:text-[#A29FA8]'>
-        You're on{' '}
-        <span className='font-semibold text-gray-900 dark:text-[#ECE9E4]'>
-          {(currentPlan && PLAN_COPY_EN[currentPlan.code]?.name) ?? currentPlan?.name ?? '—'}
-        </span>
-        .
+        <Trans
+          i18nKey='billing.subscription.youreOn'
+          values={{ plan: currentPlan ? getPlanName(currentPlan.code, currentPlan.name) : '—' }}
+          components={{ b: <span className='font-semibold text-gray-900 dark:text-[#ECE9E4]' /> }}
+        />
         {mySub?.expiresAt && mySub.isActive && (
-          <span className='text-gray-400 dark:text-[#A29FA8]'> Renews on {formatDate(mySub.expiresAt)}.</span>
+          <span className='text-gray-400 dark:text-[#A29FA8]'>
+            {t('billing.subscription.renews', { date: formatDate(mySub.expiresAt) })}
+          </span>
         )}
       </p>
 
@@ -69,7 +72,6 @@ export default function SubscriptionPage() {
           const isDowngrade = !isCurrent && PLAN_RANK[plan.code] < PLAN_RANK[currentPlanCode]
           const isPopular = plan.code === 'PRO_STUDENT'
           const savingBadge = getYearlySavingBadge(plan, plans)
-          const copy = PLAN_COPY_EN[plan.code]
           const isCreatingThis = createPayment.isPending && createPayment.variables?.planCode === plan.code
 
           return (
@@ -85,12 +87,12 @@ export default function SubscriptionPage() {
             >
               {isCurrent && (
                 <span className='absolute -top-3 left-6 bg-gray-900 dark:bg-[#5F2CFF] text-white text-[11px] font-medium px-3 py-1 rounded-full'>
-                  Current plan
+                  {t('billing.subscription.currentPlan')}
                 </span>
               )}
               {!isCurrent && isPopular && (
                 <span className='absolute -top-3 left-6 bg-indigo-600 dark:bg-[#5F2CFF] text-white text-[11px] font-medium px-3 py-1 rounded-full'>
-                  Most popular
+                  {t('billing.subscription.mostPopular')}
                 </span>
               )}
               {!isCurrent && savingBadge && (
@@ -99,11 +101,12 @@ export default function SubscriptionPage() {
                 </span>
               )}
 
-              <h3 className='text-[17px] font-semibold text-gray-900 dark:text-[#ECE9E4]'>{copy?.name ?? plan.name}</h3>
-              {/* min-h reserves room for 2 lines so the price/button block below always starts
-                  at the same height across all 3 cards, regardless of description length */}
+              <h3 className='text-[17px] font-semibold text-gray-900 dark:text-[#ECE9E4]'>
+                {getPlanName(plan.code, plan.name)}
+              </h3>
+              {/* min-h giữ chỗ cho 2 dòng để khối giá/nút bên dưới luôn thẳng hàng giữa 3 card */}
               <p className='mt-1 text-sm text-gray-500 dark:text-[#A29FA8] leading-5 min-h-[40px]'>
-                {copy?.description ?? plan.description}
+                {getPlanDescription(plan.code, plan.description)}
               </p>
 
               <div className='mt-4 flex items-baseline gap-1'>
@@ -127,12 +130,12 @@ export default function SubscriptionPage() {
                 }`}
               >
                 {isCurrent
-                  ? 'Current plan'
+                  ? t('billing.subscription.currentPlan')
                   : isDowngrade
-                    ? 'Downgrade'
+                    ? t('billing.subscription.downgrade')
                     : isCreatingThis
-                      ? 'Creating order…'
-                      : 'Upgrade'}
+                      ? t('billing.subscription.creating')
+                      : t('billing.subscription.upgrade')}
               </button>
 
               <ul className='mt-5 space-y-2.5'>
@@ -150,17 +153,20 @@ export default function SubscriptionPage() {
 
       {/* Feature comparison table */}
       <div className='mt-6 rounded-2xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#1A191C] p-6 overflow-x-auto'>
-        <h2 className='text-base font-semibold text-gray-900 dark:text-[#ECE9E4] mb-4'>Feature comparison</h2>
+        <h2 className='text-base font-semibold text-gray-900 dark:text-[#ECE9E4] mb-4'>
+          {t('billing.subscription.featureComparison')}
+        </h2>
         <table className='w-full text-sm border-collapse min-w-[560px]'>
           <thead>
             <tr className='border-b border-gray-100 dark:border-white/[0.06]'>
-              <th className='text-left font-medium text-gray-400 dark:text-[#A29FA8] pb-3 pr-4'>Feature</th>
+              <th className='text-left font-medium text-gray-400 dark:text-[#A29FA8] pb-3 pr-4'>
+                {t('billing.subscription.feature')}
+              </th>
               {plans.map((plan) => {
                 const { amount, period } = formatPrice(plan)
-                const copy = PLAN_COPY_EN[plan.code]
                 return (
                   <th key={plan.id} className='text-left font-medium pb-3 pr-4'>
-                    <span className='block text-gray-900 dark:text-[#ECE9E4]'>{copy?.name ?? plan.name}</span>
+                    <span className='block text-gray-900 dark:text-[#ECE9E4]'>{getPlanName(plan.code, plan.name)}</span>
                     <span className='block text-xs font-normal text-gray-400 dark:text-[#A29FA8]'>
                       {amount}
                       {period}
@@ -172,8 +178,10 @@ export default function SubscriptionPage() {
           </thead>
           <tbody>
             {FEATURE_ROWS.map((row) => (
-              <tr key={row.label} className='border-b border-gray-50 dark:border-white/[0.04] last:border-0'>
-                <td className='py-3 pr-4 font-medium text-gray-900 dark:text-[#ECE9E4] whitespace-nowrap'>{row.label}</td>
+              <tr key={row.labelKey} className='border-b border-gray-50 dark:border-white/[0.04] last:border-0'>
+                <td className='py-3 pr-4 font-medium text-gray-900 dark:text-[#ECE9E4] whitespace-nowrap'>
+                  {t(row.labelKey)}
+                </td>
                 {plans.map((plan) => {
                   const value = row.render(plan)
                   return (
@@ -193,23 +201,22 @@ export default function SubscriptionPage() {
         <div className='rounded-2xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#1A191C] p-5'>
           <div className='flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-[#ECE9E4]'>
             <CreditCard className='w-4 h-4 text-gray-400 dark:text-[#A29FA8]' />
-            Payment method
+            {t('billing.subscription.paymentMethod')}
           </div>
           <p className='mt-2 text-sm text-gray-500 dark:text-[#A29FA8]'>
-            {currentPlanCode === 'FREE'
-              ? 'No payment method on file. Upgrade to unlock paid features.'
-              : 'Paid via SePay (bank transfer / QR).'}
+            {currentPlanCode === 'FREE' ? t('billing.subscription.noPayment') : t('billing.subscription.paidVia')}
           </p>
         </div>
         <div className='rounded-2xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#1A191C] p-5'>
           <div className='flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-[#ECE9E4]'>
             <FileText className='w-4 h-4 text-gray-400 dark:text-[#A29FA8]' />
-            Billing history
+            {t('billing.subscription.billingHistory')}
           </div>
           {mySub?.latestPayment ? (
             <div className='mt-2 text-sm text-gray-600 dark:text-[#ECE9E4] space-y-1'>
               <p>
-                Order <span className='font-medium text-gray-900 dark:text-[#ECE9E4]'>{mySub.latestPayment.orderCode}</span> ·{' '}
+                {t('billing.subscription.order')}{' '}
+                <span className='font-medium text-gray-900 dark:text-[#ECE9E4]'>{mySub.latestPayment.orderCode}</span> ·{' '}
                 {mySub.latestPayment.amountVnd.toLocaleString('en-US')}₫
               </p>
               <p className='text-xs text-gray-400 dark:text-[#A29FA8]'>
@@ -218,7 +225,7 @@ export default function SubscriptionPage() {
               </p>
             </div>
           ) : (
-            <p className='mt-2 text-sm text-gray-500 dark:text-[#A29FA8]'>No invoices yet.</p>
+            <p className='mt-2 text-sm text-gray-500 dark:text-[#A29FA8]'>{t('billing.subscription.noInvoices')}</p>
           )}
         </div>
       </div>

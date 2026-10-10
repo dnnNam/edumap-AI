@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 // src/components/layouts/admin/SkillFormModal.tsx
 // Dùng chung cho cả TẠO (skill = null) và SỬA (skill = skill cần sửa)
 import { useEffect, useMemo } from 'react'
@@ -39,12 +40,13 @@ function Field({
   hint?: string
   children: ReactNode
 }) {
+  const { t } = useTranslation()
   return (
     <label className='block'>
       <span className='block text-sm font-medium text-gray-900 mb-1.5'>{label}</span>
       {children}
       {error ? (
-        <span className='block mt-1 text-xs text-red-600'>{error}</span>
+        <span className='block mt-1 text-xs text-red-600'>{t(error)}</span>
       ) : hint ? (
         <span className='block mt-1 text-xs text-gray-400'>{hint}</span>
       ) : null}
@@ -53,6 +55,7 @@ function Field({
 }
 
 export default function SkillFormModal({ open, onClose, skill }: Props) {
+  const { t } = useTranslation()
   const isEdit = !!skill
 
   const { data: skillsRes } = useAllSkillsQuery()
@@ -107,7 +110,7 @@ export default function SkillFormModal({ open, onClose, skill }: Props) {
       (s) => s.id !== skill?.id && s.name.trim().toLowerCase() === values.name.toLowerCase(),
     )
     if (duplicated) {
-      setError('name', { message: 'A skill with this name already exists' })
+      setError('name', { message: 'admin.skills.duplicate' })
       return
     }
 
@@ -126,7 +129,7 @@ export default function SkillFormModal({ open, onClose, skill }: Props) {
     // PATCH: chỉ gửi những field thật sự thay đổi
     const changedKeys = Object.keys(dirtyFields) as (keyof CreateSkillFormValues)[]
     if (changedKeys.length === 0) {
-      toast.info('No changes to save.')
+      toast.info(t('admin.skills.noChanges'))
       onClose()
       return
     }
@@ -148,12 +151,14 @@ export default function SkillFormModal({ open, onClose, skill }: Props) {
         className='relative w-full max-w-md max-h-[90vh] flex flex-col rounded-2xl bg-white shadow-xl'
       >
         <div className='flex items-center justify-between px-6 py-4 border-b border-gray-100'>
-          <h2 className='text-[17px] font-semibold text-gray-900'>{isEdit ? 'Edit skill' : 'Add skill'}</h2>
+          <h2 className='text-[17px] font-semibold text-gray-900'>
+            {isEdit ? t('admin.skills.edit') : t('admin.skills.add')}
+          </h2>
           <button
             type='button'
             onClick={onClose}
             disabled={isPending}
-            aria-label='Close'
+            aria-label={t('common.close')}
             className='p-1.5 rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition'
           >
             <X className='w-4 h-4' />
@@ -162,21 +167,25 @@ export default function SkillFormModal({ open, onClose, skill }: Props) {
 
         <form onSubmit={handleSubmit(onSubmit)} noValidate className='flex-1 overflow-y-auto'>
           <div className='px-6 py-5 space-y-4'>
-            <Field label='Name' error={errors.name?.message}>
+            <Field label={t('admin.skills.name')} error={errors.name?.message}>
               <input
                 type='text'
-                placeholder='e.g. Redis'
+                placeholder={t('admin.skills.namePlaceholder')}
                 autoFocus
                 {...register('name')}
                 className={inputClass(!!errors.name)}
               />
             </Field>
 
-            <Field label='Category' error={errors.category?.message} hint='Pick an existing category or type a new one'>
+            <Field
+              label={t('admin.skills.category')}
+              error={errors.category?.message}
+              hint={t('admin.skills.categoryHint')}
+            >
               <input
                 type='text'
                 list='skill-categories'
-                placeholder='e.g. Databases'
+                placeholder={t('admin.skills.categoryPlaceholder')}
                 {...register('category')}
                 className={inputClass(!!errors.category)}
               />
@@ -188,20 +197,24 @@ export default function SkillFormModal({ open, onClose, skill }: Props) {
             </Field>
 
             <div className='grid grid-cols-2 gap-4'>
-              <Field label='Difficulty' error={errors.difficultyLevel?.message}>
+              <Field label={t('admin.skills.difficulty')} error={errors.difficultyLevel?.message}>
                 <select
                   {...register('difficultyLevel', { valueAsNumber: true })}
                   className={inputClass(!!errors.difficultyLevel)}
                 >
                   {[1, 2, 3, 4, 5].map((l) => (
                     <option key={l} value={l}>
-                      Level {l}
+                      {t('admin.skills.level', { n: l })}
                     </option>
                   ))}
                 </select>
               </Field>
 
-              <Field label='Demand score' error={errors.demandScore?.message} hint='e.g. 8.5'>
+              <Field
+                label={t('admin.skills.demand')}
+                error={errors.demandScore?.message}
+                hint={t('admin.skills.demandHint')}
+              >
                 <input
                   type='number'
                   step='any'
@@ -220,7 +233,7 @@ export default function SkillFormModal({ open, onClose, skill }: Props) {
               disabled={isPending}
               className='rounded-xl border border-gray-200 text-gray-900 text-sm font-medium px-4 py-2 hover:bg-gray-50 disabled:opacity-60 transition'
             >
-              Cancel
+              {t('common.cancel')}
             </button>
             <button
               type='submit'
@@ -228,7 +241,7 @@ export default function SkillFormModal({ open, onClose, skill }: Props) {
               className='inline-flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 disabled:opacity-60 transition'
             >
               {isPending && <Loader2 className='w-4 h-4 animate-spin' />}
-              {isPending ? 'Saving...' : isEdit ? 'Save changes' : 'Create skill'}
+              {isPending ? t('common.saving') : isEdit ? t('admin.skills.saveChanges') : t('admin.skills.create')}
             </button>
           </div>
         </form>

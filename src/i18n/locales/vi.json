@@ -1,0 +1,1051 @@
+{
+  "common": {
+    "save": "Lưu thay đổi",
+    "saving": "Đang lưu...",
+    "cancel": "Hủy",
+    "delete": "Xóa",
+    "deleting": "Đang xóa...",
+    "close": "Đóng",
+    "retry": "Thử lại",
+    "loading": "Đang tải...",
+    "back": "Quay lại",
+    "search": "Tìm kiếm",
+    "refresh": "Làm mới",
+    "upgrade": "Nâng cấp",
+    "signIn": "Đăng nhập",
+    "signOut": "Đăng xuất",
+    "getStarted": "Bắt đầu",
+    "free": "Miễn phí",
+    "all": "Tất cả",
+    "language": "Ngôn ngữ",
+    "switchToLight": "Chuyển sang giao diện sáng",
+    "switchToDark": "Chuyển sang giao diện tối",
+    "guest": "Khách",
+    "pleaseWait": "Vui lòng đợi...",
+    "userAvatar": "Ảnh đại diện",
+    "previousSlide": "Slide trước",
+    "nextSlide": "Slide tiếp theo",
+    "goToSlide": "Đến slide {{n}}",
+    "add": "Thêm",
+    "exportPdf": "Xuất PDF",
+    "previousPage": "Trang trước",
+    "nextPage": "Trang sau",
+    "range": "{{from}}–{{to}} / {{total}}"
+  },
+  "nav": {
+    "workspace": "Không gian làm việc",
+    "account": "Tài khoản",
+    "menu": "Menu",
+    "dashboard": "Tổng quan",
+    "aiMentor": "Cố vấn AI",
+    "upload": "Tải lên & Phân tích",
+    "skillTree": "Cây kỹ năng",
+    "resources": "Tài nguyên",
+    "history": "Lịch sử",
+    "portfolio": "Hồ sơ năng lực",
+    "jobTrending": "Xu hướng việc làm",
+    "jobAnalysis": "Phân tích việc làm",
+    "profile": "Hồ sơ",
+    "notifications": "Thông báo",
+    "subscription": "Gói đăng ký",
+    "usage": "Mức sử dụng",
+    "settings": "Cài đặt",
+    "admin": "Quản trị",
+    "skills": "Kỹ năng",
+    "skillTrees": "Cây kỹ năng",
+    "upgradeTitle": "Nâng cấp lên Pro",
+    "upgradeDesc": "Cố vấn AI không giới hạn và phân tích chuyên sâu."
+  },
+  "header": {
+    "notifications": "Thông báo",
+    "notificationsUnread": "Thông báo, {{count}} chưa đọc",
+    "toggleMenu": "Bật/tắt menu điều hướng",
+    "freePlan": "Gói miễn phí"
+  },
+  "public": {
+    "features": "Tính năng",
+    "pricing": "Bảng giá",
+    "faq": "Câu hỏi thường gặp",
+    "footerTagline": "Cố vấn nghề nghiệp bằng AI, dành cho thế hệ kỹ sư tiếp theo."
+  },
+  "auth": {
+    "loginTitle": "Đăng nhập",
+    "loginSubtitle": "Chào mừng trở lại với cố vấn AI của bạn",
+    "welcomeBack": "Chào mừng trở lại.",
+    "roadmapAwaits": "Lộ trình của bạn đang chờ.",
+    "email": "Email",
+    "password": "Mật khẩu",
+    "passwordPlaceholder": "nhập mật khẩu của bạn",
+    "rememberMe": "Ghi nhớ đăng nhập",
+    "forgotPassword": "Quên mật khẩu?",
+    "signingIn": "Đang đăng nhập...",
+    "orContinueWith": "HOẶC TIẾP TỤC VỚI",
+    "continueGoogle": "Tiếp tục với Google",
+    "noAccount": "Chưa có tài khoản?",
+    "createOne": "Tạo tài khoản",
+    "loginSuccess": "Đăng nhập thành công!",
+    "registerTitle": "Tạo tài khoản",
+    "registerSubtitle": "Thiết lập trong 90 giây. Miễn phí mãi mãi cho sinh viên.",
+    "fullName": "Họ và tên",
+    "confirm": "Xác nhận",
+    "createAccount": "Tạo tài khoản",
+    "creatingAccount": "Đang tạo tài khoản...",
+    "haveAccount": "Đã có tài khoản?",
+    "registerSuccess": "Đăng ký thành công! Vui lòng đăng nhập.",
+    "googleFailed": "Đăng nhập Google thất bại, vui lòng thử lại."
+  },
+  "validation": {
+    "emailRequired": "Email không được để trống",
+    "emailInvalid": "Email không đúng định dạng",
+    "passwordRequired": "Mật khẩu không được để trống",
+    "passwordMin": "Mật khẩu phải từ 6 ký tự trở lên",
+    "fullNameRequired": "Họ và tên không được để trống",
+    "passwordMismatch": "Xác nhận mật khẩu không khớp",
+    "confirmRequired": "Xác nhận mật khẩu không được để trống",
+    "oldPasswordRequired": "Mật khẩu cũ không được để trống",
+    "newPasswordMin": "Mật khẩu mới phải từ 6 ký tự trở lên",
+    "tokenRequired": "Token không được để trống",
+    "universityRequired": "Tên trường đại học không được để trống",
+    "yearInt": "Năm học phải là số nguyên",
+    "yearMin": "Năm học tối thiểu là 1",
+    "yearMax": "Năm học tối đa là 7",
+    "githubRequired": "GitHub username không được để trống",
+    "skillRequired": "Vui lòng chọn kỹ năng",
+    "resourceTypeRequired": "Vui lòng chọn loại tài nguyên",
+    "titleMin": "Tiêu đề tối thiểu 3 ký tự",
+    "titleMax": "Tiêu đề tối đa 200 ký tự",
+    "urlRequired": "Vui lòng nhập URL",
+    "urlInvalid": "URL không hợp lệ (phải bắt đầu bằng http:// hoặc https://)",
+    "costRequired": "Vui lòng nhập chi phí",
+    "costMin": "Chi phí không được âm",
+    "ratingRequired": "Vui lòng nhập điểm đánh giá",
+    "ratingMin": "Tối thiểu 0",
+    "ratingMax": "Tối đa 5",
+    "durationRequired": "Vui lòng nhập thời lượng",
+    "durationMin": "Thời lượng không được âm",
+    "skillNameRequired": "Tên kỹ năng không được để trống",
+    "skillNameMax": "Tên quá dài (tối đa 100 ký tự)",
+    "categoryRequired": "Nhóm không được để trống",
+    "categoryMax": "Nhóm quá dài (tối đa 100 ký tự)",
+    "difficultySelect": "Vui lòng chọn độ khó",
+    "difficultyRange": "Độ khó phải từ 1 đến 5",
+    "demandNumber": "Điểm nhu cầu phải là số",
+    "demandMin": "Điểm nhu cầu không được âm",
+    "locationMax": "Địa chỉ tối đa 100 ký tự",
+    "locationMin": "Địa chỉ tối thiểu 2 ký tự",
+    "locationChars": "Địa chỉ chỉ gồm chữ, số, khoảng trắng và , . - / ( )",
+    "targetRoleRequired": "Vui lòng chọn vị trí mục tiêu",
+    "courseRequired": "Tên môn học không được để trống",
+    "urlMax": "Liên kết tối đa 500 ký tự",
+    "headlineMax": "Headline tối đa 100 ký tự",
+    "bioMax": "Bio tối đa 500 ký tự",
+    "avatarInvalid": "Avatar URL không hợp lệ",
+    "facebookInvalid": "Link Facebook không hợp lệ (ví dụ: https://facebook.com/username)",
+    "linkedinInvalid": "Link LinkedIn không hợp lệ (ví dụ: https://linkedin.com/in/username)",
+    "githubInvalid": "Link GitHub không hợp lệ (ví dụ: https://github.com/username)",
+    "skillEmpty": "Kỹ năng không được để trống",
+    "skillTooLong": "Mỗi kỹ năng tối đa 30 ký tự",
+    "skillsMax": "Tối đa 20 kỹ năng",
+    "skillsDuplicate": "Kỹ năng bị trùng"
+  },
+  "dashboard": {
+    "welcome": "Chào mừng trở lại, {{name}}",
+    "title": "Tổng quan học tập của bạn",
+    "subtitle": "Tóm tắt rõ ràng về kỹ năng và thời gian học từ lần phân tích gần nhất.",
+    "runAnalysis": "Chạy phân tích mới",
+    "totalSkills": "Tổng số kỹ năng",
+    "totalSkillsHint": "Các kỹ năng được nhận diện từ hồ sơ của bạn",
+    "totalHours": "Tổng giờ học",
+    "totalHoursHint": "Số giờ ước tính từ các khóa đã hoàn thành",
+    "topSkills": "Kỹ năng nổi bật",
+    "topSkillsDesc": "Những năng lực mạnh nhất được phát hiện",
+    "strongest": "Mạnh nhất",
+    "viewSkillTree": "Xem cây kỹ năng",
+    "categoryStats": "Thống kê theo nhóm",
+    "categoryStatsDesc": "Phân bố kỹ năng theo nhóm",
+    "skill_other": "{{count}} kỹ năng",
+    "category_other": "{{count}} nhóm",
+    "loadError": "Không tải được tổng quan học tập.",
+    "loadErrorHint": "Kiểm tra kết nối và thử lại."
+  },
+  "dashboardExtra": {
+    "emptySkills": "Chưa phát hiện kỹ năng nào. Hãy chạy phân tích đầu tiên để xem tại đây.",
+    "emptyCategory": "Chưa có dữ liệu nhóm."
+  },
+  "notFound": {
+    "title": "Không tìm thấy trang",
+    "desc": "Trang bạn tìm không tồn tại hoặc đã được chuyển đi. Hãy kiểm tra lại URL hoặc quay về nơi an toàn.",
+    "goBack": "Quay lại",
+    "toHome": "Về trang chủ",
+    "toDashboard": "Đến trang tổng quan"
+  },
+  "footer": {
+    "product": "Sản phẩm",
+    "company": "Công ty",
+    "legal": "Pháp lý",
+    "copyright": "© {{year}} EduMap AI · Được tạo nên với tâm huyết tại San Francisco",
+    "links": {
+      "features": "Tính năng",
+      "pricing": "Bảng giá",
+      "roadmap": "Lộ trình phát triển",
+      "changelog": "Nhật ký thay đổi",
+      "about": "Giới thiệu",
+      "careers": "Tuyển dụng",
+      "blog": "Blog",
+      "press": "Báo chí",
+      "privacy": "Quyền riêng tư",
+      "terms": "Điều khoản",
+      "security": "Bảo mật",
+      "cookies": "Cookie"
+    }
+  },
+  "errors": {
+    "sessionExpired": "Phiên đăng nhập hết hạn, vui lòng đăng nhập lại."
+  },
+  "roles": {
+    "ADMIN": "Quản trị viên",
+    "MODERATOR": "Điều hành viên",
+    "MENTOR": "Cố vấn",
+    "STUDENT": "Sinh viên",
+    "desc": {
+      "ADMIN": "Toàn quyền truy cập mọi khu vực, gồm thanh toán và vai trò.",
+      "MODERATOR": "Xem xét báo cáo và điều hành cộng đồng.",
+      "MENTOR": "Hướng dẫn sinh viên, đánh giá lộ trình và portfolio.",
+      "STUDENT": "Tài khoản mặc định với quyền học tập cá nhân."
+    }
+  },
+  "plan": {
+    "label": "Gói {{name}}"
+  },
+  "toast": {
+    "chatCreated": "Tạo phiên chat thành công! Tiến hành chat.",
+    "chatDeleted": "Đã xóa cuộc trò chuyện.",
+    "resourceCreated": "Đã tạo tài nguyên mới",
+    "resourceDeleted": "Đã xóa tài nguyên",
+    "nodeDone": "Đã đánh dấu hoàn thành!",
+    "nodeUndone": "Đã bỏ đánh dấu hoàn thành!",
+    "treeDeleted": "Đã xóa cây kỹ năng!",
+    "roleUpdated": "Cập nhật vai trò thành công!",
+    "skillCreated": "Đã tạo kỹ năng thành công.",
+    "skillUpdated": "Đã cập nhật kỹ năng thành công.",
+    "skillDeleted": "Đã xóa kỹ năng thành công.",
+    "invalidData": "Dữ liệu không hợp lệ, vui lòng kiểm tra lại biểu mẫu."
+  },
+  "login": {
+    "teaser": "Cây kỹ năng của bạn đã lớn lên khi bạn vắng mặt — đóng thêm 3 khoảng trống, khớp 2 việc làm.",
+    "xpLabel": "Kiếm được tuần này",
+    "matchLabel": "Độ khớp Stripe",
+    "demoHint": "Chế độ demo · dùng email + mật khẩu bất kỳ",
+    "students": "© EduMap AI — 120K sinh viên đã được cố vấn"
+  },
+  "register": {
+    "agreePrefix": "Khi đăng ký, bạn đồng ý với",
+    "terms": "Điều khoản",
+    "privacy": "Quyền riêng tư",
+    "headline1": "Vạch lộ trình sự nghiệp.",
+    "headline2": "Trong chưa đầy một phút.",
+    "desc": "Nhận ngay lộ trình cá nhân hóa, cây kỹ năng và việc làm phù hợp ngay khi đăng ký.",
+    "statStudents": "Sinh viên",
+    "statSchools": "Trường",
+    "statRating": "Đánh giá"
+  },
+  "changePassword": {
+    "title": "Đổi mật khẩu",
+    "desc": "Hãy chọn mật khẩu mạnh và chưa từng dùng trước đây.",
+    "current": "Mật khẩu hiện tại",
+    "new": "Mật khẩu mới",
+    "confirmNew": "Xác nhận mật khẩu mới",
+    "update": "Cập nhật mật khẩu",
+    "updating": "Đang cập nhật...",
+    "success": "Cập nhật mật khẩu thành công!"
+  },
+  "chat": {
+    "uploadRequired": {
+      "title": "Chưa có dữ liệu để AI tư vấn",
+      "desc": "Hãy upload dữ liệu của bạn để AI phân tích hồ sơ trước khi bắt đầu trò chuyện.",
+      "cta": "Upload ngay",
+      "sourceTranscript": "Transcript học thuật",
+      "sourceGithub": "GitHub profile",
+      "sourceCv": "CV / Resume"
+    },
+    "empty": {
+      "title": "Chưa có cuộc trò chuyện nào",
+      "desc": "Bắt đầu trò chuyện với AI Mentor để nhận tư vấn lộ trình.",
+      "cta": "Bắt đầu trò chuyện",
+      "h1Title": "Hiểu hồ sơ của bạn",
+      "h1Desc": "AI đọc transcript, GitHub và CV để nắm rõ năng lực hiện tại.",
+      "h2Title": "Bám theo skill tree",
+      "h2Desc": "Mọi lời khuyên đều dựa trên lộ trình kỹ năng bạn đã tạo.",
+      "h3Title": "Gợi ý bước tiếp theo",
+      "h3Desc": "Đề xuất dự án, khóa học và kỹ năng nên học kế tiếp."
+    },
+    "sidebar": {
+      "newChat": "Cuộc trò chuyện mới",
+      "history": "Lịch sử",
+      "noSessions": "Chưa có phiên chat nào.",
+      "open": "Đang mở"
+    },
+    "page": {
+      "sessions": "Phiên chat ({{count}})",
+      "allSessions": "Tất cả phiên"
+    },
+    "new": {
+      "title": "Bắt đầu cuộc trò chuyện mới",
+      "descWithPath": "Đặt tiêu đề cho phiên chat với AI Mentor dựa trên lộ trình <b>{{path}}</b>.",
+      "descNoPath": "Đặt tiêu đề cho phiên chat với AI Mentor dựa trên lộ trình của bạn.",
+      "suggestedWithPath": "Tư vấn lộ trình {{path}}",
+      "suggestedDefault": "Tư vấn lộ trình của bạn"
+    },
+    "conversation": {
+      "online": "Trực tuyến",
+      "deleteTitle": "Xóa cuộc trò chuyện?",
+      "deleteDesc": "Hành động này không thể hoàn tác. Toàn bộ tin nhắn trong phiên này sẽ bị xóa vĩnh viễn.",
+      "deleteAria": "Xóa cuộc trò chuyện",
+      "welcome": "Hey {{name}} 👋 Tôi đã xem lộ trình {{title}} của bạn. Bạn muốn bắt đầu từ đâu?",
+      "fallbackName": "bạn",
+      "thinking": "AI đang soạn câu trả lời...",
+      "placeholder": "Hỏi bất cứ điều gì về sự nghiệp của bạn...",
+      "send": "Gửi tin nhắn",
+      "suggestion1": "Phân tích GitHub của tôi và gợi ý dự án",
+      "suggestion2": "Lập lộ trình học ML 12 tuần cho tôi",
+      "suggestion3": "Đánh giá CV của tôi cho vị trí FAANG",
+      "suggestion4": "Tôi nên học kỹ năng nào tiếp theo?"
+    }
+  },
+  "billing": {
+    "perMonth": "/tháng",
+    "perYear": "/năm",
+    "perDays": "/{{count}} ngày",
+    "save": "Tiết kiệm {{percent}}% so với trả theo tháng",
+    "plans": {
+      "FREE": {
+        "name": "Miễn phí",
+        "description": "Gói miễn phí cho sinh viên mới bắt đầu."
+      },
+      "PRO_STUDENT": {
+        "name": "Pro Student",
+        "description": "Dành cho sinh viên xây dựng lộ trình chuyên sâu và portfolio."
+      },
+      "PREMIUM": {
+        "name": "Premium",
+        "description": "Gói cao cấp nhất với hạn mức lớn hơn và AI xử lý ưu tiên."
+      }
+    },
+    "window": {
+      "DAILY": "Hằng ngày",
+      "MONTHLY": "Hằng tháng"
+    },
+    "usageFeature": {
+      "AI_CHAT": {
+        "title": "Chat với Cố vấn AI",
+        "subtitle": "Tin nhắn với cố vấn AI của bạn"
+      },
+      "SKILL_TREE_GENERATION": {
+        "title": "Tạo cây kỹ năng",
+        "subtitle": "Số lần phân tích cây kỹ năng mới"
+      },
+      "GITHUB_SYNC": {
+        "title": "Đồng bộ GitHub",
+        "subtitle": "Số lần đồng bộ hồ sơ từ GitHub"
+      },
+      "PDF_REPORT": {
+        "title": "Báo cáo PDF",
+        "subtitle": "Báo cáo phân tích đã xuất"
+      },
+      "RESUME_REVIEW": {
+        "title": "Đánh giá CV",
+        "subtitle": "Số lần AI đánh giá CV"
+      },
+      "JOB_MATCHING": {
+        "title": "Gợi ý việc làm",
+        "subtitle": "Số lần gợi ý việc làm cá nhân hóa"
+      }
+    },
+    "row": {
+      "aiChats": "Chat với cố vấn AI",
+      "skillTree": "Cây kỹ năng",
+      "skillTreeGeneration": "Tạo cây kỹ năng",
+      "jobMatching": "Gợi ý việc làm",
+      "resumeReview": "Đánh giá CV",
+      "pdfExport": "Xuất PDF",
+      "githubSync": "Đồng bộ GitHub",
+      "priorityAi": "Phân tích AI ưu tiên",
+      "hideBranding": "Ẩn thương hiệu EduMap",
+      "support": "Hỗ trợ",
+      "unlimited": "Không giới hạn",
+      "plusPriority": " + ưu tiên",
+      "perDay": "{{count}}/ngày",
+      "perMonth": "{{count}}/tháng",
+      "perWeek": "{{count}}/tuần",
+      "treeValue": "{{type}} · tối đa {{nodes}} node",
+      "full": "Đầy đủ",
+      "basic": "Cơ bản",
+      "githubDay": "{{count}}/ngày · tối đa {{repos}} repo",
+      "githubWeek": "{{count}}/tuần · tối đa {{repos}} repo",
+      "yesFaster": "Có · xử lý nhanh hơn",
+      "yes": "Có",
+      "supportPriority": "Ưu tiên",
+      "supportCommunity": "Cộng đồng"
+    },
+    "highlight": {
+      "fullTree": "Cây kỹ năng đầy đủ",
+      "basicTree": "Cây kỹ năng cơ bản",
+      "unlimitedAi": "Cố vấn AI không giới hạn",
+      "aiPerDay": "{{count}} lượt chat AI/ngày",
+      "publicCourses": "Khóa học công khai",
+      "jobMatching": "Gợi ý việc làm",
+      "resumeReview": "Đánh giá CV",
+      "priorityAi": "Phân tích AI ưu tiên",
+      "prioritySupport": "Hỗ trợ ưu tiên",
+      "communitySupport": "Hỗ trợ cộng đồng"
+    },
+    "subscription": {
+      "title": "Gói đăng ký",
+      "youreOn": "Bạn đang dùng <b>{{plan}}</b>.",
+      "renews": " Gia hạn vào {{date}}.",
+      "currentPlan": "Gói hiện tại",
+      "mostPopular": "Phổ biến nhất",
+      "upgrade": "Nâng cấp",
+      "downgrade": "Hạ gói",
+      "creating": "Đang tạo đơn…",
+      "featureComparison": "So sánh tính năng",
+      "feature": "Tính năng",
+      "paymentMethod": "Phương thức thanh toán",
+      "noPayment": "Chưa có phương thức thanh toán. Nâng cấp để mở khóa tính năng trả phí.",
+      "paidVia": "Thanh toán qua SePay (chuyển khoản / QR).",
+      "billingHistory": "Lịch sử thanh toán",
+      "order": "Đơn hàng",
+      "noInvoices": "Chưa có hóa đơn nào.",
+      "loadError": "Không tải được danh sách gói. Vui lòng thử lại."
+    },
+    "usage": {
+      "title": "Mức sử dụng",
+      "subtitle": "Theo dõi hạn mức bạn đã dùng trong gói <b>{{plan}}</b>.",
+      "back": "Gói đăng ký",
+      "totalQuota": "Tổng hạn mức",
+      "usedThisCycle": "Đã dùng trong chu kỳ",
+      "remaining": "Còn lại",
+      "unlimited": "Không giới hạn",
+      "usedOf": "Đã dùng {{used}} / {{limit}}",
+      "remainingN": "Còn {{count}}",
+      "cycleStarted": "Chu kỳ bắt đầu {{date}}",
+      "needMore": "Cần thêm hạn mức?",
+      "needMoreDesc": "Nâng cấp gói để có hạn mức cao hơn cho mọi tính năng.",
+      "viewPlans": "Xem các gói",
+      "loadError": "Không tải được dữ liệu sử dụng. Vui lòng thử lại."
+    },
+    "payment": {
+      "plan": "Gói",
+      "amount": "Số tiền",
+      "period": "Chu kỳ thanh toán",
+      "yearly": "Theo năm",
+      "monthly": "Theo tháng",
+      "paymentId": "Mã thanh toán",
+      "accountName": "Tên tài khoản",
+      "bank": "Ngân hàng",
+      "description": "Nội dung chuyển khoản",
+      "qrAlt": "Mã QR thanh toán",
+      "expired": "Mã QR đã hết hạn",
+      "expiresIn": "Hết hạn sau",
+      "copy": "Sao chép nội dung",
+      "download": "Tải mã QR",
+      "waiting": "Đang chờ thanh toán… Cửa sổ này sẽ tự đóng khi chúng tôi nhận được chuyển khoản.",
+      "expiredHint": "Hãy đóng cửa sổ này rồi bấm Nâng cấp lần nữa để tạo đơn mới.",
+      "success": "Thanh toán thành công! Gói của bạn đã được nâng cấp.",
+      "copied": "Đã sao chép nội dung chuyển khoản",
+      "copyFailed": "Không thể sao chép. Vui lòng sao chép thủ công."
+    }
+  },
+  "skillTree": {
+    "title": "Cây kỹ năng",
+    "subtitleWithPath": "Lộ trình đến {{path}}: bạn đã biết gì, bước tiếp theo là gì.",
+    "subtitleDefault": "Kỹ năng, khoảng trống và bước tiếp theo của bạn, do cố vấn AI tạo ra.",
+    "loadError": "Không tải được cây kỹ năng của bạn.",
+    "loadErrorHint": "Hãy thử lại, hoặc chạy phân tích nếu bạn chưa tạo cây nào.",
+    "tryAgain": "Thử lại",
+    "loading": "Đang tải...",
+    "runAnalysis": "Chạy phân tích",
+    "emptyTitle": "Chưa có cây kỹ năng.",
+    "emptyDesc": "Hãy chạy phân tích đầu tiên để tạo cây kỹ năng.",
+    "dependencies": "Quan hệ phụ thuộc kiến thức",
+    "completed": "Đã hoàn thành",
+    "open": "Chưa hoàn thành",
+    "noCategory": "Không có kỹ năng nào trong nhóm này.",
+    "summary": {
+      "completion": "Tiến độ",
+      "ofTotal": "{{completed}} / {{total}}",
+      "totalNodes": "Tổng số node",
+      "categories_other": "Thuộc {{count}} nhóm",
+      "nextPriority": "Ưu tiên tiếp theo",
+      "priorityLevel": "Ưu tiên #{{rank}} · Cấp {{level}}",
+      "allDone": "Hoàn thành tất cả",
+      "allDoneDesc": "Mọi kỹ năng trong cây này đã hoàn thành."
+    },
+    "node": {
+      "collapse": "Thu gọn {{name}}",
+      "expand": "Mở rộng {{name}}",
+      "level": "Cấp {{level}}",
+      "mastered": "Đã thành thạo",
+      "stateCompleted": "{{name}}: đã hoàn thành",
+      "stateOpen": "{{name}}: chưa hoàn thành"
+    },
+    "detail": {
+      "selectSkill": "Chọn một kỹ năng",
+      "viewDetails": "Để xem chi tiết.",
+      "priority": "Ưu tiên #{{rank}}",
+      "difficulty": "Độ khó",
+      "demand": "Nhu cầu",
+      "status": "Trạng thái",
+      "nodeLevel": "Cấp node",
+      "children": "Node con",
+      "mastered": "Đã thành thạo",
+      "toLearn": "Cần học",
+      "completed": "Đã hoàn thành",
+      "notCompleted": "Chưa hoàn thành"
+    },
+    "filter": {
+      "label": "Lọc theo nhóm",
+      "all": "Tất cả"
+    }
+  },
+  "brand": {
+    "tagline": "Lộ trình cho giáo dục"
+  },
+  "home": {
+    "poweredBy": "Sức mạnh từ GPT-5",
+    "hero": {
+      "title1": "Cố vấn nghề nghiệp AI của bạn,",
+      "title2": "dành cho mọi sinh viên CNTT.",
+      "desc": "Tải lên bảng điểm, GitHub và CV. EduMap AI lập bản đồ kỹ năng, chỉ ra khoảng trống và xây lộ trình đến vị trí mơ ước của bạn.",
+      "watchDemo": "Xem demo",
+      "freeNote": "Miễn phí cho sinh viên · Không cần thẻ tín dụng"
+    },
+    "deck": {
+      "skillMap": "Bản đồ kỹ năng",
+      "careerScore": "Điểm nghề nghiệp",
+      "jobMatch": "Độ khớp việc làm"
+    },
+    "stats": {
+      "students": "Sinh viên được cố vấn",
+      "universities": "Trường đại học",
+      "internship": "Tỷ lệ thực tập",
+      "rating": "Đánh giá trung bình"
+    },
+    "features": {
+      "label": "Tính năng",
+      "title": "Mọi thứ bạn cần để có được vị trí mơ ước.",
+      "subtitle": "Bộ công cụ AI nghề nghiệp hoàn chỉnh, dành cho sinh viên CNTT không có thời gian để lãng phí.",
+      "swipe": "Vuốt 3D",
+      "grid": "Lưới",
+      "swipeHint": "← Kéo hoặc vuốt ngang để xem tính năng với góc nhìn 3D →",
+      "explore": "Khám phá tính năng",
+      "items": [
+        {
+          "title": "Cố vấn nghề nghiệp AI",
+          "description": "Trò chuyện với AI hiểu rõ bảng điểm, GitHub và mục tiêu của bạn. Như có một kỹ sư senior luôn sẵn sàng hỗ trợ."
+        },
+        {
+          "title": "Cây kỹ năng động",
+          "description": "Trực quan hóa sinh động mọi kỹ năng bạn đã có, đang học và nên học tiếp theo."
+        },
+        {
+          "title": "Lộ trình cá nhân hóa",
+          "description": "Kế hoạch từng tuần được tạo tự động, thích ứng khi bạn hoàn thành nhiệm vụ và mở khóa kỹ năng mới."
+        },
+        {
+          "title": "Gợi ý việc làm",
+          "description": "So khớp theo thời gian thực với hàng nghìn vị trí thực tập, kèm đúng những khoảng trống cần lấp."
+        },
+        {
+          "title": "Tạo portfolio",
+          "description": "Biến dự án của bạn thành trang portfolio ấn tượng mà nhà tuyển dụng sẽ nhớ."
+        },
+        {
+          "title": "Tài nguyên thông minh",
+          "description": "Khóa học, bài viết và tài liệu được chọn lọc cho đúng bước tiếp theo của bạn. Không còn lạc vào vô tận video YouTube."
+        }
+      ]
+    },
+    "testimonials": {
+      "label": "Khách hàng",
+      "title": "Từ giảng đường đến FAANG.",
+      "hint": "Vuốt ngang để xem phản hồi thực tế từ các học viên",
+      "items": [
+        {
+          "quote": "EduMap AI biến việc học lộn xộn của tôi thành kế hoạch tuần rõ ràng. Tôi có suất thực tập Stripe sau 4 tháng."
+        },
+        {
+          "quote": "Cây kỹ năng thật xuất sắc. Cuối cùng tôi thấy được những khoảng trống đang cản mình nhận offer FAANG."
+        },
+        {
+          "quote": "Cố vấn AI đọc GitHub của tôi và nói đúng thứ cần làm tiếp theo. Như có một kỹ sư senior trong túi."
+        }
+      ]
+    },
+    "plans": {
+      "label": "Bảng giá",
+      "title": "Gói dịch vụ phát triển cùng bạn.",
+      "perMonth": "/tháng",
+      "mostPopular": "Phổ biến nhất",
+      "items": [
+        {
+          "name": "Miễn phí",
+          "tagline": "Bắt đầu miễn phí",
+          "cta": "Dùng miễn phí",
+          "features": [
+            "Cây kỹ năng (cơ bản)",
+            "5 lượt chat AI/ngày",
+            "Khóa học công khai",
+            "Hỗ trợ cộng đồng"
+          ]
+        },
+        {
+          "name": "Pro Student",
+          "tagline": "Mọi thứ bạn cần để có thực tập",
+          "cta": "Nâng cấp lên Pro",
+          "features": [
+            "Chat nghề nghiệp AI không giới hạn",
+            "Cây kỹ năng động đầy đủ",
+            "Gợi ý việc làm & phân tích khoảng trống hằng ngày",
+            "Trình tạo trang portfolio tùy chỉnh",
+            "Hỗ trợ ưu tiên"
+          ]
+        },
+        {
+          "name": "Campus",
+          "tagline": "Dành cho khóa sinh viên & câu lạc bộ",
+          "cta": "Liên hệ kinh doanh",
+          "features": [
+            "Tối đa 25 chỗ sinh viên",
+            "Bảng phân tích theo khóa",
+            "Thư viện tài nguyên dùng chung",
+            "Cố vấn AI riêng",
+            "Công cụ quản trị"
+          ]
+        }
+      ]
+    },
+    "faq": {
+      "label": "Câu hỏi thường gặp",
+      "title": "Giải đáp thắc mắc.",
+      "items": [
+        {
+          "question": "EduMap AI phân tích hồ sơ của tôi như thế nào?",
+          "answer": "Bạn kết nối bảng điểm, GitHub và CV. AI sẽ đọc chúng, lập bản đồ mọi kỹ năng bạn đã có và so với vị trí mục tiêu để tìm ra khoảng trống."
+        },
+        {
+          "question": "Dữ liệu của tôi có riêng tư không?",
+          "answer": "Có. Bảng điểm, mã nguồn và dữ liệu cá nhân của bạn được mã hóa, không bao giờ bị bán hay chia sẻ cho bên thứ ba. Bạn có thể xóa dữ liệu bất cứ lúc nào trong phần cài đặt."
+        },
+        {
+          "question": "Nhà trường có quyền truy cập không?",
+          "answer": "Chỉ khi bạn chủ động tham gia chương trình hợp tác với trường. Mặc định tài khoản và lộ trình chỉ mình bạn thấy."
+        },
+        {
+          "question": "Tôi có thể dùng gói miễn phí mãi mãi không?",
+          "answer": "Có — gói Miễn phí không giới hạn thời gian. Bạn có thể nâng cấp lên Pro Student hoặc Premium bất cứ lúc nào khi cần thêm lượt chat AI, gợi ý việc làm hoặc hỗ trợ ưu tiên."
+        }
+      ]
+    },
+    "cta": {
+      "title": "Sẵn sàng vạch lộ trình sự nghiệp?",
+      "desc": "Tham gia cùng hơn 120.000 sinh viên đang xây dựng sự nghiệp mình thật sự muốn — trong một nửa thời gian."
+    }
+  },
+  "resources": {
+    "open": "Mở tài nguyên",
+    "price": {
+      "free": "Miễn phí"
+    },
+    "type": {
+      "DOCUMENTATION": "Tài liệu",
+      "INTERACTIVE_LAB": "Thực hành tương tác",
+      "VIDEO_COURSE": "Khóa học video",
+      "ARTICLE": "Bài viết"
+    },
+    "page": {
+      "title": "Tài nguyên học tập",
+      "subtitle": "{{count}} tài nguyên được đánh giá cao nhất cho lộ trình của bạn.",
+      "search": "Tìm trong {{count}} tài nguyên...",
+      "searchEmpty": "Tìm tài nguyên...",
+      "loadError": "Không tải được danh sách tài nguyên.",
+      "empty": "Không có tài nguyên nào phù hợp bộ lọc.",
+      "price": {
+        "All": "Tất cả",
+        "Free": "Miễn phí",
+        "Paid": "Trả phí"
+      }
+    },
+    "detail": {
+      "notFound": "Không tìm thấy tài nguyên",
+      "info": "Thông tin",
+      "type": "Loại",
+      "platform": "Nền tảng",
+      "duration": "Thời lượng",
+      "hours": "{{count}} giờ",
+      "price": "Giá",
+      "free": "🎉 Miễn phí",
+      "rating": "Đánh giá",
+      "visit": "Truy cập tài nguyên",
+      "skill": "Kỹ năng"
+    },
+    "history": {
+      "title": "Lịch sử xem",
+      "loadError": "Không tải được lịch sử xem.",
+      "none": "Bạn chưa xem tài nguyên nào.",
+      "count": "{{count}} tài nguyên đã xem",
+      "emptyBody": "Bạn chưa xem bất kỳ tài nguyên nào.",
+      "viewList": "Danh sách",
+      "viewCard": "Thẻ",
+      "cols": {
+        "resource": "Tài nguyên",
+        "skill": "Kỹ năng",
+        "type": "Loại",
+        "platform": "Nền tảng",
+        "viewedAt": "Ngày xem",
+        "action": "Hành động"
+      }
+    },
+    "skill": {
+      "title": "Tài nguyên học {{skill}}",
+      "titleDefault": "Tài nguyên học",
+      "loading": "Đang tìm tài nguyên cho kỹ năng này, có thể mất vài giây...",
+      "summary": "{{count}} tài nguyên, được chia theo video, tài liệu và thực hành.",
+      "loadError": "Không tải được tài nguyên của kỹ năng này.",
+      "empty": "Chưa có tài nguyên nào cho kỹ năng này. Bạn thử bấm “Tải thêm tài nguyên” hoặc các link bên dưới.",
+      "video": "Video",
+      "docs": "Tài liệu & bài viết",
+      "practice": "Thực hành",
+      "loadMore": "Tải thêm tài nguyên",
+      "loadingMore": "Đang tìm thêm tài nguyên...",
+      "wait": "Có thể mất vài giây, bạn đợi chút nhé.",
+      "searchElsewhere": "Tìm thêm ở nơi khác",
+      "searchElsewhereDesc": "Mở kết quả tìm kiếm {{skill}} trên các nền tảng.",
+      "added": "Đã thêm {{count}} tài nguyên mới!",
+      "noMore": "Không tìm thấy thêm tài nguyên mới."
+    }
+  },
+  "jobs": {
+    "trending": {
+      "title": "Xu hướng việc làm",
+      "subtitle_other": "{{count}} vị trí",
+      "search": "Tìm vị trí...",
+      "loadError": "Không tải được danh sách xu hướng.",
+      "empty": "Không có vị trí nào phù hợp.",
+      "interested": "Vị trí đang được quan tâm",
+      "findOn": "Tìm việc trên",
+      "searches": "Lượt tìm kiếm"
+    },
+    "analysis": {
+      "title": "Phân tích việc làm",
+      "desc": "Phân tích thị trường và gợi ý việc làm dựa trên kỹ năng và dự án của bạn.",
+      "careerPath": "Hướng nghề nghiệp:",
+      "totalSkills_other": "{{count}} kỹ năng trong hồ sơ",
+      "unchecked": "Chưa kiểm tra được hồ sơ kỹ năng của bạn.",
+      "recheck": "Kiểm tra lại",
+      "rechecking": "Đang kiểm tra...",
+      "updateProfile": "Cập nhật hồ sơ",
+      "where": "Bạn đang ở đâu?",
+      "placeholder": "Mặc định: {{loc}}",
+      "analyze": "Phân tích",
+      "analyzing": "Đang phân tích...",
+      "thinking": "AI đang phân tích thị trường, có thể mất 10–30 giây.",
+      "failed": "Không tạo được phân tích.",
+      "failedHint": "Vui lòng kiểm tra hồ sơ kỹ năng của bạn rồi thử lại.",
+      "close": "Đóng",
+      "hint": "Nhập địa chỉ rồi bấm “Phân tích” để xem gợi ý việc làm."
+    },
+    "result": {
+      "basedOnProject": "Dựa trên công nghệ trong dự án",
+      "market": "Thị trường hiện tại",
+      "platforms": "Tìm việc trên các nền tảng",
+      "keyword": "Từ khóa: {{keyword}}",
+      "sampleJobs": "Việc làm phù hợp",
+      "interview": "Câu hỏi phỏng vấn nên chuẩn bị"
+    }
+  },
+  "notifications": {
+    "summary": "{{unread}} chưa đọc · {{total}} tổng cộng",
+    "markAll": "Đánh dấu đã đọc tất cả",
+    "tab": {
+      "ALL": "Tất cả",
+      "INFO": "Thông tin",
+      "SUCCESS": "Thành công",
+      "WARNING": "Cảnh báo",
+      "ERROR": "Lỗi"
+    },
+    "type": {
+      "INFO": "Thông tin",
+      "SUCCESS": "Thành công",
+      "WARNING": "Cảnh báo",
+      "ERROR": "Lỗi"
+    },
+    "loadError": "Không thể tải thông báo. Vui lòng thử lại.",
+    "empty": "Không có thông báo",
+    "emptyHint": "Bạn sẽ thấy thông báo mới ở đây.",
+    "loadMore": "Tải thêm",
+    "goToLink": "Đi tới liên kết",
+    "close": "Đóng",
+    "justNow": "Vừa xong",
+    "minutesAgo": "{{count}} phút trước",
+    "hoursAgo": "{{count}} giờ trước",
+    "daysAgo": "{{count}} ngày trước"
+  },
+  "portfolio": {
+    "title": "Trình tạo portfolio",
+    "desc": "Chỉnh sửa, chọn giao diện và chia sẻ portfolio của bạn.",
+    "tab": {
+      "Info": "Thông tin",
+      "Theme": "Giao diện",
+      "Share": "Chia sẻ"
+    },
+    "headline": "Tiêu đề hồ sơ",
+    "bio": "Giới thiệu",
+    "avatarUrl": "Avatar URL",
+    "skills": "Kỹ năng",
+    "skillPlaceholder": "Nhập kỹ năng rồi nhấn Enter (tối đa {{max}})",
+    "removeAria": "Xóa {{name}}",
+    "public": "Công khai portfolio",
+    "publicHint": "Bất kỳ ai có link đều xem được. Nhấn “Lưu thay đổi” để áp dụng.",
+    "copyLink": "Sao chép link",
+    "copied": "Đã sao chép link",
+    "saved": "Đã lưu portfolio",
+    "invalid": "Dữ liệu không hợp lệ",
+    "fixErrors": "Vui lòng kiểm tra lại các trường bị lỗi",
+    "skillTooLong": "Mỗi kỹ năng tối đa {{max}} ký tự",
+    "skillExists": "Kỹ năng \"{{name}}\" đã có",
+    "skillsMax": "Tối đa {{max}} kỹ năng",
+    "livePreview": "Xem trước trực tiếp",
+    "yourName": "Tên của bạn",
+    "addSkillsHint": "Thêm kỹ năng ở tab Info để hiển thị tại đây.",
+    "projects": "Dự án",
+    "synced": "Đã đồng bộ từ GitHub",
+    "updated": "Cập nhật {{date}}",
+    "noTech": "Chưa phát hiện tech stack",
+    "emptyPrivate": "Bật “Công khai portfolio” ở tab Share để hiển thị dự án GitHub tại đây.",
+    "emptySynced": "Chưa có dự án nào. Đồng bộ GitHub để tự động thêm dự án của bạn.",
+    "empty": "Chưa có dự án nào.",
+    "notFound": "Không tìm thấy portfolio",
+    "notFoundDesc": "Portfolio này không tồn tại hoặc chưa được công khai."
+  },
+  "profile": {
+    "stats": {
+      "careerScore": "Điểm nghề nghiệp",
+      "streak": "Chuỗi ngày",
+      "skillsMastered": "Kỹ năng thành thạo",
+      "totalXp": "Tổng XP"
+    },
+    "ach": {
+      "firstSteps": "Bước đầu tiên",
+      "weekStreak": "Chuỗi 1 tuần",
+      "codeNinja": "Code Ninja",
+      "cloudNative": "Cloud Native",
+      "aiExplorer": "Nhà thám hiểm AI",
+      "mentor": "Cố vấn",
+      "openSource": "Mã nguồn mở",
+      "interviewReady": "Sẵn sàng phỏng vấn"
+    },
+    "goal": {
+      "leetcode": "Hoàn thành LeetCode 50",
+      "chatbot": "Xây dựng chatbot AI",
+      "aws": "Lấy chứng chỉ AWS",
+      "react": "Đóng góp cho một thư viện React",
+      "k8s": "Học Kubernetes"
+    },
+    "achievements": "Thành tích",
+    "goals": "Mục tiêu hiện tại",
+    "certificates": "Chứng chỉ",
+    "skillsMastered": "Kỹ năng thành thạo",
+    "issued": "Cấp năm {{year}}",
+    "universityNotSet": "Chưa cập nhật trường",
+    "yearN": "Năm {{n}}",
+    "memberSince": "Thành viên từ {{date}}",
+    "connectGithub": "Kết nối GitHub",
+    "viewPortfolio": "Xem portfolio",
+    "changePassword": "Đổi mật khẩu",
+    "editProfile": "Sửa hồ sơ",
+    "loadError": "Không tải được hồ sơ. Vui lòng tải lại trang."
+  },
+  "settings": {
+    "title": "Cài đặt",
+    "subtitle": "Quản lý tài khoản, tùy chọn và quyền riêng tư.",
+    "tab": {
+      "account": "Tài khoản",
+      "appearance": "Giao diện",
+      "notifications": "Thông báo",
+      "privacy": "Quyền riêng tư",
+      "danger": "Nguy hiểm"
+    },
+    "profile": "Hồ sơ",
+    "uploadNew": "Tải ảnh mới",
+    "avatarHint": "PNG hoặc JPG, tối đa 2MB",
+    "fullName": "Họ và tên",
+    "university": "Trường đại học",
+    "currentYear": "Năm học hiện tại",
+    "githubUsername": "GitHub username",
+    "comingSoon": "Cài đặt {{tab}} sắp ra mắt.",
+    "updated": "Cập nhật thông tin thành công!"
+  },
+  "upload": {
+    "title": "Tải lên & Phân tích",
+    "subtitle": "Chọn chế độ phân tích và cung cấp cho AI mọi thứ cần thiết để vẽ bản đồ sự nghiệp của bạn.",
+    "mode": {
+      "ACADEMIC": {
+        "title": "Chỉ học thuật",
+        "desc": "Bảng điểm & điểm số"
+      },
+      "GITHUB": {
+        "title": "Chỉ GitHub",
+        "desc": "Repo & hoạt động"
+      },
+      "HYBRID": {
+        "title": "Kết hợp",
+        "desc": "Bảng điểm + repo"
+      }
+    },
+    "recommended": "Khuyên dùng",
+    "targetRole": "Vị trí mục tiêu",
+    "academic": "Bảng điểm học thuật",
+    "universityName": "Tên trường đại học",
+    "uniPlaceholder": "Đại học Bách Khoa",
+    "currentYear": "Năm học hiện tại",
+    "coreCourses": "Môn học chính & điểm",
+    "addCourse": "Thêm môn học",
+    "courseName": "Tên môn học {{n}}",
+    "courseGrade": "Điểm môn học {{n}}",
+    "removeCourse": "Xóa môn học {{n}}",
+    "coursePlaceholder": "Cơ sở dữ liệu",
+    "githubProfile": "Hồ sơ GitHub",
+    "githubUsername": "GitHub username",
+    "githubHint": "Chúng tôi quét các repo nổi bật, ngôn ngữ và hoạt động đóng góp của bạn.",
+    "summary_other": "{{mode}} · {{count}} môn học",
+    "start": "Bắt đầu phân tích AI",
+    "analyzing": "Đang phân tích...",
+    "done": "Phân tích hoàn tất!",
+    "overlayTitle": "AI đang phân tích hồ sơ của bạn",
+    "overlayDesc": "Quá trình này có thể mất vài chục giây. Vui lòng không đóng trang."
+  },
+  "admin": {
+    "skills": {
+      "title": "Kỹ năng",
+      "desc": "Toàn bộ kỹ năng trong hệ thống, do quản trị viên quản lý.",
+      "add": "Thêm kỹ năng",
+      "edit": "Sửa kỹ năng",
+      "total": "Tổng kỹ năng",
+      "categories": "Nhóm",
+      "matching": "Khớp bộ lọc",
+      "search": "Tìm theo tên hoặc nhóm...",
+      "allCategories": "Tất cả nhóm",
+      "allLevels": "Tất cả cấp độ",
+      "level": "Cấp {{n}}",
+      "cols": {
+        "skill": "Kỹ năng",
+        "category": "Nhóm",
+        "difficulty": "Độ khó",
+        "demand": "Nhu cầu",
+        "created": "Ngày tạo"
+      },
+      "loadError": "Không tải được danh sách kỹ năng.",
+      "empty": "Không có kỹ năng nào khớp bộ lọc.",
+      "deleteTitle": "Xóa kỹ năng?",
+      "deleteDesc": "Hành động này không thể hoàn tác.",
+      "editAria": "Sửa {{name}}",
+      "deleteAria": "Xóa {{name}}",
+      "name": "Tên",
+      "namePlaceholder": "VD: Redis",
+      "category": "Nhóm",
+      "categoryHint": "Chọn nhóm có sẵn hoặc nhập nhóm mới",
+      "categoryPlaceholder": "VD: Databases",
+      "difficulty": "Độ khó",
+      "demand": "Điểm nhu cầu",
+      "demandHint": "VD: 8.5",
+      "create": "Tạo kỹ năng",
+      "saveChanges": "Lưu thay đổi",
+      "duplicate": "Đã có kỹ năng trùng tên",
+      "noChanges": "Không có thay đổi để lưu."
+    },
+    "trees": {
+      "title": "Cây kỹ năng",
+      "desc": "Cây kỹ năng của mọi người dùng. Bấm vào một dòng để xem các node.",
+      "total": "Tổng số cây",
+      "careerPaths": "Hướng nghề nghiệp",
+      "avg": "Tiến độ trung bình",
+      "search": "Tìm theo ID người dùng hoặc hướng nghề nghiệp...",
+      "allPaths": "Tất cả hướng nghề nghiệp",
+      "cols": {
+        "userId": "ID người dùng",
+        "careerPath": "Hướng nghề nghiệp",
+        "progress": "Tiến độ",
+        "rootNodes": "Node gốc",
+        "lastAnalyzed": "Phân tích gần nhất",
+        "created": "Ngày tạo"
+      },
+      "loadError": "Không tải được danh sách cây kỹ năng.",
+      "empty": "Không có cây kỹ năng nào khớp bộ lọc.",
+      "noNodes": "Cây này chưa có node nào.",
+      "completed": "Đã hoàn thành",
+      "notCompleted": "Chưa hoàn thành",
+      "hideNodes": "Ẩn node",
+      "showNodes": "Hiện node",
+      "deleteAria": "Xóa cây của người dùng {{id}}",
+      "deleteTitle": "Xóa cây kỹ năng?",
+      "deleteDesc": "Cây và toàn bộ node sẽ bị xóa. Hành động này không thể hoàn tác."
+    },
+    "resources": {
+      "desc": "Top {{limit}} tài nguyên được đánh giá cao nhất trên hệ thống.",
+      "add": "Thêm tài nguyên",
+      "total": "Tổng tài nguyên",
+      "free": "Miễn phí",
+      "avgRating": "Đánh giá trung bình",
+      "search": "Tìm theo tiêu đề hoặc kỹ năng...",
+      "allTypes": "Tất cả loại",
+      "cols": {
+        "title": "Tài nguyên",
+        "skill": "Kỹ năng",
+        "type": "Loại",
+        "cost": "Chi phí",
+        "rating": "Đánh giá",
+        "duration": "Thời lượng",
+        "created": "Ngày tạo"
+      },
+      "loadError": "Không tải được danh sách tài nguyên.",
+      "empty": "Không có tài nguyên nào khớp bộ lọc.",
+      "openAria": "Mở {{title}}",
+      "deleteAria": "Xóa {{title}}",
+      "deleteTitle": "Xóa tài nguyên?",
+      "deleteDesc": "sẽ bị xóa vĩnh viễn. Hành động này không thể hoàn tác.",
+      "form": {
+        "addTitle": "Thêm tài nguyên",
+        "skill": "Kỹ năng",
+        "selectSkill": "-- Chọn kỹ năng --",
+        "title": "Tiêu đề",
+        "titlePlaceholder": "VD: Node.js Crash Course",
+        "type": "Loại tài nguyên",
+        "optional": "Không bắt buộc",
+        "cost": "Chi phí ($, 0 = miễn phí)",
+        "rating": "Đánh giá (0 - 5)",
+        "duration": "Thời lượng (giờ)",
+        "creating": "Đang tạo...",
+        "create": "Tạo tài nguyên"
+      }
+    },
+    "permissions": {
+      "title": "Phân quyền người dùng",
+      "desc": "Gán vai trò và kiểm soát quyền truy cập của từng nhóm.",
+      "invite": "Mời người dùng",
+      "users": "Người dùng",
+      "matrix": "Ma trận phân quyền",
+      "matrixSoon": "Ma trận phân quyền chưa được triển khai.",
+      "search": "Tìm tên hoặc email...",
+      "allRoles": "Tất cả vai trò",
+      "cols": {
+        "user": "Người dùng",
+        "role": "Vai trò",
+        "subscription": "Gói đăng ký",
+        "joined": "Ngày tham gia"
+      },
+      "loadError": "Không tải được danh sách người dùng. Vui lòng thử lại.",
+      "notFound": "Không tìm thấy người dùng phù hợp."
+    }
+  }
+}

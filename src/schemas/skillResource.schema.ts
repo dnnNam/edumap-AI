@@ -3,14 +3,14 @@ import { z } from 'zod'
 export const RESOURCE_TYPES = ['VIDEO_COURSE', 'DOCUMENTATION', 'INTERACTIVE_LAB', 'ARTICLE'] as const
 
 export const skillResourceSchema = z.object({
-  skillId: z.string().min(1, 'Vui lòng chọn kỹ năng'),
+  skillId: z.string().min(1, 'validation.skillRequired'),
   affiliateId: z.string().trim().optional(), // để trống thì không gửi lên BE
-  resourceType: z.enum(RESOURCE_TYPES, { message: 'Vui lòng chọn loại tài nguyên' }),
-  title: z.string().trim().min(3, 'Tiêu đề tối thiểu 3 ký tự').max(200, 'Tiêu đề tối đa 200 ký tự'),
+  resourceType: z.enum(RESOURCE_TYPES, { message: 'validation.resourceTypeRequired' }),
+  title: z.string().trim().min(3, 'validation.titleMin').max(200, 'validation.titleMax'),
   url: z
     .string()
     .trim()
-    .min(1, 'Vui lòng nhập URL')
+    .min(1, 'validation.urlRequired')
     .refine((v) => {
       try {
         const u = new URL(v)
@@ -18,11 +18,14 @@ export const skillResourceSchema = z.object({
       } catch {
         return false
       }
-    }, 'URL không hợp lệ (phải bắt đầu bằng http:// hoặc https://)'),
+    }, 'validation.urlInvalid'),
   // input dùng valueAsNumber: để trống => NaN => rơi vào message bên dưới
-  cost: z.number({ message: 'Vui lòng nhập chi phí' }).min(0, 'Chi phí không được âm'),
-  rating: z.number({ message: 'Vui lòng nhập điểm đánh giá' }).min(0, 'Tối thiểu 0').max(5, 'Tối đa 5'),
-  durationHours: z.number({ message: 'Vui lòng nhập thời lượng' }).min(0, 'Thời lượng không được âm'),
+  cost: z.number({ message: 'validation.costRequired' }).min(0, 'validation.costMin'),
+  rating: z
+    .number({ message: 'validation.ratingRequired' })
+    .min(0, 'validation.ratingMin')
+    .max(5, 'validation.ratingMax'),
+  durationHours: z.number({ message: 'validation.durationRequired' }).min(0, 'validation.durationMin'),
 })
 
 export type SkillResourceFormValues = z.infer<typeof skillResourceSchema>

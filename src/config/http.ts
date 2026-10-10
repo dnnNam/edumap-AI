@@ -2,6 +2,7 @@ import type { AxiosError, AxiosInstance } from 'axios'
 import axios, { HttpStatusCode } from 'axios'
 import { clearLS, getAccessTokenFromLS } from '../utils/auth'
 import { toast } from 'sonner'
+import i18n from '../i18n'
 
 interface ErrorResponse {
   message?: string
@@ -48,7 +49,7 @@ class Http {
         if (error.response?.status === HttpStatusCode.Unauthorized) {
           const message = error?.response?.data?.message
           clearLS()
-          toast.error(message || 'Phiên đăng nhập hết hạn, vui lòng đăng nhập lại.', {
+          toast.error(message || i18n.t('errors.sessionExpired'), {
             duration: 1500,
           })
           // Tùy chọn: Ép reload để clear state trong bộ nhớ và đẩy về login

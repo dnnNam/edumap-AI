@@ -1,14 +1,17 @@
 import { ArrowLeft, Compass, Home } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router'
 import { getAccessTokenFromLS, getRoleFromLS } from '../../utils/auth'
 import { MotionFadeIn } from '../../components/motion/MotionWrapper'
 
 export default function NotFoundPage() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
 
   // Chưa đăng nhập -> về trang chủ, admin -> /admin, còn lại -> /dashboard
-  const homePath = !getAccessTokenFromLS() ? '/' : getRoleFromLS() === 'ADMIN' ? '/admin' : '/dashboard'
-  const homeLabel = !getAccessTokenFromLS() ? 'Back to home' : 'Go to dashboard'
+  const hasToken = !!getAccessTokenFromLS()
+  const homePath = !hasToken ? '/' : getRoleFromLS() === 'ADMIN' ? '/admin' : '/dashboard'
+  const homeLabel = !hasToken ? t('notFound.toHome') : t('notFound.toDashboard')
 
   return (
     <div className='min-h-screen w-full bg-[#FAFAF9] flex items-center justify-center px-4'>
@@ -18,10 +21,8 @@ export default function NotFoundPage() {
         </div>
 
         <p className='mt-6 text-sm font-medium text-indigo-600'>Error 404</p>
-        <h1 className='mt-2 text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight'>Page not found</h1>
-        <p className='mt-3 text-[15px] text-gray-500 leading-relaxed'>
-          The page you're looking for doesn't exist or has been moved. Check the URL or head back to a safe place.
-        </p>
+        <h1 className='mt-2 text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight'>{t('notFound.title')}</h1>
+        <p className='mt-3 text-[15px] text-gray-500 leading-relaxed'>{t('notFound.desc')}</p>
 
         <div className='mt-8 flex flex-col-reverse sm:flex-row items-center justify-center gap-3'>
           <button
@@ -30,7 +31,7 @@ export default function NotFoundPage() {
             className='w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white text-gray-700 text-sm font-medium px-4 py-2.5 hover:bg-gray-50 transition-colors'
           >
             <ArrowLeft className='w-4 h-4' />
-            Go back
+            {t('notFound.goBack')}
           </button>
           <Link
             to={homePath}

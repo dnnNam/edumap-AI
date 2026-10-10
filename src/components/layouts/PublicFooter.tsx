@@ -1,9 +1,6 @@
+import { useTranslation } from 'react-i18next'
 import Logo from '../ui/Logo'
-import {
-  FaTwitter,
-  FaGithub,
-  FaLinkedin,
-} from 'react-icons/fa'
+import { FaTwitter, FaGithub, FaLinkedin } from 'react-icons/fa'
 
 const SOCIALS = [
   { icon: FaTwitter, href: 'https://twitter.com', label: 'Twitter' },
@@ -11,13 +8,14 @@ const SOCIALS = [
   { icon: FaLinkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
 ]
 
-const COLUMNS: { title: string; links: string[] }[] = [
-  { title: 'Product', links: ['Features', 'Pricing', 'Roadmap', 'Changelog'] },
-  { title: 'Company', links: ['About', 'Careers', 'Blog', 'Press'] },
-  { title: 'Legal', links: ['Privacy', 'Terms', 'Security', 'Cookies'] },
+const COLUMNS: { titleKey: string; links: string[] }[] = [
+  { titleKey: 'footer.product', links: ['features', 'pricing', 'roadmap', 'changelog'] },
+  { titleKey: 'footer.company', links: ['about', 'careers', 'blog', 'press'] },
+  { titleKey: 'footer.legal', links: ['privacy', 'terms', 'security', 'cookies'] },
 ]
 
 export default function PublicFooter() {
+  const { t } = useTranslation()
   const year = new Date().getFullYear()
 
   return (
@@ -27,7 +25,7 @@ export default function PublicFooter() {
           <div>
             <Logo />
             <p className='mt-4 text-[15px] text-gray-500 dark:text-[#A29FA8] leading-relaxed max-w-xs'>
-              Your AI-powered career mentor. Built for the next generation of engineers.
+              {t('public.footerTagline')}
             </p>
             <div className='mt-5 flex items-center gap-3'>
               {SOCIALS.map(({ icon: Icon, href, label }) => (
@@ -46,10 +44,8 @@ export default function PublicFooter() {
           </div>
 
           {COLUMNS.map((col) => (
-            <div key={col.title}>
-              <h3 className='text-sm font-semibold text-gray-900 dark:text-[#ECE9E4]'>
-                {col.title}
-              </h3>
+            <div key={col.titleKey}>
+              <h3 className='text-sm font-semibold text-gray-900 dark:text-[#ECE9E4]'>{t(col.titleKey)}</h3>
               <ul className='mt-4 space-y-3'>
                 {col.links.map((link) => (
                   <li key={link}>
@@ -57,7 +53,7 @@ export default function PublicFooter() {
                       href='#'
                       className='text-[15px] text-gray-500 dark:text-[#A29FA8] hover:text-gray-900 dark:hover:text-[#ECE9E4] transition'
                     >
-                      {link}
+                      {t(`footer.links.${link}`)}
                     </a>
                   </li>
                 ))}
@@ -67,7 +63,7 @@ export default function PublicFooter() {
         </div>
 
         <div className='mt-12 sm:mt-14 pt-6 border-t border-gray-200 dark:border-white/10 text-center text-sm text-gray-400 dark:text-[#5E5A64]'>
-          © {year} EduMap AI · Crafted with intent in San Francisco
+          {t('footer.copyright', { year })}
         </div>
       </div>
     </footer>

@@ -7,12 +7,9 @@ export const jobRecommendationSchema = z.object({
   location: z
     .string()
     .trim()
-    .max(100, 'Địa chỉ tối đa 100 ký tự')
-    .refine((v) => v === '' || v.length >= 2, 'Địa chỉ tối thiểu 2 ký tự')
-    .refine(
-      (v) => v === '' || /^[\p{L}\p{N}\s,.\-/()]+$/u.test(v),
-      'Địa chỉ chỉ gồm chữ, số, khoảng trắng và , . - / ( )',
-    ),
+    .max(100, 'validation.locationMax')
+    .refine((v) => v === '' || v.length >= 2, 'validation.locationMin')
+    .refine((v) => v === '' || /^[\p{L}\p{N}\s,.\-/()]+$/u.test(v), 'validation.locationChars'),
 })
 
 export type JobRecommendationFormValues = z.infer<typeof jobRecommendationSchema>

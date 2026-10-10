@@ -1,8 +1,10 @@
+import { useTranslation } from 'react-i18next'
 import { ExternalLink } from 'lucide-react'
 import type { TrendingRole } from '../../../types/api/job.types'
 import { MotionStaggerContainer, MotionStaggerItem } from '../../motion/MotionWrapper'
 
 function TrendingCard({ role, maxCount }: { role: TrendingRole; maxCount: number }) {
+  const { t } = useTranslation()
   const percent = maxCount > 0 ? Math.max(4, Math.round((role.searchCount / maxCount) * 100)) : 0
   const links = role.jobPlatformLinks ?? []
 
@@ -15,7 +17,7 @@ function TrendingCard({ role, maxCount }: { role: TrendingRole; maxCount: number
           </div>
           <div className='min-w-0'>
             <h3 className='text-lg font-medium text-gray-900 dark:text-[#ECE9E4] truncate'>{role.targetRole}</h3>
-            <p className='text-sm text-gray-500 dark:text-[#A29FA8]'>Vị trí đang được quan tâm</p>
+            <p className='text-sm text-gray-500 dark:text-[#A29FA8]'>{t('jobs.trending.interested')}</p>
           </div>
         </div>
 
@@ -29,7 +31,7 @@ function TrendingCard({ role, maxCount }: { role: TrendingRole; maxCount: number
       {/* Link sang các trang tuyển dụng */}
       {links.length > 0 && (
         <div className='mt-5'>
-          <p className='text-xs font-medium text-gray-400 dark:text-[#A29FA8] mb-2'>Tìm việc trên</p>
+          <p className='text-xs font-medium text-gray-400 dark:text-[#A29FA8] mb-2'>{t('jobs.trending.findOn')}</p>
           <div className='flex flex-wrap gap-2'>
             {links.map((link) => (
               <a
@@ -50,11 +52,14 @@ function TrendingCard({ role, maxCount }: { role: TrendingRole; maxCount: number
 
       <div className='mt-auto pt-8'>
         <div className='flex items-center justify-between text-sm'>
-          <span className='text-gray-500 dark:text-[#A29FA8]'>Lượt tìm kiếm</span>
+          <span className='text-gray-500 dark:text-[#A29FA8]'>{t('jobs.trending.searches')}</span>
           <span className='font-medium text-gray-900 dark:text-[#ECE9E4]'>{role.searchCount}</span>
         </div>
         <div className='mt-2 h-1.5 rounded-full bg-indigo-100 dark:bg-white/10 overflow-hidden'>
-          <div className='h-full rounded-full bg-indigo-600 dark:bg-[#5F2CFF] transition-all' style={{ width: `${percent}%` }} />
+          <div
+            className='h-full rounded-full bg-indigo-600 dark:bg-[#5F2CFF] transition-all'
+            style={{ width: `${percent}%` }}
+          />
         </div>
       </div>
     </div>

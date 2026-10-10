@@ -1,14 +1,14 @@
 import { z } from 'zod'
 
 export const createSkillSchema = z.object({
-  name: z.string().trim().min(1, 'Skill name is required').max(100, 'Name is too long (max 100 characters)'),
-  category: z.string().trim().min(1, 'Category is required').max(100, 'Category is too long (max 100 characters)'),
+  name: z.string().trim().min(1, 'validation.skillNameRequired').max(100, 'validation.skillNameMax'),
+  category: z.string().trim().min(1, 'validation.categoryRequired').max(100, 'validation.categoryMax'),
   difficultyLevel: z
-    .number({ message: 'Please select a difficulty level' })
+    .number({ message: 'validation.difficultySelect' })
     .int()
-    .min(1, 'Difficulty must be between 1 and 5')
-    .max(5, 'Difficulty must be between 1 and 5'),
-  demandScore: z.number({ message: 'Demand score must be a number' }).min(0, 'Demand score cannot be negative'),
+    .min(1, 'validation.difficultyRange')
+    .max(5, 'validation.difficultyRange'),
+  demandScore: z.number({ message: 'validation.demandNumber' }).min(0, 'validation.demandMin'),
 })
 
 export type CreateSkillFormValues = z.infer<typeof createSkillSchema>

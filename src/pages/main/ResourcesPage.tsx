@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { Search } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
@@ -44,6 +45,7 @@ function TextChip({ label, active, onClick }: { label: string; active: boolean; 
 }
 
 export default function ResourcesPage() {
+  const { t } = useTranslation()
   const { data, isLoading, isError } = useTopSkillResourcesQuery(LIMIT)
   const resources = useMemo(() => data?.data?.data ?? [], [data])
 
@@ -74,9 +76,9 @@ export default function ResourcesPage() {
     // h-full khớp chiều cao <main>, overflow-y-auto tự sinh thanh cuộn khi nội dung dài
     <div className='h-full overflow-y-auto scrollbar-thin'>
       <div className='max-w-6xl mx-auto px-6 py-10 pb-16'>
-        <h1 className='text-3xl font-semibold text-gray-900 dark:text-[#ECE9E4]'>Learning Resources</h1>
+        <h1 className='text-3xl font-semibold text-gray-900 dark:text-[#ECE9E4]'>{t('resources.page.title')}</h1>
         <p className='mt-2 text-gray-500 dark:text-[#A29FA8]'>
-          {isLoading ? 'Đang tải...' : `${resources.length} tài nguyên được đánh giá cao nhất cho lộ trình của bạn.`}
+          {isLoading ? t('common.loading') : t('resources.page.subtitle', { count: resources.length })}
         </p>
 
         {/* Bộ lọc */}
@@ -87,26 +89,45 @@ export default function ResourcesPage() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               type='text'
-              placeholder={`Search ${resources.length || ''} resources...`}
+              placeholder={
+                resources.length
+                  ? t('resources.page.search', { count: resources.length })
+                  : t('resources.page.searchEmpty')
+              }
               className='w-full rounded-xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#232227] pl-12 pr-4 py-3 text-[15px] text-gray-900 dark:text-[#ECE9E4] placeholder-gray-400 dark:placeholder-gray-500 outline-none focus:border-indigo-500 dark:focus:border-[#5F2CFF] focus:ring-2 focus:ring-indigo-100 dark:focus:ring-[#5F2CFF]/20 transition'
             />
           </div>
 
           <div className='flex flex-wrap gap-2'>
             {categories.map((c) => (
-              <Chip key={c} label={c} active={category === c} onClick={() => setCategory(c)} />
+              <Chip
+                key={c}
+                label={c === ALL ? t('common.all') : c}
+                active={category === c}
+                onClick={() => setCategory(c)}
+              />
             ))}
           </div>
 
           <div className='flex flex-wrap items-center justify-between gap-3'>
             <div className='flex flex-wrap gap-1'>
               {platforms.map((p) => (
-                <TextChip key={p} label={p} active={platform === p} onClick={() => setPlatform(p)} />
+                <TextChip
+                  key={p}
+                  label={p === ALL ? t('common.all') : p}
+                  active={platform === p}
+                  onClick={() => setPlatform(p)}
+                />
               ))}
             </div>
             <div className='flex gap-1'>
               {PRICE_OPTIONS.map((p) => (
-                <TextChip key={p} label={p} active={price === p} onClick={() => setPrice(p)} />
+                <TextChip
+                  key={p}
+                  label={t(`resources.page.price.${p}`)}
+                  active={price === p}
+                  onClick={() => setPrice(p)}
+                />
               ))}
             </div>
           </div>
@@ -121,9 +142,9 @@ export default function ResourcesPage() {
               ))}
             </div>
           ) : isError ? (
-            <p className='py-16 text-center text-sm text-gray-500'>Không tải được danh sách tài nguyên.</p>
+            <p className='py-16 text-center text-sm text-gray-500'>{t('resources.page.loadError')}</p>
           ) : filtered.length === 0 ? (
-            <p className='py-16 text-center text-sm text-gray-500'>Không có tài nguyên nào phù hợp bộ lọc.</p>
+            <p className='py-16 text-center text-sm text-gray-500'>{t('resources.page.empty')}</p>
           ) : (
             // key theo bộ lọc để stagger chạy lại mỗi khi kết quả thay đổi
             <MotionStaggerContainer

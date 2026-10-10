@@ -1,3 +1,6 @@
+import { useTranslation } from 'react-i18next'
+import i18n from '../../i18n'
+import { getLocale } from '../../utils/locale'
 import { CalendarDays, GraduationCap, KeyRound, Mail, Pencil } from 'lucide-react'
 import { useState } from 'react'
 import { FaGithub } from 'react-icons/fa'
@@ -13,29 +16,29 @@ import { useNavigate } from 'react-router'
 // ---------- data not covered by the /auth/me endpoint yet (swap for real queries later) ----------
 
 const STATS = [
-  { value: '87', label: 'Career Score' },
-  { value: '24d', label: 'Streak' },
-  { value: '15', label: 'Skills mastered' },
-  { value: '12,480', label: 'Total XP' },
+  { value: '87', labelKey: 'profile.stats.careerScore' },
+  { value: '24d', labelKey: 'profile.stats.streak' },
+  { value: '15', labelKey: 'profile.stats.skillsMastered' },
+  { value: '12,480', labelKey: 'profile.stats.totalXp' },
 ]
 
 const ACHIEVEMENTS = [
-  { emoji: '🚀', label: 'First Steps' },
-  { emoji: '🔥', label: 'Week Streak' },
-  { emoji: '💻', label: 'Code Ninja' },
-  { emoji: '☁️', label: 'Cloud Native' },
-  { emoji: '🤖', label: 'AI Explorer' },
-  { emoji: '🎓', label: 'Mentor' },
-  { emoji: '⭐', label: 'Open Source' },
-  { emoji: '🏆', label: 'Interview Ready' },
+  { emoji: '🚀', labelKey: 'profile.ach.firstSteps' },
+  { emoji: '🔥', labelKey: 'profile.ach.weekStreak' },
+  { emoji: '💻', labelKey: 'profile.ach.codeNinja' },
+  { emoji: '☁️', labelKey: 'profile.ach.cloudNative' },
+  { emoji: '🤖', labelKey: 'profile.ach.aiExplorer' },
+  { emoji: '🎓', labelKey: 'profile.ach.mentor' },
+  { emoji: '⭐', labelKey: 'profile.ach.openSource' },
+  { emoji: '🏆', labelKey: 'profile.ach.interviewReady' },
 ]
 
 const GOALS = [
-  { label: 'Complete LeetCode 50', progress: 73 },
-  { label: 'Build an AI chatbot', progress: 33 },
-  { label: 'Get AWS certified', progress: 34 },
-  { label: 'Contribute to a React lib', progress: 61 },
-  { label: 'Learn Kubernetes', progress: 53 },
+  { labelKey: 'profile.goal.leetcode', progress: 73 },
+  { labelKey: 'profile.goal.chatbot', progress: 33 },
+  { labelKey: 'profile.goal.aws', progress: 34 },
+  { labelKey: 'profile.goal.react', progress: 61 },
+  { labelKey: 'profile.goal.k8s', progress: 53 },
 ]
 
 const CERTIFICATES = [
@@ -78,11 +81,9 @@ function avatarColorFor(id: string) {
 
 function formatCurrentYear(year: string | number | null) {
   if (year === null || year === undefined || year === '') return null
-  if (typeof year === 'number') {
-    const suffix = ['th', 'st', 'nd', 'rd'][year % 10 > 3 ? 0 : year % 10] ?? 'th'
-    return `${year}${suffix} year`
-  }
-  return year
+  const n = Number(year)
+  if (Number.isInteger(n)) return i18n.t('profile.yearN', { n })
+  return String(year)
     .toLowerCase()
     .split('_')
     .map((w) => w[0]?.toUpperCase() + w.slice(1))
@@ -90,14 +91,15 @@ function formatCurrentYear(year: string | number | null) {
 }
 
 function formatMemberSince(iso: string) {
-  return new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(new Date(iso))
+  return new Intl.DateTimeFormat(getLocale(), { month: 'long', year: 'numeric' }).format(new Date(iso))
 }
 
 function formatRole(role: string) {
-  return role[0] + role.slice(1).toLowerCase()
+  return i18n.t(`roles.${role}`, { defaultValue: role[0] + role.slice(1).toLowerCase() })
 }
 
 export default function ProfilePage() {
+  const { t } = useTranslation()
   const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false)
   const { data: profileResponse, isLoading, isError } = useProfileQuery()
   const changePasswordMutation = useChangePasswordMutation()
@@ -122,7 +124,7 @@ export default function ProfilePage() {
           )}
 
           {isError && !isLoading && (
-            <p className='text-sm text-gray-500 dark:text-[#A29FA8]'>Couldn't load your profile. Please refresh the page.</p>
+            <p className='text-sm text-gray-500 dark:text-[#A29FA8]'>{t('profile.loadError')}</p>
           )}
 
           {user && !isLoading && (
@@ -149,20 +151,24 @@ export default function ProfilePage() {
                       }`}
                     >
                       {user.subscriptionTier === 'FREE'
-                        ? 'Free plan'
-                        : `${user.subscriptionTier[0]}${user.subscriptionTier.slice(1).toLowerCase()} plan`}
+                        ? t('header.freePlan')
+                        : t('plan.label', {
+                            name: `${user.subscriptionTier[0]}${user.subscriptionTier.slice(1).toLowerCase()}`,
+                          })}
                     </span>
                   </div>
 
                   <p className='mt-1 text-[15px] text-gray-500 dark:text-[#A29FA8] flex items-center gap-1.5'>
                     <GraduationCap className='w-4 h-4 text-gray-400 dark:text-[#A29FA8]' />
-                    {user.universityName ?? <span className='text-gray-400 dark:text-[#A29FA8] italic'>University not set</span>}
+                    {user.universityName ?? (
+                      <span className='text-gray-400 dark:text-[#A29FA8] italic'>{t('profile.universityNotSet')}</span>
+                    )}
                     {formatCurrentYear(user.currentYear) && <> · {formatCurrentYear(user.currentYear)}</>}
                   </p>
 
                   <p className='mt-1 text-sm text-gray-400 dark:text-[#A29FA8] flex items-center gap-1.5'>
                     <CalendarDays className='w-3.5 h-3.5' />
-                    Member since {formatMemberSince(user.createdAt)}
+                    {t('profile.memberSince', { date: formatMemberSince(user.createdAt) })}
                   </p>
 
                   <div className='mt-3 flex items-center gap-2'>
@@ -189,7 +195,7 @@ export default function ProfilePage() {
                         className='flex items-center gap-1.5 h-8 rounded-full border border-dashed border-gray-200 dark:border-white/[0.15] px-3 text-xs text-gray-400 dark:text-[#A29FA8] hover:text-gray-600 dark:hover:text-[#ECE9E4] hover:border-gray-300 dark:hover:border-white/30 transition cursor-pointer'
                       >
                         <FaGithub className='w-3.5 h-3.5' />
-                        Connect GitHub
+                        {t('profile.connectGithub')}
                       </button>
                     )}
                   </div>
@@ -201,7 +207,7 @@ export default function ProfilePage() {
                   type='button'
                   className='rounded-xl border border-gray-200 dark:border-white/[0.08] text-gray-900 dark:text-[#ECE9E4] text-sm font-medium px-4 py-2 hover:text-indigo-600 dark:hover:text-[#A99DFF] hover:border-indigo-600 dark:hover:border-[#5F2CFF] hover:bg-indigo-50 dark:hover:bg-[#5F2CFF]/15 transition cursor-pointer'
                 >
-                  View portfolio
+                  {t('profile.viewPortfolio')}
                 </button>
 
                 <button
@@ -210,7 +216,7 @@ export default function ProfilePage() {
                   className='flex items-center gap-1.5 rounded-xl border border-gray-200 dark:border-white/[0.08] text-gray-900 dark:text-[#ECE9E4] text-sm font-medium px-4 py-2 hover:text-indigo-600 dark:hover:text-[#A99DFF] hover:border-indigo-600 dark:hover:border-[#5F2CFF] hover:bg-indigo-50 dark:hover:bg-[#5F2CFF]/15 transition cursor-pointer'
                 >
                   <KeyRound className='w-3.5 h-3.5' />
-                  Change password
+                  {t('profile.changePassword')}
                 </button>
 
                 <button
@@ -219,7 +225,7 @@ export default function ProfilePage() {
                   onClick={() => navigate('/settings')}
                 >
                   <Pencil className='w-3.5 h-3.5' />
-                  Edit profile
+                  {t('profile.editProfile')}
                 </button>
               </div>
             </div>
@@ -229,38 +235,45 @@ export default function ProfilePage() {
         {/* Stats */}
         <div className='grid grid-cols-2 sm:grid-cols-4 gap-4'>
           {STATS.map((stat) => (
-            <StatCard key={stat.label} value={stat.value} label={stat.label} />
+            <StatCard key={stat.labelKey} value={stat.value} label={t(stat.labelKey)} />
           ))}
         </div>
 
         {/* Achievements / Goals / Certificates */}
         <div className='grid grid-cols-1 lg:grid-cols-3 gap-5'>
           <div className='bg-white dark:bg-[#1A191C] border border-gray-200 dark:border-white/[0.08] rounded-2xl p-5'>
-            <h2 className='flex items-center gap-2 text-[15px] font-semibold text-gray-900 dark:text-[#ECE9E4]'>🏆 Achievements</h2>
+            <h2 className='flex items-center gap-2 text-[15px] font-semibold text-gray-900 dark:text-[#ECE9E4]'>
+              🏆 {t('profile.achievements')}
+            </h2>
             <div className='mt-4 grid grid-cols-4 gap-3'>
               {ACHIEVEMENTS.map((a) => (
                 <div
-                  key={a.label}
+                  key={a.labelKey}
                   className='flex flex-col items-center gap-1.5 rounded-xl border border-gray-100 dark:border-white/[0.06] bg-gray-50 dark:bg-[#232227] py-3 px-1'
                 >
                   <span className='text-xl leading-none'>{a.emoji}</span>
-                  <span className='text-[11px] text-gray-600 dark:text-[#ECE9E4] text-center leading-tight truncate w-full'>{a.label}</span>
+                  <span className='text-[11px] text-gray-600 dark:text-[#ECE9E4] text-center leading-tight truncate w-full'>
+                    {t(a.labelKey)}
+                  </span>
                 </div>
               ))}
             </div>
           </div>
 
           <div className='bg-white dark:bg-[#1A191C] border border-gray-200 dark:border-white/[0.08] rounded-2xl p-5'>
-            <h2 className='text-[15px] font-semibold text-gray-900 dark:text-[#ECE9E4]'>Current goals</h2>
+            <h2 className='text-[15px] font-semibold text-gray-900 dark:text-[#ECE9E4]'>{t('profile.goals')}</h2>
             <div className='mt-4 space-y-4'>
               {GOALS.map((goal) => (
-                <div key={goal.label}>
+                <div key={goal.labelKey}>
                   <div className='flex items-center justify-between text-sm'>
-                    <span className='text-gray-700 dark:text-[#ECE9E4]'>{goal.label}</span>
+                    <span className='text-gray-700 dark:text-[#ECE9E4]'>{t(goal.labelKey)}</span>
                     <span className='text-gray-500 dark:text-[#A29FA8]'>{goal.progress}%</span>
                   </div>
                   <div className='mt-1.5 h-1.5 rounded-full bg-gray-100 dark:bg-white/10 overflow-hidden'>
-                    <div className='h-full rounded-full bg-indigo-600 dark:bg-[#5F2CFF]' style={{ width: `${goal.progress}%` }} />
+                    <div
+                      className='h-full rounded-full bg-indigo-600 dark:bg-[#5F2CFF]'
+                      style={{ width: `${goal.progress}%` }}
+                    />
                   </div>
                 </div>
               ))}
@@ -268,7 +281,7 @@ export default function ProfilePage() {
           </div>
 
           <div className='bg-white dark:bg-[#1A191C] border border-gray-200 dark:border-white/[0.08] rounded-2xl p-5'>
-            <h2 className='text-[15px] font-semibold text-gray-900 dark:text-[#ECE9E4]'>Certificates</h2>
+            <h2 className='text-[15px] font-semibold text-gray-900 dark:text-[#ECE9E4]'>{t('profile.certificates')}</h2>
             <div className='mt-4 space-y-3'>
               {CERTIFICATES.map((cert) => (
                 <div key={cert.name} className='flex items-center gap-3'>
@@ -277,7 +290,9 @@ export default function ProfilePage() {
                   </div>
                   <div className='min-w-0'>
                     <p className='text-sm text-gray-900 dark:text-[#ECE9E4] truncate'>{cert.name}</p>
-                    <p className='text-xs text-gray-500 dark:text-[#A29FA8]'>Issued {cert.year}</p>
+                    <p className='text-xs text-gray-500 dark:text-[#A29FA8]'>
+                      {t('profile.issued', { year: cert.year })}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -287,7 +302,7 @@ export default function ProfilePage() {
 
         {/* Skills mastered */}
         <div className='bg-white dark:bg-[#1A191C] border border-gray-200 dark:border-white/[0.08] rounded-2xl p-5'>
-          <h2 className='text-[15px] font-semibold text-gray-900 dark:text-[#ECE9E4]'>Skills mastered</h2>
+          <h2 className='text-[15px] font-semibold text-gray-900 dark:text-[#ECE9E4]'>{t('profile.skillsMastered')}</h2>
           <div className='mt-4 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4'>
             {SKILLS.map((skill) => (
               <div key={skill.name}>
@@ -296,7 +311,10 @@ export default function ProfilePage() {
                   <span className='text-gray-500 dark:text-[#A29FA8]'>{skill.level}%</span>
                 </div>
                 <div className='mt-1.5 h-1.5 rounded-full bg-gray-100 dark:bg-white/10 overflow-hidden'>
-                  <div className='h-full rounded-full bg-gray-900 dark:bg-[#5F2CFF]' style={{ width: `${skill.level}%` }} />
+                  <div
+                    className='h-full rounded-full bg-gray-900 dark:bg-[#5F2CFF]'
+                    style={{ width: `${skill.level}%` }}
+                  />
                 </div>
               </div>
             ))}

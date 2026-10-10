@@ -1,20 +1,23 @@
 import { z } from 'zod'
 
+// LƯU Ý: các `message` bên dưới là KEY dịch (i18n), không phải câu chữ.
+// Khi hiển thị lỗi phải dùng t(errors.xxx.message!) — xem LoginPage / RegisterPage.
+
 // Biểu thức chính quy (Regex) chuẩn để kiểm tra định dạng email
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
 
 export const registerSchema = z
   .object({
     email: z
-      .string() // Chỉ để z.string() trống ở đây
-      .min(1, { message: 'Email không được để trống' })
-      .regex(emailRegex, { message: 'Email không đúng định dạng' }),
-    password: z.string().min(6, { message: 'Mật khẩu phải từ 6 ký tự trở lên' }),
-    fullName: z.string().min(1, { message: 'Họ và tên không được để trống' }),
-    confirmPassword: z.string().min(1),
+      .string()
+      .min(1, { message: 'validation.emailRequired' })
+      .regex(emailRegex, { message: 'validation.emailInvalid' }),
+    password: z.string().min(6, { message: 'validation.passwordMin' }),
+    fullName: z.string().min(1, { message: 'validation.fullNameRequired' }),
+    confirmPassword: z.string().min(1, { message: 'validation.confirmRequired' }),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: 'Xác nhận mật khẩu không khớp',
+    message: 'validation.passwordMismatch',
     path: ['confirmPassword'],
   })
 
@@ -26,56 +29,56 @@ export type RegisterApiPayload = Omit<RegisterFormPayload, 'confirmPassword'>
 
 export const loginSchema = z.object({
   email: z
-    .string() // Xóa đoạn required_error
-    .min(1, { message: 'Email không được để trống' })
-    .regex(emailRegex, { message: 'Email không đúng định dạng' }),
-  password: z.string().min(1, { message: 'Mật khẩu không được để trống' }),
+    .string()
+    .min(1, { message: 'validation.emailRequired' })
+    .regex(emailRegex, { message: 'validation.emailInvalid' }),
+  password: z.string().min(1, { message: 'validation.passwordRequired' }),
 })
 
 export type LoginPayload = z.infer<typeof loginSchema>
 
 export const forgotPasswordSchema = z.object({
   email: z
-    .string() // Xóa đoạn required_error
-    .min(1, { message: 'Email không được để trống' })
-    .regex(emailRegex, { message: 'Email không đúng định dạng' }),
+    .string()
+    .min(1, { message: 'validation.emailRequired' })
+    .regex(emailRegex, { message: 'validation.emailInvalid' }),
 })
 
 export type ForgotPasswordPayload = z.infer<typeof forgotPasswordSchema>
 
 export const changePasswordSchema = z.object({
-  oldPassword: z.string().min(1, { message: 'Mật khẩu cũ không được để trống' }),
-  newPassword: z.string().min(6, { message: 'Mật khẩu mới phải từ 6 ký tự trở lên' }),
+  oldPassword: z.string().min(1, { message: 'validation.oldPasswordRequired' }),
+  newPassword: z.string().min(6, { message: 'validation.newPasswordMin' }),
 })
 
 export type ChangePasswordPayload = z.infer<typeof changePasswordSchema>
 
 export const resetPasswordSchema = z
   .object({
-    token: z.string().min(1, { message: 'Token không được để trống' }),
-    newPassword: z.string().min(6, { message: 'Mật khẩu mới phải từ 6 ký tự trở lên' }),
-    confirmPassword: z.string().min(1, { message: 'Xác nhận mật khẩu không được để trống' }),
+    token: z.string().min(1, { message: 'validation.tokenRequired' }),
+    newPassword: z.string().min(6, { message: 'validation.newPasswordMin' }),
+    confirmPassword: z.string().min(1, { message: 'validation.confirmRequired' }),
   })
 
   .refine((data) => data.newPassword === data.confirmPassword, {
-    message: 'Xác nhận mật khẩu không khớp',
+    message: 'validation.passwordMismatch',
     path: ['confirmPassword'],
   })
 
 export type ResetPasswordPayload = z.infer<typeof resetPasswordSchema>
 
 export const userProfileSchema = z.object({
-  fullName: z.string().min(1, { message: 'Họ và tên không được để trống' }),
+  fullName: z.string().min(1, { message: 'validation.fullNameRequired' }),
 
-  universityName: z.string().min(1, { message: 'Tên trường đại học không được để trống' }),
+  universityName: z.string().min(1, { message: 'validation.universityRequired' }),
 
   currentYear: z
     .number()
-    .int({ message: 'Năm học phải là số nguyên' })
-    .min(1, { message: 'Năm học tối thiểu là 1' })
-    .max(7, { message: 'Năm học tối đa là 7' }),
+    .int({ message: 'validation.yearInt' })
+    .min(1, { message: 'validation.yearMin' })
+    .max(7, { message: 'validation.yearMax' }),
 
-  githubUsername: z.string().min(1, { message: 'GitHub username không được để trống' }),
+  githubUsername: z.string().min(1, { message: 'validation.githubRequired' }),
 })
 
 export type UpdateProfilePayload = z.infer<typeof userProfileSchema>

@@ -1,8 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
+import i18n from '../i18n'
 import { chatRepo } from '../repository/chat.repo'
 import type { CreateChatSessionPayload } from '../types/api/chat.types'
 import { getAccessTokenFromLS } from '../utils/auth'
-import { toast } from 'sonner'
 
 const CHAT_SESSIONS_KEY = ['chat-sessions']
 
@@ -12,7 +13,7 @@ export const useCreateChatSessionMutation = () => {
   return useMutation({
     mutationFn: (payload: CreateChatSessionPayload) => chatRepo.createSession(payload),
     onSuccess: () => {
-      toast.success('Tạo phiên chat thành công! Tiến hành chat.')
+      toast.success(i18n.t('toast.chatCreated'))
       // Tạo xong -> làm mới danh sách session để sidebar cập nhật ngay
       queryClient.invalidateQueries({ queryKey: CHAT_SESSIONS_KEY })
     },
@@ -59,8 +60,8 @@ export const useDeleteChatSessionMutation = () => {
 
   return useMutation({
     mutationFn: (sessionId: string) => chatRepo.deleteSession(sessionId),
-    onSuccess: (response, sessionId) => {
-      toast.success(response.data.data.message || 'Đã xóa cuộc trò chuyện.')
+    onSuccess: (_response, sessionId) => {
+      toast.success(i18n.t('toast.chatDeleted'))
 
       // Hủy request đang bay (nếu có) rồi xóa hẳn cache chi tiết của session vừa xóa —
       // KHÔNG dùng invalidateQueries cho key này vì query GET /chat/sessions/:id vẫn có thể

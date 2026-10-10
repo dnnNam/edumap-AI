@@ -1,14 +1,9 @@
+import { useTranslation } from 'react-i18next'
+import { getLocale } from '../../utils/locale'
 import { useMemo, useState } from 'react'
 import { Shield, UserPlus, Search, ChevronDown, MoreHorizontal } from 'lucide-react'
 import { useAllUsersQuery, useUpdateUserRoleMutation } from '../../hooks/useUserQuery'
-import {
-  ROLE_BADGE_CLASS,
-  ROLE_DESCRIPTION,
-  ROLE_LABEL,
-  ROLE_OPTIONS,
-  type AdminUser,
-  type UserRole,
-} from '../../types/api/user.type'
+import { ROLE_BADGE_CLASS, ROLE_OPTIONS, type AdminUser, type UserRole } from '../../types/api/user.type'
 
 type RoleFilter = 'ALL' | UserRole
 type Tab = 'users' | 'matrix'
@@ -23,7 +18,7 @@ function getInitials(fullName: string) {
 }
 
 function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString('vi-VN', {
+  return new Date(iso).toLocaleDateString(getLocale(), {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
@@ -31,6 +26,7 @@ function formatDate(iso: string) {
 }
 
 export default function AdminPermissionsPage() {
+  const { t } = useTranslation()
   const { data, isLoading, isError } = useAllUsersQuery()
   const { mutate: updateRole, isPending: isUpdatingRole, variables } = useUpdateUserRoleMutation()
 
@@ -67,9 +63,11 @@ export default function AdminPermissionsPage() {
         <div>
           <div className='flex items-center gap-2'>
             <Shield className='w-6 h-6 text-gray-900 dark:text-[#ECE9E4]' />
-            <h1 className='text-2xl font-bold text-gray-900 dark:text-[#ECE9E4] tracking-tight'>User permissions</h1>
+            <h1 className='text-2xl font-bold text-gray-900 dark:text-[#ECE9E4] tracking-tight'>
+              {t('admin.permissions.title')}
+            </h1>
           </div>
-          <p className='mt-1.5 text-[15px] text-gray-500 dark:text-[#A29FA8]'>Assign roles and control what each group can access.</p>
+          <p className='mt-1.5 text-[15px] text-gray-500 dark:text-[#A29FA8]'>{t('admin.permissions.desc')}</p>
         </div>
 
         <button
@@ -77,17 +75,22 @@ export default function AdminPermissionsPage() {
           className='flex items-center gap-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 transition-colors text-white text-sm font-medium px-4 py-2.5 cursor-pointer shadow-xs'
         >
           <UserPlus className='w-4 h-4' />
-          Invite user
+          {t('admin.permissions.invite')}
         </button>
       </div>
 
       {/* Stat cards theo role */}
       <div className='shrink-0 mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4'>
         {ROLE_OPTIONS.map((role) => (
-          <div key={role} className='bg-white dark:bg-[#1A191C] border border-gray-200 dark:border-white/[0.08] rounded-xl p-5 transition-colors'>
-            <p className='text-sm text-gray-500 dark:text-[#A29FA8]'>{ROLE_LABEL[role]}</p>
+          <div
+            key={role}
+            className='bg-white dark:bg-[#1A191C] border border-gray-200 dark:border-white/[0.08] rounded-xl p-5 transition-colors'
+          >
+            <p className='text-sm text-gray-500 dark:text-[#A29FA8]'>{t(`roles.${role}`)}</p>
             <p className='mt-1 text-3xl font-bold text-gray-900 dark:text-[#ECE9E4]'>{counts[role]}</p>
-            <p className='mt-2 text-[13px] text-gray-500 dark:text-[#A29FA8] leading-relaxed'>{ROLE_DESCRIPTION[role]}</p>
+            <p className='mt-2 text-[13px] text-gray-500 dark:text-[#A29FA8] leading-relaxed'>
+              {t(`roles.desc.${role}`)}
+            </p>
           </div>
         ))}
       </div>
@@ -98,25 +101,29 @@ export default function AdminPermissionsPage() {
           type='button'
           onClick={() => setTab('users')}
           className={`px-3.5 py-1.5 rounded-md text-sm font-medium transition-colors cursor-pointer ${
-            tab === 'users' ? 'bg-white dark:bg-[#1A191C] text-gray-900 dark:text-[#ECE9E4] shadow-sm' : 'text-gray-500 dark:text-[#A29FA8] hover:text-gray-700 dark:hover:text-[#ECE9E4]'
+            tab === 'users'
+              ? 'bg-white dark:bg-[#1A191C] text-gray-900 dark:text-[#ECE9E4] shadow-sm'
+              : 'text-gray-500 dark:text-[#A29FA8] hover:text-gray-700 dark:hover:text-[#ECE9E4]'
           }`}
         >
-          Users
+          {t('admin.permissions.users')}
         </button>
         <button
           type='button'
           onClick={() => setTab('matrix')}
           className={`px-3.5 py-1.5 rounded-md text-sm font-medium transition-colors cursor-pointer ${
-            tab === 'matrix' ? 'bg-white dark:bg-[#1A191C] text-gray-900 dark:text-[#ECE9E4] shadow-sm' : 'text-gray-500 dark:text-[#A29FA8] hover:text-gray-700 dark:hover:text-[#ECE9E4]'
+            tab === 'matrix'
+              ? 'bg-white dark:bg-[#1A191C] text-gray-900 dark:text-[#ECE9E4] shadow-sm'
+              : 'text-gray-500 dark:text-[#A29FA8] hover:text-gray-700 dark:hover:text-[#ECE9E4]'
           }`}
         >
-          Permission matrix
+          {t('admin.permissions.matrix')}
         </button>
       </div>
 
       {tab === 'matrix' ? (
         <div className='mt-4 bg-white dark:bg-[#1A191C] border border-gray-200 dark:border-white/[0.08] rounded-xl p-8 text-center text-sm text-gray-500 dark:text-[#A29FA8] transition-colors'>
-          Permission matrix chưa được triển khai.
+          {t('admin.permissions.matrixSoon')}
         </div>
       ) : (
         // Khối bảng: chiếm hết phần chiều cao còn lại (flex-1 min-h-0),
@@ -131,7 +138,7 @@ export default function AdminPermissionsPage() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 type='text'
-                placeholder='Search name or email...'
+                placeholder={t('admin.permissions.search')}
                 className='bg-transparent outline-none text-sm text-gray-700 dark:text-[#ECE9E4] placeholder:text-gray-400 dark:placeholder:text-[#A29FA8]/60 w-full'
               />
             </div>
@@ -142,10 +149,10 @@ export default function AdminPermissionsPage() {
                 onChange={(e) => setRoleFilter(e.target.value as RoleFilter)}
                 className='appearance-none h-10 rounded-lg border border-gray-200 dark:border-white/[0.08] pl-3.5 pr-9 text-sm text-gray-700 dark:text-[#ECE9E4] outline-none focus:border-gray-300 dark:focus:border-white/20 bg-white dark:bg-[#232227] transition-colors cursor-pointer'
               >
-                <option value='ALL'>All roles</option>
+                <option value='ALL'>{t('admin.permissions.allRoles')}</option>
                 {ROLE_OPTIONS.map((role) => (
                   <option key={role} value={role}>
-                    {ROLE_LABEL[role]}
+                    {t(`roles.${role}`)}
                   </option>
                 ))}
               </select>
@@ -158,10 +165,10 @@ export default function AdminPermissionsPage() {
             <table className='w-full text-left'>
               <thead className='sticky top-0 z-10 bg-white dark:bg-[#1A191C] transition-colors'>
                 <tr className='text-xs text-gray-500 dark:text-[#A29FA8] border-b border-gray-100 dark:border-white/[0.08]'>
-                  <th className='py-3 px-4 font-medium'>User</th>
-                  <th className='py-3 px-4 font-medium'>Role</th>
-                  <th className='py-3 px-4 font-medium'>Subscription</th>
-                  <th className='py-3 px-4 font-medium'>Joined</th>
+                  <th className='py-3 px-4 font-medium'>{t('admin.permissions.cols.user')}</th>
+                  <th className='py-3 px-4 font-medium'>{t('admin.permissions.cols.role')}</th>
+                  <th className='py-3 px-4 font-medium'>{t('admin.permissions.cols.subscription')}</th>
+                  <th className='py-3 px-4 font-medium'>{t('admin.permissions.cols.joined')}</th>
                   <th className='py-3 px-4 font-medium w-10' />
                 </tr>
               </thead>
@@ -178,7 +185,7 @@ export default function AdminPermissionsPage() {
                 {!isLoading && isError && (
                   <tr>
                     <td colSpan={5} className='py-8 px-4 text-center text-sm text-gray-500 dark:text-[#A29FA8]'>
-                      Không tải được danh sách user. Vui lòng thử lại.
+                      {t('admin.permissions.loadError')}
                     </td>
                   </tr>
                 )}
@@ -186,7 +193,7 @@ export default function AdminPermissionsPage() {
                 {!isLoading && !isError && filteredUsers.length === 0 && (
                   <tr>
                     <td colSpan={5} className='py-8 px-4 text-center text-sm text-gray-500 dark:text-[#A29FA8]'>
-                      Không tìm thấy user phù hợp.
+                      {t('admin.permissions.notFound')}
                     </td>
                   </tr>
                 )}
@@ -196,7 +203,10 @@ export default function AdminPermissionsPage() {
                   filteredUsers.map((u) => {
                     const isRowUpdating = isUpdatingRole && variables?.userId === u.id
                     return (
-                      <tr key={u.id} className='border-b border-gray-50 dark:border-white/[0.04] hover:bg-gray-50/60 dark:hover:bg-white/[0.03] transition-colors'>
+                      <tr
+                        key={u.id}
+                        className='border-b border-gray-50 dark:border-white/[0.04] hover:bg-gray-50/60 dark:hover:bg-white/[0.03] transition-colors'
+                      >
                         <td className='py-3.5 px-4'>
                           <div className='flex items-center gap-3'>
                             <div
@@ -205,7 +215,9 @@ export default function AdminPermissionsPage() {
                               {getInitials(u.fullName)}
                             </div>
                             <div className='min-w-0'>
-                              <p className='text-sm font-medium text-gray-900 dark:text-[#ECE9E4] truncate'>{u.fullName}</p>
+                              <p className='text-sm font-medium text-gray-900 dark:text-[#ECE9E4] truncate'>
+                                {u.fullName}
+                              </p>
                               <p className='text-xs text-gray-500 dark:text-[#A29FA8] truncate'>{u.email}</p>
                             </div>
                           </div>
@@ -220,7 +232,7 @@ export default function AdminPermissionsPage() {
                             >
                               {ROLE_OPTIONS.map((role) => (
                                 <option key={role} value={role}>
-                                  {ROLE_LABEL[role]}
+                                  {t(`roles.${role}`)}
                                 </option>
                               ))}
                             </select>
@@ -232,7 +244,9 @@ export default function AdminPermissionsPage() {
                             {u.subscriptionTier}
                           </span>
                         </td>
-                        <td className='py-3.5 px-4 text-sm text-gray-500 dark:text-[#A29FA8]'>{formatDate(u.createdAt)}</td>
+                        <td className='py-3.5 px-4 text-sm text-gray-500 dark:text-[#A29FA8]'>
+                          {formatDate(u.createdAt)}
+                        </td>
                         <td className='py-3.5 px-4'>
                           <button
                             type='button'

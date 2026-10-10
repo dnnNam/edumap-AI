@@ -1,11 +1,14 @@
+import { useTranslation } from 'react-i18next'
 import type { UsageItem } from '../../../types/api/billing.type'
-import { formatCycleDate, USAGE_FEATURE_META, USAGE_WINDOW_LABEL } from '../../../utils/billing'
+import { formatCycleDate, USAGE_FEATURE_META, USAGE_WINDOW_KEY } from '../../../utils/billing'
 
 export default function UsageCard({ item }: { item: UsageItem }) {
+  const { t } = useTranslation()
   const meta = USAGE_FEATURE_META[item.featureCode]
   const Icon = meta.icon
   const isUnlimited = item.remaining === null
   const percentUsed = isUnlimited || item.limit === 0 ? 0 : Math.min(100, (item.usage / item.limit) * 100)
+  const windowKey = USAGE_WINDOW_KEY[item.usageWindow]
 
   return (
     <div className='rounded-2xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#1A191C] p-5'>
@@ -15,28 +18,33 @@ export default function UsageCard({ item }: { item: UsageItem }) {
             <Icon className='w-5 h-5 text-gray-500 dark:text-[#A29FA8]' />
           </div>
           <div>
-            <p className='text-sm font-semibold text-gray-900 dark:text-[#ECE9E4]'>{meta.title}</p>
-            <p className='text-xs text-gray-500 dark:text-[#A29FA8]'>{meta.subtitle}</p>
+            <p className='text-sm font-semibold text-gray-900 dark:text-[#ECE9E4]'>{t(meta.titleKey)}</p>
+            <p className='text-xs text-gray-500 dark:text-[#A29FA8]'>{t(meta.subtitleKey)}</p>
           </div>
         </div>
         <span className='text-[11px] font-medium text-gray-500 dark:text-[#A29FA8] bg-gray-100 dark:bg-white/10 rounded-full px-2 py-1'>
-          {USAGE_WINDOW_LABEL[item.usageWindow] ?? item.usageWindow}
+          {windowKey ? t(windowKey) : item.usageWindow}
         </span>
       </div>
 
       <div className='mt-4 flex items-end justify-between text-sm'>
         <span className='text-gray-900 dark:text-[#ECE9E4] font-medium'>
-          {item.usage} of {isUnlimited ? '∞' : item.limit} used
+          {t('billing.usage.usedOf', { used: item.usage, limit: isUnlimited ? '∞' : item.limit })}
         </span>
-        <span className='text-gray-500 dark:text-[#A29FA8]'>{isUnlimited ? 'Unlimited' : `${item.remaining} remaining`}</span>
+        <span className='text-gray-500 dark:text-[#A29FA8]'>
+          {isUnlimited ? t('billing.usage.unlimited') : t('billing.usage.remainingN', { count: item.remaining ?? 0 })}
+        </span>
       </div>
 
       <div className='mt-2 h-1.5 w-full rounded-full bg-gray-100 dark:bg-white/10 overflow-hidden'>
-        <div className='h-full rounded-full bg-indigo-600 dark:bg-[#5F2CFF] transition-all' style={{ width: `${percentUsed}%` }} />
+        <div
+          className='h-full rounded-full bg-indigo-600 dark:bg-[#5F2CFF] transition-all'
+          style={{ width: `${percentUsed}%` }}
+        />
       </div>
 
       <div className='mt-3 flex items-center gap-1.5 text-xs text-gray-400 dark:text-[#A29FA8]'>
-        Cycle started {formatCycleDate(item.usageDate)}
+        {t('billing.usage.cycleStarted', { date: formatCycleDate(item.usageDate) })}
       </div>
     </div>
   )

@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 import type { SkillNode } from '../../../types/api/skillTree.types'
 import { SkeletonStat } from './SkeletonLoader'
 
@@ -26,6 +27,8 @@ export default function SkillTreeSummary({
   categoryCount: number
   nextPriority: SkillNode | null
 }) {
+  const { t } = useTranslation()
+
   return (
     <div className='grid grid-cols-1 md:grid-cols-3 gap-5'>
       {loading ? (
@@ -36,11 +39,13 @@ export default function SkillTreeSummary({
         </>
       ) : (
         <>
-          <SummaryCard label='Completion'>
+          <SummaryCard label={t('skillTree.summary.completion')}>
             <div className='mt-2 flex items-end justify-between gap-3'>
-              <p className='text-[32px] leading-none font-bold text-gray-900 dark:text-[#ECE9E4] tracking-tight'>{percentage}%</p>
+              <p className='text-[32px] leading-none font-bold text-gray-900 dark:text-[#ECE9E4] tracking-tight'>
+                {percentage}%
+              </p>
               <p className='text-sm text-gray-500 dark:text-[#A29FA8]'>
-                {completed} of {total}
+                {t('skillTree.summary.ofTotal', { completed, total })}
               </p>
             </div>
             <div
@@ -57,25 +62,34 @@ export default function SkillTreeSummary({
             </div>
           </SummaryCard>
 
-          <SummaryCard label='Total nodes'>
-            <p className='mt-2 text-[32px] leading-none font-bold text-gray-900 dark:text-[#ECE9E4] tracking-tight'>{total}</p>
+          <SummaryCard label={t('skillTree.summary.totalNodes')}>
+            <p className='mt-2 text-[32px] leading-none font-bold text-gray-900 dark:text-[#ECE9E4] tracking-tight'>
+              {total}
+            </p>
             <p className='mt-4 text-sm text-gray-500 dark:text-[#A29FA8]'>
-              Across {categoryCount} {categoryCount === 1 ? 'category' : 'categories'}
+              {t('skillTree.summary.categories', { count: categoryCount })}
             </p>
           </SummaryCard>
 
-          <SummaryCard label='Next priority'>
+          <SummaryCard label={t('skillTree.summary.nextPriority')}>
             {nextPriority ? (
               <>
-                <p className='mt-2 text-xl font-semibold text-gray-900 dark:text-[#ECE9E4] truncate'>{nextPriority.skill.name}</p>
+                <p className='mt-2 text-xl font-semibold text-gray-900 dark:text-[#ECE9E4] truncate'>
+                  {nextPriority.skill.name}
+                </p>
                 <p className='mt-4 text-sm text-gray-500 dark:text-[#A29FA8]'>
-                  Priority rank {nextPriority.priorityRank} · Level {nextPriority.skill.difficultyLevel}
+                  {t('skillTree.summary.priorityLevel', {
+                    rank: nextPriority.priorityRank,
+                    level: nextPriority.skill.difficultyLevel,
+                  })}
                 </p>
               </>
             ) : (
               <>
-                <p className='mt-2 text-xl font-semibold text-gray-900 dark:text-[#ECE9E4]'>All done</p>
-                <p className='mt-4 text-sm text-gray-500 dark:text-[#A29FA8]'>Every skill in this tree is completed.</p>
+                <p className='mt-2 text-xl font-semibold text-gray-900 dark:text-[#ECE9E4]'>
+                  {t('skillTree.summary.allDone')}
+                </p>
+                <p className='mt-4 text-sm text-gray-500 dark:text-[#A29FA8]'>{t('skillTree.summary.allDoneDesc')}</p>
               </>
             )}
           </SummaryCard>

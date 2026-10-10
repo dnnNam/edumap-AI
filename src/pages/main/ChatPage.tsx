@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { ArrowLeft, MessageSquare } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 import { useChatSessionsQuery } from '../../hooks/chatQuery'
 import type { ChatSession } from '../../types/api/chat.types'
@@ -11,6 +12,7 @@ import NewChatState from '../../components/layouts/chat/NewChatState'
 import AppLoadingSkeleton from '../../components/ui/AppLoadingSkeleton'
 
 export default function ChatPage() {
+  const { t } = useTranslation()
   const { data: sessionsResponse, isLoading } = useChatSessionsQuery()
   const sessions = sessionsResponse?.data?.data ?? []
 
@@ -37,7 +39,7 @@ export default function ChatPage() {
         {mobileShowSidebar ? (
           <div className='flex items-center gap-2 text-xs font-semibold text-gray-700 dark:text-[#ECE9E4]'>
             <MessageSquare className='w-4 h-4 text-indigo-600 dark:text-[#A99DFF]' />
-            <span>Chat Sessions ({sessions.length})</span>
+            <span>{t('chat.page.sessions', { count: sessions.length })}</span>
           </div>
         ) : (
           <button
@@ -46,7 +48,7 @@ export default function ChatPage() {
             className='inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-600 dark:text-[#A99DFF] bg-indigo-50 dark:bg-indigo-950/40 px-2.5 py-1 rounded-lg border border-indigo-100 dark:border-indigo-800/40'
           >
             <ArrowLeft className='w-3.5 h-3.5' />
-            <span>All Sessions</span>
+            <span>{t('chat.page.allSessions')}</span>
           </button>
         )}
       </div>

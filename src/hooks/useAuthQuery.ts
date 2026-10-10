@@ -18,7 +18,7 @@ export const useLoginMutation = () => {
 
 export const useMeQuery = () => {
   return useQuery({
-    queryKey: ['auth-me'],
+    queryKey: ['auth-me', getAccessTokenFromLS()], // gắn token vào key để đổi tài khoản không dùng nhầm cache cũ
     queryFn: () => authRepo.getMe(),
     enabled: !!getAccessTokenFromLS(), // chỉ gọi khi có token trong LS
     retry: false, // token sai thì không cần retry

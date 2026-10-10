@@ -1,6 +1,13 @@
+import { useTranslation } from 'react-i18next'
 export default function Avatar({ className = 'w-9 h-9' }: { className?: string }) {
+  const { t } = useTranslation()
   return (
-    <svg viewBox='0 0 100 100' className={`shrink-0 rounded-full ${className}`} role='img' aria-label='User avatar'>
+    <svg
+      viewBox='0 0 100 100'
+      className={`shrink-0 rounded-full ${className}`}
+      role='img'
+      aria-label={t('common.userAvatar')}
+    >
       <circle cx='50' cy='50' r='50' fill='#29B6F6' />
       <circle cx='48' cy='36' r='13' fill='none' stroke='#fff' strokeWidth='7' />
       <path

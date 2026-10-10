@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { Check, ChevronDown } from 'lucide-react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { LIST_ITEM } from '../../../config/motionConfig'
 
 import type { SkillNode } from '../../../types/api/skillTree.types'
@@ -23,6 +24,7 @@ interface SkillNodeTreeProps extends SharedProps {
 // ---------- 1 dòng ----------
 
 function SkillNodeRow({ node, ...shared }: { node: SkillNode } & SharedProps) {
+  const { t } = useTranslation()
   const { selectedId, activeCategory, togglingIds, onSelect, onToggle } = shared
   const [open, setOpen] = useState(true)
 
@@ -51,7 +53,11 @@ function SkillNodeRow({ node, ...shared }: { node: SkillNode } & SharedProps) {
             type='button'
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
-            aria-label={open ? `Collapse ${node.skill.name}` : `Expand ${node.skill.name}`}
+            aria-label={
+              open
+                ? t('skillTree.node.collapse', { name: node.skill.name })
+                : t('skillTree.node.expand', { name: node.skill.name })
+            }
             className='w-6 h-6 shrink-0 flex items-center justify-center rounded-md text-gray-500 dark:text-[#A29FA8] hover:bg-gray-100 dark:hover:bg-white/10 transition-colors'
           >
             <ChevronDown className={`w-4 h-4 transition-transform ${open ? '' : '-rotate-90'}`} />
@@ -80,9 +86,11 @@ function SkillNodeRow({ node, ...shared }: { node: SkillNode } & SharedProps) {
           )}
 
           <span className='min-w-0'>
-            <span className='block truncate text-[15px] font-medium text-gray-900 dark:text-[#ECE9E4]'>{node.skill.name}</span>
+            <span className='block truncate text-[15px] font-medium text-gray-900 dark:text-[#ECE9E4]'>
+              {node.skill.name}
+            </span>
             <span className='block truncate text-xs text-gray-500 dark:text-[#A29FA8]'>
-              {node.skill.category} · Level {node.skill.difficultyLevel}
+              {node.skill.category} · {t('skillTree.node.level', { level: node.skill.difficultyLevel })}
             </span>
           </span>
         </button>
@@ -91,7 +99,7 @@ function SkillNodeRow({ node, ...shared }: { node: SkillNode } & SharedProps) {
         {isMastered && (
           <span className='shrink-0 inline-flex items-center gap-1 rounded-full border border-emerald-100 dark:border-emerald-500/20 bg-emerald-50 dark:bg-emerald-500/10 px-2.5 py-1 text-xs font-medium text-emerald-700 dark:text-emerald-400'>
             <Check className='w-3 h-3' />
-            Mastered
+            {t('skillTree.node.mastered')}
           </span>
         )}
 
@@ -99,7 +107,11 @@ function SkillNodeRow({ node, ...shared }: { node: SkillNode } & SharedProps) {
         {hasChildren && (
           <ToggleSwitch
             checked={node.isCompleted}
-            label={`${node.skill.name}: ${node.isCompleted ? 'completed' : 'open'}`}
+            label={
+              node.isCompleted
+                ? t('skillTree.node.stateCompleted', { name: node.skill.name })
+                : t('skillTree.node.stateOpen', { name: node.skill.name })
+            }
             onChange={() => onToggle(node)}
             disabled={togglingIds.includes(node.id)}
           />

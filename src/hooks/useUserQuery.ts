@@ -1,3 +1,4 @@
+import i18n from '../i18n'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { userRepo } from '../repository/user.repo'
 import { getAccessTokenFromLS } from '../utils/auth'
@@ -43,7 +44,7 @@ export const useUpdateUserRoleMutation = () => {
   return useMutation({
     mutationFn: ({ userId, role }: { userId: string; role: UserRole }) => userRepo.updateUserRole(userId, role),
     onSuccess: () => {
-      toast.success('Cập nhật role thành công!')
+      toast.success(i18n.t('toast.roleUpdated'))
       // refetch lại danh sách để đồng bộ số liệu trên StatCard
       queryClient.invalidateQueries({ queryKey: ['admin-users'] })
     },

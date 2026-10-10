@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next'
+import { getLocale } from '../../utils/locale'
 import { Fragment, useMemo, useState } from 'react'
 import {
   ArrowDown,
@@ -21,13 +23,13 @@ const ALL = '__ALL__'
 type SortKey = 'userId' | 'careerPath' | 'completionPercentage' | 'nodeCount' | 'lastAnalyzedAt' | 'createdAt'
 type SortDir = 'asc' | 'desc'
 
-const COLUMNS: { key: SortKey; label: string }[] = [
-  { key: 'userId', label: 'User ID' },
-  { key: 'careerPath', label: 'Career path' },
-  { key: 'completionPercentage', label: 'Progress' },
-  { key: 'nodeCount', label: 'Root nodes' },
-  { key: 'lastAnalyzedAt', label: 'Last analyzed' },
-  { key: 'createdAt', label: 'Created' },
+const COLUMNS: { key: SortKey; labelKey: string }[] = [
+  { key: 'userId', labelKey: 'admin.trees.cols.userId' },
+  { key: 'careerPath', labelKey: 'admin.trees.cols.careerPath' },
+  { key: 'completionPercentage', labelKey: 'admin.trees.cols.progress' },
+  { key: 'nodeCount', labelKey: 'admin.trees.cols.rootNodes' },
+  { key: 'lastAnalyzedAt', labelKey: 'admin.trees.cols.lastAnalyzed' },
+  { key: 'createdAt', labelKey: 'admin.trees.cols.created' },
 ]
 
 // Cột chevron (đầu) + cột nút xóa (cuối)
@@ -64,7 +66,7 @@ function toRow(t: AdminSkillTreeItem): Row {
 
 function formatDate(iso: string) {
   if (!iso) return '—'
-  return new Date(iso).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })
+  return new Date(iso).toLocaleDateString(getLocale(), { day: '2-digit', month: '2-digit', year: 'numeric' })
 }
 
 function compare(a: Row, b: Row, key: SortKey) {
@@ -77,8 +79,9 @@ function compare(a: Row, b: Row, key: SortKey) {
 const shortId = (id: string) => `${id.slice(0, 8)}…`
 
 function RootNodeList({ nodes }: { nodes: SkillNode[] }) {
+  const { t } = useTranslation()
   if (nodes.length === 0) {
-    return <p className='text-sm text-gray-500'>This tree has no nodes yet.</p>
+    return <p className='text-sm text-gray-500'>{t('admin.trees.noNodes')}</p>
   }
   return (
     <ul className='grid grid-cols-1 md:grid-cols-2 gap-2'>
@@ -96,7 +99,7 @@ function RootNodeList({ nodes }: { nodes: SkillNode[] }) {
           <div className='min-w-0 flex-1'>
             <p className='truncate text-[15px] font-medium text-gray-900'>{node.skill.name}</p>
             <p className='truncate text-xs text-gray-500'>
-              {node.skill.category} · Level {node.skill.difficultyLevel}
+              {node.skill.category} · {t('admin.skills.level', { n: node.skill.difficultyLevel })}
             </p>
           </div>
           <span
@@ -106,7 +109,7 @@ function RootNodeList({ nodes }: { nodes: SkillNode[] }) {
                 : 'border-gray-200 bg-gray-100 text-gray-600'
             }`}
           >
-            {node.isCompleted ? 'Completed' : 'Not completed'}
+            {node.isCompleted ? t('admin.trees.completed') : t('admin.trees.notCompleted')}
           </span>
         </li>
       ))}
@@ -115,6 +118,7 @@ function RootNodeList({ nodes }: { nodes: SkillNode[] }) {
 }
 
 export default function AdminSkillTreesPage() {
+  const { t } = useTranslation()
   const { data: response, isLoading, isError, refetch } = useAllSkillTreesQuery()
   const rows = useMemo(() => (response?.data?.data ?? []).map(toRow), [response])
 
@@ -177,17 +181,17 @@ export default function AdminSkillTreesPage() {
         {/* Header */}
         <div className='flex items-end justify-between gap-4 flex-wrap'>
           <div>
-            <h1 className='text-[28px] font-bold text-gray-900'>Skill trees</h1>
-            <p className='mt-1 text-gray-500 text-[15px]'>Every user's skill tree. Click a row to see its nodes.</p>
+            <h1 className='text-[28px] font-bold text-gray-900'>{t('admin.trees.title')}</h1>
+            <p className='mt-1 text-gray-500 text-[15px]'>{t('admin.trees.desc')}</p>
           </div>
         </div>
 
         {/* Stats */}
         <div className='mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4'>
           {[
-            { label: 'Total trees', value: rows.length },
-            { label: 'Career paths', value: careerPaths.length },
-            { label: 'Average progress', value: `${avgProgress}%` },
+            { label: t('admin.trees.total'), value: rows.length },
+            { label: t('admin.trees.careerPaths'), value: careerPaths.length },
+            { label: t('admin.trees.avg'), value: `${avgProgress}%` },
           ].map((s) => (
             <div key={s.label} className='rounded-xl border border-gray-200 bg-white p-4'>
               <p className='text-xs text-gray-500'>{s.label}</p>
@@ -209,7 +213,7 @@ export default function AdminSkillTreesPage() {
                 setKeyword(e.target.value)
                 setPage(1)
               }}
-              placeholder='Search by user ID or career path...'
+              placeholder={t('admin.trees.search')}
               className='bg-transparent outline-none text-sm text-gray-700 placeholder:text-gray-400 w-full'
             />
           </div>
@@ -222,7 +226,7 @@ export default function AdminSkillTreesPage() {
             }}
             className={selectClass}
           >
-            <option value={ALL}>All career paths</option>
+            <option value={ALL}>{t('admin.trees.allPaths')}</option>
             {careerPaths.map((c) => (
               <option key={c} value={c}>
                 {c}
@@ -235,13 +239,13 @@ export default function AdminSkillTreesPage() {
         <div className='mt-5 bg-white border border-gray-200 rounded-2xl overflow-hidden'>
           {isError && !rows.length ? (
             <div className='p-10 text-center'>
-              <p className='text-[15px] font-medium text-gray-900'>Couldn't load skill trees.</p>
+              <p className='text-[15px] font-medium text-gray-900'>{t('admin.trees.loadError')}</p>
               <button
                 type='button'
                 onClick={() => refetch()}
                 className='mt-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 transition'
               >
-                Try again
+                {t('common.retry')}
               </button>
             </div>
           ) : (
@@ -261,7 +265,7 @@ export default function AdminSkillTreesPage() {
                               active ? 'text-gray-900' : ''
                             }`}
                           >
-                            {col.label}
+                            {t(col.labelKey)}
                             {active &&
                               (sortDir === 'asc' ? (
                                 <ArrowUp className='w-3.5 h-3.5' />
@@ -293,7 +297,7 @@ export default function AdminSkillTreesPage() {
                   ) : pageItems.length === 0 ? (
                     <tr>
                       <td colSpan={TOTAL_COLS} className='px-4 py-12 text-center text-gray-500'>
-                        No skill trees match your filters.
+                        {t('admin.trees.empty')}
                       </td>
                     </tr>
                   ) : (
@@ -309,7 +313,7 @@ export default function AdminSkillTreesPage() {
                               <button
                                 type='button'
                                 aria-expanded={open}
-                                aria-label={open ? 'Hide nodes' : 'Show nodes'}
+                                aria-label={open ? t('admin.trees.hideNodes') : t('admin.trees.showNodes')}
                                 className='w-6 h-6 flex items-center justify-center rounded-md text-gray-500 hover:bg-gray-100 transition-colors'
                               >
                                 <ChevronDown className={`w-4 h-4 transition-transform ${open ? '' : '-rotate-90'}`} />
@@ -348,7 +352,7 @@ export default function AdminSkillTreesPage() {
                                   e.stopPropagation()
                                   setDeleteConfirmId(row.id)
                                 }}
-                                aria-label={`Delete tree of user ${row.userId}`}
+                                aria-label={t('admin.trees.deleteAria', { id: row.userId })}
                                 className='p-1.5 rounded-lg text-gray-500 hover:text-red-600 hover:bg-red-50 transition'
                               >
                                 <Trash2 className='w-4 h-4' />
@@ -375,15 +379,18 @@ export default function AdminSkillTreesPage() {
           {!isLoading && filtered.length > 0 && (
             <div className='flex items-center justify-between gap-4 border-t border-gray-200 px-4 py-3 text-sm text-gray-500'>
               <span>
-                {(currentPage - 1) * PAGE_SIZE + 1}–{Math.min(currentPage * PAGE_SIZE, filtered.length)} of{' '}
-                {filtered.length}
+                {t('common.range', {
+                  from: (currentPage - 1) * PAGE_SIZE + 1,
+                  to: Math.min(currentPage * PAGE_SIZE, filtered.length),
+                  total: filtered.length,
+                })}
               </span>
               <div className='flex items-center gap-2'>
                 <button
                   type='button'
                   onClick={() => setPage(currentPage - 1)}
                   disabled={currentPage === 1}
-                  aria-label='Previous page'
+                  aria-label={t('common.previousPage')}
                   className='p-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-40 disabled:hover:bg-transparent transition'
                 >
                   <ChevronLeft className='w-4 h-4' />
@@ -395,7 +402,7 @@ export default function AdminSkillTreesPage() {
                   type='button'
                   onClick={() => setPage(currentPage + 1)}
                   disabled={currentPage === totalPages}
-                  aria-label='Next page'
+                  aria-label={t('common.nextPage')}
                   className='p-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-40 disabled:hover:bg-transparent transition'
                 >
                   <ChevronRight className='w-4 h-4' />
@@ -416,10 +423,8 @@ export default function AdminSkillTreesPage() {
           />
           <div role='dialog' aria-modal='true' className='relative w-full max-w-sm rounded-2xl bg-white shadow-xl'>
             <div className='px-6 py-4'>
-              <h3 className='text-[17px] font-semibold text-gray-900'>Delete skill tree?</h3>
-              <p className='mt-2 text-sm text-gray-500'>
-                The tree and all of its nodes will be removed. This action cannot be undone.
-              </p>
+              <h3 className='text-[17px] font-semibold text-gray-900'>{t('admin.trees.deleteTitle')}</h3>
+              <p className='mt-2 text-sm text-gray-500'>{t('admin.trees.deleteDesc')}</p>
             </div>
             <div className='flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-100'>
               <button
@@ -428,7 +433,7 @@ export default function AdminSkillTreesPage() {
                 disabled={deleting}
                 className='rounded-xl border border-gray-200 text-gray-900 text-sm font-medium px-4 py-2 hover:bg-gray-50 disabled:opacity-60 transition'
               >
-                Cancel
+                {t('common.cancel')}
               </button>
               <button
                 type='button'
@@ -437,7 +442,7 @@ export default function AdminSkillTreesPage() {
                 className='inline-flex items-center gap-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-sm font-medium px-4 py-2 disabled:opacity-60 transition'
               >
                 {deleting && <Loader2 className='w-4 h-4 animate-spin' />}
-                {deleting ? 'Deleting...' : 'Delete'}
+                {deleting ? t('common.deleting') : t('common.delete')}
               </button>
             </div>
           </div>

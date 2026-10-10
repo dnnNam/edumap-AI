@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { KeyRound, Eye, EyeOff, X } from 'lucide-react'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { changePasswordSchema, type ChangePasswordPayload } from '../../schemas/auth.schema'
 
@@ -17,6 +18,7 @@ export default function ChangePasswordModal({
   onSubmit,
   isSubmitting = false,
 }: ChangePasswordModalProps) {
+  const { t } = useTranslation()
   const [showCurrent, setShowCurrent] = useState(false)
   const [showNew, setShowNew] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
@@ -50,18 +52,19 @@ export default function ChangePasswordModal({
 
     if (!result.success) {
       result.error.issues.forEach((issue) => {
+        // issue.message là KEY dịch, được dịch lúc hiển thị bên dưới
         setError(issue.path[0] as 'oldPassword' | 'newPassword', { message: issue.message })
       })
       return
     }
     if (data.newPassword !== data.confirmNewPassword) {
-      setError('confirmNewPassword', { message: 'Xác nhận mật khẩu không khớp' })
+      setError('confirmNewPassword', { message: 'validation.passwordMismatch' })
       return
     }
 
     try {
       await onSubmit?.(result.data)
-      toast.success('Cập nhật mật khẩu thành công!')
+      toast.success(t('changePassword.success'))
       handleClose()
     } catch {
       // Axios interceptor tự bắt lỗi và hiển thị toast, không cần xử lý thêm ở đây
@@ -77,22 +80,22 @@ export default function ChangePasswordModal({
           type='button'
           onClick={handleClose}
           className='absolute top-5 right-5 text-gray-400 dark:text-[#A29FA8] hover:text-gray-600 dark:hover:text-[#ECE9E4] transition-colors cursor-pointer'
-          aria-label='Close'
+          aria-label={t('common.close')}
         >
           <X className='w-4.5 h-4.5' />
         </button>
 
         <div className='flex items-center gap-2'>
           <KeyRound className='w-4.5 h-4.5 text-gray-900 dark:text-[#ECE9E4]' />
-          <h2 className='text-lg font-semibold text-gray-900 dark:text-[#ECE9E4]'>Change password</h2>
+          <h2 className='text-lg font-semibold text-gray-900 dark:text-[#ECE9E4]'>{t('changePassword.title')}</h2>
         </div>
-        <p className='mt-1.5 text-sm text-gray-500 dark:text-[#A29FA8]'>Choose a strong password you haven't used before.</p>
+        <p className='mt-1.5 text-sm text-gray-500 dark:text-[#A29FA8]'>{t('changePassword.desc')}</p>
 
         <form onSubmit={submit} className='mt-6 space-y-4'>
           {/* Form input Current Password */}
           <div>
             <label htmlFor='oldPassword' className='block text-sm font-medium text-gray-800 dark:text-[#ECE9E4] mb-1.5'>
-              Current password
+              {t('changePassword.current')}
             </label>
             <div className='relative'>
               <input
@@ -109,13 +112,13 @@ export default function ChangePasswordModal({
                 {showCurrent ? <EyeOff className='w-4 h-4' /> : <Eye className='w-4 h-4' />}
               </button>
             </div>
-            {errors.oldPassword && <p className='text-sm text-red-500 mt-1'>{errors.oldPassword.message}</p>}
+            {errors.oldPassword && <p className='text-sm text-red-500 mt-1'>{t(errors.oldPassword.message!)}</p>}
           </div>
 
           {/* Form input New Password */}
           <div>
             <label htmlFor='newPassword' className='block text-sm font-medium text-gray-800 dark:text-[#ECE9E4] mb-1.5'>
-              New password
+              {t('changePassword.new')}
             </label>
             <div className='relative'>
               <input
@@ -132,13 +135,16 @@ export default function ChangePasswordModal({
                 {showNew ? <EyeOff className='w-4 h-4' /> : <Eye className='w-4 h-4' />}
               </button>
             </div>
-            {errors.newPassword && <p className='text-sm text-red-500 mt-1'>{errors.newPassword.message}</p>}
+            {errors.newPassword && <p className='text-sm text-red-500 mt-1'>{t(errors.newPassword.message!)}</p>}
           </div>
 
           {/* Form input Confirm Password */}
           <div>
-            <label htmlFor='confirmNewPassword' className='block text-sm font-medium text-gray-800 dark:text-[#ECE9E4] mb-1.5'>
-              Confirm new password
+            <label
+              htmlFor='confirmNewPassword'
+              className='block text-sm font-medium text-gray-800 dark:text-[#ECE9E4] mb-1.5'
+            >
+              {t('changePassword.confirmNew')}
             </label>
             <div className='relative'>
               <input
@@ -156,7 +162,7 @@ export default function ChangePasswordModal({
               </button>
             </div>
             {errors.confirmNewPassword && (
-              <p className='text-sm text-red-500 mt-1'>{errors.confirmNewPassword.message}</p>
+              <p className='text-sm text-red-500 mt-1'>{t(errors.confirmNewPassword.message!)}</p>
             )}
           </div>
 
@@ -166,14 +172,14 @@ export default function ChangePasswordModal({
               onClick={handleClose}
               className='rounded-xl border border-gray-200 dark:border-white/[0.08] text-gray-900 dark:text-[#ECE9E4] text-[15px] font-medium px-4 py-2.5 hover:bg-gray-50 dark:hover:bg-[#232227] transition cursor-pointer'
             >
-              Cancel
+              {t('common.cancel')}
             </button>
             <button
               type='submit'
               disabled={isSubmitting}
               className='rounded-xl bg-indigo-600 hover:bg-indigo-700 dark:bg-[#5F2CFF] dark:hover:bg-[#4B1FD6] disabled:opacity-70 text-white text-[15px] font-medium px-5 py-2.5 transition cursor-pointer'
             >
-              {isSubmitting ? 'Updating...' : 'Update password'}
+              {isSubmitting ? t('changePassword.updating') : t('changePassword.update')}
             </button>
           </div>
         </form>

@@ -1,3 +1,4 @@
+import i18n from '../../i18n'
 import { useEffect, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
@@ -19,7 +20,7 @@ export default function GoogleCallbackPage() {
     const accessToken = params.get('token')
 
     if (!accessToken) {
-      toast.error('Đăng nhập Google thất bại, vui lòng thử lại.')
+      toast.error(i18n.t('auth.googleFailed'))
       navigate('/login', { replace: true })
       return
     }
@@ -44,14 +45,14 @@ export default function GoogleCallbackPage() {
         // 4. Xóa cache cũ để ProtectedRoute gọi lại /auth/me với token mới
         queryClient.removeQueries({ queryKey: ['auth-me'] })
 
-        toast.success('Đăng nhập thành công!')
+        toast.success(i18n.t('auth.loginSuccess'))
 
         // 5. Vào dashboard, replace để URL chứa token không nằm lại trong lịch sử
         navigate('/dashboard', { replace: true })
       })
       .catch(() => {
         clearLS()
-        toast.error('Đăng nhập Google thất bại, vui lòng thử lại.')
+        toast.error(i18n.t('auth.googleFailed'))
         navigate('/login', { replace: true })
       })
   }, [params, navigate, queryClient])

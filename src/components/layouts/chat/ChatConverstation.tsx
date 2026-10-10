@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { AlertTriangle, Loader2, Send, Sparkles, Trash2, X } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import type { Components } from 'react-markdown'
@@ -11,20 +12,19 @@ import AppLoadingSkeleton from '../../ui/AppLoadingSkeleton'
 
 const EASE = [0.22, 1, 0.36, 1] as const
 
-const SUGGESTIONS: string[] = [
-  'Analyze my GitHub and suggest projects',
-  'Build me a 12-week ML roadmap',
-  'Review my CV for FAANG roles',
-  'What skill should I learn next?',
-]
-
 // Custom render cho markdown trong tin nhắn AI
 const markdownComponents: Components = {
   p: ({ children }) => <p className='mb-3 last:mb-0'>{children}</p>,
   strong: ({ children }) => <strong className='font-semibold text-gray-900 dark:text-white'>{children}</strong>,
-  ul: ({ children }) => <ul className='mb-3 last:mb-0 space-y-1.5 pl-5 list-disc marker:text-gray-400 dark:marker:text-[#85808C]'>{children}</ul>,
+  ul: ({ children }) => (
+    <ul className='mb-3 last:mb-0 space-y-1.5 pl-5 list-disc marker:text-gray-400 dark:marker:text-[#85808C]'>
+      {children}
+    </ul>
+  ),
   ol: ({ children }) => (
-    <ol className='mb-3 last:mb-0 space-y-2 pl-5 list-decimal marker:text-gray-400 dark:marker:text-[#85808C] marker:font-medium'>{children}</ol>
+    <ol className='mb-3 last:mb-0 space-y-2 pl-5 list-decimal marker:text-gray-400 dark:marker:text-[#85808C] marker:font-medium'>
+      {children}
+    </ol>
   ),
   li: ({ children }) => <li className='pl-1 leading-relaxed [&>p]:inline [&>p]:m-0'>{children}</li>,
   a: ({ children, href }) => (
@@ -38,7 +38,9 @@ const markdownComponents: Components = {
     </a>
   ),
   code: ({ children }) => (
-    <code className='bg-gray-200/70 dark:bg-white/10 text-gray-800 dark:text-[#ECE9E4] rounded px-1.5 py-0.5 text-[13px] font-mono'>{children}</code>
+    <code className='bg-gray-200/70 dark:bg-white/10 text-gray-800 dark:text-[#ECE9E4] rounded px-1.5 py-0.5 text-[13px] font-mono'>
+      {children}
+    </code>
   ),
 }
 
@@ -54,6 +56,8 @@ function DeleteConfirmModal({
   onCancel: () => void
   onConfirm: () => void
 }) {
+  const { t } = useTranslation()
+
   return (
     <AnimatePresence>
       {open && (
@@ -79,7 +83,7 @@ function DeleteConfirmModal({
               onClick={onCancel}
               disabled={isDeleting}
               className='absolute top-5 right-5 text-gray-400 dark:text-[#85808C] hover:text-gray-600 dark:hover:text-[#ECE9E4] disabled:opacity-50 transition-colors cursor-pointer'
-              aria-label='Đóng'
+              aria-label={t('common.close')}
             >
               <X className='w-4.5 h-4.5' />
             </button>
@@ -88,9 +92,11 @@ function DeleteConfirmModal({
               <AlertTriangle className='w-5 h-5 text-red-600 dark:text-[#FCA5A5]' />
             </div>
 
-            <h2 className='mt-4 text-[17px] font-semibold text-gray-900 dark:text-[#ECE9E4]'>Xóa cuộc trò chuyện?</h2>
+            <h2 className='mt-4 text-[17px] font-semibold text-gray-900 dark:text-[#ECE9E4]'>
+              {t('chat.conversation.deleteTitle')}
+            </h2>
             <p className='mt-1.5 text-sm text-gray-500 dark:text-[#B5B1BA] leading-relaxed'>
-              Hành động này không thể hoàn tác. Toàn bộ tin nhắn trong phiên này sẽ bị xóa vĩnh viễn.
+              {t('chat.conversation.deleteDesc')}
             </p>
 
             <div className='mt-6 flex items-center justify-end gap-3'>
@@ -100,7 +106,7 @@ function DeleteConfirmModal({
                 disabled={isDeleting}
                 className='rounded-xl border border-gray-200 dark:border-white/10 text-gray-700 dark:text-[#ECE9E4] text-sm font-medium px-4 py-2 hover:bg-gray-50 dark:hover:bg-white/5 disabled:opacity-60 transition cursor-pointer'
               >
-                Hủy
+                {t('common.cancel')}
               </button>
               <button
                 type='button'
@@ -109,7 +115,7 @@ function DeleteConfirmModal({
                 className='flex items-center gap-2 rounded-xl bg-red-600 hover:bg-red-700 disabled:opacity-70 text-white text-sm font-medium px-4 py-2 transition cursor-pointer shadow-xs'
               >
                 {isDeleting ? <Loader2 className='w-4 h-4 animate-spin' /> : <Trash2 className='w-4 h-4' />}
-                Xóa
+                {t('common.delete')}
               </button>
             </div>
           </motion.div>
@@ -119,16 +125,18 @@ function DeleteConfirmModal({
   )
 }
 
-export default function ChatConverstation({
-  sessionId,
-  onDeleted,
-}: {
-  sessionId: string
-  onDeleted?: () => void
-}) {
+export default function ChatConverstation({ sessionId, onDeleted }: { sessionId: string; onDeleted?: () => void }) {
+  const { t } = useTranslation()
   const fullName = getFullNameFromLS()
   const [input, setInput] = useState('')
   const bottomRef = useRef<HTMLDivElement>(null)
+
+  const suggestions = [
+    t('chat.conversation.suggestion1'),
+    t('chat.conversation.suggestion2'),
+    t('chat.conversation.suggestion3'),
+    t('chat.conversation.suggestion4'),
+  ]
 
   const { data: sessionResponse, isLoading } = useChatSessionQuery(sessionId)
   const session = sessionResponse?.data?.data
@@ -154,10 +162,13 @@ export default function ChatConverstation({
     const welcome: ChatMessage = {
       id: 'welcome',
       role: 'assistant',
-      text: `Hey ${fullName || 'bạn'} 👋 Tôi đã xem lộ trình ${session.title} của bạn. Bạn muốn bắt đầu từ đâu?`,
+      text: t('chat.conversation.welcome', {
+        name: fullName || t('chat.conversation.fallbackName'),
+        title: session.title,
+      }),
     }
     return [welcome, ...apiMessages, ...pendingMessages]
-  }, [apiMessages, pendingMessages, session, fullName])
+  }, [apiMessages, pendingMessages, session, fullName, t])
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })
@@ -206,15 +217,15 @@ export default function ChatConverstation({
             <p className='text-sm font-medium text-gray-900 dark:text-[#ECE9E4]'>{session.title}</p>
             <p className='text-xs text-gray-500 dark:text-[#A29FA8] flex items-center gap-1'>
               <span className='w-1.5 h-1.5 rounded-full bg-green-500' />
-              Online
+              {t('chat.conversation.online')}
             </p>
           </div>
         </div>
         <button
           type='button'
           onClick={() => setConfirmOpen(true)}
-          aria-label='Xóa cuộc trò chuyện'
-          title='Xóa cuộc trò chuyện'
+          aria-label={t('chat.conversation.deleteAria')}
+          title={t('chat.conversation.deleteAria')}
           className='w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 dark:text-[#85808C] hover:text-red-600 dark:hover:text-[#FCA5A5] hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors cursor-pointer'
         >
           <Trash2 className='w-4 h-4' />
@@ -227,7 +238,9 @@ export default function ChatConverstation({
             <div key={m.id} className={`flex items-start gap-3 ${m.role === 'user' ? 'flex-row-reverse' : ''}`}>
               <div
                 className={`w-8 h-8 shrink-0 rounded-full flex items-center justify-center ${
-                  m.role === 'user' ? 'bg-indigo-600 text-white' : 'bg-gray-900 dark:bg-[#131428] dark:border dark:border-white/10 text-white'
+                  m.role === 'user'
+                    ? 'bg-indigo-600 text-white'
+                    : 'bg-gray-900 dark:bg-[#131428] dark:border dark:border-white/10 text-white'
                 }`}
               >
                 <Sparkles className='w-4 h-4 text-white' />
@@ -257,7 +270,7 @@ export default function ChatConverstation({
                 <Sparkles className='w-4 h-4 text-white' />
               </div>
               <div className='rounded-2xl rounded-tl-sm bg-gray-100 dark:bg-[#232227] px-4 py-3 text-[15px] text-gray-500 dark:text-[#A29FA8] animate-pulse border border-transparent dark:border-white/5'>
-                AI đang soạn câu trả lời...
+                {t('chat.conversation.thinking')}
               </div>
             </div>
           )}
@@ -269,7 +282,7 @@ export default function ChatConverstation({
       <div className='shrink-0 px-6 pb-5 pt-2 border-t border-gray-100 dark:border-white/10 transition-colors'>
         <div className='max-w-3xl mx-auto'>
           <div className='flex flex-wrap gap-2 mb-3'>
-            {SUGGESTIONS.map((s) => (
+            {suggestions.map((s) => (
               <button
                 key={s}
                 type='button'
@@ -291,14 +304,14 @@ export default function ChatConverstation({
               }}
               disabled={isSending}
               type='text'
-              placeholder='Ask anything about your career...'
+              placeholder={t('chat.conversation.placeholder')}
               className='flex-1 outline-none text-sm text-gray-800 dark:text-[#ECE9E4] placeholder:text-gray-400 dark:placeholder:text-[#5E5A64] disabled:bg-transparent'
             />
             <button
               type='button'
               onClick={handleSend}
               disabled={isSending || !input.trim()}
-              aria-label='Send message'
+              aria-label={t('chat.conversation.send')}
               className='w-9 h-9 shrink-0 flex items-center justify-center rounded-lg bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 disabled:cursor-not-allowed transition-colors cursor-pointer'
             >
               <Send className='w-4 h-4 text-white' />

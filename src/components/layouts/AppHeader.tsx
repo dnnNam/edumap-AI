@@ -1,8 +1,10 @@
 import { Bell, Menu } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 import { useUnreadNotificationsCount } from '../../hooks/notificationQuery'
 import { getRoleFromLS } from '../../utils/auth'
 import Avatar from '../ui/Avatar'
+import LanguageToggle from '../ui/LanguageToggle'
 import ThemeToggle from '../ui/ThemeToggle'
 
 interface AppHeaderProps {
@@ -15,6 +17,7 @@ interface AppHeaderProps {
 
 // Tách riêng để hook đếm thông báo chỉ chạy khi component này được render (admin thì không render)
 function NotificationBell() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const { unreadCount } = useUnreadNotificationsCount()
 
@@ -22,7 +25,7 @@ function NotificationBell() {
     <button
       type='button'
       onClick={() => navigate('/notifications')}
-      aria-label={unreadCount > 0 ? `Notifications, ${unreadCount} unread` : 'Notifications'}
+      aria-label={unreadCount > 0 ? t('header.notificationsUnread', { count: unreadCount }) : t('header.notifications')}
       className='relative w-9 h-9 flex items-center justify-center rounded-lg hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer'
     >
       <Bell className='w-5 h-5 text-gray-500 dark:text-[#A29FA8]' />
@@ -39,9 +42,10 @@ export default function AppHeader({
   logoText = 'EduMap AI',
   badgeText = 'Demo',
   userName = 'Alex Johnson',
-  userPlan = 'Free plan',
+  userPlan,
   onToggleMenu,
 }: AppHeaderProps) {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const isAdmin = getRoleFromLS() === 'ADMIN'
 
@@ -53,7 +57,7 @@ export default function AppHeader({
         <button
           type='button'
           onClick={onToggleMenu}
-          aria-label='Toggle navigation menu'
+          aria-label={t('header.toggleMenu')}
           className='lg:hidden p-1.5 rounded-lg text-gray-700 dark:text-[#ECE9E4] hover:bg-gray-100 dark:hover:bg-white/5 transition cursor-pointer'
         >
           <Menu className='w-5 h-5' />
@@ -68,10 +72,10 @@ export default function AppHeader({
         </span>
       </div>
 
-      {/* Right: Theme Toggle + Notifications (user only) + Profile */}
+      {/* Right: Language + Theme Toggle + Notifications (user only) + Profile */}
       <div className='flex-1 flex items-center justify-end px-3 sm:px-6 min-w-0'>
         <div className='flex items-center gap-2 sm:gap-3'>
-          {/* Theme Toggle Button */}
+          <LanguageToggle />
           <ThemeToggle />
 
           {!isAdmin && <NotificationBell />}
@@ -83,8 +87,10 @@ export default function AppHeader({
           >
             <Avatar className='w-8 h-8 sm:w-9 sm:h-9' />
             <div className='hidden sm:flex flex-col items-start leading-tight'>
-              <span className='text-sm font-medium text-gray-900 dark:text-[#ECE9E4] max-w-[120px] truncate'>{userName}</span>
-              <span className='text-xs text-gray-500 dark:text-[#A29FA8]'>{userPlan}</span>
+              <span className='text-sm font-medium text-gray-900 dark:text-[#ECE9E4] max-w-[120px] truncate'>
+                {userName}
+              </span>
+              <span className='text-xs text-gray-500 dark:text-[#A29FA8]'>{userPlan ?? t('header.freePlan')}</span>
             </div>
           </button>
         </div>

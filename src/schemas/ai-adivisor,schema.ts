@@ -11,7 +11,7 @@ export type AnalysisMode = (typeof ANALYSIS_MODES)[number]
 export const analyzeFormSchema = z
   .object({
     mode: z.enum(ANALYSIS_MODES),
-    targetRole: z.string().min(1, { message: 'Vui lòng chọn vị trí mục tiêu' }),
+    targetRole: z.string().min(1, { message: 'validation.targetRoleRequired' }),
     universityName: z.string(),
     currentYear: z.number(),
     coreCourses: z.array(
@@ -31,7 +31,7 @@ export const analyzeFormSchema = z
         ctx.addIssue({
           code: 'custom',
           path: ['universityName'],
-          message: 'Tên trường đại học không được để trống',
+          message: 'validation.universityRequired',
         })
       }
 
@@ -40,7 +40,7 @@ export const analyzeFormSchema = z
           ctx.addIssue({
             code: 'custom',
             path: ['coreCourses', index, 'courseName'],
-            message: 'Tên môn học không được để trống',
+            message: 'validation.courseRequired',
           })
         }
       })
@@ -50,7 +50,7 @@ export const analyzeFormSchema = z
       ctx.addIssue({
         code: 'custom',
         path: ['githubUsername'],
-        message: 'GitHub username không được để trống',
+        message: 'validation.githubRequired',
       })
     }
   })

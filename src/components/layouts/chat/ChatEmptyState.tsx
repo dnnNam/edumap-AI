@@ -1,24 +1,15 @@
 import { Brain, GitBranch, MessageSquare, Sparkles, Target } from 'lucide-react'
-
-const HIGHLIGHTS = [
-  {
-    icon: Brain,
-    title: 'Hiểu hồ sơ của bạn',
-    description: 'AI đọc transcript, GitHub và CV để nắm rõ năng lực hiện tại.',
-  },
-  {
-    icon: GitBranch,
-    title: 'Bám theo skill tree',
-    description: 'Mọi lời khuyên đều dựa trên lộ trình kỹ năng bạn đã tạo.',
-  },
-  {
-    icon: Target,
-    title: 'Gợi ý bước tiếp theo',
-    description: 'Đề xuất dự án, khóa học và kỹ năng nên học kế tiếp.',
-  },
-]
+import { useTranslation } from 'react-i18next'
 
 export default function ChatEmptyState({ onNewChat }: { onNewChat: () => void }) {
+  const { t } = useTranslation()
+
+  const highlights = [
+    { icon: Brain, title: t('chat.empty.h1Title'), description: t('chat.empty.h1Desc') },
+    { icon: GitBranch, title: t('chat.empty.h2Title'), description: t('chat.empty.h2Desc') },
+    { icon: Target, title: t('chat.empty.h3Title'), description: t('chat.empty.h3Desc') },
+  ]
+
   return (
     <div className='flex-1 min-h-0 flex items-center justify-center p-6 bg-white dark:bg-[#1A191C] transition-colors'>
       <div className='w-full max-w-xl text-center'>
@@ -26,10 +17,8 @@ export default function ChatEmptyState({ onNewChat }: { onNewChat: () => void })
           <MessageSquare className='w-6 h-6 text-white' />
         </div>
 
-        <h2 className='mt-5 text-xl font-semibold text-gray-900 dark:text-[#ECE9E4]'>Chưa có cuộc trò chuyện nào</h2>
-        <p className='mt-2 text-sm text-gray-500 dark:text-[#B5B1BA] leading-relaxed'>
-          Bắt đầu trò chuyện với AI Mentor để nhận tư vấn lộ trình.
-        </p>
+        <h2 className='mt-5 text-xl font-semibold text-gray-900 dark:text-[#ECE9E4]'>{t('chat.empty.title')}</h2>
+        <p className='mt-2 text-sm text-gray-500 dark:text-[#B5B1BA] leading-relaxed'>{t('chat.empty.desc')}</p>
 
         <button
           type='button'
@@ -37,12 +26,15 @@ export default function ChatEmptyState({ onNewChat }: { onNewChat: () => void })
           className='mt-6 inline-flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-5 py-2.5 transition cursor-pointer shadow-xs'
         >
           <Sparkles className='w-4 h-4' />
-          Bắt đầu trò chuyện
+          {t('chat.empty.cta')}
         </button>
 
         <div className='mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4 text-left'>
-          {HIGHLIGHTS.map(({ icon: Icon, title, description }) => (
-            <div key={title} className='rounded-xl border border-gray-100 dark:border-white/10 bg-gray-50/60 dark:bg-white/5 p-4 transition-colors'>
+          {highlights.map(({ icon: Icon, title, description }) => (
+            <div
+              key={title}
+              className='rounded-xl border border-gray-100 dark:border-white/10 bg-gray-50/60 dark:bg-white/5 p-4 transition-colors'
+            >
               <div className='w-8 h-8 rounded-lg bg-white dark:bg-[#232227] border border-gray-200 dark:border-white/10 flex items-center justify-center'>
                 <Icon className='w-4 h-4 text-indigo-600 dark:text-[#A99DFF]' />
               </div>

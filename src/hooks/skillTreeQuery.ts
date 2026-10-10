@@ -1,6 +1,7 @@
 import { useMutation, useMutationState, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { AxiosResponse } from 'axios'
 import { toast } from 'sonner'
+import i18n from '../i18n'
 import { skillTreeRepo } from '../repository/skillTree.repo'
 import type { SkillTreeResponse } from '../types/api/skillTree.types'
 import { getAccessTokenFromLS } from '../utils/auth'
@@ -43,7 +44,7 @@ export const useToggleSkillNodeMutation = () => {
       const cache = queryClient.getQueryData<SkillTreeCache>(SKILL_TREE_KEY)
       const node = cache ? flattenNodes(cache.data.data.nodes).find((n) => n.id === nodeId) : undefined
 
-      toast.success(node?.isCompleted ? 'Đã đánh dấu hoàn thành!' : 'Đã bỏ đánh dấu hoàn thành!')
+      toast.success(node?.isCompleted ? i18n.t('toast.nodeDone') : i18n.t('toast.nodeUndone'))
     },
 
     // Lỗi -> chỉ lật ngược đúng node đó, không đụng các node khác đang chờ
@@ -85,7 +86,7 @@ export const useDeleteSkillTreeMutation = () => {
   return useMutation({
     mutationFn: (id: string) => skillTreeRepo.deleteSkillTree(id),
     onSuccess: () => {
-      toast.success('Đã xóa cây kỹ năng!')
+      toast.success(i18n.t('toast.treeDeleted'))
       queryClient.invalidateQueries({ queryKey: ['Skill-trees', 'admin-all'] })
     },
   })

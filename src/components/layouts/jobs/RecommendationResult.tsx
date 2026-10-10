@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { Building2, Banknote, Clock, ExternalLink, Lightbulb, MapPin, Sparkles } from 'lucide-react'
 import type { RecommendationBody, SampleJob } from '../../../types/api/job.types'
 import { MotionFadeIn, MotionStaggerContainer, MotionStaggerItem } from '../../motion/MotionWrapper'
@@ -33,6 +34,7 @@ function SampleJobCard({ job }: { job: SampleJob }) {
 }
 
 export default function RecommendationResult({ result }: { result: RecommendationBody }) {
+  const { t } = useTranslation()
   const { data: analysis } = result
 
   return (
@@ -51,26 +53,28 @@ export default function RecommendationResult({ result }: { result: Recommendatio
           {!result.isSkillUpdated && (
             <span className='inline-flex items-center gap-1.5 rounded-full border border-gray-200 dark:border-white/[0.08] px-3 py-1 text-sm text-gray-500 dark:text-[#A29FA8]'>
               <Clock className='w-3.5 h-3.5' />
-              Dựa trên công nghệ trong dự án
+              {t('jobs.result.basedOnProject')}
             </span>
           )}
         </div>
 
-        <h2 className='mt-5 text-lg font-semibold text-gray-900 dark:text-[#ECE9E4]'>Thị trường hiện tại</h2>
-        <p className='mt-2 text-[15px] leading-relaxed text-gray-600 dark:text-[#B5B1BA] max-w-3xl'>{analysis.marketSummary}</p>
+        <h2 className='mt-5 text-lg font-semibold text-gray-900 dark:text-[#ECE9E4]'>{t('jobs.result.market')}</h2>
+        <p className='mt-2 text-[15px] leading-relaxed text-gray-600 dark:text-[#B5B1BA] max-w-3xl'>
+          {analysis.marketSummary}
+        </p>
         {result.message && <p className='mt-3 text-sm text-gray-400 dark:text-[#A29FA8]'>{result.message}</p>}
       </MotionFadeIn>
 
       {/* Link tìm việc */}
       {analysis.searchLinks.length > 0 && (
         <MotionFadeIn className='rounded-3xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#1A191C] p-6'>
-          <h2 className='text-lg font-semibold text-gray-900 dark:text-[#ECE9E4]'>Tìm việc trên các nền tảng</h2>
+          <h2 className='text-lg font-semibold text-gray-900 dark:text-[#ECE9E4]'>{t('jobs.result.platforms')}</h2>
           <div className='mt-4 flex flex-wrap gap-2'>
             {analysis.searchLinks.map((link) => (
               <a
                 key={link.platform}
                 href={link.url}
-                title={`Từ khóa: ${link.searchKeyword}`}
+                title={t('jobs.result.keyword', { keyword: link.searchKeyword })}
                 target='_blank'
                 rel='noopener noreferrer'
                 className='inline-flex items-center gap-1.5 rounded-full border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#232227] px-3.5 py-2 text-sm text-gray-700 dark:text-[#ECE9E4] transition hover:border-indigo-300 dark:hover:border-[#5F2CFF] hover:bg-indigo-50 dark:hover:bg-[#5F2CFF]/20 hover:text-indigo-600 dark:hover:text-[#A99DFF]'
@@ -87,7 +91,9 @@ export default function RecommendationResult({ result }: { result: Recommendatio
       {/* Việc làm mẫu */}
       {analysis.sampleJobs.length > 0 && (
         <section>
-          <h2 className='mb-4 text-lg font-semibold text-gray-900 dark:text-[#ECE9E4]'>Việc làm phù hợp</h2>
+          <h2 className='mb-4 text-lg font-semibold text-gray-900 dark:text-[#ECE9E4]'>
+            {t('jobs.result.sampleJobs')}
+          </h2>
           <MotionStaggerContainer className='grid grid-cols-1 gap-5'>
             {analysis.sampleJobs.map((job, i) => (
               <MotionStaggerItem key={`${job.company}-${job.title}-${i}`}>
@@ -103,9 +109,11 @@ export default function RecommendationResult({ result }: { result: Recommendatio
         <MotionFadeIn className='rounded-3xl border border-indigo-100 dark:border-[#5F2CFF]/20 bg-indigo-50/60 dark:bg-[#5F2CFF]/10 p-6'>
           <div className='flex items-center gap-2 text-indigo-600 dark:text-[#A99DFF]'>
             <Lightbulb className='w-4.5 h-4.5' />
-            <h2 className='text-lg font-semibold'>Câu hỏi phỏng vấn nên chuẩn bị</h2>
+            <h2 className='text-lg font-semibold'>{t('jobs.result.interview')}</h2>
           </div>
-          <p className='mt-3 text-[15px] leading-relaxed text-gray-700 dark:text-[#ECE9E4] max-w-3xl'>{analysis.interviewTip}</p>
+          <p className='mt-3 text-[15px] leading-relaxed text-gray-700 dark:text-[#ECE9E4] max-w-3xl'>
+            {analysis.interviewTip}
+          </p>
         </MotionFadeIn>
       )}
     </div>

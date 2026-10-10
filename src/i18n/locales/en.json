@@ -1,0 +1,1057 @@
+{
+  "common": {
+    "save": "Save changes",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "deleting": "Deleting...",
+    "close": "Close",
+    "retry": "Try again",
+    "loading": "Loading...",
+    "back": "Back",
+    "search": "Search",
+    "refresh": "Refresh",
+    "upgrade": "Upgrade",
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "getStarted": "Get started",
+    "free": "Free",
+    "all": "All",
+    "language": "Language",
+    "switchToLight": "Switch to light mode",
+    "switchToDark": "Switch to dark mode",
+    "guest": "Guest",
+    "pleaseWait": "Please wait...",
+    "userAvatar": "User avatar",
+    "previousSlide": "Previous slide",
+    "nextSlide": "Next slide",
+    "goToSlide": "Go to slide {{n}}",
+    "add": "Add",
+    "exportPdf": "Export PDF",
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "range": "{{from}}–{{to}} of {{total}}"
+  },
+  "nav": {
+    "workspace": "Workspace",
+    "account": "Account",
+    "menu": "Menu",
+    "dashboard": "Dashboard",
+    "aiMentor": "AI Mentor",
+    "upload": "Upload & Analyze",
+    "skillTree": "Skill Tree",
+    "resources": "Resources",
+    "history": "History",
+    "portfolio": "Portfolio",
+    "jobTrending": "Job Trending",
+    "jobAnalysis": "Job Analysis",
+    "profile": "Profile",
+    "notifications": "Notifications",
+    "subscription": "Subscription",
+    "usage": "Usage",
+    "settings": "Settings",
+    "admin": "Admin",
+    "skills": "Skills",
+    "skillTrees": "Skill trees",
+    "upgradeTitle": "Upgrade to Pro",
+    "upgradeDesc": "Unlimited AI mentor and analytics."
+  },
+  "header": {
+    "notifications": "Notifications",
+    "notificationsUnread": "Notifications, {{count}} unread",
+    "toggleMenu": "Toggle navigation menu",
+    "freePlan": "Free plan"
+  },
+  "public": {
+    "features": "Features",
+    "pricing": "Pricing",
+    "faq": "FAQ",
+    "footerTagline": "Your AI-powered career mentor. Built for the next generation of engineers."
+  },
+  "auth": {
+    "loginTitle": "Sign in",
+    "loginSubtitle": "Welcome back to your AI mentor",
+    "welcomeBack": "Welcome back.",
+    "roadmapAwaits": "Your roadmap awaits.",
+    "email": "Email",
+    "password": "Password",
+    "passwordPlaceholder": "enter your password",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot password?",
+    "signingIn": "Signing in...",
+    "orContinueWith": "OR CONTINUE WITH",
+    "continueGoogle": "Continue with Google",
+    "noAccount": "No account?",
+    "createOne": "Create one",
+    "loginSuccess": "Signed in successfully!",
+    "registerTitle": "Create your account",
+    "registerSubtitle": "90-second setup. Free forever for students.",
+    "fullName": "Full name",
+    "confirm": "Confirm",
+    "createAccount": "Create account",
+    "creatingAccount": "Creating account...",
+    "haveAccount": "Already have an account?",
+    "registerSuccess": "Registered successfully! Please sign in.",
+    "googleFailed": "Google sign-in failed, please try again."
+  },
+  "validation": {
+    "emailRequired": "Email is required",
+    "emailInvalid": "Invalid email format",
+    "passwordRequired": "Password is required",
+    "passwordMin": "Password must be at least 6 characters",
+    "fullNameRequired": "Full name is required",
+    "passwordMismatch": "Passwords do not match",
+    "confirmRequired": "Please confirm your password",
+    "oldPasswordRequired": "Current password is required",
+    "newPasswordMin": "New password must be at least 6 characters",
+    "tokenRequired": "Token is required",
+    "universityRequired": "University name is required",
+    "yearInt": "Year must be a whole number",
+    "yearMin": "Year must be at least 1",
+    "yearMax": "Year must be at most 7",
+    "githubRequired": "GitHub username is required",
+    "skillRequired": "Please select a skill",
+    "resourceTypeRequired": "Please select a resource type",
+    "titleMin": "Title must be at least 3 characters",
+    "titleMax": "Title must be at most 200 characters",
+    "urlRequired": "Please enter a URL",
+    "urlInvalid": "Invalid URL (must start with http:// or https://)",
+    "costRequired": "Please enter a cost",
+    "costMin": "Cost cannot be negative",
+    "ratingRequired": "Please enter a rating",
+    "ratingMin": "Minimum is 0",
+    "ratingMax": "Maximum is 5",
+    "durationRequired": "Please enter a duration",
+    "durationMin": "Duration cannot be negative",
+    "skillNameRequired": "Skill name is required",
+    "skillNameMax": "Name is too long (max 100 characters)",
+    "categoryRequired": "Category is required",
+    "categoryMax": "Category is too long (max 100 characters)",
+    "difficultySelect": "Please select a difficulty level",
+    "difficultyRange": "Difficulty must be between 1 and 5",
+    "demandNumber": "Demand score must be a number",
+    "demandMin": "Demand score cannot be negative",
+    "locationMax": "Location must be at most 100 characters",
+    "locationMin": "Location must be at least 2 characters",
+    "locationChars": "Location may only contain letters, numbers, spaces and , . - / ( )",
+    "targetRoleRequired": "Please select a target role",
+    "courseRequired": "Course name is required",
+    "urlMax": "Link must be at most 500 characters",
+    "headlineMax": "Headline must be at most 100 characters",
+    "bioMax": "Bio must be at most 500 characters",
+    "avatarInvalid": "Invalid avatar URL",
+    "facebookInvalid": "Invalid Facebook link (e.g. https://facebook.com/username)",
+    "linkedinInvalid": "Invalid LinkedIn link (e.g. https://linkedin.com/in/username)",
+    "githubInvalid": "Invalid GitHub link (e.g. https://github.com/username)",
+    "skillEmpty": "Skill cannot be empty",
+    "skillTooLong": "Each skill must be at most 30 characters",
+    "skillsMax": "At most 20 skills",
+    "skillsDuplicate": "Duplicate skills"
+  },
+  "dashboard": {
+    "welcome": "Welcome back, {{name}}",
+    "title": "Your learning overview",
+    "subtitle": "A clear summary of the skills and learning time found in your latest analysis.",
+    "runAnalysis": "Run new analysis",
+    "totalSkills": "Total skills",
+    "totalSkillsHint": "Skills identified across your profile",
+    "totalHours": "Total learning hours",
+    "totalHoursHint": "Estimated hours from completed learning",
+    "topSkills": "Top skills",
+    "topSkillsDesc": "Your strongest detected capabilities",
+    "strongest": "Strongest",
+    "viewSkillTree": "View skill tree",
+    "categoryStats": "Category statistics",
+    "categoryStatsDesc": "Skill distribution by category",
+    "skill_one": "{{count}} skill",
+    "skill_other": "{{count}} skills",
+    "category_one": "{{count}} category",
+    "category_other": "{{count}} categories",
+    "loadError": "Couldn't load your learning summary.",
+    "loadErrorHint": "Check your connection and try again."
+  },
+  "dashboardExtra": {
+    "emptySkills": "No skills detected yet. Run your first analysis to see them here.",
+    "emptyCategory": "No category data yet."
+  },
+  "notFound": {
+    "title": "Page not found",
+    "desc": "The page you're looking for doesn't exist or has been moved. Check the URL or head back to a safe place.",
+    "goBack": "Go back",
+    "toHome": "Back to home",
+    "toDashboard": "Go to dashboard"
+  },
+  "footer": {
+    "product": "Product",
+    "company": "Company",
+    "legal": "Legal",
+    "copyright": "© {{year}} EduMap AI · Crafted with intent in San Francisco",
+    "links": {
+      "features": "Features",
+      "pricing": "Pricing",
+      "roadmap": "Roadmap",
+      "changelog": "Changelog",
+      "about": "About",
+      "careers": "Careers",
+      "blog": "Blog",
+      "press": "Press",
+      "privacy": "Privacy",
+      "terms": "Terms",
+      "security": "Security",
+      "cookies": "Cookies"
+    }
+  },
+  "errors": {
+    "sessionExpired": "Your session has expired, please sign in again."
+  },
+  "roles": {
+    "ADMIN": "Admin",
+    "MODERATOR": "Moderator",
+    "MENTOR": "Mentor",
+    "STUDENT": "Student",
+    "desc": {
+      "ADMIN": "Full access to every area, including billing and roles.",
+      "MODERATOR": "Reviews reports and moderates community.",
+      "MENTOR": "Guides students, reviews roadmaps and portfolios.",
+      "STUDENT": "Default account with personal learning access."
+    }
+  },
+  "plan": {
+    "label": "{{name}} plan"
+  },
+  "toast": {
+    "chatCreated": "Chat session created! Start chatting.",
+    "chatDeleted": "Conversation deleted.",
+    "resourceCreated": "Resource created",
+    "resourceDeleted": "Resource deleted",
+    "nodeDone": "Marked as completed!",
+    "nodeUndone": "Completion removed!",
+    "treeDeleted": "Skill tree deleted!",
+    "roleUpdated": "Role updated successfully!",
+    "skillCreated": "Skill created successfully.",
+    "skillUpdated": "Skill updated successfully.",
+    "skillDeleted": "Skill deleted successfully.",
+    "invalidData": "Invalid data, please check the form."
+  },
+  "login": {
+    "teaser": "Your skill tree grew while you were gone — 3 new gaps closed, 2 jobs matched.",
+    "xpLabel": "Earned this week",
+    "matchLabel": "Stripe match",
+    "demoHint": "Demo mode · use any email + password",
+    "students": "© EduMap AI — 120K students mentored"
+  },
+  "register": {
+    "agreePrefix": "By signing up you agree to our",
+    "terms": "Terms",
+    "privacy": "Privacy",
+    "headline1": "Map your career.",
+    "headline2": "In under a minute.",
+    "desc": "Get a personalized roadmap, skill tree and job matches the moment you sign up.",
+    "statStudents": "Students",
+    "statSchools": "Schools",
+    "statRating": "Rating"
+  },
+  "changePassword": {
+    "title": "Change password",
+    "desc": "Choose a strong password you haven't used before.",
+    "current": "Current password",
+    "new": "New password",
+    "confirmNew": "Confirm new password",
+    "update": "Update password",
+    "updating": "Updating...",
+    "success": "Password updated successfully!"
+  },
+  "chat": {
+    "uploadRequired": {
+      "title": "No data for the AI to advise on yet",
+      "desc": "Upload your data so the AI can analyze your profile before you start chatting.",
+      "cta": "Upload now",
+      "sourceTranscript": "Academic transcript",
+      "sourceGithub": "GitHub profile",
+      "sourceCv": "CV / Resume"
+    },
+    "empty": {
+      "title": "No conversations yet",
+      "desc": "Start chatting with the AI Mentor to get roadmap advice.",
+      "cta": "Start chatting",
+      "h1Title": "Understands your profile",
+      "h1Desc": "The AI reads your transcript, GitHub and CV to understand your current skills.",
+      "h2Title": "Follows your skill tree",
+      "h2Desc": "Every piece of advice is based on the skill roadmap you created.",
+      "h3Title": "Suggests next steps",
+      "h3Desc": "Recommends projects, courses and skills to learn next."
+    },
+    "sidebar": {
+      "newChat": "New chat",
+      "history": "History",
+      "noSessions": "No chat sessions yet.",
+      "open": "Open"
+    },
+    "page": {
+      "sessions": "Chat Sessions ({{count}})",
+      "allSessions": "All Sessions"
+    },
+    "new": {
+      "title": "Start a new conversation",
+      "descWithPath": "Give this AI Mentor chat a title based on your <b>{{path}}</b> roadmap.",
+      "descNoPath": "Give this AI Mentor chat a title based on your roadmap.",
+      "suggestedWithPath": "Advice for the {{path}} roadmap",
+      "suggestedDefault": "Advice for your roadmap"
+    },
+    "conversation": {
+      "online": "Online",
+      "deleteTitle": "Delete conversation?",
+      "deleteDesc": "This action cannot be undone. All messages in this session will be permanently deleted.",
+      "deleteAria": "Delete conversation",
+      "welcome": "Hey {{name}} 👋 I've looked at your {{title}} roadmap. Where would you like to start?",
+      "fallbackName": "there",
+      "thinking": "AI is composing a reply...",
+      "placeholder": "Ask anything about your career...",
+      "send": "Send message",
+      "suggestion1": "Analyze my GitHub and suggest projects",
+      "suggestion2": "Build me a 12-week ML roadmap",
+      "suggestion3": "Review my CV for FAANG roles",
+      "suggestion4": "What skill should I learn next?"
+    }
+  },
+  "billing": {
+    "perMonth": "/month",
+    "perYear": "/year",
+    "perDays": "/{{count}} days",
+    "save": "Save {{percent}}% vs monthly billing",
+    "plans": {
+      "FREE": {
+        "name": "Free",
+        "description": "Free plan for students just getting started."
+      },
+      "PRO_STUDENT": {
+        "name": "Pro Student",
+        "description": "For students building an in-depth roadmap and portfolio."
+      },
+      "PREMIUM": {
+        "name": "Premium",
+        "description": "Top-tier plan with higher limits and priority AI processing."
+      }
+    },
+    "window": {
+      "DAILY": "Daily",
+      "MONTHLY": "Monthly"
+    },
+    "usageFeature": {
+      "AI_CHAT": {
+        "title": "AI Mentor chat",
+        "subtitle": "Messages with your AI mentor"
+      },
+      "SKILL_TREE_GENERATION": {
+        "title": "Skill tree generation",
+        "subtitle": "New skill tree analyses"
+      },
+      "GITHUB_SYNC": {
+        "title": "GitHub sync",
+        "subtitle": "Profile syncs from GitHub"
+      },
+      "PDF_REPORT": {
+        "title": "PDF report",
+        "subtitle": "Exported analysis reports"
+      },
+      "RESUME_REVIEW": {
+        "title": "Resume review",
+        "subtitle": "AI resume reviews"
+      },
+      "JOB_MATCHING": {
+        "title": "Job matching",
+        "subtitle": "Personalized job matches"
+      }
+    },
+    "row": {
+      "aiChats": "AI mentor chats",
+      "skillTree": "Skill tree",
+      "skillTreeGeneration": "Skill tree generation",
+      "jobMatching": "Job matching",
+      "resumeReview": "Resume review",
+      "pdfExport": "PDF export",
+      "githubSync": "GitHub sync",
+      "priorityAi": "Priority AI Analysis",
+      "hideBranding": "Hide EduMap branding",
+      "support": "Support",
+      "unlimited": "Unlimited",
+      "plusPriority": " + priority",
+      "perDay": "{{count}}/day",
+      "perMonth": "{{count}}/month",
+      "perWeek": "{{count}}/week",
+      "treeValue": "{{type}} · up to {{nodes}} nodes",
+      "full": "Full",
+      "basic": "Basic",
+      "githubDay": "{{count}}/day · up to {{repos}} repos",
+      "githubWeek": "{{count}}/week · up to {{repos}} repos",
+      "yesFaster": "Yes · faster processing",
+      "yes": "Yes",
+      "supportPriority": "Priority",
+      "supportCommunity": "Community"
+    },
+    "highlight": {
+      "fullTree": "Full skill tree",
+      "basicTree": "Basic skill tree",
+      "unlimitedAi": "Unlimited AI mentor",
+      "aiPerDay": "{{count}} AI chats/day",
+      "publicCourses": "Public courses",
+      "jobMatching": "Job matching",
+      "resumeReview": "Resume review",
+      "priorityAi": "Priority AI Analysis",
+      "prioritySupport": "Priority support",
+      "communitySupport": "Community support"
+    },
+    "subscription": {
+      "title": "Subscription",
+      "youreOn": "You're on <b>{{plan}}</b>.",
+      "renews": " Renews on {{date}}.",
+      "currentPlan": "Current plan",
+      "mostPopular": "Most popular",
+      "upgrade": "Upgrade",
+      "downgrade": "Downgrade",
+      "creating": "Creating order…",
+      "featureComparison": "Feature comparison",
+      "feature": "Feature",
+      "paymentMethod": "Payment method",
+      "noPayment": "No payment method on file. Upgrade to unlock paid features.",
+      "paidVia": "Paid via SePay (bank transfer / QR).",
+      "billingHistory": "Billing history",
+      "order": "Order",
+      "noInvoices": "No invoices yet.",
+      "loadError": "Couldn't load the plan list. Please try again."
+    },
+    "usage": {
+      "title": "Billing usage",
+      "subtitle": "Track how you use your <b>{{plan}}</b> plan allowances.",
+      "back": "Subscription",
+      "totalQuota": "Total quota",
+      "usedThisCycle": "Used this cycle",
+      "remaining": "Remaining",
+      "unlimited": "Unlimited",
+      "usedOf": "{{used}} of {{limit}} used",
+      "remainingN": "{{count}} remaining",
+      "cycleStarted": "Cycle started {{date}}",
+      "needMore": "Need more usage?",
+      "needMoreDesc": "Upgrade your plan for higher limits on every feature.",
+      "viewPlans": "View plans",
+      "loadError": "Couldn't load usage data. Please try again."
+    },
+    "payment": {
+      "plan": "Plan",
+      "amount": "Amount",
+      "period": "Billing period",
+      "yearly": "Yearly",
+      "monthly": "Monthly",
+      "paymentId": "Payment ID",
+      "accountName": "Account name",
+      "bank": "Bank",
+      "description": "Description",
+      "qrAlt": "Payment QR",
+      "expired": "This QR has expired",
+      "expiresIn": "Expires in",
+      "copy": "Copy content",
+      "download": "Download QR",
+      "waiting": "Waiting for payment… This window will close automatically once we receive your transfer.",
+      "expiredHint": "Close this window and click Upgrade again to create a new order.",
+      "success": "Payment successful! Your plan has been upgraded.",
+      "copied": "Transfer content copied",
+      "copyFailed": "Could not copy. Please copy it manually."
+    }
+  },
+  "skillTree": {
+    "title": "Skill Tree",
+    "subtitleWithPath": "Your path to {{path}}: what you know, what's next.",
+    "subtitleDefault": "Your skills, gaps and next steps, generated by the AI mentor.",
+    "loadError": "Couldn't load your skill tree.",
+    "loadErrorHint": "Try again, or run an analysis if you haven't created one yet.",
+    "tryAgain": "Try again",
+    "loading": "Loading...",
+    "runAnalysis": "Run analysis",
+    "emptyTitle": "No skill tree yet.",
+    "emptyDesc": "Run your first analysis to generate one.",
+    "dependencies": "Learning dependencies",
+    "completed": "Completed",
+    "open": "Open",
+    "noCategory": "No skills found in this category.",
+    "summary": {
+      "completion": "Completion",
+      "ofTotal": "{{completed}} of {{total}}",
+      "totalNodes": "Total nodes",
+      "categories_one": "Across {{count}} category",
+      "categories_other": "Across {{count}} categories",
+      "nextPriority": "Next priority",
+      "priorityLevel": "Priority rank {{rank}} · Level {{level}}",
+      "allDone": "All done",
+      "allDoneDesc": "Every skill in this tree is completed."
+    },
+    "node": {
+      "collapse": "Collapse {{name}}",
+      "expand": "Expand {{name}}",
+      "level": "Level {{level}}",
+      "mastered": "Mastered",
+      "stateCompleted": "{{name}}: completed",
+      "stateOpen": "{{name}}: open"
+    },
+    "detail": {
+      "selectSkill": "Select a skill",
+      "viewDetails": "View its details.",
+      "priority": "Priority #{{rank}}",
+      "difficulty": "Difficulty",
+      "demand": "Demand",
+      "status": "Status",
+      "nodeLevel": "Node level",
+      "children": "Children",
+      "mastered": "Mastered",
+      "toLearn": "To learn",
+      "completed": "Completed",
+      "notCompleted": "Not completed"
+    },
+    "filter": {
+      "label": "Filter by category",
+      "all": "All"
+    }
+  },
+  "brand": {
+    "tagline": "A Roadmap for Education"
+  },
+  "home": {
+    "poweredBy": "GPT-5 Powered",
+    "hero": {
+      "title1": "Your AI career mentor,",
+      "title2": "for every CS student.",
+      "desc": "Upload your transcript, GitHub and CV. EduMap AI maps your skills, spots the gaps, and builds the roadmap to your dream role.",
+      "watchDemo": "Watch demo",
+      "freeNote": "Free for students · No credit card required"
+    },
+    "deck": {
+      "skillMap": "Skill Map",
+      "careerScore": "Career Score",
+      "jobMatch": "Job Match"
+    },
+    "stats": {
+      "students": "Students mentored",
+      "universities": "Universities",
+      "internship": "Internship rate",
+      "rating": "Avg rating"
+    },
+    "features": {
+      "label": "Features",
+      "title": "Everything you need to land the role.",
+      "subtitle": "A complete AI career stack, designed for CS students who don't have time to waste.",
+      "swipe": "3D Swipe",
+      "grid": "Grid",
+      "swipeHint": "← Drag or swipe sideways to browse features in 3D →",
+      "explore": "Explore feature",
+      "items": [
+        {
+          "title": "AI Career Mentor",
+          "description": "Chat with an AI that knows your transcript, GitHub and goals. Like having a senior engineer on speed dial."
+        },
+        {
+          "title": "Dynamic Skill Tree",
+          "description": "Beautiful interactive visualization of every skill you have, are learning, and should learn next."
+        },
+        {
+          "title": "Personalized Roadmap",
+          "description": "Auto-generated week-by-week plan that adapts as you complete tasks and unlock new skills."
+        },
+        {
+          "title": "Job Matching",
+          "description": "Real-time matching against thousands of internships and roles, with the exact gaps to close."
+        },
+        {
+          "title": "Portfolio Builder",
+          "description": "Turn your projects into a stunning portfolio site that recruiters actually remember."
+        },
+        {
+          "title": "Smart Resources",
+          "description": "Curated courses, articles and docs hand-picked for your exact next step. No more YouTube rabbit holes."
+        }
+      ]
+    },
+    "testimonials": {
+      "label": "Customers",
+      "title": "From classroom to FAANG.",
+      "hint": "Swipe sideways to read real feedback from students",
+      "items": [
+        {
+          "quote": "EduMap AI turned my chaotic learning into a clear weekly plan. Landed my Stripe internship in 4 months."
+        },
+        {
+          "quote": "The skill tree visualization is genius. I finally saw the gaps holding me back from FAANG offers."
+        },
+        {
+          "quote": "The AI mentor reads my GitHub and tells me exactly what to build next. It's like a senior engineer in my pocket."
+        }
+      ]
+    },
+    "plans": {
+      "label": "Pricing",
+      "title": "Plans that grow with you.",
+      "perMonth": "/month",
+      "mostPopular": "Most popular",
+      "items": [
+        {
+          "name": "Free",
+          "tagline": "Get started for free",
+          "cta": "Start free",
+          "features": [
+            "Skill tree (basic)",
+            "5 AI chats/day",
+            "Public courses",
+            "Community support"
+          ]
+        },
+        {
+          "name": "Pro Student",
+          "tagline": "Everything you need to land internships",
+          "cta": "Upgrade to Pro",
+          "features": [
+            "Unlimited AI career chats",
+            "Full dynamic skill DAG",
+            "Daily job matching & gap analysis",
+            "Custom portfolio site generator",
+            "Priority support"
+          ]
+        },
+        {
+          "name": "Campus",
+          "tagline": "For university cohorts & clubs",
+          "cta": "Contact sales",
+          "features": [
+            "Up to 25 student seats",
+            "Cohort analytics dashboard",
+            "Shared resources library",
+            "Dedicated mentor agent",
+            "Admin controls"
+          ]
+        }
+      ]
+    },
+    "faq": {
+      "label": "FAQ",
+      "title": "Questions, answered.",
+      "items": [
+        {
+          "question": "How does EduMap AI analyze my profile?",
+          "answer": "You connect your transcript, GitHub and CV. Our AI reads them, maps every skill you already have, and compares it against the role you're targeting to find the gaps."
+        },
+        {
+          "question": "Is my data private?",
+          "answer": "Yes. Your transcript, code and personal data are encrypted and never sold or shared with third parties. You can delete your data at any time from settings."
+        },
+        {
+          "question": "Do schools get access?",
+          "answer": "Only if you explicitly opt in to a school partnership program. By default your account and roadmap are visible to you alone."
+        },
+        {
+          "question": "Can I use the free plan forever?",
+          "answer": "Yes — the Free plan has no time limit. You can upgrade to Pro Student or Premium any time you want more AI chats, job matching or priority support."
+        }
+      ]
+    },
+    "cta": {
+      "title": "Ready to map your career?",
+      "desc": "Join 120,000+ students building the career they actually want — in half the time."
+    }
+  },
+  "resources": {
+    "open": "Open resource",
+    "price": {
+      "free": "Free"
+    },
+    "type": {
+      "DOCUMENTATION": "Documentation",
+      "INTERACTIVE_LAB": "Interactive lab",
+      "VIDEO_COURSE": "Video course",
+      "ARTICLE": "Article"
+    },
+    "page": {
+      "title": "Learning Resources",
+      "subtitle": "{{count}} top-rated resources for your roadmap.",
+      "search": "Search {{count}} resources...",
+      "searchEmpty": "Search resources...",
+      "loadError": "Couldn't load resources.",
+      "empty": "No resources match your filters.",
+      "price": {
+        "All": "All",
+        "Free": "Free",
+        "Paid": "Paid"
+      }
+    },
+    "detail": {
+      "notFound": "Resource not found",
+      "info": "Information",
+      "type": "Type",
+      "platform": "Platform",
+      "duration": "Duration",
+      "hours": "{{count}} hours",
+      "price": "Price",
+      "free": "🎉 Free",
+      "rating": "Rating",
+      "visit": "Visit resource",
+      "skill": "Skill"
+    },
+    "history": {
+      "title": "Viewing history",
+      "loadError": "Couldn't load viewing history.",
+      "none": "You haven't viewed any resources yet.",
+      "count": "{{count}} resources viewed",
+      "emptyBody": "You haven't viewed any resources yet.",
+      "viewList": "List",
+      "viewCard": "Card",
+      "cols": {
+        "resource": "Resource",
+        "skill": "Skill",
+        "type": "Type",
+        "platform": "Platform",
+        "viewedAt": "Viewed on",
+        "action": "Action"
+      }
+    },
+    "skill": {
+      "title": "Resources for learning {{skill}}",
+      "titleDefault": "Learning resources",
+      "loading": "Finding resources for this skill, this may take a few seconds...",
+      "summary": "{{count}} resources, grouped into videos, documents and practice.",
+      "loadError": "Couldn't load resources for this skill.",
+      "empty": "No resources for this skill yet. Try “Load more resources” or the links below.",
+      "video": "Video",
+      "docs": "Docs & articles",
+      "practice": "Practice",
+      "loadMore": "Load more resources",
+      "loadingMore": "Finding more resources...",
+      "wait": "This may take a few seconds, please wait.",
+      "searchElsewhere": "Search elsewhere",
+      "searchElsewhereDesc": "Open {{skill}} search results on other platforms.",
+      "added": "Added {{count}} new resources!",
+      "noMore": "No more new resources found."
+    }
+  },
+  "jobs": {
+    "trending": {
+      "title": "Job Trending",
+      "subtitle_one": "{{count}} role",
+      "subtitle_other": "{{count}} roles",
+      "search": "Search roles...",
+      "loadError": "Couldn't load trending roles.",
+      "empty": "No matching roles.",
+      "interested": "Role in demand",
+      "findOn": "Find jobs on",
+      "searches": "Searches"
+    },
+    "analysis": {
+      "title": "Job Analysis",
+      "desc": "Market analysis and job suggestions based on your skills and projects.",
+      "careerPath": "Career path:",
+      "totalSkills_one": "{{count}} skill in your profile",
+      "totalSkills_other": "{{count}} skills in your profile",
+      "unchecked": "Couldn't check your skill profile.",
+      "recheck": "Check again",
+      "rechecking": "Checking...",
+      "updateProfile": "Update profile",
+      "where": "Where are you located?",
+      "placeholder": "Default: {{loc}}",
+      "analyze": "Analyze",
+      "analyzing": "Analyzing...",
+      "thinking": "The AI is analyzing the market, this can take 10–30 seconds.",
+      "failed": "Couldn't generate the analysis.",
+      "failedHint": "Please check your skill profile and try again.",
+      "close": "Close",
+      "hint": "Enter a location and press “Analyze” to see job suggestions."
+    },
+    "result": {
+      "basedOnProject": "Based on technologies in your projects",
+      "market": "Current market",
+      "platforms": "Find jobs on platforms",
+      "keyword": "Keyword: {{keyword}}",
+      "sampleJobs": "Matching jobs",
+      "interview": "Interview questions to prepare"
+    }
+  },
+  "notifications": {
+    "summary": "{{unread}} unread · {{total}} total",
+    "markAll": "Mark all read",
+    "tab": {
+      "ALL": "All",
+      "INFO": "Info",
+      "SUCCESS": "Success",
+      "WARNING": "Warning",
+      "ERROR": "Error"
+    },
+    "type": {
+      "INFO": "Info",
+      "SUCCESS": "Success",
+      "WARNING": "Warning",
+      "ERROR": "Error"
+    },
+    "loadError": "Couldn't load notifications. Please try again.",
+    "empty": "No notifications",
+    "emptyHint": "New notifications will appear here.",
+    "loadMore": "Load more",
+    "goToLink": "Go to link",
+    "close": "Close",
+    "justNow": "Just now",
+    "minutesAgo": "{{count}} min ago",
+    "hoursAgo": "{{count}}h ago",
+    "daysAgo": "{{count}} days ago"
+  },
+  "portfolio": {
+    "title": "Portfolio Builder",
+    "desc": "Edit, pick a theme and share your portfolio.",
+    "tab": {
+      "Info": "Info",
+      "Theme": "Theme",
+      "Share": "Share"
+    },
+    "headline": "Headline",
+    "bio": "Bio",
+    "avatarUrl": "Avatar URL",
+    "skills": "Skills",
+    "skillPlaceholder": "Type a skill and press Enter (max {{max}})",
+    "removeAria": "Remove {{name}}",
+    "public": "Make portfolio public",
+    "publicHint": "Anyone with the link can view it. Press “Save changes” to apply.",
+    "copyLink": "Copy link",
+    "copied": "Link copied",
+    "saved": "Portfolio saved",
+    "invalid": "Invalid data",
+    "fixErrors": "Please check the fields with errors",
+    "skillTooLong": "Each skill must be at most {{max}} characters",
+    "skillExists": "Skill \"{{name}}\" already exists",
+    "skillsMax": "At most {{max}} skills",
+    "livePreview": "Live preview",
+    "yourName": "Your name",
+    "addSkillsHint": "Add skills in the Info tab to show them here.",
+    "projects": "Projects",
+    "synced": "Synced from GitHub",
+    "updated": "Updated {{date}}",
+    "noTech": "No tech stack detected",
+    "emptyPrivate": "Turn on “Make portfolio public” in the Share tab to show your GitHub projects here.",
+    "emptySynced": "No projects yet. Sync GitHub to add your projects automatically.",
+    "empty": "No projects yet.",
+    "notFound": "Portfolio not found",
+    "notFoundDesc": "This portfolio doesn't exist or isn't public."
+  },
+  "profile": {
+    "stats": {
+      "careerScore": "Career Score",
+      "streak": "Streak",
+      "skillsMastered": "Skills mastered",
+      "totalXp": "Total XP"
+    },
+    "ach": {
+      "firstSteps": "First Steps",
+      "weekStreak": "Week Streak",
+      "codeNinja": "Code Ninja",
+      "cloudNative": "Cloud Native",
+      "aiExplorer": "AI Explorer",
+      "mentor": "Mentor",
+      "openSource": "Open Source",
+      "interviewReady": "Interview Ready"
+    },
+    "goal": {
+      "leetcode": "Complete LeetCode 50",
+      "chatbot": "Build an AI chatbot",
+      "aws": "Get AWS certified",
+      "react": "Contribute to a React lib",
+      "k8s": "Learn Kubernetes"
+    },
+    "achievements": "Achievements",
+    "goals": "Current goals",
+    "certificates": "Certificates",
+    "skillsMastered": "Skills mastered",
+    "issued": "Issued {{year}}",
+    "universityNotSet": "University not set",
+    "yearN": "Year {{n}}",
+    "memberSince": "Member since {{date}}",
+    "connectGithub": "Connect GitHub",
+    "viewPortfolio": "View portfolio",
+    "changePassword": "Change password",
+    "editProfile": "Edit profile",
+    "loadError": "Couldn't load your profile. Please refresh the page."
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Manage your account, preferences and privacy.",
+    "tab": {
+      "account": "Account",
+      "appearance": "Appearance",
+      "notifications": "Notifications",
+      "privacy": "Privacy",
+      "danger": "Danger"
+    },
+    "profile": "Profile",
+    "uploadNew": "Upload new",
+    "avatarHint": "PNG or JPG, max 2MB",
+    "fullName": "Full name",
+    "university": "University",
+    "currentYear": "Current year",
+    "githubUsername": "GitHub username",
+    "comingSoon": "{{tab}} settings coming soon.",
+    "updated": "Profile updated successfully!"
+  },
+  "upload": {
+    "title": "Upload & Analyze",
+    "subtitle": "Choose an analysis mode and give the AI everything it needs to build your career map.",
+    "mode": {
+      "ACADEMIC": {
+        "title": "Academic Only",
+        "desc": "Transcript & grades"
+      },
+      "GITHUB": {
+        "title": "GitHub Only",
+        "desc": "Repos & activity"
+      },
+      "HYBRID": {
+        "title": "Hybrid",
+        "desc": "Transcript + repos"
+      }
+    },
+    "recommended": "Recommended",
+    "targetRole": "Target role",
+    "academic": "Academic transcript",
+    "universityName": "University name",
+    "uniPlaceholder": "MIT",
+    "currentYear": "Current year",
+    "coreCourses": "Core courses & grades",
+    "addCourse": "Add course",
+    "courseName": "Course {{n}} name",
+    "courseGrade": "Course {{n}} grade",
+    "removeCourse": "Remove course {{n}}",
+    "coursePlaceholder": "Databases",
+    "githubProfile": "GitHub profile",
+    "githubUsername": "GitHub username",
+    "githubHint": "We scan your top repos, languages and contribution activity.",
+    "summary_one": "{{mode}} · {{count}} course",
+    "summary_other": "{{mode}} · {{count}} courses",
+    "start": "Start AI analysis",
+    "analyzing": "Analyzing...",
+    "done": "Analysis complete!",
+    "overlayTitle": "The AI is analyzing your profile",
+    "overlayDesc": "This can take a few dozen seconds. Please don't close the page."
+  },
+  "admin": {
+    "skills": {
+      "title": "Skills",
+      "desc": "All skills in the system, managed by admin.",
+      "add": "Add skill",
+      "edit": "Edit skill",
+      "total": "Total skills",
+      "categories": "Categories",
+      "matching": "Matching filters",
+      "search": "Search by name or category...",
+      "allCategories": "All categories",
+      "allLevels": "All levels",
+      "level": "Level {{n}}",
+      "cols": {
+        "skill": "Skill",
+        "category": "Category",
+        "difficulty": "Difficulty",
+        "demand": "Demand",
+        "created": "Created"
+      },
+      "loadError": "Couldn't load skills.",
+      "empty": "No skills match your filters.",
+      "deleteTitle": "Delete skill?",
+      "deleteDesc": "This action cannot be undone.",
+      "editAria": "Edit {{name}}",
+      "deleteAria": "Delete {{name}}",
+      "name": "Name",
+      "namePlaceholder": "e.g. Redis",
+      "category": "Category",
+      "categoryHint": "Pick an existing category or type a new one",
+      "categoryPlaceholder": "e.g. Databases",
+      "difficulty": "Difficulty",
+      "demand": "Demand score",
+      "demandHint": "e.g. 8.5",
+      "create": "Create skill",
+      "saveChanges": "Save changes",
+      "duplicate": "A skill with this name already exists",
+      "noChanges": "No changes to save."
+    },
+    "trees": {
+      "title": "Skill trees",
+      "desc": "Every user's skill tree. Click a row to see its nodes.",
+      "total": "Total trees",
+      "careerPaths": "Career paths",
+      "avg": "Average progress",
+      "search": "Search by user ID or career path...",
+      "allPaths": "All career paths",
+      "cols": {
+        "userId": "User ID",
+        "careerPath": "Career path",
+        "progress": "Progress",
+        "rootNodes": "Root nodes",
+        "lastAnalyzed": "Last analyzed",
+        "created": "Created"
+      },
+      "loadError": "Couldn't load skill trees.",
+      "empty": "No skill trees match your filters.",
+      "noNodes": "This tree has no nodes yet.",
+      "completed": "Completed",
+      "notCompleted": "Not completed",
+      "hideNodes": "Hide nodes",
+      "showNodes": "Show nodes",
+      "deleteAria": "Delete tree of user {{id}}",
+      "deleteTitle": "Delete skill tree?",
+      "deleteDesc": "The tree and all of its nodes will be removed. This action cannot be undone."
+    },
+    "resources": {
+      "desc": "Top {{limit}} highest-rated resources in the system.",
+      "add": "Add resource",
+      "total": "Total resources",
+      "free": "Free",
+      "avgRating": "Average rating",
+      "search": "Search by title or skill...",
+      "allTypes": "All types",
+      "cols": {
+        "title": "Resource",
+        "skill": "Skill",
+        "type": "Type",
+        "cost": "Cost",
+        "rating": "Rating",
+        "duration": "Duration",
+        "created": "Created"
+      },
+      "loadError": "Couldn't load resources.",
+      "empty": "No resources match your filters.",
+      "openAria": "Open {{title}}",
+      "deleteAria": "Delete {{title}}",
+      "deleteTitle": "Delete resource?",
+      "deleteDesc": "will be permanently deleted. This action cannot be undone.",
+      "form": {
+        "addTitle": "Add resource",
+        "skill": "Skill",
+        "selectSkill": "-- Select a skill --",
+        "title": "Title",
+        "titlePlaceholder": "e.g. Node.js Crash Course",
+        "type": "Resource type",
+        "optional": "Optional",
+        "cost": "Cost ($, 0 = free)",
+        "rating": "Rating (0 - 5)",
+        "duration": "Duration (hours)",
+        "creating": "Creating...",
+        "create": "Create resource"
+      }
+    },
+    "permissions": {
+      "title": "User permissions",
+      "desc": "Assign roles and control what each group can access.",
+      "invite": "Invite user",
+      "users": "Users",
+      "matrix": "Permission matrix",
+      "matrixSoon": "The permission matrix is not implemented yet.",
+      "search": "Search name or email...",
+      "allRoles": "All roles",
+      "cols": {
+        "user": "User",
+        "role": "Role",
+        "subscription": "Subscription",
+        "joined": "Joined"
+      },
+      "loadError": "Couldn't load users. Please try again.",
+      "notFound": "No matching users found."
+    }
+  }
+}

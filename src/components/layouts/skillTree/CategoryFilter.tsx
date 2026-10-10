@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { ALL_CATEGORIES } from '../../../utils/skillTree'
 
 export default function CategoryFilter({
@@ -9,10 +10,11 @@ export default function CategoryFilter({
   active: string
   onChange: (category: string) => void
 }) {
+  const { t } = useTranslation()
   const options = [ALL_CATEGORIES, ...categories]
 
   return (
-    <div className='flex flex-wrap gap-2' role='group' aria-label='Filter by category'>
+    <div className='flex flex-wrap gap-2' role='group' aria-label={t('skillTree.filter.label')}>
       {options.map((category) => {
         const isActive = active === category
         return (
@@ -27,7 +29,7 @@ export default function CategoryFilter({
                 : 'border-gray-200 bg-white text-gray-900 shadow-sm hover:bg-gray-50 dark:border-white/[0.08] dark:bg-[#1A191C] dark:text-[#ECE9E4] dark:hover:bg-[#232227]'
             }`}
           >
-            {category === ALL_CATEGORIES ? 'All' : category}
+            {category === ALL_CATEGORIES ? t('skillTree.filter.all') : category}
           </button>
         )
       })}
