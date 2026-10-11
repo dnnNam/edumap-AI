@@ -309,7 +309,11 @@
       "suggestion1": "Phân tích GitHub của tôi và gợi ý dự án",
       "suggestion2": "Lập lộ trình học ML 12 tuần cho tôi",
       "suggestion3": "Đánh giá CV của tôi cho vị trí FAANG",
-      "suggestion4": "Tôi nên học kỹ năng nào tiếp theo?"
+      "suggestion4": "Tôi nên học kỹ năng nào tiếp theo?",
+      "toggleSuggestions": "Gợi ý câu hỏi",
+      "showSuggestions": "Hiện gợi ý câu hỏi",
+      "hideSuggestions": "Thu gọn gợi ý",
+      "hint": "Nhấp để điền nhanh câu hỏi"
     }
   },
   "billing": {

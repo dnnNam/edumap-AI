@@ -26,7 +26,7 @@ export default function Logo({ className = '', showSubtitle = false, size = 'md'
   return (
     <div
       onClick={() => navigate('/')}
-      className={`flex items-center gap-2.5 cursor-pointer group select-none ${className}`}
+      className={`flex items-center gap-2.5 cursor-pointer group select-none shrink-0 ${className}`}
     >
       <div
         className={`${iconSizes[size]} bg-[#131428] dark:border dark:border-white/10 flex items-center justify-center shrink-0 shadow-sm overflow-hidden group-hover:scale-105 transition-transform duration-200`}
@@ -34,9 +34,9 @@ export default function Logo({ className = '', showSubtitle = false, size = 'md'
         <img src='/favicon.svg' alt='EduMap AI' className='w-full h-full object-contain' />
       </div>
 
-      <div className='flex flex-col leading-tight'>
+      <div className='flex flex-col leading-tight shrink-0'>
         <div
-          className={`font-black tracking-tight text-gray-900 dark:text-[#ECE9E4] ${textSizes[size]} group-hover:text-indigo-600 dark:group-hover:text-[#A99DFF] transition-colors`}
+          className={`font-black tracking-tight text-gray-900 dark:text-[#ECE9E4] ${textSizes[size]} group-hover:text-indigo-600 dark:group-hover:text-[#A99DFF] transition-colors whitespace-nowrap`}
         >
           EDUMAP<span className='text-indigo-600 dark:text-[#A99DFF]'>AI</span>
         </div>
