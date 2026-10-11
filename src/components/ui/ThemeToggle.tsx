@@ -23,10 +23,10 @@ export default function ThemeToggle({ className = '' }: ThemeToggleProps) {
       aria-label={label}
       aria-pressed={isDark}
       title={label}
-      className={`relative inline-flex items-center justify-center min-w-[44px] min-h-[44px] w-10 h-10 sm:w-9 sm:h-9 rounded-xl border transition-all duration-200 select-none cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-[#121114] active:scale-95 hover:scale-[1.03] ${
+      className={`relative inline-flex items-center justify-center w-9 h-9 sm:w-9 sm:h-9 rounded-xl border border-black/[0.06] dark:border-white/[0.08] transition-all duration-200 select-none cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-[#121114] active:scale-95 hover:scale-[1.03] shrink-0 ${
         isDark
-          ? 'bg-[#1A191C] hover:bg-[#232227] border-white/10 text-[#ECE9E4] shadow-xs'
-          : 'bg-white hover:bg-gray-100/80 border-gray-200 text-gray-700 shadow-xs'
+          ? 'bg-[#1A191C] hover:bg-[#232227] text-[#ECE9E4] shadow-xs'
+          : 'bg-white hover:bg-gray-100/80 text-gray-700 shadow-xs'
       } ${className}`}
     >
       {/* Icon Mặt Trời (hiển thị khi Light mode, xoay lùi và thu nhỏ khi sang Dark mode) */}
