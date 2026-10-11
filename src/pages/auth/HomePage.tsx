@@ -33,8 +33,9 @@ import ScrollPerspective3D from '../../components/motion/ScrollPerspective3D'
 import LayeredStatDeck from '../../components/motion/LayeredStatDeck'
 import GradientBorderCard from '../../components/motion/GradientBorderCard'
 
-// 1 Vật thể 3D duy nhất trên toàn trang (lazy-load)
+// 3D Canvas (lazy-load)
 const HeroSingle3D = lazy(() => import('../../components/canvas3d/HeroSingle3D'))
+const HeroBackground3D = lazy(() => import('../../components/canvas3d/HeroBackground3D'))
 
 // ---------- data (GIỮ NGUYÊN 100%) ----------
 
@@ -113,14 +114,19 @@ export default function HomePage() {
         </div>
 
         {/* ================= HERO SECTION ================= */}
-        <section className='relative bg-[#FAFAF9] dark:bg-[#121114] z-10 transition-colors'>
-          <div className='max-w-5xl mx-auto px-4 sm:px-6 pt-16 sm:pt-24 pb-8 sm:pb-12 text-center relative'>
+        <section className='relative bg-[#FAFAF9] dark:bg-[#121114] z-10 transition-colors overflow-hidden'>
+          {/* Nền 3D WebGL: Mạng lưới Skill DAG Constellation & Dòng chảy Tri thức (Hiệu năng cao, zero lag) */}
+          <Suspense fallback={null}>
+            <HeroBackground3D />
+          </Suspense>
+
+          <div className='max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-20 md:pt-24 pb-8 sm:pb-12 text-center relative z-10'>
             {/* Logo Badge với 3D Levitation + 1 Vật thể 3D nằm tách hẳn ra ngoài đuôi tag, không bị che */}
             <div className='relative inline-block mb-6 sm:mb-8'>
               {/* Vật thể 3D tách hẳn ra ngoài đuôi tag (không bị tag che) và phía trên chữ mentor */}
               <div
                 aria-hidden='true'
-                className='absolute -top-7 sm:-top-10 md:-top-12 left-[90%] sm:left-[98%] md:left-[102%] w-24 h-24 sm:w-36 sm:h-36 md:w-44 md:h-44 pointer-events-none select-none z-10 opacity-90'
+                className='absolute -top-6 sm:-top-10 md:-top-12 left-[82%] sm:left-[96%] md:left-[102%] w-20 h-20 sm:w-32 sm:h-32 md:w-44 md:h-44 pointer-events-none select-none z-10 opacity-90'
               >
                 <Suspense fallback={null}>
                   <HeroSingle3D className='w-full h-full' />
@@ -128,8 +134,8 @@ export default function HomePage() {
               </div>
 
               <Floating3D duration={4.5} distance={6}>
-                <div className='relative z-10 inline-flex items-center gap-3 p-1.5 pr-4 rounded-2xl bg-white dark:bg-[#1A191C] border border-gray-200 dark:border-white/10 shadow-sm hover:border-gray-300 dark:hover:border-white/20 transition-all select-none'>
-                  <div className='w-8 h-8 rounded-xl bg-[#131428] flex items-center justify-center shrink-0 p-1 shadow-xs'>
+                <div className='relative z-10 inline-flex items-center gap-2.5 sm:gap-3 p-1.5 pr-3.5 sm:pr-4 rounded-2xl bg-white dark:bg-[#1A191C] border border-gray-200 dark:border-white/10 shadow-sm hover:border-gray-300 dark:hover:border-white/20 transition-all select-none'>
+                  <div className='w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-[#131428] flex items-center justify-center shrink-0 p-1 shadow-xs'>
                     <img src='/favicon.svg' alt='EduMap AI' className='w-full h-full object-contain' />
                   </div>
                   <div className='text-left'>
@@ -150,7 +156,7 @@ export default function HomePage() {
 
             {/* Tiêu đề chính Hero */}
             <ScrollPerspective3D rotateXAmount={4}>
-              <h1 className='text-4xl sm:text-6xl font-bold text-gray-900 dark:text-[#ECE9E4] tracking-tight leading-[1.12] sm:leading-[1.1] max-w-4xl mx-auto'>
+              <h1 className='text-3xl sm:text-5xl md:text-6xl font-bold text-gray-900 dark:text-[#ECE9E4] tracking-tight leading-[1.14] sm:leading-[1.1] max-w-4xl mx-auto'>
                 {t('home.hero.title1')}
                 <br />
                 {t('home.hero.title2')}
