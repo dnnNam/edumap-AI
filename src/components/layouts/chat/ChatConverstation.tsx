@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { AlertTriangle, Loader2, Send, Sparkles, Trash2, X } from 'lucide-react'
+import { AlertTriangle, ChevronDown, Loader2, Send, Sparkles, Trash2, X } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import ReactMarkdown from 'react-markdown'
@@ -129,6 +129,7 @@ export default function ChatConverstation({ sessionId, onDeleted }: { sessionId:
   const { t } = useTranslation()
   const fullName = getFullNameFromLS()
   const [input, setInput] = useState('')
+  const [showSuggestions, setShowSuggestions] = useState(false)
   const bottomRef = useRef<HTMLDivElement>(null)
 
   const suggestions = [
@@ -279,21 +280,68 @@ export default function ChatConverstation({ sessionId, onDeleted }: { sessionId:
         </div>
       </div>
 
-      <div className='shrink-0 px-6 pb-5 pt-2 border-t border-gray-100 dark:border-white/10 transition-colors'>
+      <div className='shrink-0 px-4 sm:px-6 pb-4 sm:pb-5 pt-2 border-t border-gray-100 dark:border-white/10 transition-colors'>
         <div className='max-w-3xl mx-auto'>
-          <div className='flex flex-wrap gap-2 mb-3'>
-            {suggestions.map((s) => (
-              <button
-                key={s}
-                type='button'
-                onClick={() => setInput(s)}
-                disabled={isSending}
-                className='text-sm text-gray-700 dark:text-[#ECE9E4] bg-white dark:bg-[#232227] border border-gray-200 dark:border-white/10 rounded-full px-3.5 py-1.5 hover:border-gray-300 dark:hover:border-white/20 hover:bg-gray-50 dark:hover:bg-white/5 disabled:opacity-60 disabled:cursor-not-allowed transition-colors cursor-pointer shadow-xs'
-              >
-                {s}
-              </button>
-            ))}
+          {/* Nút bật/hạ danh sách gợi ý */}
+          <div className='flex items-center justify-between mb-2'>
+            <button
+              type='button'
+              onClick={() => setShowSuggestions((prev) => !prev)}
+              className={`inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
+                showSuggestions
+                  ? 'bg-indigo-50 text-indigo-600 dark:bg-indigo-950/40 dark:text-[#A99DFF]'
+                  : 'text-gray-500 hover:text-gray-900 dark:text-[#A29FA8] dark:hover:text-[#ECE9E4] hover:bg-gray-100 dark:hover:bg-white/5'
+              }`}
+              aria-expanded={showSuggestions}
+              aria-label={
+                showSuggestions
+                  ? t('chat.conversation.hideSuggestions')
+                  : t('chat.conversation.showSuggestions')
+              }
+            >
+              <Sparkles className='w-3.5 h-3.5 text-indigo-500 dark:text-[#A99DFF]' />
+              <span>{t('chat.conversation.toggleSuggestions')}</span>
+              <ChevronDown
+                className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                  showSuggestions ? 'rotate-180' : ''
+                }`}
+              />
+            </button>
+
+            {showSuggestions && (
+              <span className='text-[11px] text-gray-400 dark:text-[#85808C] hidden sm:inline'>
+                {t('chat.conversation.hint')}
+              </span>
+            )}
           </div>
+
+          {/* Danh sách gợi ý câu hỏi (bật lên / hạ xuống mượt mà) */}
+          <AnimatePresence initial={false}>
+            {showSuggestions && (
+              <motion.div
+                key='chat-suggestions'
+                initial={{ opacity: 0, height: 0, marginBottom: 0 }}
+                animate={{ opacity: 1, height: 'auto', marginBottom: 10 }}
+                exit={{ opacity: 0, height: 0, marginBottom: 0 }}
+                transition={{ duration: 0.22, ease: EASE }}
+                className='overflow-hidden'
+              >
+                <div className='flex flex-wrap gap-2 pb-1 max-h-40 overflow-y-auto sm:max-h-none sm:overflow-visible'>
+                  {suggestions.map((s) => (
+                    <button
+                      key={s}
+                      type='button'
+                      onClick={() => setInput(s)}
+                      disabled={isSending}
+                      className='text-xs sm:text-sm text-gray-700 dark:text-[#ECE9E4] bg-white dark:bg-[#232227] border border-gray-200 dark:border-white/10 rounded-full px-3.5 py-1.5 hover:border-indigo-400 dark:hover:border-[#A99DFF]/40 hover:bg-indigo-50/50 dark:hover:bg-white/5 disabled:opacity-60 disabled:cursor-not-allowed transition-all cursor-pointer shadow-xs active:scale-95'
+                    >
+                      {s}
+                    </button>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           <div className='flex items-center gap-3 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-2.5 bg-white dark:bg-[#232227] focus-within:border-gray-300 dark:focus-within:border-white/20 transition-colors'>
             <input

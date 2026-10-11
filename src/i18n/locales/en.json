@@ -311,7 +311,11 @@
       "suggestion1": "Analyze my GitHub and suggest projects",
       "suggestion2": "Build me a 12-week ML roadmap",
       "suggestion3": "Review my CV for FAANG roles",
-      "suggestion4": "What skill should I learn next?"
+      "suggestion4": "What skill should I learn next?",
+      "toggleSuggestions": "Suggested questions",
+      "showSuggestions": "Show suggested questions",
+      "hideSuggestions": "Collapse suggestions",
+      "hint": "Click to autofill question"
     }
   },
   "billing": {
