@@ -508,7 +508,8 @@
       "mastered": "Mastered",
       "toLearn": "To learn",
       "completed": "Completed",
-      "notCompleted": "Not completed"
+      "notCompleted": "Not completed",
+      "viewResources": "View learning resources"
     },
     "filter": {
       "label": "Filter by category",
@@ -599,12 +600,7 @@
           "name": "Free",
           "tagline": "Get started for free",
           "cta": "Start free",
-          "features": [
-            "Skill tree (basic)",
-            "5 AI chats/day",
-            "Public courses",
-            "Community support"
-          ]
+          "features": ["Skill tree (basic)", "5 AI chats/day", "Public courses", "Community support"]
         },
         {
           "name": "Pro Student",

@@ -505,7 +505,8 @@
       "mastered": "Đã thành thạo",
       "toLearn": "Cần học",
       "completed": "Đã hoàn thành",
-      "notCompleted": "Chưa hoàn thành"
+      "notCompleted": "Chưa hoàn thành",
+      "viewResources": "Xem tài liệu học tập"
     },
     "filter": {
       "label": "Lọc theo nhóm",
@@ -596,12 +597,7 @@
           "name": "Miễn phí",
           "tagline": "Bắt đầu miễn phí",
           "cta": "Dùng miễn phí",
-          "features": [
-            "Cây kỹ năng (cơ bản)",
-            "5 lượt chat AI/ngày",
-            "Khóa học công khai",
-            "Hỗ trợ cộng đồng"
-          ]
+          "features": ["Cây kỹ năng (cơ bản)", "5 lượt chat AI/ngày", "Khóa học công khai", "Hỗ trợ cộng đồng"]
         },
         {
           "name": "Pro Student",

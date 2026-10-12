@@ -1,5 +1,6 @@
-import { BadgeCheck, Circle, CircleCheck, Sparkles, type LucideIcon } from 'lucide-react'
+import { BadgeCheck, BookOpen, Circle, CircleCheck, Sparkles, type LucideIcon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router'
 import type { SkillNode } from '../../../types/api/skillTree.types'
 
 export interface SkillDetailPanelProps {
@@ -93,6 +94,7 @@ function StatusRow({ node }: { node: SkillNode }) {
 
 export default function SkillDetailPanel({ node }: SkillDetailPanelProps) {
   const { t } = useTranslation()
+  const navigate = useNavigate()
 
   if (!node) {
     return (
@@ -134,6 +136,16 @@ export default function SkillDetailPanel({ node }: SkillDetailPanelProps) {
         <InfoRow label={t('skillTree.detail.nodeLevel')} value={String(node.nodeLevel)} />
         <InfoRow label={t('skillTree.detail.children')} value={String(node.children.length)} />
       </dl>
+
+      {/* Chuyển sang trang tài liệu học tập của skill này (route: /resources/:skillId) */}
+      <button
+        type='button'
+        onClick={() => navigate(`/resources/${node.skill.id}`)}
+        className='mt-5 w-full flex items-center justify-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 dark:bg-[#5F2CFF] dark:hover:bg-[#4B1FD6] text-white text-sm font-medium py-2.5 transition-colors cursor-pointer'
+      >
+        <BookOpen className='w-4 h-4' />
+        {t('skillTree.detail.viewResources')}
+      </button>
     </aside>
   )
 }
