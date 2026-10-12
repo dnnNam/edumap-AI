@@ -121,35 +121,35 @@ export default function HomePage() {
           </Suspense>
 
           <div className='max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-20 md:pt-24 pb-8 sm:pb-12 text-center relative z-10'>
-            {/* Logo Badge với 3D Levitation + 1 Vật thể 3D nằm tách hẳn ra ngoài đuôi tag, không bị che */}
-            <div className='relative inline-block mb-6 sm:mb-8'>
-              {/* Vật thể 3D tách hẳn ra ngoài đuôi tag (không bị tag che) và phía trên chữ mentor */}
-              <div
-                aria-hidden='true'
-                className='absolute -top-6 sm:-top-10 md:-top-12 left-[82%] sm:left-[96%] md:left-[102%] w-20 h-20 sm:w-32 sm:h-32 md:w-44 md:h-44 pointer-events-none select-none z-10 opacity-90'
-              >
-                <Suspense fallback={null}>
-                  <HeroSingle3D className='w-full h-full' />
-                </Suspense>
-              </div>
+            {/* Logo Badge Cân Đối Tuyệt Đối: 3D Crystal Nucleus + Holographic Pill Badge */}
+            <div className='relative inline-block mb-6 sm:mb-8 mx-auto'>
+              <Floating3D duration={4.5} distance={5}>
+                <div className='flex flex-col items-center justify-center'>
+                  {/* Vật thể 3D trung tâm (Cân xứng trục Y hoàn hảo, xoay nhịp nhàng) */}
+                  <div
+                    aria-hidden='true'
+                    className='w-28 h-28 sm:w-32 sm:h-32 md:w-36 md:h-36 -mb-2 sm:-mb-2.5 relative z-20 pointer-events-none select-none'
+                  >
+                    <Suspense fallback={null}>
+                      <HeroSingle3D className='w-full h-full' />
+                    </Suspense>
+                  </div>
 
-              <Floating3D duration={4.5} distance={6}>
-                <div className='relative z-10 inline-flex items-center gap-2.5 sm:gap-3 p-1.5 pr-3.5 sm:pr-4 rounded-2xl bg-white dark:bg-[#1A191C] border border-gray-200 dark:border-white/10 shadow-sm hover:border-gray-300 dark:hover:border-white/20 transition-all select-none'>
-                  <div className='w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-[#131428] flex items-center justify-center shrink-0 p-1 shadow-xs'>
-                    <img src='/favicon.svg' alt='EduMap AI' className='w-full h-full object-contain' />
-                  </div>
-                  <div className='text-left'>
-                    <div className='text-xs font-black tracking-tight text-gray-900 dark:text-[#ECE9E4] leading-none'>
+                  {/* Chiếc Badge Pill bo tròn siêu gọn gàng, tinh tế ngay dưới vật thể 3D */}
+                  <div className='relative z-10 inline-flex items-center gap-2 py-1 px-3 sm:px-3.5 rounded-full bg-white/85 dark:bg-[#1A191C]/85 backdrop-blur-md border border-gray-200/80 dark:border-white/10 shadow-xs hover:border-indigo-500/35 dark:hover:border-indigo-400/35 hover:shadow-sm transition-all duration-300 select-none'>
+                    <span className='flex h-1.5 w-1.5 relative'>
+                      <span className='animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75'></span>
+                      <span className='relative inline-flex rounded-full h-1.5 w-1.5 bg-indigo-600 dark:bg-[#A99DFF]'></span>
+                    </span>
+                    <span className='text-[11px] sm:text-xs font-bold tracking-tight text-gray-900 dark:text-[#ECE9E4]'>
                       EDUMAP<span className='text-indigo-600 dark:text-[#A99DFF]'>AI</span>
-                    </div>
-                    <div className='text-[8px] font-bold tracking-wider text-gray-400 dark:text-[#85808C] uppercase mt-0.5'>
-                      {t('brand.tagline')}
+                    </span>
+                    <span className='h-2.5 w-[1px] bg-gray-200 dark:bg-white/15' />
+                    <div className='inline-flex items-center gap-1.5 text-[11px] sm:text-xs font-medium text-gray-600 dark:text-[#B5B1BA]'>
+                      <span className='w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse' />
+                      <span className='text-indigo-600 dark:text-[#A99DFF] font-semibold'>{t('home.poweredBy')}</span>
                     </div>
                   </div>
-                  <span className='w-1 h-1 rounded-full bg-gray-300 dark:bg-white/20' />
-                  <span className='text-xs font-semibold text-indigo-600 dark:text-[#A99DFF] hidden sm:inline'>
-                    {t('home.poweredBy')}
-                  </span>
                 </div>
               </Floating3D>
             </div>
