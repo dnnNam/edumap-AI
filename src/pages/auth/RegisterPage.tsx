@@ -1,4 +1,5 @@
 import { Mail, Lock, User } from 'lucide-react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import Logo from '../../components/ui/Logo'
 import StatCard from '../../components/ui/StatCard'
@@ -12,10 +13,12 @@ import { Link, useNavigate } from 'react-router'
 import { registerSchema, type RegisterFormPayload } from '../../schemas/auth.schema'
 import { useRegisterMutation } from '../../hooks/useAuthQuery'
 import { toast } from 'sonner'
+import { Turnstile } from '@marsidev/react-turnstile'
 
 export default function RegisterPage() {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
 
   // 1. Khởi tạo React Hook Form kết hợp Zod Resolver
   const {
@@ -37,17 +40,20 @@ export default function RegisterPage() {
 
   // 3. Xử lý logic submit form
   const onSubmit = (data: RegisterFormPayload) => {
-    // confirmPassword chỉ dùng để validate ở client, ta chỉ gửi data mà backend cần
+    if (!turnstileToken) {
+      toast.error('Vui lòng hoàn thành xác minh bảo mật Turnstile!')
+      return
+    }
+
     const { email, password, fullName } = data
 
     registerUser(
-      { email, password, fullName },
+      { email, password, fullName, turnstileToken },
       {
         onSuccess: () => {
           toast.success(t('auth.registerSuccess'))
           navigate('/login')
         },
-        // onError không cần xử lý riêng vì http.ts interceptor đã toast lỗi chung rồi
       },
     )
   }
@@ -125,7 +131,23 @@ export default function RegisterPage() {
               </div>
             </div>
 
-            <PrimaryButton type='submit' loading={isPending} loadingText={t('auth.creatingAccount')}>
+            {/* Cloudflare Turnstile */}
+            <div className='flex justify-center'>
+              <Turnstile
+                siteKey={import.meta.env.VITE_TURNSTILE_SITE_KEY}
+                onSuccess={(token) => setTurnstileToken(token)}
+                onError={() => setTurnstileToken(null)}
+                onExpire={() => setTurnstileToken(null)}
+                options={{ theme: 'auto' }}
+              />
+            </div>
+
+            <PrimaryButton
+              type='submit'
+              loading={isPending}
+              disabled={!turnstileToken || isPending}
+              loadingText={t('auth.creatingAccount')}
+            >
               {t('auth.createAccount')}
             </PrimaryButton>
 

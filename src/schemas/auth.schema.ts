@@ -6,6 +6,7 @@ import { z } from 'zod'
 // Biểu thức chính quy (Regex) chuẩn để kiểm tra định dạng email
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
 
+// REGISTER SCHEMA & TYPES
 export const registerSchema = z
   .object({
     email: z
@@ -21,12 +22,15 @@ export const registerSchema = z
     path: ['confirmPassword'],
   })
 
-// 1. Type dùng cho Form (Có confirmPassword)
+// 1. Type dùng cho Form (Có confirmPassword để validate ở client)
 export type RegisterFormPayload = z.infer<typeof registerSchema>
 
-// 2. Type dùng để gửi lên Backend (Đã loại bỏ confirmPassword)
-export type RegisterApiPayload = Omit<RegisterFormPayload, 'confirmPassword'>
+// 2. Type dùng để gửi lên Backend (Đã loại bỏ confirmPassword và kèm turnstileToken)
+export type RegisterApiPayload = Omit<RegisterFormPayload, 'confirmPassword'> & {
+  turnstileToken: string
+}
 
+// LOGIN SCHEMA & TYPES
 export const loginSchema = z.object({
   email: z
     .string()
@@ -35,7 +39,13 @@ export const loginSchema = z.object({
   password: z.string().min(1, { message: 'validation.passwordRequired' }),
 })
 
+// 1. Type dùng cho Form Login
 export type LoginPayload = z.infer<typeof loginSchema>
+
+// 2. Type dùng để gửi lên Backend (Kèm theo turnstileToken)
+export type LoginApiPayload = LoginPayload & {
+  turnstileToken: string
+}
 
 export const forgotPasswordSchema = z.object({
   email: z

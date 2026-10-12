@@ -16,13 +16,16 @@ import { loginSchema, type LoginPayload } from '../../schemas/auth.schema'
 import { useLoginMutation } from '../../hooks/useAuthQuery'
 import { toast } from 'sonner'
 import { saveAuthToLS } from '../../utils/auth'
+import { Turnstile } from '@marsidev/react-turnstile'
 
 export default function LoginPage() {
   const { t } = useTranslation()
   const [rememberMe, setRememberMe] = useState(true)
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
 
   const navigate = useNavigate()
   const queryClient = useQueryClient()
+
   // 1. Khởi tạo form với Zod
   const {
     register,
@@ -37,6 +40,7 @@ export default function LoginPage() {
   })
 
   const { mutate: loginUser, isPending } = useLoginMutation()
+
   const handleGoogleLogin = () => {
     // Chuyển hướng cả trang sang backend, backend sẽ redirect tiếp sang Google
     window.location.href = `${import.meta.env.VITE_API_URL}/auth/google`
@@ -44,23 +48,31 @@ export default function LoginPage() {
 
   // 3. Xử lý Submit
   const onSubmit = (data: LoginPayload) => {
-    loginUser(data, {
-      onSuccess: (response) => {
-        const { accessToken, user } = response.data.data
+    if (!turnstileToken) {
+      toast.error('Vui lòng hoàn thành xác minh bảo mật Turnstile!')
+      return
+    }
 
-        if (accessToken) {
-          queryClient.clear() // bỏ cache của tài khoản đăng nhập trước đó
-          saveAuthToLS({
-            accessToken,
-            fullName: user?.fullName,
-            role: user?.role,
-            remember: rememberMe,
-          })
-          toast.success(t('auth.loginSuccess'))
-          navigate('/dashboard')
-        }
+    loginUser(
+      { ...data, turnstileToken },
+      {
+        onSuccess: (response) => {
+          const { accessToken, user } = response.data.data
+
+          if (accessToken) {
+            queryClient.clear() // bỏ cache của tài khoản đăng nhập trước đó
+            saveAuthToLS({
+              accessToken,
+              fullName: user?.fullName,
+              role: user?.role,
+              remember: rememberMe,
+            })
+            toast.success(t('auth.loginSuccess'))
+            navigate('/dashboard')
+          }
+        },
       },
-    })
+    )
   }
 
   return (
@@ -108,11 +120,11 @@ export default function LoginPage() {
                 placeholder='alex@university.edu'
                 {...register('email')}
               />
-              {/* Hiển thị lỗi Zod (message là key dịch) */}
               {errors.email && (
                 <p className='text-sm text-red-500 dark:text-[#FCA5A5] mt-1'>{t(errors.email.message!)}</p>
               )}
             </div>
+
             <div>
               <FormInput
                 id='password'
@@ -145,7 +157,23 @@ export default function LoginPage() {
               </a>
             </div>
 
-            <PrimaryButton type='submit' loading={isPending} loadingText={t('auth.signingIn')}>
+            {/* Cloudflare Turnstile */}
+            <div className='flex justify-center'>
+              <Turnstile
+                siteKey={import.meta.env.VITE_TURNSTILE_SITE_KEY}
+                onSuccess={(token) => setTurnstileToken(token)}
+                onError={() => setTurnstileToken(null)}
+                onExpire={() => setTurnstileToken(null)}
+                options={{ theme: 'auto' }}
+              />
+            </div>
+
+            <PrimaryButton
+              type='submit'
+              loading={isPending}
+              disabled={!turnstileToken || isPending}
+              loadingText={t('auth.signingIn')}
+            >
               {t('common.signIn')}
             </PrimaryButton>
 
