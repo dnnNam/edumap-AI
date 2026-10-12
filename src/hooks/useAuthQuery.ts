@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
-import type { ChangePasswordPayload, LoginPayload, RegisterApiPayload } from '../schemas/auth.schema'
+import type { ChangePasswordPayload, RegisterApiPayload, LoginApiPayload } from '../schemas/auth.schema'
 import { authRepo } from '../repository/auth.repo'
 import { getAccessTokenFromLS } from '../utils/auth'
 
@@ -12,7 +12,7 @@ export const useRegisterMutation = () => {
 
 export const useLoginMutation = () => {
   return useMutation({
-    mutationFn: (data: LoginPayload) => authRepo.login(data),
+    mutationFn: (data: LoginApiPayload) => authRepo.login(data),
   })
 }
 
