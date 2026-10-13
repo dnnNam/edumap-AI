@@ -111,27 +111,27 @@ export default function ForgotPasswordPage() {
         <div className='max-w-md'>
           <div className='inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-100 dark:border-white/10 text-xs font-semibold text-indigo-600 dark:text-[#A99DFF] mb-6'>
             <ShieldCheck className='w-4 h-4' />
-            <span>EduMap Security Protocol</span>
+            <span>{t('auth.forgotHeroBadge')}</span>
           </div>
 
           <h1 className='text-[38px] leading-[1.18] font-bold text-gray-900 dark:text-[#ECE9E4] tracking-tight'>
-            Bảo mật tài khoản &amp;
+            {t('auth.forgotHeroTitle1')}
             <br />
-            Khôi phục lộ trình học tập.
+            {t('auth.forgotHeroTitle2')}
           </h1>
           <p className='mt-5 text-gray-500 dark:text-[#B5B1BA] text-[15px] leading-relaxed'>
-            Liên kết đặt lại mật khẩu bảo vệ bằng mã hóa SHA-256 dùng một lần, tự động hết hạn sau 15 phút để đảm bảo dữ liệu cá nhân của bạn luôn an toàn.
+            {t('auth.forgotHeroDesc')}
           </p>
 
           <div className='mt-8 grid grid-cols-2 gap-4'>
-            <StatCard value='15 phút' label='Thời hạn liên kết' />
-            <StatCard value='256-bit' label='Mã hóa token' />
+            <StatCard value={t('auth.forgotStatValue1')} label={t('auth.forgotStatLabel1')} />
+            <StatCard value={t('auth.forgotStatValue2')} label={t('auth.forgotStatLabel2')} />
           </div>
         </div>
 
         <div className='flex items-center gap-2 text-sm text-gray-400 dark:text-[#5E5A64]'>
           <Sparkles className='w-4 h-4 text-indigo-500' />
-          <span>EduMap AI · Hệ thống bảo mật định danh học viên</span>
+          <span>{t('auth.forgotFooterTag')}</span>
         </div>
       </div>
 

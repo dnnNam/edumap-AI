@@ -93,27 +93,27 @@ export default function ResetPasswordPage() {
         <div className='max-w-md'>
           <div className='inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-100 dark:border-white/10 text-xs font-semibold text-indigo-600 dark:text-[#A99DFF] mb-6'>
             <ShieldCheck className='w-4 h-4' />
-            <span>EduMap Identity Guard</span>
+            <span>{t('auth.resetHeroBadge')}</span>
           </div>
 
           <h1 className='text-[38px] leading-[1.18] font-bold text-gray-900 dark:text-[#ECE9E4] tracking-tight'>
-            Thiết lập mật khẩu mới,
+            {t('auth.resetHeroTitle1')}
             <br />
-            Tiếp tục hành trình công nghệ.
+            {t('auth.resetHeroTitle2')}
           </h1>
           <p className='mt-5 text-gray-500 dark:text-[#B5B1BA] text-[15px] leading-relaxed'>
-            Mật khẩu mới của bạn sẽ được băm bằng thuật toán Bcrypt 10 rounds đạt tiêu chuẩn bảo mật ngân hàng số trước khi lưu trữ an toàn vào hệ thống.
+            {t('auth.resetHeroDesc')}
           </p>
 
           <div className='mt-8 grid grid-cols-2 gap-4'>
-            <StatCard value='Bcrypt' label='Chuẩn băm mật khẩu' />
-            <StatCard value='100%' label='Bảo mật phiên đăng nhập' />
+            <StatCard value={t('auth.resetStatValue1')} label={t('auth.resetStatLabel1')} />
+            <StatCard value={t('auth.resetStatValue2')} label={t('auth.resetStatLabel2')} />
           </div>
         </div>
 
         <div className='flex items-center gap-2 text-sm text-gray-400 dark:text-[#5E5A64]'>
           <Sparkles className='w-4 h-4 text-indigo-500' />
-          <span>EduMap AI · Hệ thống bảo vệ dữ liệu học viên</span>
+          <span>{t('auth.resetFooterTag')}</span>
         </div>
       </div>
 
@@ -229,7 +229,7 @@ export default function ResetPasswordPage() {
                     >
                       <Check className='w-2.5 h-2.5' />
                     </div>
-                    <span>{t('validation.passwordMismatch') === 'Xác nhận mật khẩu không khớp' ? 'Hai mật khẩu trùng khớp' : 'Passwords match'}</span>
+                    <span>{t('auth.passwordsMatch')}</span>
                   </div>
                 </div>
 
