@@ -1,4 +1,4 @@
-import { Navigate, useSearchParams } from 'react-router'
+import { Navigate, useLocation, useSearchParams } from 'react-router'
 
 import AnimatedOutlet from '../components/motion/AnimatedOutlet'
 import AppLoadingSkeleton from '../components/ui/AppLoadingSkeleton'
@@ -7,11 +7,17 @@ import { getAccessTokenFromLS, getRoleFromLS } from '../utils/auth'
 
 export default function PublicRoute() {
   const [params] = useSearchParams()
+  const location = useLocation()
   const accessToken = getAccessTokenFromLS()
   const { data, isLoading, isError } = useMeQuery()
 
-  // Đang xử lý Google callback: để GoogleCallbackPage tự lo, không redirect/skeleton chen ngang
-  if (params.get('token')) {
+  // Cho phép trang reset-password, forgot-password hoặc Google callback render trực tiếp
+  const isAuthUtility =
+    location.pathname === '/forgot-password' ||
+    location.pathname === '/reset-password' ||
+    Boolean(params.get('token'))
+
+  if (isAuthUtility) {
     return <AnimatedOutlet />
   }
 
