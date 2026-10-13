@@ -1,5 +1,11 @@
 import http from '../config/http'
-import type { ChangePasswordPayload, LoginPayload, RegisterApiPayload } from '../schemas/auth.schema'
+import type {
+  ChangePasswordPayload,
+  ForgotPasswordApiPayload,
+  LoginPayload,
+  RegisterApiPayload,
+  ResetPasswordApiPayload,
+} from '../schemas/auth.schema'
 import type { ApiResponse, AuthResponse, User } from '../types/api/auth.types'
 
 class AuthRepository {
@@ -22,6 +28,16 @@ class AuthRepository {
 
   changePassword(body: ChangePasswordPayload) {
     return http.patch(`${this.PREFIX}/change-password`, body)
+  }
+
+  // Hàm gọi API Yêu cầu gửi email khôi phục mật khẩu
+  forgotPassword(payload: ForgotPasswordApiPayload) {
+    return http.post<{ message: string }>(`${this.PREFIX}/forgot-password`, payload)
+  }
+
+  // Hàm gọi API Đặt lại mật khẩu mới
+  resetPassword(payload: ResetPasswordApiPayload) {
+    return http.post<{ message: string }>(`${this.PREFIX}/reset-password`, payload)
   }
 }
 

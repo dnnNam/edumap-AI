@@ -55,6 +55,9 @@ export const forgotPasswordSchema = z.object({
 })
 
 export type ForgotPasswordPayload = z.infer<typeof forgotPasswordSchema>
+export type ForgotPasswordApiPayload = ForgotPasswordPayload & {
+  turnstileToken: string
+}
 
 export const changePasswordSchema = z.object({
   oldPassword: z.string().min(1, { message: 'validation.oldPasswordRequired' }),
@@ -63,19 +66,34 @@ export const changePasswordSchema = z.object({
 
 export type ChangePasswordPayload = z.infer<typeof changePasswordSchema>
 
+export const resetPasswordFormSchema = z
+  .object({
+    newPassword: z.string().min(6, { message: 'validation.newPasswordMin' }),
+    confirmPassword: z.string().min(1, { message: 'validation.confirmRequired' }),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: 'validation.passwordMismatch',
+    path: ['confirmPassword'],
+  })
+
+export type ResetPasswordFormPayload = z.infer<typeof resetPasswordFormSchema>
+
 export const resetPasswordSchema = z
   .object({
     token: z.string().min(1, { message: 'validation.tokenRequired' }),
     newPassword: z.string().min(6, { message: 'validation.newPasswordMin' }),
     confirmPassword: z.string().min(1, { message: 'validation.confirmRequired' }),
   })
-
   .refine((data) => data.newPassword === data.confirmPassword, {
     message: 'validation.passwordMismatch',
     path: ['confirmPassword'],
   })
 
 export type ResetPasswordPayload = z.infer<typeof resetPasswordSchema>
+export type ResetPasswordApiPayload = {
+  token: string
+  newPassword: string
+}
 
 export const userProfileSchema = z.object({
   fullName: z.string().min(1, { message: 'validation.fullNameRequired' }),

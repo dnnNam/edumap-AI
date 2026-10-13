@@ -2,6 +2,8 @@ import { createBrowserRouter } from 'react-router'
 
 import LoginPage from '../pages/auth/LoginPage'
 import RegisterPage from '../pages/auth/RegisterPage'
+import ForgotPasswordPage from '../pages/auth/ForgotPasswordPage'
+import ResetPasswordPage from '../pages/auth/ResetPasswordPage'
 
 import ChatPage from '../pages/main/ChatPage'
 import DashBoard from '../pages/main/DashBoard'
@@ -42,6 +44,8 @@ const router = createBrowserRouter([
       { index: true, Component: HomeEntry },
       { path: '/login', Component: LoginPage },
       { path: '/register', Component: RegisterPage },
+      { path: '/forgot-password', Component: ForgotPasswordPage },
+      { path: '/reset-password', Component: ResetPasswordPage },
       { path: '/portfolio/:username', Component: PortfolioPublicPage },
     ],
   },

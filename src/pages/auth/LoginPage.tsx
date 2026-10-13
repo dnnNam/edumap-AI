@@ -149,12 +149,12 @@ export default function LoginPage() {
                 />
                 {t('auth.rememberMe')}
               </label>
-              <a
-                href='#'
-                className='text-gray-500 dark:text-[#A29FA8] hover:text-gray-800 dark:hover:text-[#ECE9E4] transition'
+              <Link
+                to='/forgot-password'
+                className='text-gray-500 dark:text-[#A29FA8] hover:text-indigo-600 dark:hover:text-[#A99DFF] transition'
               >
                 {t('auth.forgotPassword')}
-              </a>
+              </Link>
             </div>
 
             {/* Cloudflare Turnstile */}
