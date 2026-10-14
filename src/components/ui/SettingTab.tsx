@@ -17,7 +17,9 @@ export default function SettingsTabs<T extends string>({
   className = '',
 }: SettingsTabsProps<T>) {
   return (
-    <div className={`inline-flex items-center gap-1 rounded-xl bg-gray-100 dark:bg-[#1A191C] border border-transparent dark:border-white/[0.08] p-1 ${className}`}>
+    <div
+      className={`inline-flex items-center gap-1 rounded-xl bg-gray-100 dark:bg-[#1A191C] border border-transparent dark:border-white/[0.08] p-1 ${className}`}
+    >
       {tabs.map((tab) => (
         <button
           key={tab.key}

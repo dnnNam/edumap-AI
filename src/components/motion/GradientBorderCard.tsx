@@ -29,9 +29,7 @@ export default function GradientBorderCard({
       />
 
       {/* Lớp nội dung bên trong giữ nguyên 100% style của card */}
-      <div className={`relative ${rounded} overflow-hidden h-full w-full`}>
-        {children}
-      </div>
+      <div className={`relative ${rounded} overflow-hidden h-full w-full`}>{children}</div>
     </div>
   )
 }

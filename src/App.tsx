@@ -10,10 +10,7 @@ function AppContent() {
   const { isDark } = useTheme()
 
   return (
-    <SkeletonTheme
-      baseColor={isDark ? '#1A191C' : '#f3f4f6'}
-      highlightColor={isDark ? '#232227' : '#e5e7eb'}
-    >
+    <SkeletonTheme baseColor={isDark ? '#1A191C' : '#f3f4f6'} highlightColor={isDark ? '#232227' : '#e5e7eb'}>
       <Toaster position='top-right' richColors theme={isDark ? 'dark' : 'light'} />
       <RouterProvider router={router} />
     </SkeletonTheme>

@@ -44,4 +44,3 @@ export default function Floating3D({
     </motion.div>
   )
 }
-

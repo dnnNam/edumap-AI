@@ -6,10 +6,16 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint .",
+    "build:analyze": "vite build --mode analyze",
     "preview": "vite preview",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "type-check": "tsc --noEmit",
     "test": "jest",
-    "test:ci": "jest --ci --coverage"
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "prepare": "husky"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.9.1",
@@ -36,6 +42,8 @@
     "zod": "^4.6.5"
   },
   "devDependencies": {
+    "@commitlint/cli": "^21.2.3",
+    "@commitlint/config-conventional": "^21.2.3",
     "@eslint/js": "^10.0.1",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.13.3",
@@ -47,7 +55,10 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.6",
     "globals": "^17.12.0",
+    "husky": "^9.1.7",
     "jest": "^30.5.2",
+    "lint-staged": "^16.4.0",
+    "prettier": "^3.9.10",
     "ts-jest": "^29.4.13",
     "ts-node": "^10.9.2",
     "typescript": "~6.0.2",

@@ -56,4 +56,3 @@ export default function ScrollPerspective3D({
     </div>
   )
 }
-

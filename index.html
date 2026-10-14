@@ -17,20 +17,20 @@
 
     <!-- Theme Initialization Script: Chống nháy FOUC trước khi DOM render -->
     <script>
-      (function() {
+      ;(function () {
         try {
-          var saved = localStorage.getItem('edumap-theme');
+          var saved = localStorage.getItem('edumap-theme')
           if (saved === 'dark') {
-            document.documentElement.classList.add('dark');
-            document.documentElement.setAttribute('data-theme', 'dark');
-            document.documentElement.style.colorScheme = 'dark';
+            document.documentElement.classList.add('dark')
+            document.documentElement.setAttribute('data-theme', 'dark')
+            document.documentElement.style.colorScheme = 'dark'
           } else {
-            document.documentElement.classList.remove('dark');
-            document.documentElement.setAttribute('data-theme', 'light');
-            document.documentElement.style.colorScheme = 'light';
+            document.documentElement.classList.remove('dark')
+            document.documentElement.setAttribute('data-theme', 'light')
+            document.documentElement.style.colorScheme = 'light'
           }
         } catch (e) {}
-      })();
+      })()
     </script>
   </head>
 

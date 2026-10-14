@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useTranslation } from 'react-i18next'
 import { getLocale } from '../../utils/locale'
 import { useMemo, useState } from 'react'
@@ -84,7 +85,7 @@ export default function AdminPermissionsPage() {
         {ROLE_OPTIONS.map((role) => (
           <div
             key={role}
-            className='bg-white dark:bg-[#1A191C] border border-gray-200 dark:border-white/[0.08] rounded-xl p-5 transition-colors'
+            className='bg-white dark:bg-[#1A191C] border border-gray-200 dark:border-white/8 rounded-xl p-5 transition-colors'
           >
             <p className='text-sm text-gray-500 dark:text-[#A29FA8]'>{t(`roles.${role}`)}</p>
             <p className='mt-1 text-3xl font-bold text-gray-900 dark:text-[#ECE9E4]'>{counts[role]}</p>
@@ -122,17 +123,17 @@ export default function AdminPermissionsPage() {
       </div>
 
       {tab === 'matrix' ? (
-        <div className='mt-4 bg-white dark:bg-[#1A191C] border border-gray-200 dark:border-white/[0.08] rounded-xl p-8 text-center text-sm text-gray-500 dark:text-[#A29FA8] transition-colors'>
+        <div className='mt-4 bg-white dark:bg-[#1A191C] border border-gray-200 dark:border-white/8 rounded-xl p-8 text-center text-sm text-gray-500 dark:text-[#A29FA8] transition-colors'>
           {t('admin.permissions.matrixSoon')}
         </div>
       ) : (
         // Khối bảng: chiếm hết phần chiều cao còn lại (flex-1 min-h-0),
         // bản thân nó là flex-col để search/filter đứng yên, còn vùng cuộn
         // (div overflow-y-auto phía dưới) tự co giãn theo không gian còn lại.
-        <div className='mt-4 min-h-0 flex-1 flex flex-col bg-white dark:bg-[#1A191C] border border-gray-200 dark:border-white/[0.08] rounded-xl overflow-hidden transition-colors'>
+        <div className='mt-4 min-h-0 flex-1 flex flex-col bg-white dark:bg-[#1A191C] border border-gray-200 dark:border-white/8 rounded-xl overflow-hidden transition-colors'>
           {/* Search + filter */}
-          <div className='shrink-0 flex items-center gap-3 p-4 border-b border-gray-100 dark:border-white/[0.08] flex-wrap transition-colors'>
-            <div className='flex-1 min-w-[220px] flex items-center gap-2 h-10 rounded-lg bg-gray-50 dark:bg-[#232227] border border-gray-200 dark:border-white/[0.08] px-3 text-gray-400 dark:text-[#A29FA8] focus-within:border-gray-300 dark:focus-within:border-white/20 transition-colors'>
+          <div className='shrink-0 flex items-center gap-3 p-4 border-b border-gray-100 dark:border-white/8 flex-wrap transition-colors'>
+            <div className='flex-1 min-w-55 flex items-center gap-2 h-10 rounded-lg bg-gray-50 dark:bg-[#232227] border border-gray-200 dark:border-white/8 px-3 text-gray-400 dark:text-[#A29FA8] focus-within:border-gray-300 dark:focus-within:border-white/20 transition-colors'>
               <Search className='w-4 h-4 shrink-0' />
               <input
                 value={search}
@@ -147,7 +148,7 @@ export default function AdminPermissionsPage() {
               <select
                 value={roleFilter}
                 onChange={(e) => setRoleFilter(e.target.value as RoleFilter)}
-                className='appearance-none h-10 rounded-lg border border-gray-200 dark:border-white/[0.08] pl-3.5 pr-9 text-sm text-gray-700 dark:text-[#ECE9E4] outline-none focus:border-gray-300 dark:focus:border-white/20 bg-white dark:bg-[#232227] transition-colors cursor-pointer'
+                className='appearance-none h-10 rounded-lg border border-gray-200 dark:border-white/8 pl-3.5 pr-9 text-sm text-gray-700 dark:text-[#ECE9E4] outline-none focus:border-gray-300 dark:focus:border-white/20 bg-white dark:bg-[#232227] transition-colors cursor-pointer'
               >
                 <option value='ALL'>{t('admin.permissions.allRoles')}</option>
                 {ROLE_OPTIONS.map((role) => (
@@ -164,7 +165,7 @@ export default function AdminPermissionsPage() {
           <div className='flex-1 min-h-0 overflow-y-auto'>
             <table className='w-full text-left'>
               <thead className='sticky top-0 z-10 bg-white dark:bg-[#1A191C] transition-colors'>
-                <tr className='text-xs text-gray-500 dark:text-[#A29FA8] border-b border-gray-100 dark:border-white/[0.08]'>
+                <tr className='text-xs text-gray-500 dark:text-[#A29FA8] border-b border-gray-100 dark:border-white/8'>
                   <th className='py-3 px-4 font-medium'>{t('admin.permissions.cols.user')}</th>
                   <th className='py-3 px-4 font-medium'>{t('admin.permissions.cols.role')}</th>
                   <th className='py-3 px-4 font-medium'>{t('admin.permissions.cols.subscription')}</th>
@@ -175,7 +176,7 @@ export default function AdminPermissionsPage() {
               <tbody>
                 {isLoading &&
                   Array.from({ length: 4 }).map((_, i) => (
-                    <tr key={i} className='border-b border-gray-50 dark:border-white/[0.04]'>
+                    <tr key={i} className='border-b border-gray-50 dark:border-white/4'>
                       <td className='py-4 px-4' colSpan={5}>
                         <div className='h-4 w-full max-w-xs rounded bg-gray-100 dark:bg-white/10 animate-pulse' />
                       </td>
@@ -205,7 +206,7 @@ export default function AdminPermissionsPage() {
                     return (
                       <tr
                         key={u.id}
-                        className='border-b border-gray-50 dark:border-white/[0.04] hover:bg-gray-50/60 dark:hover:bg-white/[0.03] transition-colors'
+                        className='border-b border-gray-50 dark:border-white/4 hover:bg-gray-50/60 dark:hover:bg-white/3 transition-colors'
                       >
                         <td className='py-3.5 px-4'>
                           <div className='flex items-center gap-3'>
@@ -228,7 +229,7 @@ export default function AdminPermissionsPage() {
                               value={u.role}
                               disabled={isRowUpdating}
                               onChange={(e) => updateRole({ userId: u.id, role: e.target.value as UserRole })}
-                              className='appearance-none h-9 rounded-lg border border-gray-200 dark:border-white/[0.08] pl-3 pr-8 text-sm text-gray-700 dark:text-[#ECE9E4] outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 bg-white dark:bg-[#232227] disabled:opacity-60 transition cursor-pointer'
+                              className='appearance-none h-9 rounded-lg border border-gray-200 dark:border-white/8 pl-3 pr-8 text-sm text-gray-700 dark:text-[#ECE9E4] outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 bg-white dark:bg-[#232227] disabled:opacity-60 transition cursor-pointer'
                             >
                               {ROLE_OPTIONS.map((role) => (
                                 <option key={role} value={role}>
@@ -240,7 +241,7 @@ export default function AdminPermissionsPage() {
                           </div>
                         </td>
                         <td className='py-3.5 px-4'>
-                          <span className='text-xs font-medium text-gray-600 dark:text-[#ECE9E4] bg-gray-100 dark:bg-white/10 border border-gray-200 dark:border-white/[0.08] rounded-full px-2.5 py-1'>
+                          <span className='text-xs font-medium text-gray-600 dark:text-[#ECE9E4] bg-gray-100 dark:bg-white/10 border border-gray-200 dark:border-white/8 rounded-full px-2.5 py-1'>
                             {u.subscriptionTier}
                           </span>
                         </td>

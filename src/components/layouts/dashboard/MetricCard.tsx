@@ -22,7 +22,9 @@ export default function MetricCard({
         {loading ? (
           <div className='mt-3 h-10 w-24 rounded-lg bg-gray-100 dark:bg-white/5 animate-pulse' />
         ) : (
-          <p className='mt-2 text-[40px] leading-none font-bold text-gray-900 dark:text-[#ECE9E4] tracking-tight'>{value}</p>
+          <p className='mt-2 text-[40px] leading-none font-bold text-gray-900 dark:text-[#ECE9E4] tracking-tight'>
+            {value}
+          </p>
         )}
         <p className='mt-3 text-xs text-gray-500 dark:text-[#85808C]'>{hint}</p>
       </div>

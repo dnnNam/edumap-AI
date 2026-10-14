@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useTranslation } from 'react-i18next'
 import i18n from '../../i18n'
 import { getLocale } from '../../utils/locale'
@@ -155,7 +156,7 @@ export default function NotificationsPage() {
             type='button'
             onClick={handleMarkAllRead}
             disabled={unreadCount === 0}
-            className='rounded-xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#1A191C] text-sm font-medium text-gray-900 dark:text-[#ECE9E4] px-4 py-2 hover:bg-gray-50 dark:hover:bg-[#232227] disabled:opacity-50 disabled:cursor-not-allowed transition-colors shrink-0 cursor-pointer'
+            className='rounded-xl border border-gray-200 dark:border-white/8 bg-white dark:bg-[#1A191C] text-sm font-medium text-gray-900 dark:text-[#ECE9E4] px-4 py-2 hover:bg-gray-50 dark:hover:bg-[#232227] disabled:opacity-50 disabled:cursor-not-allowed transition-colors shrink-0 cursor-pointer'
           >
             {t('notifications.markAll')}
           </button>
@@ -170,7 +171,7 @@ export default function NotificationsPage() {
               className={`shrink-0 rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors cursor-pointer ${
                 activeTab === tab.key
                   ? 'bg-gray-900 dark:bg-[#5F2CFF] text-white'
-                  : 'bg-white dark:bg-[#1A191C] border border-gray-200 dark:border-white/[0.08] text-gray-600 dark:text-[#A29FA8] hover:bg-gray-50 dark:hover:bg-[#232227]'
+                  : 'bg-white dark:bg-[#1A191C] border border-gray-200 dark:border-white/8 text-gray-600 dark:text-[#A29FA8] hover:bg-gray-50 dark:hover:bg-[#232227]'
               }`}
             >
               {t(tab.labelKey)}
@@ -179,7 +180,7 @@ export default function NotificationsPage() {
           ))}
         </div>
 
-        <div className='bg-white dark:bg-[#1A191C] border border-gray-200 dark:border-white/[0.08] rounded-2xl shadow-sm overflow-hidden'>
+        <div className='bg-white dark:bg-[#1A191C] border border-gray-200 dark:border-white/8 rounded-2xl shadow-sm overflow-hidden'>
           {isLoading ? (
             <AppLoadingSkeleton />
           ) : isError ? (
@@ -193,7 +194,7 @@ export default function NotificationsPage() {
               <p className='mt-1 text-xs text-gray-500 dark:text-[#A29FA8]'>{t('notifications.emptyHint')}</p>
             </div>
           ) : (
-            <div className='divide-y divide-gray-100 dark:divide-white/[0.06]'>
+            <div className='divide-y divide-gray-100 dark:divide-white/6'>
               {filtered.map((n) => {
                 const config = TYPE_CONFIG[n.type]
                 const Icon = config.icon
@@ -241,7 +242,7 @@ export default function NotificationsPage() {
             <button
               type='button'
               onClick={() => setLimit((l) => l + 20)}
-              className='rounded-xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#1A191C] text-sm font-medium text-gray-700 dark:text-[#ECE9E4] px-5 py-2.5 hover:bg-gray-50 dark:hover:bg-[#232227] transition-colors cursor-pointer'
+              className='rounded-xl border border-gray-200 dark:border-white/8 bg-white dark:bg-[#1A191C] text-sm font-medium text-gray-700 dark:text-[#ECE9E4] px-5 py-2.5 hover:bg-gray-50 dark:hover:bg-[#232227] transition-colors cursor-pointer'
             >
               {t('notifications.loadMore')}
             </button>
@@ -262,7 +263,7 @@ export default function NotificationsPage() {
             onClick={handleCloseDetail}
           >
             <motion.div
-              className='w-full max-w-md bg-white dark:bg-[#1A191C] border border-gray-200 dark:border-white/[0.08] rounded-2xl shadow-xl overflow-hidden'
+              className='w-full max-w-md bg-white dark:bg-[#1A191C] border border-gray-200 dark:border-white/8 rounded-2xl shadow-xl overflow-hidden'
               initial={{ opacity: 0, y: 16, scale: 0.97 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 16, scale: 0.97 }}
@@ -304,7 +305,7 @@ export default function NotificationsPage() {
                       </p>
                     </div>
 
-                    <div className='flex items-center justify-end gap-2 px-5 py-4 border-t border-gray-100 dark:border-white/[0.06] bg-gray-50 dark:bg-[#232227]'>
+                    <div className='flex items-center justify-end gap-2 px-5 py-4 border-t border-gray-100 dark:border-white/6 bg-gray-50 dark:bg-[#232227]'>
                       {selected.link && (
                         <button
                           type='button'
@@ -318,7 +319,7 @@ export default function NotificationsPage() {
                       <button
                         type='button'
                         onClick={handleCloseDetail}
-                        className='rounded-xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#1A191C] text-sm font-medium text-gray-700 dark:text-[#ECE9E4] px-4 py-2 hover:bg-gray-50 dark:hover:bg-[#232227] transition-colors cursor-pointer'
+                        className='rounded-xl border border-gray-200 dark:border-white/8 bg-white dark:bg-[#1A191C] text-sm font-medium text-gray-700 dark:text-[#ECE9E4] px-4 py-2 hover:bg-gray-50 dark:hover:bg-[#232227] transition-colors cursor-pointer'
                       >
                         {t('notifications.close')}
                       </button>
