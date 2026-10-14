@@ -33,9 +33,7 @@ export default function ThemeToggle({ className = '' }: ThemeToggleProps) {
       <span
         aria-hidden='true'
         className={`absolute inset-0 flex items-center justify-center transition-all duration-350 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-          isDark
-            ? 'opacity-0 rotate-90 scale-50 pointer-events-none'
-            : 'opacity-100 rotate-0 scale-100 text-amber-500'
+          isDark ? 'opacity-0 rotate-90 scale-50 pointer-events-none' : 'opacity-100 rotate-0 scale-100 text-amber-500'
         }`}
       >
         <Sun className='w-4 h-4 sm:w-[18px] sm:h-[18px]' strokeWidth={1.75} />
@@ -45,9 +43,7 @@ export default function ThemeToggle({ className = '' }: ThemeToggleProps) {
       <span
         aria-hidden='true'
         className={`absolute inset-0 flex items-center justify-center transition-all duration-350 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-          isDark
-            ? 'opacity-100 rotate-0 scale-100 text-[#A99DFF]'
-            : 'opacity-0 -rotate-90 scale-50 pointer-events-none'
+          isDark ? 'opacity-100 rotate-0 scale-100 text-[#A99DFF]' : 'opacity-0 -rotate-90 scale-50 pointer-events-none'
         }`}
       >
         <Moon className='w-4 h-4 sm:w-[18px] sm:h-[18px]' strokeWidth={1.75} />
@@ -55,4 +51,3 @@ export default function ThemeToggle({ className = '' }: ThemeToggleProps) {
     </button>
   )
 }
-

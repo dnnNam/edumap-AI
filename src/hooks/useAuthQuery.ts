@@ -50,4 +50,3 @@ export const useResetPasswordMutation = () => {
     mutationFn: (data: ResetPasswordApiPayload) => authRepo.resetPassword(data),
   })
 }
-

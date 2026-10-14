@@ -68,12 +68,7 @@ export interface MySubscription {
 export type MySubscriptionResponse = ApiResponse<MySubscription>
 
 export type UsageFeatureCode =
-  | 'AI_CHAT'
-  | 'SKILL_TREE_GENERATION'
-  | 'GITHUB_SYNC'
-  | 'PDF_REPORT'
-  | 'RESUME_REVIEW'
-  | 'JOB_MATCHING'
+  'AI_CHAT' | 'SKILL_TREE_GENERATION' | 'GITHUB_SYNC' | 'PDF_REPORT' | 'RESUME_REVIEW' | 'JOB_MATCHING'
 
 export type UsageWindow = 'DAILY' | 'MONTHLY'
 

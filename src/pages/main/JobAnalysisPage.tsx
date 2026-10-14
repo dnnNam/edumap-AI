@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/incompatible-library */
 import { useTranslation } from 'react-i18next'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { isAxiosError } from 'axios'
@@ -92,7 +93,7 @@ export default function JobAnalysisPage() {
         <form
           onSubmit={onSubmit}
           noValidate
-          className='mt-8 rounded-3xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#1A191C] p-6'
+          className='mt-8 rounded-3xl border border-gray-200 dark:border-white/8 bg-white dark:bg-[#1A191C] p-6'
         >
           <label htmlFor='location' className='block text-sm font-medium text-gray-800 dark:text-[#ECE9E4] mb-1.5'>
             {t('jobs.analysis.where')}
@@ -108,7 +109,7 @@ export default function JobAnalysisPage() {
                 className={`w-full rounded-xl border pl-12 pr-4 py-3 text-[15px] text-gray-900 dark:text-[#ECE9E4] bg-white dark:bg-[#232227] placeholder-gray-400 dark:placeholder-gray-500 outline-none focus:ring-2 transition ${
                   errors.location
                     ? 'border-red-400 focus:border-red-500 focus:ring-red-100 dark:focus:ring-red-950'
-                    : 'border-gray-200 dark:border-white/[0.08] focus:border-indigo-500 dark:focus:border-[#5F2CFF] focus:ring-indigo-100 dark:focus:ring-[#5F2CFF]/20'
+                    : 'border-gray-200 dark:border-white/8 focus:border-indigo-500 dark:focus:border-[#5F2CFF] focus:ring-indigo-100 dark:focus:ring-[#5F2CFF]/20'
                 }`}
                 {...register('location')}
               />
@@ -136,7 +137,7 @@ export default function JobAnalysisPage() {
                   className={`rounded-full border px-3 py-1.5 text-sm transition cursor-pointer ${
                     active
                       ? 'border-indigo-300 dark:border-[#5F2CFF] bg-indigo-50 dark:bg-[#5F2CFF]/20 text-indigo-600 dark:text-[#A99DFF]'
-                      : 'border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#232227] text-gray-600 dark:text-[#A29FA8] hover:border-indigo-300 dark:hover:border-[#5F2CFF] hover:text-indigo-600 dark:hover:text-[#A99DFF]'
+                      : 'border-gray-200 dark:border-white/8 bg-white dark:bg-[#232227] text-gray-600 dark:text-[#A29FA8] hover:border-indigo-300 dark:hover:border-[#5F2CFF] hover:text-indigo-600 dark:hover:text-[#A99DFF]'
                   }`}
                 >
                   {loc}
@@ -156,7 +157,7 @@ export default function JobAnalysisPage() {
               <Skeleton height={200} borderRadius={24} />
             </div>
           ) : isError ? (
-            <div className='rounded-3xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#1A191C] p-10 text-center'>
+            <div className='rounded-3xl border border-gray-200 dark:border-white/8 bg-white dark:bg-[#1A191C] p-10 text-center'>
               <p className='text-[15px] font-medium text-gray-900 dark:text-[#ECE9E4]'>{t('jobs.analysis.failed')}</p>
               <p className='mt-1.5 text-sm text-gray-500 dark:text-[#A29FA8]'>
                 {errorMessage ?? t('jobs.analysis.failedHint')}
@@ -164,7 +165,7 @@ export default function JobAnalysisPage() {
               <button
                 type='button'
                 onClick={() => resetMutation()}
-                className='mt-5 rounded-xl border border-gray-200 dark:border-white/[0.08] text-gray-900 dark:text-[#ECE9E4] text-sm font-medium px-4 py-2 hover:bg-gray-50 dark:hover:bg-[#232227] transition cursor-pointer'
+                className='mt-5 rounded-xl border border-gray-200 dark:border-white/8 text-gray-900 dark:text-[#ECE9E4] text-sm font-medium px-4 py-2 hover:bg-gray-50 dark:hover:bg-[#232227] transition cursor-pointer'
               >
                 {t('jobs.analysis.close')}
               </button>

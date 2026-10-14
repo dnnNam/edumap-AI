@@ -168,9 +168,7 @@ export default function ForgotPasswordPage() {
                     {...register('email')}
                   />
                   {errors.email && (
-                    <p className='text-sm text-red-500 dark:text-[#FCA5A5] mt-1'>
-                      {t(errors.email.message!)}
-                    </p>
+                    <p className='text-sm text-red-500 dark:text-[#FCA5A5] mt-1'>{t(errors.email.message!)}</p>
                   )}
                 </div>
 
@@ -237,11 +235,7 @@ export default function ForgotPasswordPage() {
                   className='inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl text-sm font-semibold border border-gray-200 dark:border-white/10 bg-white dark:bg-[#232227] text-gray-700 dark:text-[#ECE9E4] hover:bg-gray-50 dark:hover:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed transition'
                 >
                   <RefreshCw className={`w-4 h-4 ${isPending ? 'animate-spin' : ''}`} />
-                  <span>
-                    {cooldown > 0
-                      ? `${t('auth.resendEmail')} (${cooldown}s)`
-                      : t('auth.resendEmail')}
-                  </span>
+                  <span>{cooldown > 0 ? `${t('auth.resendEmail')} (${cooldown}s)` : t('auth.resendEmail')}</span>
                 </button>
 
                 <Link
@@ -258,4 +252,3 @@ export default function ForgotPasswordPage() {
     </div>
   )
 }
-

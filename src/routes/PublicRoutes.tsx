@@ -13,9 +13,7 @@ export default function PublicRoute() {
 
   // Cho phép trang reset-password, forgot-password hoặc Google callback render trực tiếp
   const isAuthUtility =
-    location.pathname === '/forgot-password' ||
-    location.pathname === '/reset-password' ||
-    Boolean(params.get('token'))
+    location.pathname === '/forgot-password' || location.pathname === '/reset-password' || Boolean(params.get('token'))
 
   if (isAuthUtility) {
     return <AnimatedOutlet />

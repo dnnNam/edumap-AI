@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/incompatible-library */
 import { useState, useEffect } from 'react'
 import { Lock, ArrowLeft, CheckCircle2, AlertTriangle, ShieldCheck, Check, Sparkles } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
@@ -137,9 +138,7 @@ export default function ResetPasswordPage() {
               </div>
 
               <div>
-                <h3 className='text-xl font-bold text-gray-900 dark:text-[#ECE9E4]'>
-                  {t('auth.invalidTokenTitle')}
-                </h3>
+                <h3 className='text-xl font-bold text-gray-900 dark:text-[#ECE9E4]'>{t('auth.invalidTokenTitle')}</h3>
                 <p className='mt-2.5 text-sm text-gray-500 dark:text-[#B5B1BA] leading-relaxed'>
                   {t('auth.invalidTokenDesc')}
                 </p>
@@ -182,9 +181,7 @@ export default function ResetPasswordPage() {
                     {...register('newPassword')}
                   />
                   {errors.newPassword && (
-                    <p className='text-sm text-red-500 dark:text-[#FCA5A5] mt-1'>
-                      {t(errors.newPassword.message!)}
-                    </p>
+                    <p className='text-sm text-red-500 dark:text-[#FCA5A5] mt-1'>{t(errors.newPassword.message!)}</p>
                   )}
                 </div>
 
@@ -221,8 +218,7 @@ export default function ResetPasswordPage() {
                   <div className='flex items-center gap-2'>
                     <div
                       className={`w-4 h-4 rounded-full flex items-center justify-center ${
-                        confirmPasswordValue.length > 0 &&
-                        newPasswordValue === confirmPasswordValue
+                        confirmPasswordValue.length > 0 && newPasswordValue === confirmPasswordValue
                           ? 'bg-emerald-500 text-white'
                           : 'bg-gray-200 dark:bg-white/10 text-gray-400'
                       }`}
@@ -277,4 +273,3 @@ export default function ResetPasswordPage() {
     </div>
   )
 }
-

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/incompatible-library */
 import { useTranslation } from 'react-i18next'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { BookOpen, ChevronDown, FileText, Layers, Loader2, Plus, Sparkles, Trash2 } from 'lucide-react'

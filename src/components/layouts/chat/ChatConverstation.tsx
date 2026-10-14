@@ -294,17 +294,13 @@ export default function ChatConverstation({ sessionId, onDeleted }: { sessionId:
               }`}
               aria-expanded={showSuggestions}
               aria-label={
-                showSuggestions
-                  ? t('chat.conversation.hideSuggestions')
-                  : t('chat.conversation.showSuggestions')
+                showSuggestions ? t('chat.conversation.hideSuggestions') : t('chat.conversation.showSuggestions')
               }
             >
               <Sparkles className='w-3.5 h-3.5 text-indigo-500 dark:text-[#A99DFF]' />
               <span>{t('chat.conversation.toggleSuggestions')}</span>
               <ChevronDown
-                className={`w-3.5 h-3.5 transition-transform duration-200 ${
-                  showSuggestions ? 'rotate-180' : ''
-                }`}
+                className={`w-3.5 h-3.5 transition-transform duration-200 ${showSuggestions ? 'rotate-180' : ''}`}
               />
             </button>
 

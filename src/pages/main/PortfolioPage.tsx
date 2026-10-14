@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/incompatible-library */
 import { useTranslation } from 'react-i18next'
 import { getLocale } from '../../utils/locale'
 import { zodResolver } from '@hookform/resolvers/zod'

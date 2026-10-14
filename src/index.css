@@ -1,44 +1,44 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @variant dark (&:where(.dark, .dark *));
 
 @layer base {
   :root {
     color-scheme: light;
-    --bg-page: #FAFAF9;
-    --bg-card: #FFFFFF;
-    --bg-elevated: #F9FAFB;
-    --border-subtle: #E5E7EB;
-    --border-strong: #D1D5DB;
+    --bg-page: #fafaf9;
+    --bg-card: #ffffff;
+    --bg-elevated: #f9fafb;
+    --border-subtle: #e5e7eb;
+    --border-strong: #d1d5db;
     --text-primary: #111827;
-    --text-secondary: #4B5563;
-    --text-muted: #6B7280;
-    --text-subtle: #9CA3AF;
-    --accent-brand: #4F46E5;
-    --accent-hover: #4338CA;
-    --accent-subtle: #EEF2FF;
-    --accent-text: #4F46E5;
+    --text-secondary: #4b5563;
+    --text-muted: #6b7280;
+    --text-subtle: #9ca3af;
+    --accent-brand: #4f46e5;
+    --accent-hover: #4338ca;
+    --accent-subtle: #eef2ff;
+    --accent-text: #4f46e5;
     --card-glare: rgba(255, 255, 255, 0.75);
-    --conic-gradient: conic-gradient(from 0deg, #4F46E5 0deg, #818CF8 90deg, #E0E7FF 180deg, #4F46E5 360deg);
+    --conic-gradient: conic-gradient(from 0deg, #4f46e5 0deg, #818cf8 90deg, #e0e7ff 180deg, #4f46e5 360deg);
   }
 
   .dark {
     color-scheme: dark;
     --bg-page: #121114;
-    --bg-card: #1A191C;
+    --bg-card: #1a191c;
     --bg-elevated: #232227;
     --border-subtle: rgba(255, 255, 255, 0.08);
     --border-strong: rgba(255, 255, 255, 0.15);
-    --text-primary: #ECE9E4;
-    --text-secondary: #B5B1BA;
-    --text-muted: #85808C;
-    --text-subtle: #5E5A64;
-    --accent-brand: #4F46E5;
-    --accent-hover: #4338CA;
+    --text-primary: #ece9e4;
+    --text-secondary: #b5b1ba;
+    --text-muted: #85808c;
+    --text-subtle: #5e5a64;
+    --accent-brand: #4f46e5;
+    --accent-hover: #4338ca;
     --accent-subtle: rgba(169, 157, 255, 0.12);
-    --accent-text: #A99DFF;
+    --accent-text: #a99dff;
     --card-glare: rgba(255, 255, 255, 0.18);
-    --conic-gradient: conic-gradient(from 0deg, #4338CA 0deg, #6366F1 90deg, #A99DFF 180deg, #4338CA 360deg);
+    --conic-gradient: conic-gradient(from 0deg, #4338ca 0deg, #6366f1 90deg, #a99dff 180deg, #4338ca 360deg);
   }
 
   body {
@@ -51,7 +51,12 @@
   html.theme-transitioning *,
   html.theme-transitioning *::before,
   html.theme-transitioning *::after {
-    transition: background-color 0.28s ease, border-color 0.28s ease, color 0.28s ease, fill 0.28s ease, stroke 0.28s ease !important;
+    transition:
+      background-color 0.28s ease,
+      border-color 0.28s ease,
+      color 0.28s ease,
+      fill 0.28s ease,
+      stroke 0.28s ease !important;
     transition-delay: 0s !important;
   }
 
