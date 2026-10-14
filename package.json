@@ -17,6 +17,10 @@
     "test:coverage": "jest --coverage",
     "prepare": "husky"
   },
+  "engines": {
+    "node": "22.14.0",
+    "npm": ">=10.0.0"
+  },
   "dependencies": {
     "@hookform/resolvers": "^5.9.1",
     "@marsidev/react-turnstile": "^1.6.2",

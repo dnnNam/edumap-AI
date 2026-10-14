@@ -1,0 +1,11 @@
+# Tự động chuẩn hóa dấu xuống dòng thành LF cho mọi file text
+* text=auto eol=lf
+
+# Khai báo file binary không can thiệp
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
