@@ -571,6 +571,16 @@
       "watchDemo": "Watch demo",
       "freeNote": "Free for students · No credit card required"
     },
+    "demoModal": {
+      "title": "EduMap AI Platform Walkthrough",
+      "badge": "Product Tour 2026",
+      "escHint": "Press ESC to close",
+      "getStarted": "Get started now",
+      "exploreMore": "Explore features below",
+      "videoError": "Unable to load video file directly",
+      "videoErrorDesc": "Please place your video file in the public folder or configure VITE_DEMO_VIDEO_URL in the .env file on your VPS server.",
+      "retry": "Retry loading"
+    },
     "deck": {
       "skillMap": "Skill Map",
       "careerScore": "Career Score",

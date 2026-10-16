@@ -32,6 +32,7 @@ import Floating3D from '../../components/motion/Floating3D'
 import ScrollPerspective3D from '../../components/motion/ScrollPerspective3D'
 import LayeredStatDeck from '../../components/motion/LayeredStatDeck'
 import GradientBorderCard from '../../components/motion/GradientBorderCard'
+import VideoDemoModal from '../../components/ui/VideoDemoModal'
 
 // 3D Canvas (lazy-load)
 const HeroSingle3D = lazy(() => import('../../components/canvas3d/HeroSingle3D'))
@@ -89,6 +90,7 @@ export default function HomePage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null)
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null)
   const [featureViewMode, setFeatureViewMode] = useState<'coverflow' | 'grid'>('coverflow')
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false)
   const { t } = useTranslation()
 
   const featureItems = t('home.features.items', { returnObjects: true }) as { title: string; description: string }[]
@@ -179,13 +181,12 @@ export default function HomePage() {
               </button>
               <button
                 type='button'
-                onClick={() => {
-                  const el = document.getElementById('preview-card')
-                  el?.scrollIntoView({ behavior: 'smooth' })
-                }}
-                className='w-full sm:w-auto flex items-center justify-center gap-2 text-gray-900 dark:text-[#ECE9E4] font-medium px-4 py-3 text-[15px] hover:text-gray-600 dark:hover:text-white active:scale-[0.98] transition cursor-pointer'
+                onClick={() => setIsVideoModalOpen(true)}
+                className='w-full sm:w-auto flex items-center justify-center gap-2.5 text-gray-900 dark:text-[#ECE9E4] font-medium px-4 py-3 text-[15px] hover:text-indigo-600 dark:hover:text-[#A99DFF] active:scale-[0.98] transition cursor-pointer group'
               >
-                <Play className='w-4 h-4 text-indigo-600 dark:text-[#A99DFF]' />
+                <span className='w-7 h-7 rounded-full bg-indigo-50 dark:bg-white/10 flex items-center justify-center group-hover:scale-110 group-hover:bg-indigo-100 dark:group-hover:bg-white/20 transition-all shadow-2xs'>
+                  <Play className='w-3.5 h-3.5 fill-indigo-600 text-indigo-600 dark:fill-[#A99DFF] dark:text-[#A99DFF] ml-0.5' />
+                </span>
                 <span>{t('home.hero.watchDemo')}</span>
               </button>
             </div>
@@ -608,6 +609,9 @@ export default function HomePage() {
           </div>
         </section>
       </main>
+
+      {/* Modal Video Demo Rạp Chiếu Phim Cao Cấp */}
+      <VideoDemoModal isOpen={isVideoModalOpen} onClose={() => setIsVideoModalOpen(false)} />
 
       <PublicFooter />
     </div>
