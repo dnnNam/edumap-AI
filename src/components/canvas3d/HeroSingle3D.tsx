@@ -400,7 +400,7 @@ export default function HeroSingle3D({ className = '' }: HeroSingle3DProps) {
 
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate)
-      if (!isVisible || document.hidden) return
+      if (!isVisible || document.hidden || document.documentElement.classList.contains('video-modal-open')) return
 
       const delta = Math.min(clock.getDelta(), 0.1)
       const time = clock.getElapsedTime()

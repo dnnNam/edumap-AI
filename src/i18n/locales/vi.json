@@ -568,6 +568,16 @@
       "watchDemo": "Xem demo",
       "freeNote": "Miễn phí cho sinh viên · Không cần thẻ tín dụng"
     },
+    "demoModal": {
+      "title": "Trải nghiệm nền tảng EduMap AI",
+      "badge": "Product Tour 2026",
+      "escHint": "Nhấn ESC để đóng",
+      "getStarted": "Bắt đầu trải nghiệm ngay",
+      "exploreMore": "Khám phá giao diện bên dưới",
+      "videoError": "Không thể tải trực tiếp file video",
+      "videoErrorDesc": "Vui lòng đặt video vào thư mục public hoặc cấu hình VITE_DEMO_VIDEO_URL trong file .env trên máy chủ VPS.",
+      "retry": "Thử tải lại"
+    },
     "deck": {
       "skillMap": "Bản đồ kỹ năng",
       "careerScore": "Điểm nghề nghiệp",

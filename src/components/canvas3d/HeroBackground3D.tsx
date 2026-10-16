@@ -390,7 +390,7 @@ export default function HeroBackground3D({ className = '' }: HeroBackground3DPro
     const animate = (now: number) => {
       animationFrameId = requestAnimationFrame(animate)
 
-      if (!isVisible || document.hidden) return
+      if (!isVisible || document.hidden || document.documentElement.classList.contains('video-modal-open')) return
 
       const elapsed = now - lastRenderTime
       if (elapsed < FRAME_INTERVAL) return
