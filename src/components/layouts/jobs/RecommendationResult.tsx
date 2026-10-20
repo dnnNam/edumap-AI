@@ -64,6 +64,54 @@ function SampleJobCard({ job }: { job: SampleJob }) {
       )}
 
       <p className='mt-4 text-[15px] leading-relaxed text-gray-600 dark:text-[#B5B1BA]'>{job.description}</p>
+
+      {/* Action / Apply Links */}
+      <div className='mt-5 pt-4 border-t border-gray-100 dark:border-white/5 flex flex-wrap items-center justify-between gap-3'>
+        <a
+          href={
+            job.applyUrl ||
+            `https://www.google.com/search?q=${encodeURIComponent(`${job.title} ${job.company} tuyển dụng`)}&ibp=htl;jobs`
+          }
+          target='_blank'
+          rel='noopener noreferrer'
+          className='inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white text-xs font-semibold shadow-sm shadow-indigo-500/20 transition'
+        >
+          <span>Xem tin tuyển dụng & Ứng tuyển</span>
+          <ExternalLink className='w-3.5 h-3.5' />
+        </a>
+
+        {/* Quick platform links */}
+        <div className='flex items-center gap-1.5 flex-wrap'>
+          <span className='text-xs text-gray-400 dark:text-[#A29FA8]'>Tìm trên:</span>
+          {(
+            job.links || [
+              {
+                platform: 'ITviec',
+                url: `https://itviec.com/it-jobs?query=${encodeURIComponent(job.title)}`,
+              },
+              {
+                platform: 'TopCV',
+                url: `https://www.topcv.vn/tim-viec-lam?keyword=${encodeURIComponent(`${job.title} ${job.company}`)}`,
+              },
+              {
+                platform: 'LinkedIn',
+                url: `https://www.linkedin.com/jobs/search/?keywords=${encodeURIComponent(`${job.title} ${job.company}`)}`,
+              },
+            ]
+          ).map((pLink, idx) => (
+            <a
+              key={idx}
+              href={pLink.url}
+              target='_blank'
+              rel='noopener noreferrer'
+              className='inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-white/5 dark:hover:bg-white/10 text-xs font-medium text-gray-700 dark:text-[#ECE9E4] transition'
+            >
+              <span>{pLink.platform}</span>
+              <ExternalLink className='w-3 h-3 text-gray-400' />
+            </a>
+          ))}
+        </div>
+      </div>
     </div>
   )
 }

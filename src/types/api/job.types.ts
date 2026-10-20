@@ -53,6 +53,11 @@ export interface RecommendationSearchLink {
   searchKeyword: string
 }
 
+export interface SampleJobPlatformLink {
+  platform: string
+  url: string
+}
+
 export interface SampleJob {
   title: string
   company: string
@@ -62,6 +67,8 @@ export interface SampleJob {
   experienceLevel?: string
   requirements?: string[]
   description: string
+  applyUrl?: string
+  links?: SampleJobPlatformLink[]
 }
 
 export interface RecommendationAnalysis {
