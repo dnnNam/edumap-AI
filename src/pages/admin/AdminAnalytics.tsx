@@ -45,25 +45,37 @@ export default function AdminAnalyticsPage() {
     }
   }, [dateRange])
 
-  // Queries
+  // Status Query
   const { data: statusRes, isLoading: isStatusLoading } = useAnalyticsStatusQuery()
+  const status = statusRes?.data?.data
+  const isConfigured = Boolean(status?.isConfigured)
+
+  // Report Queries (only execute if GA4 is configured on the backend server)
   const {
     data: overviewRes,
     isLoading: isOverviewLoading,
     refetch: refetchOverview,
     isFetching: isOverviewFetching,
-  } = useAnalyticsOverviewQuery(queryParams)
-  const { data: realtimeRes } = useAnalyticsRealtimeQuery()
-  const { data: timeseriesRes, isLoading: isTimeseriesLoading } = useAnalyticsTimeseriesQuery(queryParams)
-  const { data: topPagesRes, isLoading: isTopPagesLoading } = useAnalyticsTopPagesQuery({ ...queryParams, limit: 7 })
-  const { data: sourcesRes, isLoading: isSourcesLoading } = useAnalyticsTrafficSourcesQuery({
-    ...queryParams,
-    limit: 6,
-  })
-  const { data: devicesRes, isLoading: isDevicesLoading } = useAnalyticsDevicesQuery(queryParams)
-  const { data: eventsRes, isLoading: isEventsLoading } = useAnalyticsEventsQuery({ ...queryParams, limit: 6 })
+  } = useAnalyticsOverviewQuery(queryParams, isConfigured)
+  const { data: realtimeRes } = useAnalyticsRealtimeQuery(isConfigured)
+  const { data: timeseriesRes, isLoading: isTimeseriesLoading } = useAnalyticsTimeseriesQuery(queryParams, isConfigured)
+  const { data: topPagesRes, isLoading: isTopPagesLoading } = useAnalyticsTopPagesQuery(
+    { ...queryParams, limit: 7 },
+    isConfigured,
+  )
+  const { data: sourcesRes, isLoading: isSourcesLoading } = useAnalyticsTrafficSourcesQuery(
+    {
+      ...queryParams,
+      limit: 6,
+    },
+    isConfigured,
+  )
+  const { data: devicesRes, isLoading: isDevicesLoading } = useAnalyticsDevicesQuery(queryParams, isConfigured)
+  const { data: eventsRes, isLoading: isEventsLoading } = useAnalyticsEventsQuery(
+    { ...queryParams, limit: 6 },
+    isConfigured,
+  )
 
-  const status = statusRes?.data?.data
   const overview = overviewRes?.data?.data
   const realtime = realtimeRes?.data?.data
   const timeseries = timeseriesRes?.data?.data ?? []
