@@ -2,6 +2,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import type { LucideIcon } from 'lucide-react'
 import {
   Award,
+  BarChart3,
   Bell,
   BookOpen,
   Clock,
@@ -60,6 +61,7 @@ const ACCOUNT_ITEMS: NavItem[] = [
   { icon: Gauge, labelKey: 'nav.usage', to: '/usage', roles: ['STUDENT', 'MENTOR', 'MODERATOR'] },
   { icon: Settings, labelKey: 'nav.settings', to: '/settings' },
   { icon: Shield, labelKey: 'nav.admin', to: '/admin', roles: ['ADMIN'] },
+  { icon: BarChart3, labelKey: 'nav.analytics', to: '/admin/analytics', roles: ['ADMIN'] },
   { icon: Layers, labelKey: 'nav.skills', to: '/admin/skills', roles: ['ADMIN'] },
   { icon: GitBranch, labelKey: 'nav.skillTrees', to: '/admin/skill-trees', roles: ['ADMIN'] },
   { icon: Library, labelKey: 'nav.resources', to: '/admin/resources', roles: ['ADMIN'] },

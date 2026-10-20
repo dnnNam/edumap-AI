@@ -13,6 +13,7 @@ import AppLayouts from '../layout/AppLayouts'
 import AdminResourcesPage from '../pages/admin/AdminResources'
 import AdminSkillsPage from '../pages/admin/AdminSkill'
 import AdminSkillTreesPage from '../pages/admin/SkillTreeAdmin'
+import AdminAnalyticsPage from '../pages/admin/AdminAnalytics'
 import HomeEntry from '../pages/auth/HomeEntry'
 import NotFoundPage from '../pages/auth/NotFoundPage'
 import AdminPermissionsPage from '../pages/main/AdminPermissionPage'
@@ -87,6 +88,7 @@ const router = createBrowserRouter([
               { path: 'admin/skills', element: <AdminSkillsPage /> },
               { path: '/admin/skill-trees', element: <AdminSkillTreesPage /> },
               { path: '/admin/resources', element: <AdminResourcesPage /> },
+              { path: '/admin/analytics', element: <AdminAnalyticsPage /> },
             ],
           },
         ],
