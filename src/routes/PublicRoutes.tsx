@@ -4,8 +4,10 @@ import AnimatedOutlet from '../components/motion/AnimatedOutlet'
 import AppLoadingSkeleton from '../components/ui/AppLoadingSkeleton'
 import { useMeQuery } from '../hooks/useAuthQuery'
 import { getAccessTokenFromLS, getRoleFromLS } from '../utils/auth'
+import { usePageTracking } from '../hooks/usePageTracking'
 
 export default function PublicRoute() {
+  usePageTracking()
   const [params] = useSearchParams()
   const location = useLocation()
   const accessToken = getAccessTokenFromLS()

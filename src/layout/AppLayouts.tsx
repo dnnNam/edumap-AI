@@ -7,11 +7,13 @@ import { useMySubscriptionQuery } from '../hooks/billingQuery'
 import { useProfileQuery } from '../hooks/useUserQuery'
 import { getFullNameFromLS, getRoleFromLS } from '../utils/auth'
 import { getPlanName } from '../utils/billing'
+import { usePageTracking } from '../hooks/usePageTracking'
 
 // Chỉ role đặc biệt mới hiện role, STUDENT hiện tên gói
 const SPECIAL_ROLES = ['ADMIN', 'MODERATOR', 'MENTOR']
 
 export default function AppLayouts() {
+  usePageTracking()
   const { t } = useTranslation()
   const role = getRoleFromLS()
   const { data: profileRes } = useProfileQuery()
