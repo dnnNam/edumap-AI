@@ -111,13 +111,13 @@ export default function AdminAnalyticsPage() {
           {!isStatusLoading && status && (
             <div
               className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border ${
-                status.mode === 'real'
+                status.isConfigured
                   ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-800'
-                  : 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-400 dark:border-amber-800'
+                  : 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-400 dark:border-rose-800'
               }`}
             >
-              <span className={`w-2 h-2 rounded-full ${status.mode === 'real' ? 'bg-emerald-500' : 'bg-amber-500'}`} />
-              {status.mode === 'real' ? `Live GA4 (${status.propertyId})` : 'Mock Demo Mode'}
+              <span className={`w-2 h-2 rounded-full ${status.isConfigured ? 'bg-emerald-500' : 'bg-rose-500'}`} />
+              {status.isConfigured ? `Live GA4 (${status.propertyId})` : 'Chưa cấu hình GA4'}
             </div>
           )}
 
@@ -144,6 +144,35 @@ export default function AdminAnalyticsPage() {
           </button>
         </div>
       </div>
+
+      {/* UNCONFIGURED ALERT BANNER */}
+      {!isStatusLoading && status && !status.isConfigured && (
+        <div className='p-4 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/50 rounded-2xl flex items-start gap-3 text-amber-800 dark:text-amber-300 text-sm'>
+          <div className='p-1.5 bg-amber-500/10 rounded-lg shrink-0 mt-0.5'>
+            <Activity className='w-4 h-4 text-amber-600 dark:text-amber-400' />
+          </div>
+          <div>
+            <p className='font-semibold'>Google Analytics 4 chưa được kết nối trên máy chủ</p>
+            <p className='mt-1 text-xs text-amber-700 dark:text-amber-400/90 leading-relaxed'>
+              Vui lòng bổ sung 3 biến môi trường{' '}
+              <code className='px-1 py-0.5 bg-amber-100 dark:bg-amber-900/50 rounded font-mono font-medium'>
+                GA_PROPERTY_ID
+              </code>
+              ,{' '}
+              <code className='px-1 py-0.5 bg-amber-100 dark:bg-amber-900/50 rounded font-mono font-medium'>
+                GA_CLIENT_EMAIL
+              </code>{' '}
+              và{' '}
+              <code className='px-1 py-0.5 bg-amber-100 dark:bg-amber-900/50 rounded font-mono font-medium'>
+                GA_PRIVATE_KEY
+              </code>{' '}
+              vào file{' '}
+              <code className='px-1 py-0.5 bg-amber-100 dark:bg-amber-900/50 rounded font-mono font-medium'>.env</code>{' '}
+              trên máy chủ production để lấy số liệu thực tế từ GA4.
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* REALTIME PULSE WIDGET & TOP KPI CARDS */}
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4'>

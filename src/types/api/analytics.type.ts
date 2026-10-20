@@ -2,7 +2,6 @@ import type { ApiResponse } from './auth.types'
 
 export interface AnalyticsStatus {
   isConfigured: boolean
-  mode: 'real' | 'mock'
   propertyId: string | null
   message: string
 }
