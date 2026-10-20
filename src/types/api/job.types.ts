@@ -11,8 +11,26 @@ export interface TrendingRole {
   targetRole: string
   searchCount: number
   badge: string
+  salaryRange?: string
+  growthRate?: string
+  openPositions?: number
+  topSkills?: string[]
   // để optional phòng khi backend role nào đó chưa có link
   jobPlatformLinks?: JobPlatformLink[]
+}
+
+export interface SalaryByLevel {
+  junior: string
+  middle: string
+  senior: string
+}
+
+export interface MarketInsightsMetrics {
+  salaryByLevel?: SalaryByLevel
+  competitionLevel?: string
+  demandGrowth?: string
+  topRequiredSkills?: string[]
+  bonusSkills?: string[]
 }
 
 // Phần `data` bên trong response ngoài cùng
@@ -41,11 +59,14 @@ export interface SampleJob {
   salary: string
   location: string
   jobType: string
+  experienceLevel?: string
+  requirements?: string[]
   description: string
 }
 
 export interface RecommendationAnalysis {
   marketSummary: string
+  marketMetrics?: MarketInsightsMetrics
   searchLinks: RecommendationSearchLink[]
   sampleJobs: SampleJob[]
   interviewTip: string
