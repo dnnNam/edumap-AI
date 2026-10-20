@@ -7,11 +7,13 @@ import { useMySubscriptionQuery } from '../hooks/billingQuery'
 import { useProfileQuery } from '../hooks/useUserQuery'
 import { getFullNameFromLS, getRoleFromLS } from '../utils/auth'
 import { getPlanName } from '../utils/billing'
+import { usePageTracking } from '../hooks/usePageTracking'
 
 // Chỉ role đặc biệt mới hiện role, STUDENT hiện tên gói
 const SPECIAL_ROLES = ['ADMIN', 'MODERATOR', 'MENTOR']
 
 export default function AppLayouts() {
+  usePageTracking()
   const { t } = useTranslation()
   const role = getRoleFromLS()
   const { data: profileRes } = useProfileQuery()
@@ -28,13 +30,15 @@ export default function AppLayouts() {
   const closeSidebar = useCallback(() => setSidebarOpen(false), [])
 
   return (
-    <div className='flex flex-col h-screen w-full bg-gray-50 dark:bg-[#121114]'>
-      <AppHeader userName={fullName} userPlan={userPlan} onToggleMenu={toggleSidebar} />
-      <div className='flex flex-1 min-h-0 relative overflow-hidden'>
+    <div className='flex flex-col h-screen w-full bg-gray-50 dark:bg-[#121114] print:h-auto print:bg-white print:overflow-visible'>
+      <div className='print:hidden'>
+        <AppHeader userName={fullName} userPlan={userPlan} onToggleMenu={toggleSidebar} />
+      </div>
+      <div className='flex flex-1 min-h-0 relative overflow-hidden print:overflow-visible print:h-auto'>
         {/* Mobile backdrop overlay */}
         {sidebarOpen && (
           <div
-            className='fixed inset-0 z-40 bg-gray-900/30 dark:bg-black/60 backdrop-blur-xs lg:hidden transition-opacity'
+            className='fixed inset-0 z-40 bg-gray-900/30 dark:bg-black/60 backdrop-blur-xs lg:hidden transition-opacity print:hidden'
             onClick={closeSidebar}
             aria-hidden='true'
           />
@@ -44,7 +48,7 @@ export default function AppLayouts() {
         <div
           className={`
             fixed top-0 bottom-0 left-0 z-50 w-60 shadow-xl lg:shadow-none
-            transition-transform duration-300 ease-in-out
+            transition-transform duration-300 ease-in-out print:hidden
             lg:static lg:top-auto lg:bottom-auto lg:z-auto lg:translate-x-0 lg:flex lg:flex-col lg:shrink-0
             ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
           `}
@@ -52,7 +56,7 @@ export default function AppLayouts() {
           <AppAside onClose={closeSidebar} />
         </div>
 
-        <main className='flex-1 min-h-0 flex flex-col overflow-y-auto min-w-0 bg-gray-50 dark:bg-[#121114]'>
+        <main className='flex-1 min-h-0 flex flex-col overflow-y-auto min-w-0 bg-gray-50 dark:bg-[#121114] print:bg-white print:overflow-visible print:h-auto'>
           <AnimatedOutlet />
         </main>
       </div>

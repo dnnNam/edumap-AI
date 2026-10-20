@@ -2,19 +2,28 @@ import { useMemo, useState } from 'react'
 import {
   Activity,
   BarChart3,
+  ChevronDown,
   Clock,
+  Compass,
+  Download,
   Eye,
+  FileSpreadsheet,
+  FileText,
   Globe,
+  Info,
   Laptop,
   Radio,
   RefreshCw,
+  Share2,
   Smartphone,
   Tablet,
   TrendingUp,
   Users,
   Zap,
 } from 'lucide-react'
+import { FaFacebook, FaGoogle, FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa'
 import Skeleton from 'react-loading-skeleton'
+import { exportAnalyticsToExcel, exportAnalyticsToPDF } from '../../utils/analyticsExport'
 import {
   useAnalyticsDevicesQuery,
   useAnalyticsEventsQuery,
@@ -35,8 +44,114 @@ const DATE_RANGE_LABELS: Record<DateRangeOption, { vi: string; en: string }> = {
   '30daysAgo': { vi: '30 ngày qua', en: 'Last 30 days' },
 }
 
+const getSourceMeta = (source: string, medium: string, channelGroup: string) => {
+  const s = (source || '').toLowerCase()
+  const c = (channelGroup || '').toLowerCase()
+  const m = (medium || '').toLowerCase()
+
+  if (s.includes('facebook') || s.includes('fb.') || s.includes('meta')) {
+    return {
+      label: 'Facebook',
+      sub: `${source} / ${medium}`,
+      Icon: FaFacebook,
+      color: 'text-[#1877F2]',
+      bg: 'bg-[#1877F2]/10 dark:bg-[#1877F2]/20',
+      category: 'social' as const,
+      badge: 'Mạng xã hội',
+    }
+  }
+  if (s.includes('instagram')) {
+    return {
+      label: 'Instagram',
+      sub: `${source} / ${medium}`,
+      Icon: FaInstagram,
+      color: 'text-[#E4405F]',
+      bg: 'bg-[#E4405F]/10 dark:bg-[#E4405F]/20',
+      category: 'social' as const,
+      badge: 'Mạng xã hội',
+    }
+  }
+  if (s.includes('tiktok')) {
+    return {
+      label: 'TikTok',
+      sub: `${source} / ${medium}`,
+      Icon: FaTiktok,
+      color: 'text-gray-900 dark:text-gray-100',
+      bg: 'bg-gray-900/10 dark:bg-white/10',
+      category: 'social' as const,
+      badge: 'Mạng xã hội',
+    }
+  }
+  if (s.includes('youtube')) {
+    return {
+      label: 'YouTube',
+      sub: `${source} / ${medium}`,
+      Icon: FaYoutube,
+      color: 'text-[#FF0000]',
+      bg: 'bg-[#FF0000]/10 dark:bg-[#FF0000]/20',
+      category: 'social' as const,
+      badge: 'Mạng xã hội',
+    }
+  }
+  if (s.includes('google')) {
+    return {
+      label: 'Google Search',
+      sub: `${source} / ${medium}`,
+      Icon: FaGoogle,
+      color: 'text-[#4285F4]',
+      bg: 'bg-[#4285F4]/10 dark:bg-[#4285F4]/20',
+      category: 'search' as const,
+      badge: 'Tìm kiếm',
+    }
+  }
+  if (c.includes('social') || m.includes('social')) {
+    return {
+      label: source,
+      sub: `${source} / ${medium}`,
+      Icon: Share2,
+      color: 'text-pink-500',
+      bg: 'bg-pink-500/10 dark:bg-pink-500/20',
+      category: 'social' as const,
+      badge: 'Mạng xã hội',
+    }
+  }
+  if (c.includes('search') || m.includes('cpc') || m.includes('organic')) {
+    return {
+      label: source,
+      sub: `${source} / ${medium}`,
+      Icon: Globe,
+      color: 'text-blue-500',
+      bg: 'bg-blue-500/10 dark:bg-blue-500/20',
+      category: 'search' as const,
+      badge: 'Tìm kiếm',
+    }
+  }
+  if (s.includes('(direct)') || c.includes('direct')) {
+    return {
+      label: 'Truy cập trực tiếp (Direct URL)',
+      sub: 'Người dùng gõ URL hoặc mở Bookmark',
+      Icon: Compass,
+      color: 'text-indigo-500',
+      bg: 'bg-indigo-500/10 dark:bg-indigo-500/20',
+      category: 'direct' as const,
+      badge: 'Trực tiếp',
+    }
+  }
+  return {
+    label: source,
+    sub: `${source} / ${medium} (${channelGroup})`,
+    Icon: Globe,
+    color: 'text-emerald-500',
+    bg: 'bg-emerald-500/10 dark:bg-emerald-500/20',
+    category: 'other' as const,
+    badge: channelGroup || 'Giới thiệu',
+  }
+}
+
 export default function AdminAnalyticsPage() {
   const [dateRange, setDateRange] = useState<DateRangeOption>('7daysAgo')
+  const [sourceCategory, setSourceCategory] = useState<'all' | 'social' | 'search' | 'direct'>('all')
+  const [exportMenuOpen, setExportMenuOpen] = useState(false)
 
   const queryParams = useMemo(() => {
     return {
@@ -45,25 +160,37 @@ export default function AdminAnalyticsPage() {
     }
   }, [dateRange])
 
-  // Queries
+  // Status Query
   const { data: statusRes, isLoading: isStatusLoading } = useAnalyticsStatusQuery()
+  const status = statusRes?.data?.data
+  const isConfigured = Boolean(status?.isConfigured)
+
+  // Report Queries (only execute if GA4 is configured on the backend server)
   const {
     data: overviewRes,
     isLoading: isOverviewLoading,
     refetch: refetchOverview,
     isFetching: isOverviewFetching,
-  } = useAnalyticsOverviewQuery(queryParams)
-  const { data: realtimeRes } = useAnalyticsRealtimeQuery()
-  const { data: timeseriesRes, isLoading: isTimeseriesLoading } = useAnalyticsTimeseriesQuery(queryParams)
-  const { data: topPagesRes, isLoading: isTopPagesLoading } = useAnalyticsTopPagesQuery({ ...queryParams, limit: 7 })
-  const { data: sourcesRes, isLoading: isSourcesLoading } = useAnalyticsTrafficSourcesQuery({
-    ...queryParams,
-    limit: 6,
-  })
-  const { data: devicesRes, isLoading: isDevicesLoading } = useAnalyticsDevicesQuery(queryParams)
-  const { data: eventsRes, isLoading: isEventsLoading } = useAnalyticsEventsQuery({ ...queryParams, limit: 6 })
+  } = useAnalyticsOverviewQuery(queryParams, isConfigured)
+  const { data: realtimeRes } = useAnalyticsRealtimeQuery(isConfigured)
+  const { data: timeseriesRes, isLoading: isTimeseriesLoading } = useAnalyticsTimeseriesQuery(queryParams, isConfigured)
+  const { data: topPagesRes, isLoading: isTopPagesLoading } = useAnalyticsTopPagesQuery(
+    { ...queryParams, limit: 7 },
+    isConfigured,
+  )
+  const { data: sourcesRes, isLoading: isSourcesLoading } = useAnalyticsTrafficSourcesQuery(
+    {
+      ...queryParams,
+      limit: 15,
+    },
+    isConfigured,
+  )
+  const { data: devicesRes, isLoading: isDevicesLoading } = useAnalyticsDevicesQuery(queryParams, isConfigured)
+  const { data: eventsRes, isLoading: isEventsLoading } = useAnalyticsEventsQuery(
+    { ...queryParams, limit: 6 },
+    isConfigured,
+  )
 
-  const status = statusRes?.data?.data
   const overview = overviewRes?.data?.data
   const realtime = realtimeRes?.data?.data
   const timeseries = timeseriesRes?.data?.data ?? []
@@ -71,6 +198,27 @@ export default function AdminAnalyticsPage() {
   const sources = sourcesRes?.data?.data ?? []
   const devices = devicesRes?.data?.data ?? []
   const events = eventsRes?.data?.data ?? []
+
+  const filteredSources = useMemo(() => {
+    if (sourceCategory === 'all') return sources
+    return sources.filter((s) => {
+      const meta = getSourceMeta(s.source, s.medium, s.channelGroup)
+      return meta.category === sourceCategory
+    })
+  }, [sources, sourceCategory])
+
+  const socialStats = useMemo(() => {
+    let socialSessions = 0
+    let searchSessions = 0
+    let directSessions = 0
+    for (const s of sources) {
+      const cat = getSourceMeta(s.source, s.medium, s.channelGroup).category
+      if (cat === 'social') socialSessions += s.sessions
+      else if (cat === 'search') searchSessions += s.sessions
+      else if (cat === 'direct') directSessions += s.sessions
+    }
+    return { socialSessions, searchSessions, directSessions }
+  }, [sources])
 
   const handleRefreshAll = () => {
     void refetchOverview()
@@ -86,9 +234,25 @@ export default function AdminAnalyticsPage() {
   }
 
   return (
-    <div className='p-4 md:p-6 lg:p-8 space-y-6 max-w-7xl mx-auto'>
+    <div className='p-4 md:p-6 lg:p-8 space-y-6 max-w-7xl mx-auto print:p-0 print:space-y-4 print:max-w-none'>
+      {/* PRINT-ONLY EXECUTIVE HEADER */}
+      <div className='hidden print:block mb-4 border-b border-gray-300 pb-3'>
+        <div className='flex items-center justify-between'>
+          <div>
+            <h1 className='text-xl font-bold text-gray-900'>BÁO CÁO PHÂN TÍCH LƯU LƯỢNG EDUMAP AI (GA4)</h1>
+            <p className='text-xs text-gray-600 mt-0.5'>
+              Khoảng thời gian: {DATE_RANGE_LABELS[dateRange].vi} • Ngày xuất: {new Date().toLocaleDateString('vi-VN')}
+            </p>
+          </div>
+          <div className='text-right text-[11px] text-gray-500'>
+            <div>Mã GA4 Property: {status?.propertyId || '559513268'}</div>
+            <div>Nền tảng: edumapai.io.vn</div>
+          </div>
+        </div>
+      </div>
+
       {/* HEADER SECTION */}
-      <div className='flex flex-col md:flex-row md:items-center justify-between gap-4'>
+      <div className='flex flex-col md:flex-row md:items-center justify-between gap-4 print:hidden'>
         <div>
           <div className='flex items-center gap-2.5'>
             <div className='p-2 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded-xl'>
@@ -105,7 +269,7 @@ export default function AdminAnalyticsPage() {
           </div>
         </div>
 
-        {/* CONTROLS (Date Filter & Refresh) */}
+        {/* CONTROLS (Date Filter, Refresh & Export) */}
         <div className='flex items-center gap-2.5 flex-wrap'>
           {/* Status Badge */}
           {!isStatusLoading && status && (
@@ -142,6 +306,65 @@ export default function AdminAnalyticsPage() {
             <RefreshCw className={`w-4 h-4 ${isOverviewFetching ? 'animate-spin text-indigo-500' : ''}`} />
             <span>Làm mới</span>
           </button>
+
+          {/* Export Dropdown Button */}
+          <div className='relative'>
+            <button
+              onClick={() => setExportMenuOpen((prev) => !prev)}
+              className='inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-medium transition-colors shadow-2xs cursor-pointer'
+            >
+              <Download className='w-4 h-4' />
+              <span>Xuất báo cáo</span>
+              <ChevronDown className='w-3.5 h-3.5 opacity-80' />
+            </button>
+
+            {exportMenuOpen && (
+              <>
+                <div className='fixed inset-0 z-20' onClick={() => setExportMenuOpen(false)} />
+                <div className='absolute right-0 mt-2 w-60 bg-white dark:bg-[#1a191d] border border-gray-200 dark:border-white/10 rounded-2xl shadow-xl z-30 p-1.5 animate-in fade-in zoom-in-95 duration-150'>
+                  <button
+                    onClick={() => {
+                      exportAnalyticsToExcel({
+                        dateRangeLabel: DATE_RANGE_LABELS[dateRange].vi,
+                        propertyId: status?.propertyId,
+                        overview,
+                        timeseries,
+                        topPages,
+                        sources,
+                        devices,
+                      })
+                      setExportMenuOpen(false)
+                    }}
+                    className='w-full flex items-center gap-2.5 px-3 py-2 text-left rounded-xl hover:bg-gray-100 dark:hover:bg-white/5 text-gray-700 dark:text-gray-200 text-xs font-medium transition-colors cursor-pointer'
+                  >
+                    <div className='p-1.5 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-lg shrink-0'>
+                      <FileSpreadsheet className='w-4 h-4' />
+                    </div>
+                    <div>
+                      <div className='font-semibold'>Xuất file Excel (.csv)</div>
+                      <div className='text-[10px] text-gray-400'>Mở trực tiếp bằng Microsoft Excel</div>
+                    </div>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      exportAnalyticsToPDF()
+                      setExportMenuOpen(false)
+                    }}
+                    className='w-full flex items-center gap-2.5 px-3 py-2 text-left rounded-xl hover:bg-gray-100 dark:hover:bg-white/5 text-gray-700 dark:text-gray-200 text-xs font-medium transition-colors cursor-pointer mt-0.5'
+                  >
+                    <div className='p-1.5 bg-rose-500/10 text-rose-600 dark:text-rose-400 rounded-lg shrink-0'>
+                      <FileText className='w-4 h-4' />
+                    </div>
+                    <div>
+                      <div className='font-semibold'>Xuất file PDF / In báo cáo</div>
+                      <div className='text-[10px] text-gray-400'>Lưu dưới dạng PDF định dạng A4</div>
+                    </div>
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </div>
 
@@ -193,15 +416,20 @@ export default function AdminAnalyticsPage() {
             <div className='text-4xl font-extrabold tracking-tight'>
               {realtime ? realtime.activeUsers : <Skeleton width={60} />}
             </div>
-            <div className='text-xs text-indigo-100 mt-1'>Người dùng đang online ngay lúc này</div>
+            <div className='text-xs text-indigo-100 mt-1'>Người dùng đang online (30 phút qua)</div>
           </div>
 
-          <div className='pt-2 border-t border-white/15 text-xs text-indigo-200 truncate'>
-            {realtime?.topActivePages && realtime.topActivePages.length > 0 ? (
-              <span>Đang xem: {realtime.topActivePages[0].pagePath}</span>
-            ) : (
-              <span>Chưa có phiên truy cập đang hoạt động</span>
-            )}
+          <div className='pt-2 border-t border-white/15 text-xs text-indigo-200'>
+            <div className='truncate'>
+              {realtime?.topActivePages && realtime.topActivePages.length > 0 ? (
+                <span>Đang xem: {realtime.topActivePages[0].pagePath}</span>
+              ) : (
+                <span>Chưa có phiên truy cập đang hoạt động</span>
+              )}
+            </div>
+            <div className='text-[10px] text-indigo-200/80 mt-1 leading-tight'>
+              *Tính người dùng có thao tác trong 30 phút qua (chuẩn GA4)
+            </div>
           </div>
         </div>
 
@@ -463,42 +691,161 @@ export default function AdminAnalyticsPage() {
         {/* Traffic Sources & Channels */}
         <div className='bg-white dark:bg-[#1a191d] border border-gray-200 dark:border-white/10 rounded-2xl p-5 shadow-2xs flex flex-col justify-between'>
           <div>
-            <div className='flex items-center justify-between mb-4'>
-              <h2 className='text-base font-bold text-gray-900 dark:text-white flex items-center gap-2'>
-                <Globe className='w-4 h-4 text-emerald-500' />
-                <span>Nguồn lưu lượng truy cập (Traffic Sources)</span>
-              </h2>
-              <span className='text-xs text-gray-400 dark:text-gray-500'>Kênh người dùng</span>
+            <div className='flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4'>
+              <div>
+                <h2 className='text-base font-bold text-gray-900 dark:text-white flex items-center gap-2'>
+                  <Share2 className='w-4 h-4 text-pink-500' />
+                  <span>Nguồn lưu lượng & Mạng xã hội</span>
+                </h2>
+                <p className='text-xs text-gray-500 dark:text-gray-400 mt-0.5'>
+                  Phân loại người dùng đến từ Facebook, Instagram, Google, Direct...
+                </p>
+              </div>
+
+              {/* Category Filter Tabs */}
+              <div className='flex items-center gap-1 p-1 bg-gray-100 dark:bg-white/5 rounded-xl text-xs font-medium'>
+                <button
+                  type='button'
+                  onClick={() => setSourceCategory('all')}
+                  className={`px-2.5 py-1 rounded-lg transition-colors ${
+                    sourceCategory === 'all'
+                      ? 'bg-white dark:bg-[#25242a] text-indigo-600 dark:text-indigo-400 shadow-2xs'
+                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                  }`}
+                >
+                  Tất cả ({sources.length})
+                </button>
+                <button
+                  type='button'
+                  onClick={() => setSourceCategory('social')}
+                  className={`px-2.5 py-1 rounded-lg transition-colors flex items-center gap-1 ${
+                    sourceCategory === 'social'
+                      ? 'bg-white dark:bg-[#25242a] text-pink-600 dark:text-pink-400 shadow-2xs'
+                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                  }`}
+                >
+                  <span>Mạng XH</span>
+                  {socialStats.socialSessions > 0 && (
+                    <span className='w-1.5 h-1.5 rounded-full bg-pink-500 animate-pulse' />
+                  )}
+                </button>
+                <button
+                  type='button'
+                  onClick={() => setSourceCategory('search')}
+                  className={`px-2.5 py-1 rounded-lg transition-colors ${
+                    sourceCategory === 'search'
+                      ? 'bg-white dark:bg-[#25242a] text-blue-600 dark:text-blue-400 shadow-2xs'
+                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                  }`}
+                >
+                  Google
+                </button>
+                <button
+                  type='button'
+                  onClick={() => setSourceCategory('direct')}
+                  className={`px-2.5 py-1 rounded-lg transition-colors ${
+                    sourceCategory === 'direct'
+                      ? 'bg-white dark:bg-[#25242a] text-indigo-600 dark:text-indigo-400 shadow-2xs'
+                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                  }`}
+                >
+                  Trực tiếp
+                </button>
+              </div>
+            </div>
+
+            {/* Quick Stat Badges */}
+            <div className='grid grid-cols-3 gap-2 mb-4'>
+              <div className='p-2.5 bg-pink-50/50 dark:bg-pink-950/20 border border-pink-100 dark:border-pink-900/30 rounded-xl text-center'>
+                <div className='text-xs text-pink-700 dark:text-pink-400 font-medium flex items-center justify-center gap-1'>
+                  <FaFacebook className='w-3 h-3 text-[#1877F2]' />
+                  <FaInstagram className='w-3 h-3 text-[#E4405F]' />
+                  <span>Mạng xã hội</span>
+                </div>
+                <div className='text-base font-bold text-gray-900 dark:text-white mt-0.5'>
+                  {socialStats.socialSessions.toLocaleString()}{' '}
+                  <span className='text-[10px] font-normal text-gray-500'>phiên</span>
+                </div>
+              </div>
+
+              <div className='p-2.5 bg-blue-50/50 dark:bg-blue-950/20 border border-blue-100 dark:border-blue-900/30 rounded-xl text-center'>
+                <div className='text-xs text-blue-700 dark:text-blue-400 font-medium flex items-center justify-center gap-1'>
+                  <FaGoogle className='w-3 h-3 text-[#4285F4]' />
+                  <span>Google</span>
+                </div>
+                <div className='text-base font-bold text-gray-900 dark:text-white mt-0.5'>
+                  {socialStats.searchSessions.toLocaleString()}{' '}
+                  <span className='text-[10px] font-normal text-gray-500'>phiên</span>
+                </div>
+              </div>
+
+              <div className='p-2.5 bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-100 dark:border-indigo-900/30 rounded-xl text-center'>
+                <div className='text-xs text-indigo-700 dark:text-indigo-400 font-medium flex items-center justify-center gap-1'>
+                  <Compass className='w-3 h-3 text-indigo-500' />
+                  <span>Trực tiếp</span>
+                </div>
+                <div className='text-base font-bold text-gray-900 dark:text-white mt-0.5'>
+                  {socialStats.directSessions.toLocaleString()}{' '}
+                  <span className='text-[10px] font-normal text-gray-500'>phiên</span>
+                </div>
+              </div>
             </div>
 
             {isSourcesLoading ? (
               <div className='space-y-3'>
-                <Skeleton count={5} height={32} />
+                <Skeleton count={5} height={40} />
               </div>
-            ) : sources.length === 0 ? (
-              <p className='text-sm text-gray-400 dark:text-gray-500 text-center py-8'>
-                Chưa có dữ liệu nguồn truy cập
-              </p>
+            ) : filteredSources.length === 0 ? (
+              <div className='text-center py-6 px-4 bg-gray-50 dark:bg-white/5 rounded-xl'>
+                <p className='text-sm text-gray-500 dark:text-gray-400 font-medium'>
+                  Chưa có dữ liệu nguồn truy cập {sourceCategory !== 'all' ? 'cho mục này' : ''}
+                </p>
+                <p className='text-xs text-gray-400 dark:text-gray-500 mt-1 leading-relaxed'>
+                  Google Analytics 4 cập nhật báo cáo kênh truy cập định kỳ. Thử chuyển bộ lọc sang &quot;7 ngày
+                  qua&quot; hoặc &quot;30 ngày qua&quot; để xem dữ liệu tích luỹ.
+                </p>
+              </div>
             ) : (
-              <div className='space-y-3.5'>
-                {sources.map((src, idx) => {
+              <div className='space-y-3 max-h-80 overflow-y-auto pr-1'>
+                {filteredSources.map((src, idx) => {
+                  const meta = getSourceMeta(src.source, src.medium, src.channelGroup)
+                  const SourceIcon = meta.Icon
                   const maxSessions = Math.max(...sources.map((s) => s.sessions), 1)
                   const percent = Math.round((src.sessions / maxSessions) * 100)
 
                   return (
-                    <div key={idx} className='space-y-1.5'>
-                      <div className='flex items-center justify-between text-xs'>
-                        <span className='font-semibold text-gray-800 dark:text-gray-200 flex items-center gap-1.5'>
-                          <span className='w-2 h-2 rounded-full bg-emerald-500' />
-                          {src.channelGroup} ({src.source} / {src.medium})
-                        </span>
-                        <span className='font-medium text-gray-500 dark:text-gray-400'>
-                          {src.sessions.toLocaleString()} phiên ({src.activeUsers} users)
-                        </span>
+                    <div
+                      key={idx}
+                      className='p-2.5 bg-gray-50/80 dark:bg-white/5 border border-gray-100 dark:border-white/5 rounded-xl space-y-2 hover:bg-gray-100/60 dark:hover:bg-white/10 transition-colors'
+                    >
+                      <div className='flex items-center justify-between gap-2 text-xs'>
+                        <div className='flex items-center gap-2.5 min-w-0'>
+                          <div className={`p-1.5 rounded-lg ${meta.bg} ${meta.color} shrink-0`}>
+                            <SourceIcon className='w-4 h-4' />
+                          </div>
+                          <div className='truncate'>
+                            <div className='font-semibold text-gray-900 dark:text-white truncate flex items-center gap-1.5'>
+                              <span>{meta.label}</span>
+                              <span className='px-1.5 py-0.2 bg-gray-200/60 dark:bg-white/10 text-gray-600 dark:text-gray-300 rounded text-[10px] font-normal'>
+                                {meta.badge}
+                              </span>
+                            </div>
+                            <div className='text-[10px] text-gray-400 truncate mt-0.5'>{meta.sub}</div>
+                          </div>
+                        </div>
+
+                        <div className='text-right shrink-0'>
+                          <div className='font-bold text-gray-800 dark:text-gray-200'>
+                            {src.sessions.toLocaleString()}{' '}
+                            <span className='text-[10px] font-normal text-gray-500'>phiên</span>
+                          </div>
+                          <div className='text-[10px] text-gray-400'>{src.activeUsers} người dùng</div>
+                        </div>
                       </div>
-                      <div className='w-full bg-gray-100 dark:bg-white/5 rounded-full h-2 overflow-hidden'>
+
+                      <div className='w-full bg-gray-200/60 dark:bg-white/10 rounded-full h-1.5 overflow-hidden'>
                         <div
-                          className='bg-linear-to-r from-emerald-500 to-teal-400 h-2 rounded-full transition-all duration-500'
+                          className='bg-linear-to-r from-pink-500 via-indigo-500 to-teal-400 h-1.5 rounded-full transition-all duration-500'
                           style={{ width: `${percent}%` }}
                         />
                       </div>
@@ -507,6 +854,23 @@ export default function AdminAnalyticsPage() {
                 })}
               </div>
             )}
+          </div>
+
+          {/* Campaign Tracking Tips */}
+          <div className='mt-4 pt-3 border-t border-gray-100 dark:border-white/10 flex items-start gap-2 text-[11px] text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-white/5 p-2.5 rounded-xl'>
+            <Info className='w-4 h-4 text-indigo-500 shrink-0 mt-0.5' />
+            <p className='leading-relaxed'>
+              <span className='font-semibold text-gray-700 dark:text-gray-300'>Mẹo theo dõi chiến dịch:</span> Khi đăng
+              link trên Facebook/Instagram/TikTok, thêm đuôi{' '}
+              <code className='px-1 py-0.5 bg-gray-200 dark:bg-white/10 rounded font-mono text-indigo-600 dark:text-indigo-400'>
+                ?utm_source=facebook
+              </code>{' '}
+              hoặc{' '}
+              <code className='px-1 py-0.5 bg-gray-200 dark:bg-white/10 rounded font-mono text-pink-600 dark:text-pink-400'>
+                ?utm_source=instagram
+              </code>{' '}
+              để GA4 nhận diện chuẩn xác 100%.
+            </p>
           </div>
         </div>
       </div>
