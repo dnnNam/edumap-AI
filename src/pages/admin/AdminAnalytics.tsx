@@ -2,9 +2,13 @@ import { useMemo, useState } from 'react'
 import {
   Activity,
   BarChart3,
+  ChevronDown,
   Clock,
   Compass,
+  Download,
   Eye,
+  FileSpreadsheet,
+  FileText,
   Globe,
   Info,
   Laptop,
@@ -19,6 +23,7 @@ import {
 } from 'lucide-react'
 import { FaFacebook, FaGoogle, FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa'
 import Skeleton from 'react-loading-skeleton'
+import { exportAnalyticsToExcel, exportAnalyticsToPDF } from '../../utils/analyticsExport'
 import {
   useAnalyticsDevicesQuery,
   useAnalyticsEventsQuery,
@@ -145,8 +150,8 @@ const getSourceMeta = (source: string, medium: string, channelGroup: string) => 
 
 export default function AdminAnalyticsPage() {
   const [dateRange, setDateRange] = useState<DateRangeOption>('7daysAgo')
-
   const [sourceCategory, setSourceCategory] = useState<'all' | 'social' | 'search' | 'direct'>('all')
+  const [exportMenuOpen, setExportMenuOpen] = useState(false)
 
   const queryParams = useMemo(() => {
     return {
@@ -229,9 +234,25 @@ export default function AdminAnalyticsPage() {
   }
 
   return (
-    <div className='p-4 md:p-6 lg:p-8 space-y-6 max-w-7xl mx-auto'>
+    <div className='p-4 md:p-6 lg:p-8 space-y-6 max-w-7xl mx-auto print:p-0 print:space-y-4 print:max-w-none'>
+      {/* PRINT-ONLY EXECUTIVE HEADER */}
+      <div className='hidden print:block mb-4 border-b border-gray-300 pb-3'>
+        <div className='flex items-center justify-between'>
+          <div>
+            <h1 className='text-xl font-bold text-gray-900'>BÁO CÁO PHÂN TÍCH LƯU LƯỢNG EDUMAP AI (GA4)</h1>
+            <p className='text-xs text-gray-600 mt-0.5'>
+              Khoảng thời gian: {DATE_RANGE_LABELS[dateRange].vi} • Ngày xuất: {new Date().toLocaleDateString('vi-VN')}
+            </p>
+          </div>
+          <div className='text-right text-[11px] text-gray-500'>
+            <div>Mã GA4 Property: {status?.propertyId || '559513268'}</div>
+            <div>Nền tảng: edumapai.io.vn</div>
+          </div>
+        </div>
+      </div>
+
       {/* HEADER SECTION */}
-      <div className='flex flex-col md:flex-row md:items-center justify-between gap-4'>
+      <div className='flex flex-col md:flex-row md:items-center justify-between gap-4 print:hidden'>
         <div>
           <div className='flex items-center gap-2.5'>
             <div className='p-2 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded-xl'>
@@ -248,7 +269,7 @@ export default function AdminAnalyticsPage() {
           </div>
         </div>
 
-        {/* CONTROLS (Date Filter & Refresh) */}
+        {/* CONTROLS (Date Filter, Refresh & Export) */}
         <div className='flex items-center gap-2.5 flex-wrap'>
           {/* Status Badge */}
           {!isStatusLoading && status && (
@@ -285,6 +306,65 @@ export default function AdminAnalyticsPage() {
             <RefreshCw className={`w-4 h-4 ${isOverviewFetching ? 'animate-spin text-indigo-500' : ''}`} />
             <span>Làm mới</span>
           </button>
+
+          {/* Export Dropdown Button */}
+          <div className='relative'>
+            <button
+              onClick={() => setExportMenuOpen((prev) => !prev)}
+              className='inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-medium transition-colors shadow-2xs cursor-pointer'
+            >
+              <Download className='w-4 h-4' />
+              <span>Xuất báo cáo</span>
+              <ChevronDown className='w-3.5 h-3.5 opacity-80' />
+            </button>
+
+            {exportMenuOpen && (
+              <>
+                <div className='fixed inset-0 z-20' onClick={() => setExportMenuOpen(false)} />
+                <div className='absolute right-0 mt-2 w-60 bg-white dark:bg-[#1a191d] border border-gray-200 dark:border-white/10 rounded-2xl shadow-xl z-30 p-1.5 animate-in fade-in zoom-in-95 duration-150'>
+                  <button
+                    onClick={() => {
+                      exportAnalyticsToExcel({
+                        dateRangeLabel: DATE_RANGE_LABELS[dateRange].vi,
+                        propertyId: status?.propertyId,
+                        overview,
+                        timeseries,
+                        topPages,
+                        sources,
+                        devices,
+                      })
+                      setExportMenuOpen(false)
+                    }}
+                    className='w-full flex items-center gap-2.5 px-3 py-2 text-left rounded-xl hover:bg-gray-100 dark:hover:bg-white/5 text-gray-700 dark:text-gray-200 text-xs font-medium transition-colors cursor-pointer'
+                  >
+                    <div className='p-1.5 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-lg shrink-0'>
+                      <FileSpreadsheet className='w-4 h-4' />
+                    </div>
+                    <div>
+                      <div className='font-semibold'>Xuất file Excel (.csv)</div>
+                      <div className='text-[10px] text-gray-400'>Mở trực tiếp bằng Microsoft Excel</div>
+                    </div>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      exportAnalyticsToPDF()
+                      setExportMenuOpen(false)
+                    }}
+                    className='w-full flex items-center gap-2.5 px-3 py-2 text-left rounded-xl hover:bg-gray-100 dark:hover:bg-white/5 text-gray-700 dark:text-gray-200 text-xs font-medium transition-colors cursor-pointer mt-0.5'
+                  >
+                    <div className='p-1.5 bg-rose-500/10 text-rose-600 dark:text-rose-400 rounded-lg shrink-0'>
+                      <FileText className='w-4 h-4' />
+                    </div>
+                    <div>
+                      <div className='font-semibold'>Xuất file PDF / In báo cáo</div>
+                      <div className='text-[10px] text-gray-400'>Lưu dưới dạng PDF định dạng A4</div>
+                    </div>
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </div>
 
