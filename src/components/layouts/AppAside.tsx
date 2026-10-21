@@ -166,21 +166,35 @@ export default function AppAside({ onClose }: AppAsideProps) {
         )}
       </div>
 
-      {/* Upgrade card */}
+      {/* Upgrade card - Dribbble Bento Style */}
       {userRole !== 'ADMIN' && (
-        <div className='mt-5 p-2.5 shrink-0'>
-          <div className='rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-[#232227] p-4 transition-colors'>
-            <p className='text-sm font-semibold text-gray-900 dark:text-[#ECE9E4] mb-1'>{t('nav.upgradeTitle')}</p>
-            <p className='text-xs text-gray-500 dark:text-[#A29FA8] mb-3'>{t('nav.upgradeDesc')}</p>
+        <div className='mt-5 p-2 shrink-0'>
+          <div className='rounded-2xl bg-gradient-to-br from-[#D4F973] via-[#C5F456] to-[#A3E635] p-4 text-gray-950 shadow-md relative overflow-hidden group'>
+            {/* Background sparkle decoration */}
+            <div className='absolute -right-3 -top-3 w-16 h-16 bg-white/40 rounded-full blur-lg pointer-events-none' />
+
+            <div className='flex items-center justify-between mb-2'>
+              <span className='px-2 py-0.5 rounded-full bg-black/10 text-[10px] font-black uppercase tracking-wider'>
+                PRO PLAN
+              </span>
+              <span className='text-lg'>🚀</span>
+            </div>
+
+            <p className='text-sm font-black text-gray-950 leading-tight mb-1'>Upgrade to Pro</p>
+            <p className='text-[11px] text-gray-800/90 leading-snug mb-3 font-medium'>
+              Mở khóa toàn bộ gợi ý việc làm và tư vấn AI không giới hạn.
+            </p>
+
             <button
               type='button'
               onClick={() => {
                 onClose?.()
                 navigate('/subscription')
               }}
-              className='w-full bg-indigo-600 text-white text-sm font-medium rounded-lg py-2 hover:bg-indigo-700 transition-colors cursor-pointer'
+              className='w-full bg-gray-950 hover:bg-black text-white text-xs font-bold rounded-xl py-2.5 shadow-md transition-all active:scale-95 cursor-pointer flex items-center justify-center gap-1'
             >
-              {t('common.upgrade')}
+              <span>Nâng cấp ngay</span>
+              <span className='text-xs'>⚡</span>
             </button>
           </div>
         </div>

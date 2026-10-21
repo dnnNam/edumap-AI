@@ -1,19 +1,21 @@
-import { ArrowRight, BookOpen, Clock, Sparkles, Tags } from 'lucide-react'
+import { ArrowRight, BookOpen, Sparkles } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 
-import MetricCard from '../../components/layouts/dashboard/MetricCard'
 import { useMySkillsSummaryQuery } from '../../hooks/skillsQuery'
 import type { TopSkill } from '../../types/api/skills.type'
 import { getFullNameFromLS } from '../../utils/auth'
 import Panel from '../../components/layouts/dashboard/Panel'
 import DashboardHeroBanner from '../../components/layouts/dashboard/DashboardHeroBanner'
+import BentoSkillBreakdownCard from '../../components/layouts/dashboard/BentoSkillBreakdownCard'
+import BentoMetricCards from '../../components/layouts/dashboard/BentoMetricCards'
+import BentoMarketMatchCard from '../../components/layouts/dashboard/BentoMarketMatchCard'
+import BentoMonthlyVelocityCard from '../../components/layouts/dashboard/BentoMonthlyVelocityCard'
 
 // ---------- helpers ----------
 
 const TOP_SKILLS_LIMIT = 5
-const numberFormat = new Intl.NumberFormat('en-US', { maximumFractionDigits: 1 })
 
 function getSkillName(skill: TopSkill): string {
   if (typeof skill === 'string') return skill
@@ -87,24 +89,29 @@ export default function DashBoard() {
           </div>
         ) : (
           <>
-            {/* Metrics */}
-            <div className='mt-6 grid grid-cols-1 md:grid-cols-2 gap-5'>
-              <MetricCard
-                label={t('dashboard.totalSkills')}
-                value={numberFormat.format(summary?.totalSkills ?? 0)}
-                hint={t('dashboard.totalSkillsHint')}
-                icon={Tags}
-                iconClassName='bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-[#A99DFF]'
-                loading={isLoading}
-              />
-              <MetricCard
-                label={t('dashboard.totalHours')}
-                value={numberFormat.format(summary?.totalHours ?? 0)}
-                hint={t('dashboard.totalHoursHint')}
-                icon={Clock}
-                iconClassName='bg-gray-100 dark:bg-white/10 text-gray-500 dark:text-[#A29FA8]'
-                loading={isLoading}
-              />
+            {/* Dribbble Style Modern Bento-Grid Layout */}
+            <div className='mt-8 grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch'>
+              {/* Left Column: Phân bổ Kỹ năng & Tech Stack (5 cols) */}
+              <div className='lg:col-span-5 flex flex-col'>
+                <BentoSkillBreakdownCard
+                  totalSkills={summary?.totalSkills ?? 0}
+                  categoryStats={summary?.categoryStats ?? {}}
+                />
+              </div>
+
+              {/* Right Column: Split Top Metrics & Bottom Monthly Dark Card (7 cols) */}
+              <div className='lg:col-span-7 flex flex-col gap-6 justify-between'>
+                {/* Top Row: Cây kỹ năng & Thời lượng (left) + Độ khớp thị trường (right) */}
+                <div className='grid grid-cols-1 sm:grid-cols-2 gap-6 items-stretch'>
+                  <BentoMetricCards totalHours={summary?.totalHours ?? 0} totalSkills={summary?.totalSkills ?? 0} />
+                  <BentoMarketMatchCard />
+                </div>
+
+                {/* Bottom Row: Tiến độ học tập & Commit theo tháng (Large Dark Card) */}
+                <div className='flex-1'>
+                  <BentoMonthlyVelocityCard />
+                </div>
+              </div>
             </div>
 
             <div className='mt-5 grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-5 items-start'>
