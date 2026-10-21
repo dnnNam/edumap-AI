@@ -1,18 +1,26 @@
-import { Target, MoreVertical, ArrowUpRight } from 'lucide-react'
+import { Target } from 'lucide-react'
 
-export default function BentoMarketMatchCard() {
-  // Ma trận 9 cột x 4 hàng chấm mô phỏng biểu đồ mật độ độ khớp kỹ năng
-  const matrixData = [
-    [0.3, 0.5, 0.8, 1.0],
-    [0.4, 0.7, 0.9, 0.6],
-    [0.2, 0.6, 0.7, 0.4],
-    [0.6, 0.9, 1.0, 0.8],
-    [0.5, 0.8, 0.9, 0.7],
-    [0.3, 0.6, 0.8, 1.0],
-    [0.4, 0.7, 0.9, 0.5],
-    [0.5, 0.9, 1.0, 0.9],
-    [0.3, 0.7, 0.8, 0.6],
-  ]
+interface BentoMarketMatchCardProps {
+  careerPath?: string | null
+  completionPercentage?: number
+}
+
+export default function BentoMarketMatchCard({ careerPath, completionPercentage = 0 }: BentoMarketMatchCardProps) {
+  const percentage = Math.min(100, Math.max(0, completionPercentage))
+  const displayCareer = careerPath || 'Định hướng nghề nghiệp'
+
+  // Ma trận 9 cột x 4 hàng (36 chấm) phản ánh tỷ lệ hoàn thành lộ trình thực tế
+  const totalDots = 36
+  const activeDots = Math.round((percentage / 100) * totalDots)
+
+  const getTierStatus = (pct: number) => {
+    if (pct >= 80) return { label: 'Sẵn sàng ứng tuyển', color: 'text-emerald-600 dark:text-emerald-400' }
+    if (pct >= 50) return { label: 'Đang tăng tốc', color: 'text-indigo-600 dark:text-[#A99DFF]' }
+    if (pct > 0) return { label: 'Đang xây dựng', color: 'text-purple-600 dark:text-[#C49BFF]' }
+    return { label: 'Chưa bắt đầu', color: 'text-gray-400 dark:text-[#A29FA8]' }
+  }
+
+  const status = getTierStatus(percentage)
 
   return (
     <div className='h-full rounded-[32px] border border-gray-200/80 dark:border-white/[0.08] bg-white dark:bg-[#1A191C] p-6 sm:p-7 shadow-xs flex flex-col justify-between transition-all'>
@@ -23,50 +31,51 @@ export default function BentoMarketMatchCard() {
             <div className='w-8 h-8 rounded-xl bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-[#C49BFF] flex items-center justify-center font-bold'>
               <Target className='w-4 h-4' />
             </div>
-            <span className='font-bold text-gray-900 dark:text-[#ECE9E4] text-sm'>Độ Khớp Thị Trường</span>
+            <span className='font-bold text-gray-900 dark:text-[#ECE9E4] text-sm'>Độ Khớp Lộ Trình</span>
           </div>
-          <button
-            type='button'
-            aria-label='Tùy chọn'
-            className='text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition cursor-pointer'
-          >
-            <MoreVertical className='w-4 h-4' />
-          </button>
-        </div>
-
-        {/* Big Number & Badge */}
-        <div className='mt-4 flex items-baseline gap-3'>
-          <div className='text-4xl font-black text-gray-900 dark:text-[#ECE9E4] tracking-tight'>
-            88<span className='text-2xl text-purple-600 dark:text-[#C49BFF]'>%</span>
-          </div>
-          <span className='inline-flex items-center gap-0.5 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400 border border-emerald-200/60 dark:border-emerald-800/40 text-xs font-bold'>
-            <ArrowUpRight className='w-3 h-3' />
-            +10%
+          <span className='text-[11px] font-semibold px-2 py-0.5 rounded-full bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-[#C49BFF] truncate max-w-[120px]'>
+            {careerPath ? careerPath : 'Chưa chọn'}
           </span>
         </div>
-        <p className='text-xs text-gray-400 dark:text-[#A29FA8] mt-0.5'>Chỉ số sẵn sàng ứng tuyển IT 2026</p>
+
+        {/* Big Number & Status */}
+        <div className='mt-4 flex items-baseline gap-3'>
+          <div className='text-4xl font-black text-gray-900 dark:text-[#ECE9E4] tracking-tight'>
+            {percentage}
+            <span className='text-2xl text-purple-600 dark:text-[#C49BFF]'>%</span>
+          </div>
+          <span className={`text-xs font-bold ${status.color}`}>{status.label}</span>
+        </div>
+        <p className='text-xs text-gray-400 dark:text-[#A29FA8] mt-0.5 truncate' title={displayCareer}>
+          {careerPath ? `Tiến độ cho vị trí: ${careerPath}` : 'Hãy tạo cây kỹ năng mục tiêu để theo dõi'}
+        </p>
       </div>
 
-      {/* Dotted Matrix Grid Chart - Đúng chuẩn ảnh mẫu */}
+      {/* Dotted Matrix Grid Chart - 9 cột x 4 hàng minh hoạ 36 điểm kỹ năng */}
       <div className='my-4 flex items-center justify-between gap-1.5 px-1 py-2'>
-        {matrixData.map((col, colIdx) => (
+        {Array.from({ length: 9 }).map((_, colIdx) => (
           <div key={colIdx} className='flex flex-col gap-2 items-center'>
-            {col.map((val, rowIdx) => (
-              <div
-                key={rowIdx}
-                className='w-3.5 h-3.5 rounded-full transition-all duration-300'
-                style={{
-                  backgroundColor: `rgba(147, 112, 219, ${val})`,
-                }}
-              />
-            ))}
+            {Array.from({ length: 4 }).map((_, rowIdx) => {
+              const dotIndex = colIdx * 4 + rowIdx
+              const isFilled = dotIndex < activeDots
+              return (
+                <div
+                  key={rowIdx}
+                  className={`w-3.5 h-3.5 rounded-full transition-all duration-300 ${
+                    isFilled
+                      ? 'bg-gradient-to-tr from-[#9B87F5] to-[#7C3AED] shadow-xs shadow-indigo-500/30'
+                      : 'bg-gray-100 dark:bg-white/[0.08]'
+                  }`}
+                />
+              )
+            })}
           </div>
         ))}
       </div>
 
       <div className='pt-2 border-t border-gray-100 dark:border-white/5 flex items-center justify-between text-[11px] text-gray-500 dark:text-[#A29FA8]'>
-        <span>Mức độ cạnh tranh:</span>
-        <span className='font-bold text-emerald-600 dark:text-emerald-400'>Rất Cao (Tier 1)</span>
+        <span>Trạng thái lộ trình:</span>
+        <span className={`font-bold ${status.color}`}>{status.label}</span>
       </div>
     </div>
   )

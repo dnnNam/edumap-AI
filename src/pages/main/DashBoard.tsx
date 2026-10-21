@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 
 import { useMySkillsSummaryQuery } from '../../hooks/skillsQuery'
+import { useMySkillTreeQuery } from '../../hooks/skillTreeQuery'
 import type { TopSkill } from '../../types/api/skills.type'
 import { getFullNameFromLS } from '../../utils/auth'
 import Panel from '../../components/layouts/dashboard/Panel'
@@ -37,6 +38,9 @@ export default function DashBoard() {
 
   const { data: response, isLoading, isError, isFetching, refetch } = useMySkillsSummaryQuery()
   const summary = response?.data?.data
+
+  const { data: treeResponse } = useMySkillTreeQuery()
+  const tree = treeResponse?.data?.data
 
   const topSkills = (summary?.topSkills ?? []).map(getSkillName).filter(Boolean).slice(0, TOP_SKILLS_LIMIT)
 
@@ -99,17 +103,28 @@ export default function DashBoard() {
                 />
               </div>
 
-              {/* Right Column: Split Top Metrics & Bottom Monthly Dark Card (7 cols) */}
+              {/* Right Column: Split Top Metrics & Bottom Domain Distribution Card (7 cols) */}
               <div className='lg:col-span-7 flex flex-col gap-6 justify-between'>
                 {/* Top Row: Cây kỹ năng & Thời lượng (left) + Độ khớp thị trường (right) */}
                 <div className='grid grid-cols-1 sm:grid-cols-2 gap-6 items-stretch'>
-                  <BentoMetricCards totalHours={summary?.totalHours ?? 0} totalSkills={summary?.totalSkills ?? 0} />
-                  <BentoMarketMatchCard />
+                  <BentoMetricCards
+                    totalHours={summary?.totalHours ?? 0}
+                    completedNodes={tree?.completedCount ?? 0}
+                    totalNodes={tree?.totalNodes ?? 0}
+                    completionPercentage={tree?.completionPercentage ?? 0}
+                  />
+                  <BentoMarketMatchCard
+                    careerPath={tree?.careerPath}
+                    completionPercentage={tree?.completionPercentage ?? 0}
+                  />
                 </div>
 
-                {/* Bottom Row: Tiến độ học tập & Commit theo tháng (Large Dark Card) */}
+                {/* Bottom Row: Phân bố năng lực theo lĩnh vực thực tế (Large Dark Card) */}
                 <div className='flex-1'>
-                  <BentoMonthlyVelocityCard />
+                  <BentoMonthlyVelocityCard
+                    categoryStats={summary?.categoryStats ?? {}}
+                    totalSkills={summary?.totalSkills ?? 0}
+                  />
                 </div>
               </div>
             </div>
