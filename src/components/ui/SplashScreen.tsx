@@ -1,161 +1,173 @@
 import { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 
 interface SplashScreenProps {
   onFinish?: () => void
-  duration?: number // ms
 }
 
-export default function SplashScreen({ onFinish, duration = 1400 }: SplashScreenProps) {
-  const [progress, setProgress] = useState(0)
+/**
+ * SoundScape-style Hero Brand Morph & Unfold Splash Screen:
+ * Phase 1 (0ms - 600ms): Geometric square at center morphs and rotates into EduMap AI icon.
+ * Phase 2 (600ms - 1400ms): Icon slides left, brand name "EduMap AI" unfolds from behind it.
+ * Phase 3 (1400ms - 2100ms): The whole logo flies smoothly up to the top-left header position,
+ * while the dark curtain dissolves and the app content reveals from bottom up.
+ */
+export default function SplashScreen({ onFinish }: SplashScreenProps) {
+  // animationPhase:
+  // 1 = initial morph
+  // 2 = text unfold
+  // 3 = fly to header & dissolve
+  const [phase, setPhase] = useState<1 | 2 | 3>(1)
+  const [isFinished, setIsFinished] = useState(false)
 
   useEffect(() => {
-    // Xóa thẻ pre-splash trong index.html nếu có
-    const initialSplash = document.getElementById('initial-splash')
-    if (initialSplash) {
-      initialSplash.remove()
+    // Xóa pre-splash nếu có từ index.html
+    const preSplash = document.getElementById('initial-splash')
+    if (preSplash) preSplash.remove()
+
+    // Phase 1 -> 2: Mở chữ sau 650ms
+    const t1 = setTimeout(() => {
+      setPhase(2)
+    }, 650)
+
+    // Phase 2 -> 3: Bay lên header sau 1500ms
+    const t2 = setTimeout(() => {
+      setPhase(3)
+    }, 1500)
+
+    // Kết thúc hoàn toàn sau 2200ms
+    const t3 = setTimeout(() => {
+      setIsFinished(true)
+      onFinish?.()
+    }, 2200)
+
+    return () => {
+      clearTimeout(t1)
+      clearTimeout(t2)
+      clearTimeout(t3)
     }
+  }, [onFinish])
 
-    const startTime = Date.now()
-    const interval = setInterval(() => {
-      const elapsed = Date.now() - startTime
-      const currentProgress = Math.min(100, Math.round((elapsed / duration) * 100))
-      setProgress(currentProgress)
+  const handleSkip = () => {
+    setIsFinished(true)
+    onFinish?.()
+  }
 
-      if (elapsed >= duration) {
-        clearInterval(interval)
-        setTimeout(() => {
-          onFinish?.()
-        }, 150)
-      }
-    }, 16)
-
-    return () => clearInterval(interval)
-  }, [duration, onFinish])
+  if (isFinished) return null
 
   return (
-    <motion.div
-      key='edumap-splash'
-      initial={{ opacity: 1 }}
-      exit={{
-        opacity: 0,
-        scale: 1.02,
-        filter: 'blur(10px)',
-        transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] },
-      }}
-      className='fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-[#0C0A14] text-white overflow-hidden select-none'
-    >
-      {/* 1. Ambient High-Tech Glow Orbs */}
+    <AnimatePresence>
       <motion.div
-        animate={{
-          scale: [1, 1.25, 1],
-          opacity: [0.35, 0.55, 0.35],
-        }}
-        transition={{
-          duration: 3,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-        className='absolute w-[420px] h-[420px] rounded-full bg-gradient-to-tr from-[#5F2CFF]/40 to-[#9B87F5]/30 blur-[120px] pointer-events-none'
-      />
+        key='splash-container'
+        initial={{ opacity: 1 }}
+        animate={{ opacity: phase === 3 ? 0 : 1 }}
+        transition={{ duration: 0.65, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+        onClick={handleSkip}
+        className='fixed inset-0 z-[999999] pointer-events-auto select-none overflow-hidden bg-[#13121D] flex items-center justify-center cursor-pointer'
+      >
+        {/* Ambient subtle background glow */}
+        <div className='absolute w-[500px] h-[500px] rounded-full bg-[#5F2CFF]/12 blur-[140px] pointer-events-none' />
 
-      <motion.div
-        animate={{
-          scale: [1.2, 1, 1.2],
-          opacity: [0.2, 0.4, 0.2],
-        }}
-        transition={{
-          duration: 3.5,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-        className='absolute -bottom-20 -right-20 w-[350px] h-[350px] rounded-full bg-[#D4F973]/15 blur-[100px] pointer-events-none'
-      />
-
-      {/* Grid Pattern chìm tinh tế */}
-      <div
-        className='absolute inset-0 pointer-events-none opacity-20'
-        style={{
-          backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.15) 1px, transparent 0)',
-          backgroundSize: '32px 32px',
-        }}
-      />
-
-      {/* 2. Logo Container with Neon Pulse Ring */}
-      <div className='relative flex flex-col items-center z-10'>
+        {/* Dynamic Logo Lockup Container */}
         <motion.div
-          initial={{ scale: 0.8, opacity: 0, y: 15 }}
-          animate={{ scale: 1, opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className='relative mb-6'
+          animate={
+            phase === 3
+              ? {
+                  // Vị trí bay lên góc trên bên trái (khớp với Header)
+                  x: 'calc(-50vw + 90px)',
+                  y: 'calc(-50vh + 32px)',
+                  scale: 0.68,
+                  opacity: 0,
+                  transition: {
+                    duration: 0.75,
+                    ease: [0.25, 1, 0.5, 1], // cinematic bezier
+                  },
+                }
+              : {
+                  x: 0,
+                  y: 0,
+                  scale: 1,
+                  opacity: 1,
+                }
+          }
+          className='relative flex items-center justify-center'
         >
-          {/* Neon Glow Outer Ring */}
-          <div className='absolute -inset-3 rounded-3xl bg-gradient-to-tr from-[#5F2CFF] to-[#D4F973] opacity-30 blur-xl animate-pulse' />
-
-          {/* Logo Frame */}
-          <div className='relative w-24 h-24 sm:w-28 sm:h-28 rounded-3xl p-0.5 bg-gradient-to-b from-white/30 via-white/10 to-transparent shadow-2xl backdrop-blur-md'>
-            <div className='w-full h-full rounded-[22px] bg-[#161322] flex items-center justify-center p-3.5 border border-white/10 shadow-inner overflow-hidden'>
-              <img
-                src='/edumap-icon.png'
-                alt='EduMap AI Logo'
-                className='w-full h-full object-contain filter drop-shadow-[0_0_15px_rgba(95,44,255,0.6)]'
-              />
-            </div>
-          </div>
-        </motion.div>
-
-        {/* 3. Brand Name & Badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className='text-center'
-        >
-          <div className='flex items-center justify-center gap-2 mb-1.5'>
-            <h1 className='text-3xl sm:text-4xl font-black tracking-tight text-white flex items-center gap-1.5'>
-              <span>EduMap</span>
-              <span className='bg-gradient-to-r from-[#9B87F5] via-[#C4B5FD] to-[#D4F973] bg-clip-text text-transparent drop-shadow-[0_0_20px_rgba(155,135,245,0.4)]'>
-                AI
-              </span>
-            </h1>
-          </div>
-
-          <p className='text-xs sm:text-sm font-semibold tracking-widest uppercase text-white/50 drop-shadow-sm'>
-            A Roadmap for Education
-          </p>
-        </motion.div>
-
-        {/* 4. High-Tech Laser Progress Bar */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.35 }}
-          className='mt-8 flex flex-col items-center w-56 sm:w-64'
-        >
-          {/* Laser Track */}
-          <div className='w-full h-1.5 rounded-full bg-white/[0.08] p-0.5 border border-white/10 overflow-hidden relative shadow-inner'>
-            <motion.div
-              className='h-full rounded-full bg-gradient-to-r from-[#5F2CFF] via-[#9B87F5] to-[#D4F973] shadow-[0_0_12px_#5F2CFF]'
-              style={{ width: `${progress}%` }}
-              transition={{ ease: 'linear' }}
+          {/* 1. The Icon (Center Morph -> Slides Left in Phase 2) */}
+          <motion.div
+            initial={{ scale: 0.2, rotate: -45, borderRadius: '6px' }}
+            animate={
+              phase === 1
+                ? {
+                    scale: 1,
+                    rotate: 0,
+                    x: 0,
+                    borderRadius: '18px',
+                    transition: { duration: 0.55, ease: [0.34, 1.56, 0.64, 1] },
+                  }
+                : {
+                    scale: 1,
+                    rotate: 0,
+                    x: -8, // trượt nhẹ sang trái tạo khoảng cách cho tên thương hiệu
+                    borderRadius: '18px',
+                    transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
+                  }
+            }
+            className='relative w-14 h-14 sm:w-16 sm:h-16 bg-[#1D1B2C] border border-white/20 shadow-2xl flex items-center justify-center p-2.5 overflow-hidden shrink-0 z-20'
+          >
+            {/* Phân mảnh hình học trắng biến thành icon như trong clip */}
+            <motion.img
+              src='/edumap-icon.png'
+              alt='EduMap'
+              initial={{ opacity: 0, scale: 0.6 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2, duration: 0.4 }}
+              className='w-full h-full object-contain filter drop-shadow-[0_0_10px_rgba(155,135,245,0.7)]'
             />
-          </div>
+          </motion.div>
 
-          {/* Micro Status Label */}
-          <div className='mt-3 flex items-center justify-between w-full text-[11px] font-mono tracking-wider text-white/40'>
-            <span className='flex items-center gap-1.5'>
-              <span className='w-1.5 h-1.5 rounded-full bg-[#D4F973] animate-ping' />
-              <span>KHỞI TẠO HỆ THỐNG</span>
-            </span>
-            <span className='font-bold text-white/70'>{progress}%</span>
-          </div>
+          {/* 2. The Brand Name (Horizontal Unfold from Behind Icon) */}
+          <motion.div
+            initial={{ width: 0, opacity: 0, x: -25 }}
+            animate={
+              phase >= 2
+                ? {
+                    width: 'auto',
+                    opacity: 1,
+                    x: 10,
+                    transition: {
+                      width: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+                      opacity: { duration: 0.4, delay: 0.1 },
+                      x: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
+                    },
+                  }
+                : {
+                    width: 0,
+                    opacity: 0,
+                    x: -25,
+                  }
+            }
+            className='overflow-hidden whitespace-nowrap flex flex-col justify-center'
+          >
+            <div className='flex items-baseline gap-1 font-black text-3xl sm:text-4xl tracking-tight text-white'>
+              <span>EduMap</span>
+              <span className='bg-gradient-to-r from-[#9B87F5] to-[#D4F973] bg-clip-text text-transparent'>AI</span>
+            </div>
+            <motion.span
+              initial={{ opacity: 0, y: 3 }}
+              animate={phase >= 2 ? { opacity: 0.6, y: 0 } : { opacity: 0, y: 3 }}
+              transition={{ delay: 0.35, duration: 0.4 }}
+              className='text-[10px] sm:text-[11px] font-semibold tracking-widest uppercase text-gray-300'
+            >
+              A Roadmap for Education
+            </motion.span>
+          </motion.div>
         </motion.div>
-      </div>
 
-      {/* 5. Footer Copyright & Engine Label */}
-      <div className='absolute bottom-6 text-[10px] tracking-widest uppercase text-white/30 font-medium font-mono'>
-        EduMap AI Engine • Personalized Learning
-      </div>
-    </motion.div>
+        {/* Nút Skip nhỏ tinh tế góc dưới màn hình */}
+        <div className='absolute bottom-6 right-6 text-xs text-white/30 hover:text-white/70 transition-colors font-medium'>
+          Nhấp để bỏ qua ➔
+        </div>
+      </motion.div>
+    </AnimatePresence>
   )
 }
