@@ -1,5 +1,6 @@
 import { ArrowRight, BookOpen, Sparkles } from 'lucide-react'
 import type { ReactNode } from 'react'
+import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 
@@ -53,14 +54,25 @@ export default function DashBoard() {
     <div className='h-full overflow-y-auto [scrollbar-gutter:stable]'>
       <div className='max-w-6xl mx-auto px-6 py-8'>
         {/* Modern SaaS Dashboard Hero Banner */}
-        <DashboardHeroBanner
-          fullName={fullName}
-          totalSkills={summary?.totalSkills ?? 0}
-          totalHours={summary?.totalHours ?? 0}
-        />
+        <motion.div
+          initial={{ opacity: 0, y: 22 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <DashboardHeroBanner
+            fullName={fullName}
+            totalSkills={summary?.totalSkills ?? 0}
+            totalHours={summary?.totalHours ?? 0}
+          />
+        </motion.div>
 
         {/* Header */}
-        <div className='flex items-end justify-between gap-4 flex-wrap'>
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+          className='flex items-end justify-between gap-4 flex-wrap mt-6'
+        >
           <div>
             <h2 className='text-2xl font-bold text-gray-900 dark:text-[#ECE9E4] tracking-tight'>
               {t('dashboard.title')}
@@ -76,7 +88,7 @@ export default function DashBoard() {
             <Sparkles className='w-4 h-4' />
             {t('dashboard.runAnalysis')}
           </button>
-        </div>
+        </motion.div>
 
         {isError && !summary ? (
           <div className='mt-6 bg-white dark:bg-[#1A191C] border border-gray-200 dark:border-white/10 rounded-2xl p-10 text-center transition-colors'>
@@ -94,7 +106,12 @@ export default function DashBoard() {
         ) : (
           <>
             {/* Dribbble Style Modern Bento-Grid Layout */}
-            <div className='mt-8 grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch'>
+            <motion.div
+              initial={{ opacity: 0, y: 28 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.16, ease: [0.22, 1, 0.36, 1] }}
+              className='mt-8 grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch'
+            >
               {/* Left Column: Phân bổ Kỹ năng & Tech Stack (5 cols) */}
               <div className='lg:col-span-5 flex flex-col'>
                 <BentoSkillBreakdownCard
@@ -127,9 +144,14 @@ export default function DashBoard() {
                   />
                 </div>
               </div>
-            </div>
+            </motion.div>
 
-            <div className='mt-5 grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-5 items-start'>
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, delay: 0.26, ease: [0.22, 1, 0.36, 1] }}
+              className='mt-5 grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-5 items-start'
+            >
               {/* Top skills */}
               <Panel
                 title={t('dashboard.topSkills')}
@@ -219,7 +241,7 @@ export default function DashBoard() {
                   </div>
                 )}
               </Panel>
-            </div>
+            </motion.div>
           </>
         )}
       </div>

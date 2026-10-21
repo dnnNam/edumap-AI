@@ -191,12 +191,11 @@ export default function SplashScreen({ onFinish }: SplashScreenProps) {
               {/* Slogan "A Roadmap for Education" */}
               <motion.div
                 initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 0.65, y: 0 }}
-                transition={{
-                  duration: 0.6,
-                  delay: 0.65,
-                  ease: 'easeOut',
-                }}
+                animate={
+                  phase === 4
+                    ? { opacity: 0, y: -4, transition: { duration: 0.2 } }
+                    : { opacity: 0.65, y: 0, transition: { duration: 0.6, delay: 0.65, ease: 'easeOut' } }
+                }
                 className='text-[10px] sm:text-[11px] font-semibold tracking-[0.2em] uppercase text-gray-300 mt-1.5'
               >
                 A Roadmap for Education
