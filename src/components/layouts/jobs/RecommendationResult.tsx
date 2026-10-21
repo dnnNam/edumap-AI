@@ -70,32 +70,32 @@ function SampleJobCard({ job }: { job: SampleJob }) {
         <a
           href={
             job.applyUrl ||
-            `https://www.google.com/search?q=${encodeURIComponent(`${job.title} ${job.company} tuyển dụng`)}&ibp=htl;jobs`
+            `https://itviec.com/it-jobs?query=${encodeURIComponent((job.title || '').replace(/\([^)]*\)/g, '').trim() || job.title)}`
           }
           target='_blank'
           rel='noopener noreferrer'
           className='inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white text-xs font-semibold shadow-sm shadow-indigo-500/20 transition'
         >
-          <span>Xem tin tuyển dụng & Ứng tuyển</span>
+          <span>Xem việc làm trên ITviec</span>
           <ExternalLink className='w-3.5 h-3.5' />
         </a>
 
         {/* Quick platform links */}
         <div className='flex items-center gap-1.5 flex-wrap'>
-          <span className='text-xs text-gray-400 dark:text-[#A29FA8]'>Tìm trên:</span>
+          <span className='text-xs text-gray-400 dark:text-[#A29FA8]'>Xem thêm trên:</span>
           {(
             job.links || [
               {
-                platform: 'ITviec',
-                url: `https://itviec.com/it-jobs?query=${encodeURIComponent(job.title)}`,
+                platform: 'TopCV',
+                url: `https://www.topcv.vn/tim-viec-lam-moi-nhat?keyword=${encodeURIComponent((job.title || '').replace(/\([^)]*\)/g, '').trim() || job.title)}`,
               },
               {
-                platform: 'TopCV',
-                url: `https://www.topcv.vn/tim-viec-lam?keyword=${encodeURIComponent(`${job.title} ${job.company}`)}`,
+                platform: 'TopDev',
+                url: `https://topdev.vn/jobs/search?keyword=${encodeURIComponent((job.title || '').replace(/\([^)]*\)/g, '').trim() || job.title)}`,
               },
               {
                 platform: 'LinkedIn',
-                url: `https://www.linkedin.com/jobs/search/?keywords=${encodeURIComponent(`${job.title} ${job.company}`)}`,
+                url: `https://www.linkedin.com/jobs/search/?keywords=${encodeURIComponent((job.title || '').replace(/\([^)]*\)/g, '').trim() || job.title)}`,
               },
             ]
           ).map((pLink, idx) => (
