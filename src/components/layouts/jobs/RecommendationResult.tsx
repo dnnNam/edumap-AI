@@ -14,7 +14,32 @@ import {
 import type { RecommendationBody, SampleJob } from '../../../types/api/job.types'
 import { MotionFadeIn, MotionStaggerContainer, MotionStaggerItem } from '../../motion/MotionWrapper'
 
-function SampleJobCard({ job }: { job: SampleJob }) {
+function getItviecCityPath(loc: string): string {
+  const clean = (loc || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+  if (clean.includes('hcm') || clean.includes('ho chi minh') || clean.includes('sai gon')) {
+    return 'ho-chi-minh-hcm'
+  }
+  if (clean.includes('ha noi') || clean.includes('hanoi')) {
+    return 'ha-noi'
+  }
+  if (clean.includes('da nang') || clean.includes('danang')) {
+    return 'da-nang'
+  }
+  return ''
+}
+
+function SampleJobCard({ job, location }: { job: SampleJob; location?: string }) {
+  const effectiveLocation = job.location || location || ''
+  const itviecCity = getItviecCityPath(effectiveLocation)
+  const cleanTitle = (job.title || '').replace(/\([^)]*\)/g, '').trim() || job.title
+  const encodedTitle = encodeURIComponent(cleanTitle)
+  const fallbackItviecUrl = itviecCity
+    ? `https://itviec.com/it-jobs/${itviecCity}?query=${encodedTitle}`
+    : `https://itviec.com/it-jobs?query=${encodedTitle}`
+
   return (
     <div className='h-full rounded-3xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#1A191C] p-6 transition hover:shadow-md hover:border-gray-300 dark:hover:border-white/20'>
       <div className='flex flex-wrap items-start justify-between gap-3'>
@@ -68,10 +93,7 @@ function SampleJobCard({ job }: { job: SampleJob }) {
       {/* Action / Apply Links */}
       <div className='mt-5 pt-4 border-t border-gray-100 dark:border-white/5 flex flex-wrap items-center justify-between gap-3'>
         <a
-          href={
-            job.applyUrl ||
-            `https://itviec.com/it-jobs?query=${encodeURIComponent((job.title || '').replace(/\([^)]*\)/g, '').trim() || job.title)}`
-          }
+          href={job.applyUrl || fallbackItviecUrl}
           target='_blank'
           rel='noopener noreferrer'
           className='inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white text-xs font-semibold shadow-sm shadow-indigo-500/20 transition'
@@ -87,15 +109,15 @@ function SampleJobCard({ job }: { job: SampleJob }) {
             job.links || [
               {
                 platform: 'TopCV',
-                url: `https://www.topcv.vn/tim-viec-lam-moi-nhat?keyword=${encodeURIComponent((job.title || '').replace(/\([^)]*\)/g, '').trim() || job.title)}`,
+                url: `https://www.topcv.vn/tim-viec-lam-moi-nhat?keyword=${encodeURIComponent(`${cleanTitle} ${effectiveLocation}`)}`,
               },
               {
                 platform: 'TopDev',
-                url: `https://topdev.vn/jobs/search?keyword=${encodeURIComponent((job.title || '').replace(/\([^)]*\)/g, '').trim() || job.title)}`,
+                url: `https://topdev.vn/jobs/search?keyword=${encodeURIComponent(`${cleanTitle} ${effectiveLocation}`)}`,
               },
               {
                 platform: 'LinkedIn',
-                url: `https://www.linkedin.com/jobs/search/?keywords=${encodeURIComponent((job.title || '').replace(/\([^)]*\)/g, '').trim() || job.title)}`,
+                url: `https://www.linkedin.com/jobs/search/?keywords=${encodedTitle}&location=${encodeURIComponent(effectiveLocation)}`,
               },
             ]
           ).map((pLink, idx) => (
@@ -286,7 +308,7 @@ export default function RecommendationResult({ result }: { result: Recommendatio
           <MotionStaggerContainer className='grid grid-cols-1 gap-5'>
             {analysis.sampleJobs.map((job, i) => (
               <MotionStaggerItem key={`${job.company}-${job.title}-${i}`}>
-                <SampleJobCard job={job} />
+                <SampleJobCard job={job} location={result.location} />
               </MotionStaggerItem>
             ))}
           </MotionStaggerContainer>
