@@ -46,7 +46,66 @@
     </script>
   </head>
 
-  <body>
+  <body style="margin: 0; background-color: #0c0a14">
+    <!-- Pre-React Splash: Ngăn chặn hoàn toàn hiện tượng chớp trắng trước khi React bundle tải xong -->
+    <div
+      id="initial-splash"
+      style="
+        position: fixed;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: #0c0a14;
+        z-index: 999999;
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+      "
+    >
+      <div
+        style="
+          width: 84px;
+          height: 84px;
+          border-radius: 22px;
+          background: #161322;
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 0 35px rgba(95, 44, 255, 0.45);
+          margin-bottom: 18px;
+        "
+      >
+        <img src="/edumap-icon.png" alt="EduMap AI" style="width: 54px; height: 54px; object-fit: contain" />
+      </div>
+      <div style="font-size: 26px; font-weight: 800; color: #ffffff; letter-spacing: -0.5px">
+        EduMap
+        <span
+          style="
+            background: linear-gradient(135deg, #9b87f5, #d4f973);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+          "
+          >AI</span
+        >
+      </div>
+      <div
+        style="
+          font-size: 11px;
+          font-weight: 600;
+          color: rgba(255, 255, 255, 0.4);
+          letter-spacing: 2px;
+          margin-top: 6px;
+          text-transform: uppercase;
+        "
+      >
+        A Roadmap for Education
+      </div>
+    </div>
+
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
