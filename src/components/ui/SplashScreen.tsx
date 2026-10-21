@@ -2,13 +2,14 @@ import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 interface SplashScreenProps {
+  onStartExit?: () => void
   onFinish?: () => void
 }
 
 const BRAND_NAME = ['E', 'd', 'u', 'M', 'a', 'p']
 const BRAND_AI = ['A', 'I']
 
-export default function SplashScreen({ onFinish }: SplashScreenProps) {
+export default function SplashScreen({ onStartExit, onFinish }: SplashScreenProps) {
   // Phase 1 (0.0s - 1.1s): Khối hình học xoay và biến đổi (Morphing) thành Logo chính xác
   // Phase 2 (1.1s - 2.2s): Icon trượt sang trái, từng con chữ EduMap AI hiện ra
   // Phase 3 (2.2s - 3.6s): Dừng lại ở tâm màn hình để người dùng kịp đọc rõ ràng (1.4s reading pause)
@@ -23,7 +24,10 @@ export default function SplashScreen({ onFinish }: SplashScreenProps) {
 
     const t1 = setTimeout(() => setPhase(2), 1100)
     const t2 = setTimeout(() => setPhase(3), 2200)
-    const t3 = setTimeout(() => setPhase(4), 3600)
+    const t3 = setTimeout(() => {
+      setPhase(4)
+      onStartExit?.() // Kích hoạt hiệu ứng trang web trồi lên ngay khi phase 4 bắt đầu
+    }, 3600)
     const t4 = setTimeout(() => {
       setIsFinished(true)
       onFinish?.()
@@ -35,9 +39,10 @@ export default function SplashScreen({ onFinish }: SplashScreenProps) {
       clearTimeout(t3)
       clearTimeout(t4)
     }
-  }, [onFinish])
+  }, [onStartExit, onFinish])
 
   const handleSkip = () => {
+    onStartExit?.()
     setIsFinished(true)
     onFinish?.()
   }

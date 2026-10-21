@@ -3,6 +3,7 @@ import type { ReactNode } from 'react'
 import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
+import { useSplash } from '../../context/SplashContext'
 
 import { useMySkillsSummaryQuery } from '../../hooks/skillsQuery'
 import { useMySkillTreeQuery } from '../../hooks/skillTreeQuery'
@@ -36,6 +37,7 @@ export default function DashBoard() {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const fullName = getFullNameFromLS()
+  const { isPageRevealed } = useSplash()
 
   const { data: response, isLoading, isError, isFetching, refetch } = useMySkillsSummaryQuery()
   const summary = response?.data?.data
@@ -55,9 +57,9 @@ export default function DashBoard() {
       <div className='max-w-6xl mx-auto px-6 py-8'>
         {/* Modern SaaS Dashboard Hero Banner */}
         <motion.div
-          initial={{ opacity: 0, y: 22 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          initial={{ opacity: 0, y: 28 }}
+          animate={isPageRevealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 28 }}
+          transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
         >
           <DashboardHeroBanner
             fullName={fullName}
@@ -68,9 +70,9 @@ export default function DashBoard() {
 
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+          initial={{ opacity: 0, y: 22 }}
+          animate={isPageRevealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 22 }}
+          transition={{ duration: 0.55, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
           className='flex items-end justify-between gap-4 flex-wrap mt-6'
         >
           <div>
@@ -107,9 +109,9 @@ export default function DashBoard() {
           <>
             {/* Dribbble Style Modern Bento-Grid Layout */}
             <motion.div
-              initial={{ opacity: 0, y: 28 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.16, ease: [0.22, 1, 0.36, 1] }}
+              initial={{ opacity: 0, y: 36 }}
+              animate={isPageRevealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 36 }}
+              transition={{ duration: 0.75, delay: 0.16, ease: [0.22, 1, 0.36, 1] }}
               className='mt-8 grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch'
             >
               {/* Left Column: Phân bổ Kỹ năng & Tech Stack (5 cols) */}
@@ -147,9 +149,9 @@ export default function DashBoard() {
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, delay: 0.26, ease: [0.22, 1, 0.36, 1] }}
+              initial={{ opacity: 0, y: 30 }}
+              animate={isPageRevealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+              transition={{ duration: 0.65, delay: 0.28, ease: [0.22, 1, 0.36, 1] }}
               className='mt-5 grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-5 items-start'
             >
               {/* Top skills */}
