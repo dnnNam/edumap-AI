@@ -5,7 +5,6 @@ import Skeleton from 'react-loading-skeleton'
 import { useTrendingJobsQuery } from '../../hooks/jobQuery'
 import TrendingRoles from '../../components/layouts/jobs/TrendingRoles'
 import JobsHeroBanner from '../../components/layouts/jobs/JobsHeroBanner'
-import JobFlashSaleCarousel from '../../components/layouts/jobs/JobFlashSaleCarousel'
 
 export default function JobsPage() {
   const { t } = useTranslation()
@@ -28,9 +27,6 @@ export default function JobsPage() {
       <div className='max-w-6xl mx-auto px-6 py-10 pb-16'>
         {/* Modern SaaS Hero Banner */}
         <JobsHeroBanner activeTab='trending' />
-
-        {/* Khối FlashSale Việc Làm Bắt Mắt (Đồng hồ đếm ngược + Carousel) */}
-        <JobFlashSaleCarousel />
 
         {/* Tiêu đề & Mô tả */}
         <div className='flex flex-wrap items-end justify-between gap-4'>
