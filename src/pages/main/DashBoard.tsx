@@ -8,6 +8,7 @@ import { useMySkillsSummaryQuery } from '../../hooks/skillsQuery'
 import type { TopSkill } from '../../types/api/skills.type'
 import { getFullNameFromLS } from '../../utils/auth'
 import Panel from '../../components/layouts/dashboard/Panel'
+import DashboardHeroBanner from '../../components/layouts/dashboard/DashboardHeroBanner'
 
 // ---------- helpers ----------
 
@@ -45,22 +46,26 @@ export default function DashBoard() {
     // h-full (không dùng flex-1): cha trực tiếp là <motion.div className='h-full'> của AnimatedOutlet
     <div className='h-full overflow-y-auto [scrollbar-gutter:stable]'>
       <div className='max-w-6xl mx-auto px-6 py-8'>
+        {/* Modern SaaS Dashboard Hero Banner */}
+        <DashboardHeroBanner
+          fullName={fullName}
+          totalSkills={summary?.totalSkills ?? 0}
+          totalHours={summary?.totalHours ?? 0}
+        />
+
         {/* Header */}
         <div className='flex items-end justify-between gap-4 flex-wrap'>
           <div>
-            {fullName && (
-              <p className='text-sm text-gray-500 dark:text-[#A29FA8]'>{t('dashboard.welcome', { name: fullName })}</p>
-            )}
-            <h1 className='mt-1 text-[32px] font-bold text-gray-900 dark:text-[#ECE9E4] tracking-tight'>
+            <h2 className='text-2xl font-bold text-gray-900 dark:text-[#ECE9E4] tracking-tight'>
               {t('dashboard.title')}
-            </h1>
-            <p className='mt-1.5 text-[15px] text-gray-500 dark:text-[#B5B1BA]'>{t('dashboard.subtitle')}</p>
+            </h2>
+            <p className='mt-1 text-sm text-gray-500 dark:text-[#B5B1BA]'>{t('dashboard.subtitle')}</p>
           </div>
 
           <button
             type='button'
             onClick={() => navigate('/upload')}
-            className='flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-[15px] font-medium px-5 py-2.5 transition cursor-pointer shadow-sm'
+            className='flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2.5 transition cursor-pointer shadow-sm'
           >
             <Sparkles className='w-4 h-4' />
             {t('dashboard.runAnalysis')}
