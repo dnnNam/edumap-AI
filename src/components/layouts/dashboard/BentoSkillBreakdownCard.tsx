@@ -1,8 +1,8 @@
-import { Layers, ArrowRight, Sparkles } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import SpotlightCard from '../../ui/SpotlightCard'
+import { AnimatedLayers, AnimatedSparkles, AnimatedArrowRight } from '../../ui/AnimatedIcons'
 
 interface BentoSkillBreakdownCardProps {
   totalSkills: number
@@ -26,13 +26,13 @@ export default function BentoSkillBreakdownCard({ totalSkills, categoryStats }: 
   const pct3 = cat3 ? Math.round((cat3[1] / totalSkills) * 100) : 0
 
   return (
-    <SpotlightCard className='h-full p-6 sm:p-7 shadow-xs flex flex-col justify-between transition-all'>
+    <SpotlightCard className='h-full p-6 sm:p-7 shadow-xs flex flex-col justify-between transition-all group'>
       <div>
         {/* Header */}
         <div className='flex items-center justify-between'>
           <div className='flex items-center gap-2.5'>
             <div className='w-9 h-9 rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-[#A99DFF] flex items-center justify-center font-bold'>
-              <Layers className='w-4.5 h-4.5' />
+              <AnimatedLayers className='w-4.5 h-4.5' />
             </div>
             <span className='font-bold text-gray-900 dark:text-[#ECE9E4] text-base'>
               {t('dashboard.bento.skillBreakdown')}
@@ -57,8 +57,8 @@ export default function BentoSkillBreakdownCard({ totalSkills, categoryStats }: 
         {/* Bong bóng tròn hoặc Empty State */}
         {!hasSkills ? (
           <div className='my-8 py-10 flex flex-col items-center justify-center text-center rounded-2xl bg-gray-50/50 dark:bg-white/[0.02] border border-dashed border-gray-200 dark:border-white/10'>
-            <div className='w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-[#A99DFF] flex items-center justify-center mb-3'>
-              <Sparkles className='w-6 h-6' />
+            <div className='w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-[#A99DFF] flex items-center justify-center mb-3 group cursor-default'>
+              <AnimatedSparkles className='w-6 h-6' />
             </div>
             <p className='text-sm font-semibold text-gray-900 dark:text-[#ECE9E4]'>
               {t('dashboard.bento.noSkillsTitle')}
@@ -69,10 +69,10 @@ export default function BentoSkillBreakdownCard({ totalSkills, categoryStats }: 
             <button
               type='button'
               onClick={() => navigate('/upload')}
-              className='mt-4 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-medium transition cursor-pointer'
+              className='mt-4 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-medium transition cursor-pointer group'
             >
               {t('dashboard.bento.analyzeNow')}
-              <ArrowRight className='w-3 h-3' />
+              <AnimatedArrowRight className='w-3 h-3' />
             </button>
           </div>
         ) : (

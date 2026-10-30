@@ -1,6 +1,6 @@
-import { GitBranch, Clock } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import SpotlightCard from '../../ui/SpotlightCard'
+import { AnimatedGitBranch, AnimatedClock } from '../../ui/AnimatedIcons'
 
 interface BentoMetricCardsProps {
   totalHours: number
@@ -22,11 +22,11 @@ export default function BentoMetricCards({
   return (
     <div className='flex flex-col gap-5 h-full justify-between'>
       {/* 1. Thẻ Cây kỹ năng (Tiến độ thực tế theo lộ trình) */}
-      <SpotlightCard className='flex-1 p-6 shadow-xs flex flex-col justify-between transition-all'>
+      <SpotlightCard className='flex-1 p-6 shadow-xs flex flex-col justify-between transition-all group'>
         <div className='flex items-center justify-between'>
           <div className='flex items-center gap-2.5'>
             <div className='w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-[#A99DFF] flex items-center justify-center font-bold'>
-              <GitBranch className='w-4 h-4' />
+              <AnimatedGitBranch className='w-4 h-4' />
             </div>
             <span className='font-bold text-gray-900 dark:text-[#ECE9E4] text-sm'>
               {t('dashboard.bento.targetSkillTree')}
@@ -62,11 +62,11 @@ export default function BentoMetricCards({
       </SpotlightCard>
 
       {/* 2. Thẻ Thời lượng & Năng suất học tập (Dữ liệu thực từ DB) */}
-      <SpotlightCard className='flex-1 p-6 shadow-xs flex flex-col justify-between transition-all'>
+      <SpotlightCard className='flex-1 p-6 shadow-xs flex flex-col justify-between transition-all group'>
         <div className='flex items-center justify-between'>
           <div className='flex items-center gap-2.5'>
             <div className='w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-[#A99DFF] flex items-center justify-center font-bold'>
-              <Clock className='w-4 h-4' />
+              <AnimatedClock className='w-4 h-4' />
             </div>
             <span className='font-bold text-gray-900 dark:text-[#ECE9E4] text-sm'>
               {t('dashboard.bento.accumulatedHours')}

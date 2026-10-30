@@ -1,8 +1,14 @@
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
-import { Briefcase, ShieldCheck } from 'lucide-react'
 import { MotionFadeIn } from '../../motion/MotionWrapper'
-import { AnimatedSparkles, AnimatedGitBranch, AnimatedArrowRight, AnimatedZap } from '../../ui/AnimatedIcons'
+import {
+  AnimatedSparkles,
+  AnimatedGitBranch,
+  AnimatedArrowRight,
+  AnimatedZap,
+  AnimatedBriefcase,
+  AnimatedShieldCheck,
+} from '../../ui/AnimatedIcons'
 
 interface DashboardHeroBannerProps {
   fullName?: string
@@ -62,9 +68,9 @@ export default function DashboardHeroBanner({ fullName, totalSkills = 0, totalHo
             <button
               type='button'
               onClick={() => navigate('/jobs/trending')}
-              className='inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200/80 dark:bg-white/10 dark:hover:bg-white/15 border border-gray-200/80 dark:border-white/10 text-gray-700 dark:text-white text-xs sm:text-sm font-medium active:scale-[0.98] transition cursor-pointer backdrop-blur-sm'
+              className='inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200/80 dark:bg-white/10 dark:hover:bg-white/15 border border-gray-200/80 dark:border-white/10 text-gray-700 dark:text-white text-xs sm:text-sm font-medium active:scale-[0.98] transition cursor-pointer backdrop-blur-sm group'
             >
-              <Briefcase className='w-4 h-4 text-gray-500 dark:text-white/80' />
+              <AnimatedBriefcase className='w-4 h-4 text-gray-500 dark:text-white/80' />
               <span>{t('dashboard.banner.exploreJobs')}</span>
             </button>
 
@@ -96,8 +102,8 @@ export default function DashboardHeroBanner({ fullName, totalSkills = 0, totalHo
                   </div>
                 </div>
 
-                <span className='inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 text-emerald-700 dark:text-emerald-400 text-[11px] font-semibold'>
-                  <ShieldCheck className='w-3 h-3' />
+                <span className='inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 text-emerald-700 dark:text-emerald-400 text-[11px] font-semibold group cursor-default'>
+                  <AnimatedShieldCheck className='w-3 h-3' />
                   {t('dashboard.banner.active')}
                 </span>
               </div>
