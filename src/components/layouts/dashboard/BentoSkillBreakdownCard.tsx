@@ -1,6 +1,8 @@
 import { Layers, ArrowRight, Sparkles } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router'
+import { useTranslation } from 'react-i18next'
+import SpotlightCard from '../../ui/SpotlightCard'
 
 interface BentoSkillBreakdownCardProps {
   totalSkills: number
@@ -8,6 +10,7 @@ interface BentoSkillBreakdownCardProps {
 }
 
 export default function BentoSkillBreakdownCard({ totalSkills, categoryStats }: BentoSkillBreakdownCardProps) {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const categories = Object.entries(categoryStats).sort(([, a], [, b]) => b - a)
   const topCategories = categories.slice(0, 3)
@@ -23,7 +26,7 @@ export default function BentoSkillBreakdownCard({ totalSkills, categoryStats }: 
   const pct3 = cat3 ? Math.round((cat3[1] / totalSkills) * 100) : 0
 
   return (
-    <div className='h-full rounded-[32px] border border-gray-200/80 dark:border-white/[0.08] bg-white dark:bg-[#1A191C] p-6 sm:p-7 shadow-xs flex flex-col justify-between transition-all'>
+    <SpotlightCard className='h-full p-6 sm:p-7 shadow-xs flex flex-col justify-between transition-all'>
       <div>
         {/* Header */}
         <div className='flex items-center justify-between'>
@@ -31,10 +34,12 @@ export default function BentoSkillBreakdownCard({ totalSkills, categoryStats }: 
             <div className='w-9 h-9 rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-[#A99DFF] flex items-center justify-center font-bold'>
               <Layers className='w-4.5 h-4.5' />
             </div>
-            <span className='font-bold text-gray-900 dark:text-[#ECE9E4] text-base'>Phân Bổ Kỹ Năng</span>
+            <span className='font-bold text-gray-900 dark:text-[#ECE9E4] text-base'>
+              {t('dashboard.bento.skillBreakdown')}
+            </span>
           </div>
           <span className='text-xs font-semibold px-2.5 py-1 rounded-full bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-[#A29FA8]'>
-            {categories.length} lĩnh vực
+            {t('dashboard.bento.domains', { count: categories.length })}
           </span>
         </div>
 
@@ -42,10 +47,12 @@ export default function BentoSkillBreakdownCard({ totalSkills, categoryStats }: 
         <div className='mt-5 flex items-baseline gap-3'>
           <div className='text-4xl sm:text-5xl font-black text-gray-900 dark:text-[#ECE9E4] tracking-tight'>
             {totalSkills}
-            <span className='text-xl sm:text-2xl font-bold text-indigo-600 dark:text-[#A99DFF] ml-1.5'>kỹ năng</span>
+            <span className='text-xl sm:text-2xl font-bold text-indigo-600 dark:text-[#A99DFF] ml-1.5'>
+              {t('dashboard.bento.skills')}
+            </span>
           </div>
         </div>
-        <p className='text-xs text-gray-400 dark:text-[#A29FA8] mt-1'>Xác thực từ hồ sơ phân tích thực tế của bạn</p>
+        <p className='text-xs text-gray-400 dark:text-[#A29FA8] mt-1'>{t('dashboard.bento.verifiedFromProfile')}</p>
 
         {/* Bong bóng tròn hoặc Empty State */}
         {!hasSkills ? (
@@ -53,28 +60,30 @@ export default function BentoSkillBreakdownCard({ totalSkills, categoryStats }: 
             <div className='w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-[#A99DFF] flex items-center justify-center mb-3'>
               <Sparkles className='w-6 h-6' />
             </div>
-            <p className='text-sm font-semibold text-gray-900 dark:text-[#ECE9E4]'>Chưa có dữ liệu kỹ năng</p>
+            <p className='text-sm font-semibold text-gray-900 dark:text-[#ECE9E4]'>
+              {t('dashboard.bento.noSkillsTitle')}
+            </p>
             <p className='text-xs text-gray-400 dark:text-[#A29FA8] max-w-[220px] mt-1'>
-              Kết nối GitHub hoặc tải mã nguồn để hệ thống trích xuất kỹ năng thật.
+              {t('dashboard.bento.noSkillsDesc')}
             </p>
             <button
               type='button'
               onClick={() => navigate('/upload')}
               className='mt-4 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-medium transition cursor-pointer'
             >
-              Phân tích ngay
+              {t('dashboard.bento.analyzeNow')}
               <ArrowRight className='w-3 h-3' />
             </button>
           </div>
         ) : (
           <div className='my-8 relative h-48 w-full flex items-center justify-center'>
-            {/* Vòng tròn 1: Lớn nhất (Tím nhạt / Lavender) */}
+            {/* Vòng tròn 1: Lớn nhất (Indigo Gradient) */}
             {cat1 && (
               <motion.div
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.1 }}
-                className='absolute -left-1 sm:left-4 top-2 w-32 h-32 rounded-full bg-gradient-to-tr from-[#9B87F5] to-[#C4B5FD] text-white flex flex-col items-center justify-center shadow-lg shadow-indigo-500/20 z-10'
+                className='absolute -left-1 sm:left-4 top-2 w-32 h-32 rounded-full bg-gradient-to-tr from-indigo-600 to-[#A99DFF] text-white flex flex-col items-center justify-center shadow-lg shadow-indigo-500/20 z-10'
               >
                 <span className='text-xl sm:text-2xl font-black tracking-tight'>{cat1[1]}</span>
                 <span className='text-[10px] font-semibold opacity-90 truncate max-w-[90px] text-center px-1'>
@@ -100,19 +109,19 @@ export default function BentoSkillBreakdownCard({ totalSkills, categoryStats }: 
               </motion.div>
             ) : null}
 
-            {/* Vòng tròn 3: Nhỏ (Màu vôi sáng / Lime Accent) */}
+            {/* Vòng tròn 3: Nhỏ (Emerald Accent) */}
             {cat3 ? (
               <motion.div
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.3 }}
-                className='absolute left-24 sm:left-28 bottom-0 w-24 h-24 rounded-full bg-[#D4F973] text-gray-900 flex flex-col items-center justify-center shadow-lg shadow-lime-500/20 z-30 font-bold'
+                className='absolute left-24 sm:left-28 bottom-0 w-24 h-24 rounded-full bg-emerald-400 dark:bg-emerald-500 text-gray-900 flex flex-col items-center justify-center shadow-lg shadow-emerald-500/20 z-30 font-bold'
               >
                 <span className='text-base sm:text-lg font-black'>{cat3[1]}</span>
-                <span className='text-[9px] font-bold text-gray-800 truncate max-w-[70px] text-center px-1'>
+                <span className='text-[9px] font-bold text-gray-800 dark:text-gray-900 truncate max-w-[70px] text-center px-1'>
                   {cat3[0]}
                 </span>
-                <span className='text-[9px] text-gray-700 font-medium'>{pct3}%</span>
+                <span className='text-[9px] text-gray-700 dark:text-gray-900 font-medium'>{pct3}%</span>
               </motion.div>
             ) : null}
           </div>
@@ -124,7 +133,7 @@ export default function BentoSkillBreakdownCard({ totalSkills, categoryStats }: 
         <div className='space-y-3 pt-4 border-t border-gray-100 dark:border-white/5'>
           {topCategories.map(([name, count], idx) => {
             const pct = Math.round((count / totalSkills) * 100)
-            const colors = ['bg-[#9B87F5]', 'bg-[#1E1B4B] dark:bg-[#9D84FF]', 'bg-[#D4F973]']
+            const colors = ['bg-indigo-600', 'bg-[#1E1B4B] dark:bg-[#A99DFF]', 'bg-emerald-400']
             return (
               <div key={name}>
                 <div className='flex items-center justify-between text-xs font-semibold mb-1'>
@@ -142,9 +151,9 @@ export default function BentoSkillBreakdownCard({ totalSkills, categoryStats }: 
         </div>
       ) : (
         <div className='pt-3 border-t border-gray-100 dark:border-white/5 text-[11px] text-gray-400 text-center'>
-          Dữ liệu sẽ hiển thị khi hoàn tất phân tích
+          {t('dashboard.bento.dataWillShow')}
         </div>
       )}
-    </div>
+    </SpotlightCard>
   )
 }
