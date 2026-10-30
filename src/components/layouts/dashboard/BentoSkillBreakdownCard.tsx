@@ -68,13 +68,13 @@ export default function BentoSkillBreakdownCard({ totalSkills, categoryStats }: 
           </div>
         ) : (
           <div className='my-8 relative h-48 w-full flex items-center justify-center'>
-            {/* Vòng tròn 1: Lớn nhất (Tím nhạt / Lavender) */}
+            {/* Vòng tròn 1: Lớn nhất (Indigo Chủ đạo) */}
             {cat1 && (
               <motion.div
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.1 }}
-                className='absolute -left-1 sm:left-4 top-2 w-32 h-32 rounded-full bg-gradient-to-tr from-[#9B87F5] to-[#C4B5FD] text-white flex flex-col items-center justify-center shadow-lg shadow-indigo-500/20 z-10'
+                className='absolute -left-1 sm:left-4 top-2 w-32 h-32 rounded-full bg-gradient-to-tr from-indigo-600 to-indigo-500 text-white flex flex-col items-center justify-center shadow-lg shadow-indigo-600/25 z-10'
               >
                 <span className='text-xl sm:text-2xl font-black tracking-tight'>{cat1[1]}</span>
                 <span className='text-[10px] font-semibold opacity-90 truncate max-w-[90px] text-center px-1'>
@@ -84,13 +84,13 @@ export default function BentoSkillBreakdownCard({ totalSkills, categoryStats }: 
               </motion.div>
             )}
 
-            {/* Vòng tròn 2: Vừa (Tím than đậm) */}
+            {/* Vòng tròn 2: Vừa (Indigo Đậm) */}
             {cat2 ? (
               <motion.div
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
-                className='absolute right-2 sm:right-6 top-0 w-28 h-28 rounded-full bg-[#1E1B4B] dark:bg-[#2A2356] text-white flex flex-col items-center justify-center shadow-md border border-white/20 z-20'
+                className='absolute right-2 sm:right-6 top-0 w-28 h-28 rounded-full bg-indigo-900/90 dark:bg-indigo-950/90 text-white flex flex-col items-center justify-center shadow-md border border-indigo-500/30 z-20'
               >
                 <span className='text-lg sm:text-xl font-black'>{cat2[1]}</span>
                 <span className='text-[10px] font-medium opacity-80 truncate max-w-[80px] text-center px-1'>
@@ -100,19 +100,17 @@ export default function BentoSkillBreakdownCard({ totalSkills, categoryStats }: 
               </motion.div>
             ) : null}
 
-            {/* Vòng tròn 3: Nhỏ (Màu vôi sáng / Lime Accent) */}
+            {/* Vòng tròn 3: Nhỏ (Indigo Subtle / Lavender) */}
             {cat3 ? (
               <motion.div
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.3 }}
-                className='absolute left-24 sm:left-28 bottom-0 w-24 h-24 rounded-full bg-[#D4F973] text-gray-900 flex flex-col items-center justify-center shadow-lg shadow-lime-500/20 z-30 font-bold'
+                className='absolute left-24 sm:left-28 bottom-0 w-24 h-24 rounded-full bg-indigo-100 text-indigo-950 dark:bg-[#A99DFF] dark:text-[#121114] flex flex-col items-center justify-center shadow-md shadow-indigo-500/10 z-30 font-bold'
               >
                 <span className='text-base sm:text-lg font-black'>{cat3[1]}</span>
-                <span className='text-[9px] font-bold text-gray-800 truncate max-w-[70px] text-center px-1'>
-                  {cat3[0]}
-                </span>
-                <span className='text-[9px] text-gray-700 font-medium'>{pct3}%</span>
+                <span className='text-[9px] font-bold truncate max-w-[70px] text-center px-1'>{cat3[0]}</span>
+                <span className='text-[9px] opacity-80 font-medium'>{pct3}%</span>
               </motion.div>
             ) : null}
           </div>
@@ -124,7 +122,7 @@ export default function BentoSkillBreakdownCard({ totalSkills, categoryStats }: 
         <div className='space-y-3 pt-4 border-t border-gray-100 dark:border-white/5'>
           {topCategories.map(([name, count], idx) => {
             const pct = Math.round((count / totalSkills) * 100)
-            const colors = ['bg-[#9B87F5]', 'bg-[#1E1B4B] dark:bg-[#9D84FF]', 'bg-[#D4F973]']
+            const colors = ['bg-indigo-600', 'bg-indigo-500 dark:bg-[#A99DFF]', 'bg-indigo-400 dark:bg-indigo-300']
             return (
               <div key={name}>
                 <div className='flex items-center justify-between text-xs font-semibold mb-1'>

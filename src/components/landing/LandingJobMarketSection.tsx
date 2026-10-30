@@ -113,7 +113,7 @@ export default function LandingJobMarketSection() {
         {/* 2-Column Split: Demand Charts on Left, Job List on Right */}
         <div className='grid grid-cols-1 lg:grid-cols-12 gap-8 items-start'>
           {/* Left Column: Biểu đồ kỹ năng & Mức độ khát nhân lực (5 cols) */}
-          <div className='lg:col-span-5 rounded-3xl border border-gray-200/80 dark:border-white/[0.08] bg-white dark:bg-[#1A1824] p-6 sm:p-7 shadow-xs'>
+          <div className='lg:col-span-5 rounded-3xl border border-gray-200/80 dark:border-white/[0.08] bg-white dark:bg-[#1A191C] p-6 sm:p-7 shadow-xs'>
             <div className='flex items-center justify-between mb-6'>
               <div className='flex items-center gap-2'>
                 <div className='w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-[#A99DFF] flex items-center justify-center font-bold'>
@@ -143,7 +143,7 @@ export default function LandingJobMarketSection() {
                       whileInView={{ width: `${bar.score}%` }}
                       viewport={{ once: true }}
                       transition={{ duration: 0.8, ease: 'easeOut' }}
-                      className='h-full rounded-full bg-gradient-to-r from-indigo-500 to-[#9B87F5]'
+                      className='h-full rounded-full bg-gradient-to-r from-indigo-600 to-indigo-500 dark:to-[#A99DFF]'
                     />
                   </div>
                   <div className='text-[10px] text-gray-400 dark:text-[#8E8B96]'>{bar.growth}</div>
@@ -153,7 +153,7 @@ export default function LandingJobMarketSection() {
 
             <div className='mt-8 pt-5 border-t border-gray-100 dark:border-white/5 text-xs text-gray-400 flex items-center justify-between'>
               <span>Dữ liệu tổng hợp từ:</span>
-              <span className='font-semibold text-gray-700 dark:text-[#C4B5FD]'>LinkedIn • TopCV • ITviec</span>
+              <span className='font-semibold text-gray-700 dark:text-[#A99DFF]'>LinkedIn • TopCV • ITviec</span>
             </div>
           </div>
 
@@ -170,7 +170,7 @@ export default function LandingJobMarketSection() {
                 key={job.id}
                 variants={listItemVariants}
                 whileHover={{ x: 4, transition: { duration: 0.2 } }}
-                className='rounded-2xl border border-gray-200/80 dark:border-white/[0.08] bg-white dark:bg-[#1A1824] p-5 shadow-xs hover:shadow-md hover:border-indigo-400/80 dark:hover:border-indigo-500/40 transition-all cursor-pointer group'
+                className='rounded-2xl border border-gray-200/80 dark:border-white/[0.08] bg-white dark:bg-[#1A191C] p-5 shadow-xs hover:shadow-md hover:border-indigo-400/80 dark:hover:border-indigo-500/40 transition-all cursor-pointer group'
               >
                 <div className='flex items-start justify-between gap-3'>
                   <div>

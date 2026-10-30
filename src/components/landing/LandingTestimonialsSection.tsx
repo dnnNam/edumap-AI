@@ -64,7 +64,7 @@ export default function LandingTestimonialsSection() {
   return (
     <section
       id='testimonials'
-      className='py-20 sm:py-28 relative z-10 overflow-hidden bg-white dark:bg-[#15141A] border-t border-gray-200/80 dark:border-white/5 transition-colors'
+      className='py-20 sm:py-28 relative z-10 overflow-hidden bg-white dark:bg-[#121114] border-t border-gray-200/80 dark:border-white/5 transition-colors'
     >
       <div className='max-w-6xl mx-auto px-4 sm:px-6 lg:px-8'>
         {/* Section Header */}
@@ -94,7 +94,7 @@ export default function LandingTestimonialsSection() {
               key={item.name}
               variants={itemVariants}
               whileHover={{ y: -6, transition: { duration: 0.25 } }}
-              className='rounded-3xl border border-gray-200/80 dark:border-white/[0.08] bg-gray-50/50 dark:bg-[#1A1824] p-7 shadow-xs hover:shadow-xl hover:border-indigo-400/80 dark:hover:border-indigo-500/40 transition-all flex flex-col justify-between group'
+              className='rounded-3xl border border-gray-200/80 dark:border-white/[0.08] bg-gray-50/50 dark:bg-[#1A191C] p-7 shadow-xs hover:shadow-xl hover:border-indigo-400/80 dark:hover:border-indigo-500/40 transition-all flex flex-col justify-between group'
             >
               <div>
                 {/* Rating Stars & Quote Icon */}
