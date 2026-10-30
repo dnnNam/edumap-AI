@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
-import { Sparkles, ArrowRight, GitBranch, Briefcase, Zap, ShieldCheck } from 'lucide-react'
+import { Briefcase, ShieldCheck } from 'lucide-react'
 import { MotionFadeIn } from '../../motion/MotionWrapper'
+import { AnimatedSparkles, AnimatedGitBranch, AnimatedArrowRight, AnimatedZap } from '../../ui/AnimatedIcons'
 
 interface DashboardHeroBannerProps {
   fullName?: string
@@ -28,8 +29,8 @@ export default function DashboardHeroBanner({ fullName, totalSkills = 0, totalHo
         {/* Left Column: Greeting & Actions (Col 7) */}
         <div className='lg:col-span-7 space-y-4'>
           {/* Top Pill Badge */}
-          <div className='inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-50 dark:bg-white/10 border border-indigo-100 dark:border-white/10 text-xs font-semibold text-indigo-700 dark:text-white/90 backdrop-blur-md'>
-            <Sparkles className='w-3.5 h-3.5 text-amber-500 dark:text-amber-400' />
+          <div className='inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-50 dark:bg-white/10 border border-indigo-100 dark:border-white/10 text-xs font-semibold text-indigo-700 dark:text-white/90 backdrop-blur-md cursor-default'>
+            <AnimatedSparkles className='w-3.5 h-3.5 text-amber-500 dark:text-amber-400' />
             <span>{t('dashboard.banner.badge')}</span>
           </div>
 
@@ -51,11 +52,11 @@ export default function DashboardHeroBanner({ fullName, totalSkills = 0, totalHo
             <button
               type='button'
               onClick={() => navigate('/skill-tree')}
-              className='inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-semibold shadow-md shadow-indigo-600/20 active:scale-[0.98] transition cursor-pointer'
+              className='inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-semibold shadow-md shadow-indigo-600/20 active:scale-[0.98] transition cursor-pointer group'
             >
-              <GitBranch className='w-4 h-4' />
+              <AnimatedGitBranch className='w-4 h-4' />
               <span>{t('dashboard.banner.viewTree')}</span>
-              <ArrowRight className='w-4 h-4' />
+              <AnimatedArrowRight className='w-4 h-4' />
             </button>
 
             <button
@@ -72,7 +73,7 @@ export default function DashboardHeroBanner({ fullName, totalSkills = 0, totalHo
               onClick={() => navigate('/upload')}
               className='inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-xs text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-white transition cursor-pointer'
             >
-              <Zap className='w-3.5 h-3.5' />
+              <AnimatedZap className='w-3.5 h-3.5' />
               <span>{t('dashboard.runAnalysis')}</span>
             </button>
           </div>
@@ -85,7 +86,7 @@ export default function DashboardHeroBanner({ fullName, totalSkills = 0, totalHo
               <div className='flex items-center justify-between'>
                 <div className='flex items-center gap-2.5'>
                   <div className='w-8 h-8 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-600/25'>
-                    <Zap className='w-4 h-4' />
+                    <AnimatedZap className='w-4 h-4' />
                   </div>
                   <div>
                     <h3 className='text-xs font-bold uppercase tracking-wider text-gray-900 dark:text-white'>

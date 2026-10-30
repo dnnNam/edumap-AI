@@ -1,4 +1,4 @@
-import { Bell, Menu } from 'lucide-react'
+import { Menu } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 import { useUnreadNotificationsCount } from '../../hooks/notificationQuery'
@@ -6,6 +6,7 @@ import { getRoleFromLS } from '../../utils/auth'
 import Avatar from '../ui/Avatar'
 import LanguageToggle from '../ui/LanguageToggle'
 import ThemeToggle from '../ui/ThemeToggle'
+import { AnimatedBell } from '../ui/AnimatedIcons'
 
 interface AppHeaderProps {
   userName?: string
@@ -26,7 +27,7 @@ function NotificationBell() {
       aria-label={unreadCount > 0 ? t('header.notificationsUnread', { count: unreadCount }) : t('header.notifications')}
       className='relative w-9 h-9 flex items-center justify-center rounded-lg hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer'
     >
-      <Bell className='w-5 h-5 text-gray-500 dark:text-[#A29FA8]' />
+      <AnimatedBell className='w-5 h-5 text-gray-500 dark:text-[#A29FA8]' />
       {unreadCount > 0 && (
         <span className='absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-indigo-600 text-white text-[10px] font-semibold leading-none ring-2 ring-white dark:ring-[#1A191C]'>
           {unreadCount > 9 ? '9+' : unreadCount}
