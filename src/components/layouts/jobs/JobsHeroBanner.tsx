@@ -1,5 +1,6 @@
 import { Link } from 'react-router'
 import { TrendingUp, Compass, ArrowUpRight } from 'lucide-react'
+import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { MotionFadeIn } from '../../motion/MotionWrapper'
 import { AnimatedSparkles, AnimatedZap, AnimatedShieldCheck, AnimatedBriefcase } from '../../ui/AnimatedIcons'
@@ -8,8 +9,6 @@ import NumberTicker from '../../ui/NumberTicker'
 interface JobsHeroBannerProps {
   activeTab: 'trending' | 'analysis'
 }
-
-const HOT_STACK = ['React 19', 'Next.js', 'Go', 'Python AI', 'Docker']
 
 export default function JobsHeroBanner({ activeTab }: JobsHeroBannerProps) {
   const { t } = useTranslation()
@@ -92,80 +91,43 @@ export default function JobsHeroBanner({ activeTab }: JobsHeroBannerProps) {
           </div>
         </div>
 
-        {/* Right Column: Glassmorphic Live Market Radar Card (5 cols) */}
-        <div className='lg:col-span-5'>
-          <div className='rounded-2xl border border-gray-200/80 dark:border-white/10 bg-gray-50/80 dark:bg-white/[0.05] backdrop-blur-md p-5 sm:p-6 shadow-xs dark:shadow-xl relative overflow-hidden'>
-            <div className='relative z-10 space-y-4'>
-              {/* Header */}
-              <div className='flex items-center justify-between'>
-                <div className='flex items-center gap-2.5 group cursor-pointer'>
-                  <div className='w-8 h-8 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-600/25'>
-                    <AnimatedBriefcase className='w-4 h-4' />
-                  </div>
-                  <div>
-                    <h3 className='text-xs font-bold uppercase tracking-wider text-gray-900 dark:text-white'>
-                      {t('jobs.hero.radarTitle')}
-                    </h3>
-                    <p className='text-[11px] text-gray-500 dark:text-gray-400'>{t('jobs.hero.radarSubtitle')}</p>
-                  </div>
-                </div>
+        {/* Right Column: 3D Career Matching Illustration with Floating Glass Badges (5 cols) */}
+        <div className='lg:col-span-5 flex items-center justify-center relative'>
+          {/* Subtle Ambient Light Orb behind 3D art */}
+          <div className='absolute w-64 h-64 bg-indigo-500/20 dark:bg-indigo-500/25 rounded-full blur-3xl pointer-events-none' />
 
-                <span className='inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 text-emerald-700 dark:text-emerald-400 text-[11px] font-semibold'>
-                  <span className='relative flex h-2 w-2'>
-                    <span className='animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75' />
-                    <span className='relative inline-flex rounded-full h-2 w-2 bg-emerald-500' />
-                  </span>
-                  {t('jobs.hero.radarLive')}
-                </span>
-              </div>
+          {/* 3D Illustration Frame with subtle float animation */}
+          <motion.div
+            animate={{ y: [0, -7, 0] }}
+            transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
+            className='relative w-full max-w-[380px] rounded-3xl overflow-hidden border border-gray-200/80 dark:border-white/10 shadow-lg dark:shadow-2xl bg-gradient-to-b from-indigo-50/40 to-white/60 dark:from-white/[0.04] dark:to-white/[0.01] backdrop-blur-sm group'
+          >
+            <img
+              src='/career-hero.jpg'
+              alt='EduMap AI Career Matching'
+              className='w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out'
+              loading='lazy'
+            />
 
-              {/* 2 Stats Cards */}
-              <div className='grid grid-cols-2 gap-3 pt-1'>
-                <div className='p-3.5 rounded-xl bg-white dark:bg-white/[0.04] border border-gray-200/60 dark:border-white/[0.06] shadow-xs dark:shadow-none'>
-                  <div className='text-xs text-gray-500 dark:text-gray-400 font-medium'>
-                    {t('jobs.hero.radarNewPositions')}
-                  </div>
-                  <div className='mt-1 text-xl sm:text-2xl font-black text-gray-900 dark:text-white flex items-baseline gap-0.5'>
-                    <NumberTicker value={2450} />
-                    <span className='text-sm text-indigo-600 dark:text-[#A99DFF] font-bold'>+</span>
-                  </div>
-                </div>
-
-                <div className='p-3.5 rounded-xl bg-white dark:bg-white/[0.04] border border-gray-200/60 dark:border-white/[0.06] shadow-xs dark:shadow-none'>
-                  <div className='text-xs text-gray-500 dark:text-gray-400 font-medium'>
-                    {t('jobs.hero.radarMatchRate')}
-                  </div>
-                  <div className='mt-1 text-xl sm:text-2xl font-black text-emerald-600 dark:text-emerald-400 flex items-baseline gap-0.5'>
-                    <NumberTicker value={94} />
-                    <span className='text-xs font-bold'>%</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Hot Stack Pills */}
-              <div className='pt-1'>
-                <div className='text-[11px] font-semibold text-gray-400 dark:text-[#85808C] uppercase tracking-wider mb-2 flex items-center justify-between'>
-                  <span>{t('jobs.hero.radarHotStack')}</span>
-                </div>
-                <div className='flex flex-wrap gap-1.5'>
-                  {HOT_STACK.map((tech) => (
-                    <span
-                      key={tech}
-                      className='px-2.5 py-1 rounded-lg bg-white dark:bg-white/[0.06] border border-gray-200/60 dark:border-white/[0.06] text-xs font-medium text-gray-700 dark:text-gray-300'
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Footer */}
-              <div className='pt-2 border-t border-gray-200/60 dark:border-white/10 flex items-center justify-between text-[11px] text-gray-500 dark:text-gray-400'>
-                <span>{t('jobs.hero.radarDirectApi')}</span>
-                <span className='font-semibold text-indigo-600 dark:text-[#A99DFF]'>ITviec · TopCV · LinkedIn</span>
-              </div>
+            {/* Floating Glass Pill 1: Top Right (Live Feed & Jobs count) */}
+            <div className='absolute top-3.5 right-3.5 inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/90 dark:bg-[#161426]/90 border border-gray-200/80 dark:border-white/15 shadow-md backdrop-blur-md text-[11px] font-bold text-gray-900 dark:text-white'>
+              <span className='relative flex h-2 w-2'>
+                <span className='animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75' />
+                <span className='relative inline-flex rounded-full h-2 w-2 bg-emerald-500' />
+              </span>
+              <span>
+                <NumberTicker value={2450} />+ Vị trí mới
+              </span>
             </div>
-          </div>
+
+            {/* Floating Glass Pill 2: Bottom Left (Match Rate) */}
+            <div className='absolute bottom-3.5 left-3.5 inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/90 dark:bg-[#161426]/90 border border-emerald-200/80 dark:border-emerald-500/20 shadow-md backdrop-blur-md text-[11px] font-bold text-emerald-700 dark:text-emerald-400'>
+              <AnimatedBriefcase className='w-3.5 h-3.5 text-indigo-600 dark:text-[#A99DFF]' />
+              <span>
+                Khớp <NumberTicker value={94} />% Tech Stack
+              </span>
+            </div>
+          </motion.div>
         </div>
       </div>
     </MotionFadeIn>
