@@ -8,6 +8,8 @@ import LanguageToggle from '../ui/LanguageToggle'
 import ThemeToggle from '../ui/ThemeToggle'
 
 interface AppHeaderProps {
+  logoText?: string
+  badgeText?: string
   userName?: string
   userPlan?: string
   onToggleMenu?: () => void
@@ -36,7 +38,13 @@ function NotificationBell() {
   )
 }
 
-export default function AppHeader({ userName = 'Alex Johnson', userPlan, onToggleMenu }: AppHeaderProps) {
+export default function AppHeader({
+  logoText = 'EduMap AI',
+  badgeText = 'Demo',
+  userName = 'Alex Johnson',
+  userPlan,
+  onToggleMenu,
+}: AppHeaderProps) {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const isAdmin = getRoleFromLS() === 'ADMIN'
@@ -55,21 +63,13 @@ export default function AppHeader({ userName = 'Alex Johnson', userPlan, onToggl
           <Menu className='w-5 h-5' />
         </button>
 
-        {/* Brand Logo Lockup */}
-        <div
-          onClick={() => navigate('/dashboard')}
-          className='flex items-center gap-2.5 cursor-pointer select-none shrink-0 group'
-        >
-          <div className='w-8 h-8 rounded-xl bg-[#131428] border border-white/10 flex items-center justify-center shrink-0 p-1 shadow-sm group-hover:scale-105 transition-transform'>
-            <img src='/favicon.svg' alt='EduMap AI' className='w-full h-full object-contain' />
-          </div>
-          <span className='font-black text-gray-900 dark:text-[#ECE9E4] text-base hidden xs:inline tracking-tight'>
-            EduMap
-            <span className='bg-gradient-to-r from-[#9B87F5] to-[#D4F973] bg-clip-text text-transparent ml-0.5'>
-              AI
-            </span>
-          </span>
+        <div className='w-8 h-8 rounded-lg bg-[#131428] flex items-center justify-center shrink-0 p-1 shadow-xs'>
+          <img src='/favicon.svg' alt='EduMap AI' className='w-full h-full object-contain' />
         </div>
+        <span className='font-semibold text-gray-900 dark:text-[#ECE9E4] text-base hidden xs:inline'>{logoText}</span>
+        <span className='hidden sm:inline text-xs text-gray-500 dark:text-[#A29FA8] bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-full px-2 py-0.5'>
+          {badgeText}
+        </span>
       </div>
 
       {/* Right: Language + Theme Toggle + Notifications (user only) + Profile */}

@@ -7,7 +7,6 @@ import { useForm } from 'react-hook-form'
 import Skeleton from 'react-loading-skeleton'
 import { Link } from 'react-router'
 import RecommendationResult from '../../components/layouts/jobs/RecommendationResult'
-import JobsHeroBanner from '../../components/layouts/jobs/JobsHeroBanner'
 import { useCheckJobProfileQuery, useJobRecommendationsMutation } from '../../hooks/jobQuery'
 import { DEFAULT_LOCATION, jobRecommendationSchema, type JobRecommendationFormValues } from '../../schemas/job.schema'
 
@@ -47,14 +46,8 @@ export default function JobAnalysisPage() {
   return (
     <div className='h-full overflow-y-auto scrollbar-thin'>
       <div className='max-w-6xl mx-auto px-6 py-10 pb-16'>
-        {/* Modern SaaS Hero Banner */}
-        <JobsHeroBanner activeTab='analysis' />
-
-        {/* Tiêu đề & Mô tả */}
-        <div>
-          <h2 className='text-2xl font-bold text-gray-900 dark:text-[#ECE9E4]'>{t('jobs.analysis.title')}</h2>
-          <p className='mt-1 text-sm text-gray-500 dark:text-[#A29FA8]'>{t('jobs.analysis.desc')}</p>
-        </div>
+        <h1 className='text-3xl font-semibold text-gray-900 dark:text-[#ECE9E4]'>{t('jobs.analysis.title')}</h1>
+        <p className='mt-2 text-gray-500 dark:text-[#A29FA8]'>{t('jobs.analysis.desc')}</p>
 
         {/* Trạng thái hồ sơ kỹ năng */}
         <div className='mt-6'>

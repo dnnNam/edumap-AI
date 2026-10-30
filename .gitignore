@@ -24,10 +24,7 @@ dist-ssr
 *.sw?
 
 
-# Media
-*.mp4
-*.mov
-
+# dotenv environment variable files
 .env
 .env.development.local
 .env.test.local
