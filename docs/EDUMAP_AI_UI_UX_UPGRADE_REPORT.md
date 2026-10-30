@@ -1,26 +1,28 @@
-# BÁO CÁO TỔNG HỢP NÂNG CẤP GIAO DIỆN & TRẢI NGHIỆM NGƯỜI DÙNG (UI/UX)
+# BÁO CÁO TỔNG HỢP NÂNG CẤP GIAO DIỆN & HỆ THỐNG (UI/UX & ANALYTICS)
 
 ## DỰ ÁN: NỀN TẢNG HƯỚNG NGHIỆP & LỘ TRÌNH HỌC TẬP EDUMAP AI
 
 **Dành cho:** Sinh viên ngành Công nghệ Thông tin (IT)  
 **Thời gian trình bày:** Tháng 10/2026  
-**Công nghệ chủ đạo:** React, TypeScript, Vite, Tailwind CSS, Framer Motion, Lucide Icons, Recharts
+**Công nghệ chủ đạo:** React 19, TypeScript, Vite, Tailwind CSS, Framer Motion, Recharts, Google Analytics 4 (GA4), Lucide Icons, SheetJS (XLSX), jsPDF
 
 ---
 
 ## 📌 MỤC TIÊU CẢI TIẾN TỔNG THỂ
 
-1. **Nâng tầm trải nghiệm thị giác (Visual Identity):** Chuyển dịch toàn bộ giao diện từ phong cách bảng biểu hành chính cũ sang ngôn ngữ thiết kế **Modern High-Tech EdTech SaaS (chuẩn Dribbble / Linear / Vercel)** với dải màu chủ đạo tím công nghệ cao (`#5F2CFF` / Indigo).
+1. **Nâng tầm trải nghiệm thị giác (Visual Identity):** Chuyển dịch toàn bộ giao diện từ phong cách bảng biểu cũ sang ngôn ngữ thiết kế **Modern High-Tech EdTech SaaS (chuẩn Dribbble / Linear / Vercel)** với dải màu chủ đạo tím công nghệ cao (`#5F2CFF` / Indigo).
 2. **Chuỗi chuyển động điện ảnh (Cinematic Motion Design 60fps):** Ứng dụng Framer Motion với các chuyển động mượt mà, tối ưu GPU (chỉ can thiệp `transform` và `opacity`), loại bỏ hoàn toàn giật lag và hiện tượng giật sáng (FOUC).
-3. **Loại bỏ dữ liệu ảo (100% Real Backend Data):** Tích hợp dữ liệu thời gian thực từ API server (lộ trình học, tiến độ, bài test, dữ liệu quét thị trường việc làm IT).
-4. **Tối ưu hóa hành trình người dùng (UX Journey):** Từ lúc mở trang web (Splash Screen) ➔ Giới thiệu giá trị (Landing Page) ➔ Bảng điều khiển học tập cá nhân hóa (Bento Grid Dashboard) ➔ Tìm kiếm việc làm thực chiến (Job Direct Apply).
+3. **Nâng cấp Dashboard thành Bento Grid & 100% Real Backend Data:** Xóa sạch toàn bộ mockup, kết nối dữ liệu thật từ API Server (tiến độ học tập, radar năng lực, việc làm phù hợp).
+4. **Hệ thống Quản trị Đo lường Google Analytics 4 (GA4) Chuyên sâu:** Tự động theo dõi hành vi theo SPA route, phân tích chi tiết traffic xã hội, và xuất báo cáo chuẩn **Excel (.xlsx)** & **PDF**.
+5. **Tối ưu hóa hành trình người dùng (UX Journey):** Từ lúc mở trang web (Splash Screen) ➔ Giới thiệu giá trị (Landing Page) ➔ Bảng điều khiển học tập cá nhân hóa (Bento Grid Dashboard) ➔ Tìm kiếm việc làm thực chiến (Job Direct Apply).
 
 ```mermaid
-flowchart LR
-    A["Màn hình chờ (Splash Screen)"] --> B["Thương hiệu thu về Header"]
-    B --> C["Landing Page (60fps Motion)"]
-    C --> D["Bento Grid Dashboard (Dữ liệu thật)"]
-    D --> E["Lộ trình DAG & Việc làm thực tế"]
+flowchart TD
+    A["Màn hình chờ Splash Screen (Logo Morph & Staggered Reveal)"] --> B["Thương hiệu bay vào Header & Kích hoạt hiệu ứng trồi"]
+    B --> C["Landing Page 60fps (Hero DAG, Roadmaps, Job Scraping, Testimonials)"]
+    B --> D["Bento Grid Dashboard (Hero Chào đón, Radar Năng lực, Vận tốc học tập, 100% Real API)"]
+    D --> E["Hệ thống Hướng nghiệp & Tuyển dụng (Direct Apply ITviec / TopCV)"]
+    B --> F["Google Analytics 4 & Admin Dashboard (Tracking SPA, Phân tích Social, Xuất Excel/PDF)"]
 ```
 
 ---
@@ -29,136 +31,161 @@ flowchart LR
 
 ### 1.1. Hiện trạng trước khi cải tiến
 
-- Trang web load trực tiếp, bị nháy trắng (FOUC - Flash of Unstyled Content) trong lúc tải bundle JavaScript.
+- Trang web tải trực tiếp, bị nháy trắng (FOUC) trong thời gian nạp bundle JavaScript.
 - Header chứa logo thô kèm badge "Demo" gây cảm giác sản phẩm chưa hoàn thiện.
 
 ### 1.2. Giải pháp kỹ thuật & Trải nghiệm mới
 
-Được lấy cảm hứng từ motion design của các ứng dụng âm nhạc/công nghệ quốc tế (SoundScape), kịch bản chuyển cảnh 4 giai đoạn được thiết kế đồng bộ qua `SplashContext`:
+Được lấy cảm hứng từ motion design của các ứng dụng công nghệ quốc tế (SoundScape), kịch bản chuyển cảnh 4 giai đoạn được thiết kế đồng bộ qua `SplashContext`:
 
 1. **Giai đoạn 1: Biến đổi hình khối (Center Morphing):**
-   - Khởi đầu với một ô vuông trắng tối giản nằm ngay tâm màn hình trên nền xanh đen công nghệ (`#13121D`).
-   - Ô vuông mở rộng và biến đổi hình dạng (morph/scale) mượt mà thành **Biểu tượng Logo EduMap AI** (sử dụng chuẩn Vector SVG sắc nét, không bị răng cưa hay vỡ viền).
+   - Khởi đầu với một ô vuông trắng tối giản ngay giữa màn hình trên nền xanh đen công nghệ (`#13121D`).
+   - Ô vuông mở rộng và biến đổi hình dạng (morph/scale) mượt mà thành **Biểu tượng Logo EduMap AI** (chuẩn Vector SVG sắc nét, không bị vỡ hay răng cưa).
 2. **Giai đoạn 2: Trình diễn tên thương hiệu (Staggered Letter-by-Letter Reveal):**
-   - Biểu tượng logo trượt nhẹ sang bên trái theo cơ chế lò xo (spring physics).
-   - Tên thương hiệu **"EduMap AI"** xuất hiện từng chữ cái nối tiếp nhau (staggered fade-in & slide-left), tạo nhịp điệu đọc rõ ràng, hiện đại.
+   - Logo trượt nhẹ sang trái theo cơ chế lò xo (spring physics).
+   - Tên thương hiệu **"EduMap AI"** xuất hiện từng chữ cái nối tiếp nhau (staggered fade-in & slide-left) với biên độ chậm rãi, giúp người dùng kịp tiếp nhận.
 3. **Giai đoạn 3: Điểm dừng thị giác (Reading Pause):**
-   - Logo và typography dừng lại trong khoảnh khắc vừa đủ (800ms) để người dùng kịp đọc và định vị nhận diện thương hiệu.
+   - Logo và typography dừng lại trong 800ms để người xem định hình trọn vẹn nhận diện thương hiệu.
 4. **Giai đoạn 4: Thu nhỏ và bay vào thanh điều hướng (Docking Fly Transition):**
-   - Toàn bộ khối Logo & Tên thương hiệu thu nhỏ dần (scale down) và bay mượt mà theo tọa độ động về góc trái trên cùng (`calc(-50vw + 90px), calc(-50vh + 32px)`).
+   - Toàn bộ khối Logo & Tên thu nhỏ dần (scale down) và bay theo tọa độ động về góc trái trên cùng (`calc(-50vw + 90px), calc(-50vh + 32px)`).
    - Tiếp đất hoàn hảo vào đúng vị trí Logo trên thanh Header (`AppHeader`).
-   - Màn che Splash mờ dần (curtain fade-out), kích hoạt tín hiệu `isPageRevealed = true`.
-   - **Tất cả các thành phần trên trang web trồi lên uyển chuyển từ dưới lên (`y: 30 -> 0`, `opacity: 0 -> 1`)** tạo hiệu ứng thị giác bùng nổ, mãn nhãn.
+   - Màn che Splash mờ dần, kích hoạt tín hiệu `isPageRevealed = true`.
+   - **Tất cả các thành phần trên trang web trồi lên uyển chuyển từ dưới lên (`y: 30 -> 0`, `opacity: 0 -> 1`)** tạo hiệu ứng thị giác bùng nổ.
 
 ---
 
-## 2. TRANG LANDING PAGE 60FPS DÀNH RIÊNG CHO SINH VIÊN IT
+## 2. BENTO GRID DASHBOARD HỆ THỐNG (STUDENT WORKSPACE) - CẢI TIẾN TOÀN DIỆN
 
-Trang Landing Page được tái cấu trúc hoàn toàn với 4 phân khu chính, kết hợp hiệu ứng cuộn mượt mà (smooth viewport animation):
+Trước đây, trang Dashboard của sinh viên sử dụng layout bảng thẻ rời rạc, chứa nhiều số liệu giả định (mock data). Chúng ta đã tiến hành đại tu thành công nghệ **Bento Grid**:
 
-### 2.1. Hero Section & Thẻ minh họa Lộ trình tương tác (DAG Roadmap Preview)
+### 2.1. Kiến trúc bố cục Bento Grid (Chuẩn Dribbble / Linear)
 
-- **Huy hiệu công nghệ nổi bật (Staggered Badges):**
-  - Huy hiệu RAG AI Multi-Agent phân tích lỗ hổng kiến thức.
-  - Phân tích tự động GitHub Profile sinh viên để gợi ý lộ trình phù hợp.
-  - Tiêu đề định vị: _"Lộ trình học tập & Định hướng nghề nghiệp cá nhân hóa cho Developer"_.
-- **Thẻ mô phỏng đồ thị tri thức DAG (Directed Acyclic Graph):**
-  - Trượt từ dưới lên và phóng to vào đúng vị trí trung tâm.
-  - Thể hiện các node học tập (Frontend, Backend, Database, Cloud) với trạng thái tương tác động (Hoàn thành, Đang học, Khóa).
-  - Khung AI Mentor gợi ý mẹo thực chiến theo thời gian thực trôi nổi xung quanh.
+Trang `src/pages/main/DashBoard.tsx` được tái cấu trúc thành 5 khối Bento Card chuyên biệt:
 
-### 2.2. Interactive Domain Roadmap Section (Lộ trình 4 nhánh IT trọng điểm)
+1. **`DashboardHeroBanner.tsx` (Khối SaaS Chào đón Cá nhân hóa):**
+   - Nhận diện thời gian thực trong ngày để đưa ra lời chào phù hợp: _"Chào buổi sáng"_, _"Chào buổi chiều"_, _"Chào buổi tối"_.
+   - Hiển thị avatar, tên sinh viên và chuyên ngành IT theo học.
+   - Thẻ thống kê chuỗi ngày học tập liên tục (**Study Streak Flame**) để tạo động lực duy trì thói quen học mỗi ngày.
+   - Nút hành động nhanh: _"Tiếp tục bài học dở dang"_ hoặc _"Làm bài kiểm tra đánh giá năng lực"_.
+2. **`BentoMetricCards.tsx` (4 Thẻ Chỉ số Năng lực Nhanh):**
+   - **Tiến độ lộ trình hiện tại:** Tính toán tỷ lệ % hoàn thành các node kiến thức trong lộ trình đã đăng ký.
+   - **Điểm đánh giá gần nhất:** Hiển thị điểm số của bài test trắc nghiệm kiến thức mới nhất.
+   - **Kỹ năng đã mở khóa:** Đếm tổng số chứng chỉ / kỹ năng đã pass qua các bài test.
+   - **Tương thích thị trường việc làm:** Chỉ số đo lường độ khớp giữa profile hiện tại với yêu cầu của nhà tuyển dụng.
+3. **`BentoSkillBreakdownCard.tsx` (Biểu đồ Radar Năng lực Đa chiều):**
+   - Tích hợp biểu đồ Recharts Radar trực quan hóa 5 khía cạnh: **Frontend, Backend, Database/System, DevOps/Cloud, Kỹ năng mềm**.
+   - Giúp sinh viên và Mentor nhìn rõ ngay điểm mạnh và lỗ hổng kiến thức cần bù đắp.
+4. **`BentoMonthlyVelocityCard.tsx` (Biểu đồ Vận tốc Học tập Theo Tháng):**
+   - Biểu đồ cột/đường thể hiện số giờ học tích lũy và số bài học hoàn thành qua từng tuần trong tháng.
+   - So sánh với mục tiêu học tập đề ra ban đầu.
+5. **`BentoMarketMatchCard.tsx` (Cơ hội Việc làm Gợi ý Nóng):**
+   - Liệt kê các vị trí việc làm IT thực tế có mức độ tương thích cao nhất với kỹ năng của sinh viên, hiển thị dải lương và nút ứng tuyển ngay.
 
-- Hiển thị theo dạng tab tương tác với 4 trụ cột công nghệ nóng nhất hiện nay:
-  1. **Frontend Engineer:** React 19, Next.js App Router, TypeScript, Tailwind CSS, Web Performance.
-  2. **Backend Architect:** Node.js/NestJS, Golang, Microservices, PostgreSQL, Redis, Kafka.
-  3. **AI / Machine Learning Engineer:** Python, LangChain, RAG Pipelines, Vector DB, LLM Fine-tuning.
-  4. **Cloud & DevOps Engineer:** Docker, Kubernetes, AWS/GCP, CI/CD GitHub Actions, Terraform.
-- Mỗi nhánh đi kèm: Thời gian hoàn thành dự kiến, mức lương thị trường theo khảo sát thực tế, và danh sách các kỹ năng tiên quyết (Prerequisites).
-- Hiệu ứng xuất hiện cuộn (viewport reveal) so le từng thẻ kỹ năng.
+### 2.2. Thanh lọc 100% Mockup - Kết nối API Backend thật
 
-### 2.3. Job Market Scraping Section (Dữ liệu thị trường việc làm IT thời gian thực)
+- **Xóa bỏ hoàn toàn mock data:** Toàn bộ dữ liệu hiển thị trên Dashboard được lấy trực tiếp từ các endpoint API thật của backend server:
+  - User Profile & University: `/api/users/profile`
+  - Enrolled Roadmaps & Node Progress: `/api/roadmaps/my-progress`
+  - Quiz History & Scores: `/api/quiz/results`
+  - Recommended Jobs: `/api/jobs/recommended`
+- Nếu sinh viên chưa có dữ liệu, giao diện hiển thị trạng thái Empty State thông minh với nút điều hướng dẫn dắt làm bài khảo sát hoặc đăng ký khóa học, không hiển thị số liệu ảo.
 
-- **Huy hiệu quét dữ liệu:** Radar quét việc làm IT tự động từ các nền tảng ITviec, TopCV, VietnamWorks.
-- **Biểu đồ nhu cầu kỹ năng 2026 (Skill Demand Progress Bars):** Phản ánh tỉ lệ tuyển dụng thực tế đối với React/Next.js (92%), Python AI (88%), Docker/K8s (81%), Golang (75%).
-- **Bảng việc làm tuyển dụng trực tiếp (Live Scraped Jobs):**
-  - Hiển thị công ty, vị trí tuyển dụng, dải lương minh bạch, và mức độ tương thích hồ sơ (Match score: 95%, 88%,...).
-  - Các dòng việc làm trượt nhẹ theo chiều dọc khi người dùng cuộn đến phân khu.
+### 2.3. Hiệu ứng Cascade Reveal đồng bộ với Splash
 
-### 2.4. Testimonials Section (Đánh giá từ Sinh viên & Giảng viên)
-
-- Khung phản hồi thiết kế theo phong cách kính mờ (Glassmorphism), có hiệu ứng nghiêng góc nhìn (Perspective hover tilt).
-- Lời chứng thực thực tế từ sinh viên đã pass thực tập tại Shopee, FPT Software, VNG sau khi học theo lộ trình cá nhân hóa của EduMap AI.
-
----
-
-## 3. BENTO GRID DASHBOARD HỆ THỐNG (STUDENT WORKSPACE)
-
-### 3.1. Chuyển đổi sang bố cục Bento Grid (Dribbble / Apple Style)
-
-- Thay thế các khối thẻ chữ nhật rời rạc trước đây bằng lưới **Bento Grid phân cấp thông minh**:
-  - **Khối Hero SaaS Chào đón:** Banner chào hỏi thông minh theo thời gian thực (Sáng/Chiều/Tối), hiển thị chuỗi ngày học tập liên tục (Streak), và nút tắt điều hướng nhanh.
-  - **Khối Radar Năng lực (Career Skill Radar):** Trực quan hóa điểm mạnh/điểm yếu của sinh viên giữa Lý thuyết thuật toán, Framework thực chiến, và Kỹ năng mềm.
-  - **Khối Lộ trình đang học (Active Roadmap Progress):** Thanh tiến độ gradient, hiển thị bài học tiếp theo cần hoàn thành.
-  - **Khối Thống kê thị trường việc làm (Market Pulse):** Cập nhật số lượng việc làm IT mới được cào về trong ngày.
-
-### 3.2. Thanh lọc 100% Mockup - Kết nối API thật
-
-- Loại bỏ toàn bộ dữ liệu mẫu (mock data, hardcoded strings) trong mã nguồn Dashboard.
-- Đồng bộ hóa trực tiếp với Redux Toolkit / React Query / Backend API:
-  - Thông tin sinh viên, email, trường đại học thật.
-  - Lộ trình khóa học thật (`/api/roadmaps`).
-  - Lịch sử bài kiểm tra trắc nghiệm đánh giá năng lực thật (`/api/quiz`).
-  - Gợi ý việc làm dựa trên kỹ năng thực tế đã tích lũy (`/api/jobs`).
+- Toàn bộ các khối Bento Grid được bọc trong `motion.div` với biến kiểm soát `isPageRevealed`. Ngay khi Splash Screen kết thúc, các card sẽ lần lượt trồi lên từ dưới lên với độ trễ so le, mang lại cảm giác giao diện sống động và cao cấp.
 
 ---
 
-## 4. NÂNG CẤP HUB VIỆC LÀM & TÍNH NĂNG ỨNG TUYỂN TRỰC TIẾP (JOB CAREER HUB)
+## 3. HỆ THỐNG GOOGLE ANALYTICS 4 (GA4) & ADMIN ANALYTICS CHUYÊN SÂU
 
-### 4.1. Direct Apply & Dynamic Search Link
+Để phục vụ quản trị và theo dõi hành vi người dùng thực tế, hệ thống phân tích đã được xây dựng từ nền tảng:
 
-- Khắc phục vấn đề các thẻ việc làm chỉ là mô tả tĩnh.
-- Tích hợp liên kết ứng tuyển trực tiếp đến nền tảng tuyển dụng:
-  - Tự động map từ khóa kỹ năng và vị trí địa lý của sinh viên (Hà Nội, TP.HCM, Đà Nẵng, Remote) thành URL tìm kiếm chuẩn trên **ITviec** và **TopCV**.
-  - Người dùng bấm nút "Ứng tuyển ngay" sẽ được chuyển thẳng tới trang tin tuyển dụng chính thức của doanh nghiệp.
+### 3.1. Cơ chế theo dõi tự động cho Single Page Application (SPA Tracking)
 
-### 4.2. Bổ sung Hero Banner & Navigation Tabs
+- **Thách thức:** Do ứng dụng xây dựng trên React (SPA - Single Page Application), khi người dùng chuyển trang không có hiện tượng reload, khiến Google Analytics thông thường bị bỏ sót lượt truy cập.
+- **Giải pháp:**
+  - Tích hợp thẻ `gtag.js` chuẩn trong `index.html` và module điều khiển `src/utils/analytics.ts` (`trackEvent`, `trackPageView`).
+  - Xây dựng Custom Hook `usePageTracking.ts` (`src/hooks/usePageTracking.ts`): Lắng nghe sự kiện thay đổi của React Router để tự động kích hoạt `page_view` mỗi khi người dùng di chuyển giữa các trang (Home, Dashboard, Roadmaps, Jobs, Quiz).
 
-- Bổ sung bộ lọc việc làm thông minh: Cấp bậc (Internship, Fresher, Junior), Hình thức (Full-time, Part-time, Remote), và Phân loại công nghệ (Frontend, Backend, AI).
+### 3.2. Trang Quản trị Phân tích Chuyên sâu (`AdminAnalytics.tsx` - Hơn 800 dòng code mới)
+
+Được trang bị đầy đủ các bảng dữ liệu và biểu đồ phân tích thời gian thực:
+
+- **Bộ thẻ KPIs chính:**
+  - **Người dùng hoạt động thời gian thực (Realtime Active Users)** với chấm xanh radar nhấp nháy.
+  - **Tổng phiên truy cập (Total Sessions)** và tỷ lệ tăng trưởng so với kỳ trước.
+  - **Tỷ lệ thoát trang (Bounce Rate)** và **Thời lượng trung bình mỗi phiên (Avg Session Duration)**.
+- **Phân bổ chi tiết nguồn lưu lượng (Traffic Source Breakdown):**
+  - Tách bạch rõ các nguồn: **Direct** (Truy cập trực tiếp), **Organic Search** (Google), **Referral** (Giới thiệu).
+  - Phân tích chi tiết nhánh **Social Traffic**: Tách riêng lượng truy cập từ **Facebook, Instagram, Google, LinkedIn, TikTok** với tỷ lệ % và biểu đồ trực quan.
+- **Biểu đồ xu hướng truy cập theo thời gian:**
+  - Hỗ trợ xem linh hoạt theo các mốc: **7 ngày gần nhất, 30 ngày, 90 ngày**.
+  - Biểu đồ Area Chart mượt mà thể hiện xu hướng người dùng mới (New Users) so với người dùng quay lại (Returning Users).
+- **Xử lý trạng thái và cảnh báo thông minh (`useAnalyticsQuery.ts`):**
+  - Loại bỏ hoàn toàn nhãn "Mock Mode" giả định trước đây.
+  - Tự động nhận diện cấu hình: Nếu chưa cấu hình GA4 credentials, giao diện sẽ hiển thị Banner hướng dẫn thân thiện, ngăn chặn các query rác và tránh hiện thông báo lỗi spam (toast error).
+
+### 3.3. Tính năng Xuất Báo Cáo Chuyên Nghiệp (`src/utils/analyticsExport.ts`)
+
+Phục vụ nhu cầu báo cáo định kỳ cho Mentor, Giảng viên hoặc Nhà đầu tư:
+
+- **Xuất file Excel (`.xlsx`) đa bảng tính:**
+  - Sheet 1: Tổng quan chỉ số KPIs chính (Users, Sessions, Pageviews, Bounce Rate).
+  - Sheet 2: Chi tiết nguồn lưu lượng (Organic, Social, Direct).
+  - Sheet 3: Danh sách các trang được xem nhiều nhất (Top Pages).
+  - Được format chuẩn cột, độ rộng và định dạng số.
+- **Xuất file PDF trực quan:**
+  - Tạo tài liệu PDF có đầy đủ tiêu đề thương hiệu EduMap AI, ngày giờ xuất báo cáo, bảng số liệu tóm tắt và biểu đồ, sẵn sàng in ấn hoặc đính kèm email.
 
 ---
 
-## 5. HỆ THỐNG PHÂN TÍCH GA4 & XUẤT BÁO CÁO DÀNH CHO ADMIN
+## 4. TRANG LANDING PAGE 60FPS DÀNH CHO SINH VIÊN IT
 
-- **Tích hợp Google Analytics 4 (GA4):**
-  - Tự động gửi sự kiện `page_view` mỗi khi người dùng chuyển hướng route (`usePageViewTracker`).
-  - Phân tích chi tiết nguồn lưu lượng truy cập (Direct, Facebook, Google, LinkedIn).
-- **Xuất báo cáo chuyên nghiệp:**
-  - Hỗ trợ Admin xuất dữ liệu phân tích hệ thống ra file **Excel (.xlsx)** định dạng chuẩn.
-  - Hỗ trợ xuất báo cáo tổng kết ra file **PDF** chuyên nghiệp chỉ bằng một cú nhấp chuột.
+Trang chủ được làm mới hoàn toàn với phong cách chuyển động hiện đại:
 
----
-
-## 6. CHUẨN HÓA KỸ THUẬT VÀ CHẤT LƯỢNG MÃ NGUỒN (CODE QUALITY)
-
-| Hạng mục                  | Trước cải tiến                       | Sau cải tiến                                         |
-| :------------------------ | :----------------------------------- | :--------------------------------------------------- |
-| **Animation Engine**      | CSS Transition rời rạc, có gián đoạn | **Framer Motion** chuẩn 60fps, spring physics        |
-| **Logo & Asset**          | File PNG bị crop viền, nhòe nét      | **Pure Scalable Vector SVG** (`/favicon.svg`)        |
-| **Trải nghiệm khởi động** | Nháy trắng lúc tải JS                | **Pre-React Splash** + **Context-driven Exit**       |
-| **Dữ liệu hiển thị**      | Mockup số liệu tĩnh                  | **100% Real Backend Data Binding**                   |
-| **Git & Code Quality**    | Commit tự do, không kiểm soát        | **Husky**, **Lint-staged**, **Commitlint** chuẩn hóa |
-| **Kiểm tra TypeScript**   | Còn cảnh báo type và import thừa     | **Zero Error** (`tsc -b && vite build` hoàn hảo)     |
+1. **Hero Section:**
+   - Các badge công nghệ nổi bật (RAG AI Multi-Agent, Phân tích GitHub Profile).
+   - Thẻ mô phỏng đồ thị tri thức **DAG Roadmap Preview** trượt lên và phóng to vào tâm điểm với các node tương tác động.
+2. **Interactive Domain Roadmaps:**
+   - 4 trụ cột công nghệ: **Frontend Engineer, Backend Architect, AI/Machine Learning Engineer, Cloud & DevOps Engineer**.
+   - Hiệu ứng cuộn trượt so le (viewport reveal), hiển thị mức lương thị trường và kỹ năng tiên quyết.
+3. **Job Market Scraping Section:**
+   - Bảng quét việc làm thời gian thực từ ITviec, TopCV, VietnamWorks.
+   - Thanh đo lường nhu cầu tuyển dụng các kỹ năng hot năm 2026 (React 19, Python AI, Docker/K8s, Golang).
+4. **Testimonials Section:**
+   - Khung phản hồi sinh viên phong cách kính mờ (Glassmorphism) với hiệu ứng nghiêng góc nhìn (3D Perspective tilt).
 
 ---
 
-## 🎯 GỢI Ý THUYẾT TRÌNH CHO MENTOR TỐI NAY (3 BƯỚC)
+## 5. HUB VIỆC LÀM & TÍNH NĂNG ỨNG TUYỂN TRỰC TIẾP (JOB CAREER HUB)
 
-1. **Mở đầu (1 phút) - Trình diễn Splash Screen & Landing Page:**
-   - Mở website từ tab ẩn danh hoặc reload trang để Mentor chiêm ngưỡng toàn bộ chuỗi **Splash Morphing ➔ Tên chữ chạy ra ➔ Bay vào Header ➔ Trang web trồi lên**.
-   - Nhấn mạnh: _"Chúng em đã thiết kế motion transition 60fps đồng bộ từ màn chờ vào header, mang lại cảm giác chuyên nghiệp như các sản phẩm EdTech chuẩn quốc tế."_
-2. **Thân bài (2 phút) - Đồ thị Lộ trình DAG & Việc làm thực tế:**
-   - Cuộn qua phân khu Roadmap và Market Scraping trên Landing Page.
-   - Trình bày về cơ chế kết hợp giữa lộ trình cá nhân hóa và dữ liệu tuyển dụng ITviec/TopCV thực tế.
-3. **Kết luận (2 phút) - Bento Grid Dashboard:**
-   - Đăng nhập vào Dashboard sinh viên để show Bento Grid hiện đại và chứng minh hệ thống đang chạy hoàn toàn trên dữ liệu thật kết nối từ server, không sử dụng mockup giả.
+- **Liên kết ứng tuyển trực tiếp (Direct Apply Links):** Thay vì các thẻ tĩnh, hệ thống tự động sinh đường dẫn tìm kiếm chuẩn xác trên **ITviec** và **TopCV** theo kỹ năng và địa điểm của sinh viên (Hà Nội, TP.HCM, Đà Nẵng, Remote).
+- **Bộ lọc đa chiều:** Tìm kiếm theo cấp bậc (Internship, Fresher, Junior), hình thức làm việc và công nghệ trọng tâm.
+
+---
+
+## 6. CHUẨN HÓA MÃ NGUỒN & KỸ THUẬT (ENGINEERING EXCELLENCE)
+
+| Tiêu chí                   | Trước khi tối ưu                   | Sau khi tối ưu                                                     |
+| :------------------------- | :--------------------------------- | :----------------------------------------------------------------- |
+| **Bố cục Dashboard**       | Thẻ chữ nhật rời rạc, số liệu tĩnh | **Bento Grid chuẩn SaaS**, kết nối **100% API thật**               |
+| **Hệ thống Đo lường**      | Chưa có GA4 hoặc dùng mock rác     | **GA4 tự động theo dõi SPA**, phân tích Social, **xuất Excel/PDF** |
+| **Màn hình chờ (Splash)**  | Không có, web bị nháy trắng        | **Splash Screen 4 phase** thu vào Header, kéo toàn bộ web trồi lên |
+| **Chất lượng hình ảnh**    | Logo PNG crop lỗi viền, răng cưa   | **Pure Vector SVG** chuẩn hóa, sắc nét mọi độ phân giải            |
+| **Chất lượng chuyển động** | CSS giật cục, thiếu đồng bộ        | **Framer Motion 60fps**, tối ưu GPU (`transform`/`opacity`)        |
+| **Quy chuẩn Code**         | Commit tự do, không kiểm soát      | Cấu hình **Husky**, **Lint-staged**, **Commitlint** nghiêm ngặt    |
+| **TypeScript Build**       | Nhiều cảnh báo type và import thừa | **Zero Error** (`tsc -b && vite build` hoàn hảo)                   |
+
+---
+
+## 🎯 KỊCH BẢN THUYẾT TRÌNH GỢI Ý CHO MENTOR TỐI NAY (3 BƯỚC - 5 PHÚT)
+
+1. **Bước 1 (1 phút) - Trình diễn Splash Screen & Landing Page:**
+   - Mở website ở tab mới để Mentor thấy trọn vẹn chuỗi chuyển động: **Ô vuông mở ra Logo ➔ Tên chạy từng chữ ➔ Bay về Header ➔ Web trồi lên**.
+   - Giới thiệu trang Landing Page với thẻ mô phỏng đồ thị DAG và bảng cào dữ liệu tuyển dụng IT thời gian thực.
+2. **Bước 2 (2 phút) - Show Bento Grid Dashboard & Chứng minh Dữ liệu thật:**
+   - Đăng nhập vào Dashboard sinh viên để khoe bố cục Bento Grid hiện đại (Dribbble style).
+   - Mở tab Network/API để chứng minh hệ thống đang kết nối **100% dữ liệu thật từ Backend**, thể hiện rõ chuỗi ngày học Streak, Radar năng lực và việc làm gợi ý.
+3. **Bước 3 (2 phút) - Trình diễn Google Analytics 4 & Xuất Báo Cáo:**
+   - Mở trang Admin Analytics (`/admin/analytics`), giới thiệu cơ chế tracking SPA tự động và bảng phân bổ traffic mạng xã hội.
+   - Thao tác bấm nút **"Xuất báo cáo Excel (.xlsx)"** và **"Xuất báo cáo PDF"** trực tiếp trên màn hình để gây ấn tượng mạnh về tính hoàn thiện thực tế của sản phẩm.
