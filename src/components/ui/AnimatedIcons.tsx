@@ -1,16 +1,15 @@
-import { motion, type Variants } from 'framer-motion'
-
 interface AnimatedIconProps {
   className?: string
   size?: number
 }
 
 /**
- * 1. AnimatedSparkles: Ngôi sao chính xoay nhẹ đàn hồi, các tia sao phụ nhấp nháy phát sáng
+ * 1. AnimatedSparkles: Ngôi sao chính xoay lấp lánh, các tia sáng phụ phát sáng phóng to
+ * Kích hoạt ngay khi hover vào bất kỳ vị trí nào của button/container chứa class 'group'
  */
 export function AnimatedSparkles({ className = '', size = 18 }: AnimatedIconProps) {
   return (
-    <motion.svg
+    <svg
       xmlns='http://www.w3.org/2000/svg'
       width={size}
       height={size}
@@ -20,44 +19,31 @@ export function AnimatedSparkles({ className = '', size = 18 }: AnimatedIconProp
       strokeWidth='2'
       strokeLinecap='round'
       strokeLinejoin='round'
-      className={className}
-      whileHover='hover'
-      initial='idle'
+      className={`icon-sparkle shrink-0 ${className}`}
     >
       {/* Ngôi sao chính */}
-      <motion.path
-        d='M12 3c0 4.5 3.5 8 8 8-4.5 0-8 3.5-8 8 0-4.5-3.5-8-8-8 4.5 0 8-3.5 8-8z'
-        variants={{
-          idle: { rotate: 0, scale: 1 },
-          hover: { rotate: [0, 15, -10, 0], scale: [1, 1.15, 1], transition: { duration: 0.6, ease: 'easeInOut' } },
-        }}
-      />
-      {/* Tia sáng phụ trên góc */}
-      <motion.path
+      <path d='M12 3c0 4.5 3.5 8 8 8-4.5 0-8 3.5-8 8 0-4.5-3.5-8-8-8 4.5 0 8-3.5 8-8z' />
+      {/* Tia sáng phụ trên */}
+      <path
         d='M19 3v4M21 5h-4'
-        variants={{
-          idle: { scale: 1, opacity: 0.8 },
-          hover: { scale: [1, 1.4, 1], opacity: [0.8, 1, 0.8], transition: { duration: 0.5, repeat: 1 } },
-        }}
+        className='transition-transform duration-300 origin-center group-hover:scale-125 group-hover:opacity-100'
       />
-      {/* Tia sáng phụ góc dưới */}
-      <motion.path
+      {/* Tia sáng phụ dưới */}
+      <path
         d='M5 17v2M6 18H4'
-        variants={{
-          idle: { scale: 1, opacity: 0.7 },
-          hover: { scale: [1, 1.5, 1], opacity: [0.7, 1, 0.7], transition: { duration: 0.5, delay: 0.1, repeat: 1 } },
-        }}
+        className='transition-transform duration-300 origin-center group-hover:scale-125 group-hover:opacity-100'
       />
-    </motion.svg>
+    </svg>
   )
 }
 
 /**
- * 2. AnimatedGitBranch: Tách nhánh và các điểm nút nhảy đàn hồi (rất hợp nút Cây Kỹ Năng)
+ * 2. AnimatedGitBranch: Tách nhánh và các điểm node tròn phập phồng nảy nở
+ * Kích hoạt ngay khi hover vào bất kỳ vị trí nào của button 'Xem Cây kỹ năng'
  */
 export function AnimatedGitBranch({ className = '', size = 18 }: AnimatedIconProps) {
   return (
-    <motion.svg
+    <svg
       xmlns='http://www.w3.org/2000/svg'
       width={size}
       height={size}
@@ -67,69 +53,44 @@ export function AnimatedGitBranch({ className = '', size = 18 }: AnimatedIconPro
       strokeWidth='2'
       strokeLinecap='round'
       strokeLinejoin='round'
-      className={className}
-      whileHover='hover'
-      initial='idle'
+      className={`icon-branch shrink-0 ${className}`}
     >
-      {/* Đường thân chính */}
-      <motion.line
-        x1='6'
-        y1='3'
-        x2='6'
-        y2='15'
-        variants={{
-          idle: { pathLength: 1 },
-          hover: { pathLength: [0.6, 1], transition: { duration: 0.4 } },
-        }}
-      />
-      {/* Đường nhánh rẽ cong */}
-      <motion.path
-        d='M18 9a9 9 0 0 1-9 9'
-        variants={{
-          idle: { pathLength: 1, opacity: 1 },
-          hover: { pathLength: [0, 1], opacity: [0.4, 1], transition: { duration: 0.45, ease: 'easeOut' } },
-        }}
-      />
+      {/* Thân chính */}
+      <line x1='6' y1='3' x2='6' y2='15' />
+      {/* Nhánh cong */}
+      <path d='M18 9a9 9 0 0 1-9 9' />
       {/* Node gốc dưới */}
-      <motion.circle
+      <circle
         cx='6'
         cy='18'
         r='3'
-        variants={{
-          idle: { scale: 1 },
-          hover: { scale: [1, 1.25, 1], transition: { duration: 0.4 } },
-        }}
+        className='transition-transform duration-300 origin-[6px_18px] group-hover:scale-125'
       />
       {/* Node trên */}
-      <motion.circle
+      <circle
         cx='6'
         cy='6'
         r='3'
-        variants={{
-          idle: { scale: 1 },
-          hover: { scale: [1, 1.25, 1], transition: { duration: 0.4, delay: 0.08 } },
-        }}
+        className='transition-transform duration-300 origin-[6px_6px] group-hover:scale-125'
       />
       {/* Node nhánh rẽ */}
-      <motion.circle
+      <circle
         cx='18'
         cy='9'
         r='3'
-        variants={{
-          idle: { scale: 1 },
-          hover: { scale: [1, 1.35, 1], transition: { duration: 0.4, delay: 0.16 } },
-        }}
+        className='transition-transform duration-300 origin-[18px_9px] group-hover:scale-130'
       />
-    </motion.svg>
+    </svg>
   )
 }
 
 /**
- * 3. AnimatedZap: Tia sét nạp năng lượng phóng to và giật điện nhẹ
+ * 3. AnimatedZap: Tia sét nạp năng lượng đàn hồi và chuyển động vi lượng
+ * Kích hoạt ngay khi hover vào button hoặc radar overview
  */
 export function AnimatedZap({ className = '', size = 18 }: AnimatedIconProps) {
   return (
-    <motion.svg
+    <svg
       xmlns='http://www.w3.org/2000/svg'
       width={size}
       height={size}
@@ -139,39 +100,20 @@ export function AnimatedZap({ className = '', size = 18 }: AnimatedIconProps) {
       strokeWidth='2'
       strokeLinecap='round'
       strokeLinejoin='round'
-      className={className}
-      whileHover='hover'
-      initial='idle'
+      className={`icon-zap shrink-0 ${className}`}
     >
-      <motion.polygon
-        points='13 2 3 14 12 14 11 22 21 10 12 10 13 2'
-        variants={{
-          idle: { scale: 1, rotate: 0 },
-          hover: {
-            scale: [1, 1.2, 0.95, 1.1, 1],
-            rotate: [0, -8, 8, -4, 0],
-            transition: { duration: 0.5, ease: 'easeInOut' },
-          },
-        }}
-      />
-    </motion.svg>
+      <polygon points='13 2 3 14 12 14 11 22 21 10 12 10 13 2' />
+    </svg>
   )
 }
 
 /**
- * 4. AnimatedBell: Chuông thông báo lắc lư con lắc đung đưa
+ * 4. AnimatedBell: Chuông thông báo đung đưa lắc lư con lắc vật lý
+ * Kích hoạt ngay khi rê chuột vào bất kỳ góc nào của button chuông thông báo trên Header
  */
 export function AnimatedBell({ className = '', size = 18 }: AnimatedIconProps) {
-  const bellVariants: Variants = {
-    idle: { rotate: 0 },
-    hover: {
-      rotate: [0, 18, -16, 12, -8, 4, 0],
-      transition: { duration: 0.65, ease: 'easeInOut' },
-    },
-  }
-
   return (
-    <motion.svg
+    <svg
       xmlns='http://www.w3.org/2000/svg'
       width={size}
       height={size}
@@ -181,29 +123,21 @@ export function AnimatedBell({ className = '', size = 18 }: AnimatedIconProps) {
       strokeWidth='2'
       strokeLinecap='round'
       strokeLinejoin='round'
-      className={className}
-      whileHover='hover'
-      initial='idle'
-      style={{ originX: '50%', originY: '15%' }}
+      className={`icon-bell shrink-0 ${className}`}
     >
-      <motion.path d='M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9' variants={bellVariants} />
-      <motion.path
-        d='M13.73 21a2 2 0 0 1-3.46 0'
-        variants={{
-          idle: { x: 0 },
-          hover: { x: [0, 2, -2, 1, 0], transition: { duration: 0.5, delay: 0.1 } },
-        }}
-      />
-    </motion.svg>
+      <path d='M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9' />
+      <path d='M13.73 21a2 2 0 0 1-3.46 0' />
+    </svg>
   )
 }
 
 /**
- * 5. AnimatedArrowRight: Mũi tên trượt về phía trước đàn hồi
+ * 5. AnimatedArrowRight: Mũi tên lướt tới phía trước 4px mượt mà
+ * Kích hoạt ngay khi chạm vào bất kỳ điểm nào của button CTA
  */
 export function AnimatedArrowRight({ className = '', size = 16 }: AnimatedIconProps) {
   return (
-    <motion.svg
+    <svg
       xmlns='http://www.w3.org/2000/svg'
       width={size}
       height={size}
@@ -213,27 +147,10 @@ export function AnimatedArrowRight({ className = '', size = 16 }: AnimatedIconPr
       strokeWidth='2.2'
       strokeLinecap='round'
       strokeLinejoin='round'
-      className={className}
-      whileHover='hover'
-      initial='idle'
+      className={`icon-arrow transition-transform duration-300 ease-out shrink-0 ${className}`}
     >
-      <motion.line
-        x1='5'
-        y1='12'
-        x2='19'
-        y2='12'
-        variants={{
-          idle: { x: 0 },
-          hover: { x: [0, 4, 2], transition: { duration: 0.35, ease: 'easeOut' } },
-        }}
-      />
-      <motion.polyline
-        points='12 5 19 12 12 19'
-        variants={{
-          idle: { x: 0 },
-          hover: { x: [0, 4, 2], transition: { duration: 0.35, ease: 'easeOut' } },
-        }}
-      />
-    </motion.svg>
+      <line x1='5' y1='12' x2='19' y2='12' />
+      <polyline points='12 5 19 12 12 19' />
+    </svg>
   )
 }

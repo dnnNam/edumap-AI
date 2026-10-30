@@ -29,7 +29,7 @@ export default function DashboardHeroBanner({ fullName, totalSkills = 0, totalHo
         {/* Left Column: Greeting & Actions (Col 7) */}
         <div className='lg:col-span-7 space-y-4'>
           {/* Top Pill Badge */}
-          <div className='inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-50 dark:bg-white/10 border border-indigo-100 dark:border-white/10 text-xs font-semibold text-indigo-700 dark:text-white/90 backdrop-blur-md cursor-default'>
+          <div className='inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-50 dark:bg-white/10 border border-indigo-100 dark:border-white/10 text-xs font-semibold text-indigo-700 dark:text-white/90 backdrop-blur-md cursor-default group'>
             <AnimatedSparkles className='w-3.5 h-3.5 text-amber-500 dark:text-amber-400' />
             <span>{t('dashboard.banner.badge')}</span>
           </div>
@@ -71,7 +71,7 @@ export default function DashboardHeroBanner({ fullName, totalSkills = 0, totalHo
             <button
               type='button'
               onClick={() => navigate('/upload')}
-              className='inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-xs text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-white transition cursor-pointer'
+              className='inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-xs text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-white transition cursor-pointer group'
             >
               <AnimatedZap className='w-3.5 h-3.5' />
               <span>{t('dashboard.runAnalysis')}</span>
@@ -84,7 +84,7 @@ export default function DashboardHeroBanner({ fullName, totalSkills = 0, totalHo
           <div className='rounded-2xl border border-gray-200/80 dark:border-white/10 bg-gray-50/80 dark:bg-white/[0.05] backdrop-blur-md p-5 sm:p-6 shadow-xs dark:shadow-xl relative overflow-hidden'>
             <div className='relative z-10 space-y-4'>
               <div className='flex items-center justify-between'>
-                <div className='flex items-center gap-2.5'>
+                <div className='flex items-center gap-2.5 group cursor-pointer'>
                   <div className='w-8 h-8 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-600/25'>
                     <AnimatedZap className='w-4 h-4' />
                   </div>

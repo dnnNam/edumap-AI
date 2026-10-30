@@ -91,4 +91,89 @@
   .dark ::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, 0.28);
   }
+
+  /* Micro-interactions: Tự động kích hoạt khi hover vào bất kỳ vị trí nào của button/container chứa class 'group' */
+  @keyframes bell-ring {
+    0%,
+    100% {
+      transform: rotate(0deg);
+    }
+    20% {
+      transform: rotate(18deg);
+    }
+    40% {
+      transform: rotate(-14deg);
+    }
+    60% {
+      transform: rotate(10deg);
+    }
+    80% {
+      transform: rotate(-4deg);
+    }
+  }
+
+  @keyframes zap-bounce {
+    0%,
+    100% {
+      transform: scale(1) rotate(0deg);
+    }
+    25% {
+      transform: scale(1.22) rotate(-8deg);
+    }
+    55% {
+      transform: scale(0.95) rotate(6deg);
+    }
+    80% {
+      transform: scale(1.1) rotate(-3deg);
+    }
+  }
+
+  @keyframes sparkle-twinkle {
+    0%,
+    100% {
+      transform: rotate(0deg) scale(1);
+    }
+    50% {
+      transform: rotate(25deg) scale(1.22);
+    }
+  }
+
+  @keyframes branch-pulse {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1);
+    }
+  }
+
+  .group:hover .icon-bell,
+  .icon-bell:hover {
+    transform-origin: 50% 15%;
+    animation: bell-ring 0.65s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  }
+
+  .group:hover .icon-zap,
+  .icon-zap:hover {
+    transform-origin: center;
+    animation: zap-bounce 0.5s ease-in-out both;
+  }
+
+  .group:hover .icon-sparkle,
+  .icon-sparkle:hover {
+    transform-origin: center;
+    animation: sparkle-twinkle 0.6s ease-in-out both;
+  }
+
+  .group:hover .icon-branch,
+  .icon-branch:hover {
+    transform-origin: center;
+    animation: branch-pulse 0.45s ease-out both;
+  }
+
+  .group:hover .icon-arrow,
+  .icon-arrow:hover {
+    transform: translateX(4px);
+  }
 }

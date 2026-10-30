@@ -25,7 +25,7 @@ function NotificationBell() {
       type='button'
       onClick={() => navigate('/notifications')}
       aria-label={unreadCount > 0 ? t('header.notificationsUnread', { count: unreadCount }) : t('header.notifications')}
-      className='relative w-9 h-9 flex items-center justify-center rounded-lg hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer'
+      className='relative w-9 h-9 flex items-center justify-center rounded-lg hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer group'
     >
       <AnimatedBell className='w-5 h-5 text-gray-500 dark:text-[#A29FA8]' />
       {unreadCount > 0 && (
