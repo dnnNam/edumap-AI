@@ -2,6 +2,8 @@ import { motion } from 'framer-motion'
 import { ArrowRight, Play, Sparkles, GitBranch, Terminal, Cpu, Database, CheckCircle2 } from 'lucide-react'
 import { useNavigate } from 'react-router'
 import { useSplash } from '../../context/SplashContext'
+import ShimmerButton from '../ui/ShimmerButton'
+import SpotlightCard from '../ui/SpotlightCard'
 
 interface LandingHeroProps {
   onWatchDemo: () => void
@@ -62,14 +64,11 @@ export default function LandingHero({ onWatchDemo }: LandingHeroProps) {
           transition={{ duration: 0.6, delay: 0.24, ease: [0.22, 1, 0.36, 1] }}
           className='mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-4 max-w-md mx-auto sm:max-w-none'
         >
-          <button
-            type='button'
-            onClick={() => navigate('/register')}
-            className='w-full sm:w-auto inline-flex items-center justify-center gap-2.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 active:scale-[0.98] text-white font-bold px-7 py-3.5 text-sm sm:text-base transition-all shadow-lg shadow-indigo-600/30 hover:shadow-indigo-600/40 cursor-pointer'
-          >
+          {/* ShimmerButton từ Aceternity UI style */}
+          <ShimmerButton type='button' onClick={() => navigate('/register')}>
             <span>Khám phá Lộ trình miễn phí</span>
             <ArrowRight className='w-4.5 h-4.5' />
-          </button>
+          </ShimmerButton>
 
           <button
             type='button'
@@ -99,10 +98,8 @@ export default function LandingHero({ onWatchDemo }: LandingHeroProps) {
           transition={{ duration: 0.85, delay: 0.32, ease: [0.16, 1, 0.3, 1] }}
           className='mt-12 sm:mt-16 text-left relative'
         >
-          {/* Ambient Glow Aura */}
-          <div className='absolute -inset-1 rounded-[36px] bg-indigo-500/15 blur-xl pointer-events-none' />
-
-          <div className='relative rounded-[32px] border border-gray-200/80 dark:border-white/10 bg-white dark:bg-[#1A191C] shadow-2xl overflow-hidden p-5 sm:p-8 backdrop-blur-xl'>
+          {/* SpotlightCard với hiệu ứng quầng sáng rọi theo chuột */}
+          <SpotlightCard className='shadow-2xl p-5 sm:p-8 backdrop-blur-xl'>
             {/* Window Topbar */}
             <div className='flex items-center justify-between pb-5 border-b border-gray-100 dark:border-white/5'>
               <div className='flex items-center gap-2'>
@@ -204,7 +201,7 @@ export default function LandingHero({ onWatchDemo }: LandingHeroProps) {
                 Dự báo mức lương: $1,200 - $1,800/tháng
               </span>
             </div>
-          </div>
+          </SpotlightCard>
         </motion.div>
       </div>
     </section>
