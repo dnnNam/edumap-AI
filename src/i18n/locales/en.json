@@ -834,6 +834,17 @@
     }
   },
   "jobs": {
+    "hero": {
+      "badge": "EduMap AI Career Radar · IT Market 2026",
+      "title": "Discover & Conquer",
+      "titleAccent": "IT Career Opportunities",
+      "desc": "Cross-match your hands-on coding skills from actual projects with real-time job demands across ITviec, TopCV and LinkedIn.",
+      "tabTrending": "Trending Jobs",
+      "tabAnalysis": "Analyze My Job Matches",
+      "marketData": "Standard 2026 IT Market Data",
+      "githubStack": "Real GitHub Tech Stack Aligned",
+      "directConnect": "Directly connected to ITviec & TopCV"
+    },
     "trending": {
       "title": "Job Trending",
       "subtitle_one": "{{count}} role",

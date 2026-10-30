@@ -831,6 +831,17 @@
     }
   },
   "jobs": {
+    "hero": {
+      "badge": "EduMap AI Career Radar · Thị trường IT 2026",
+      "title": "Khám Phá & Chinh Phục",
+      "titleAccent": "Cơ Hội Nghề Nghiệp IT",
+      "desc": "Hệ thống đối soát kỹ năng thực chiến từ các dự án lập trình thực tế của bạn với nhu cầu tuyển dụng theo thời gian thực trên các nền tảng ITviec, TopCV và LinkedIn.",
+      "tabTrending": "Việc làm xu hướng (Trending)",
+      "tabAnalysis": "Phân tích gợi ý việc làm của tôi",
+      "marketData": "Dữ liệu chuẩn thị trường IT 2026",
+      "githubStack": "Bám sát Tech Stack GitHub thực tế",
+      "directConnect": "Kết nối trực tiếp ITviec & TopCV"
+    },
     "trending": {
       "title": "Xu hướng việc làm",
       "subtitle_other": "{{count}} vị trí",
