@@ -843,7 +843,14 @@
       "tabAnalysis": "Analyze My Job Matches",
       "marketData": "Standard 2026 IT Market Data",
       "githubStack": "Real GitHub Tech Stack Aligned",
-      "directConnect": "Directly connected to ITviec & TopCV"
+      "directConnect": "Directly connected to ITviec & TopCV",
+      "radarTitle": "IT Career Radar",
+      "radarSubtitle": "Real-time updates",
+      "radarLive": "Live Feed",
+      "radarNewPositions": "New IT Positions",
+      "radarMatchRate": "Tech Stack Match",
+      "radarHotStack": "In-demand Tech Stack Q4",
+      "radarDirectApi": "Direct API Match"
     },
     "trending": {
       "title": "Job Trending",

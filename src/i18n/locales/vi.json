@@ -840,7 +840,14 @@
       "tabAnalysis": "Phân tích gợi ý việc làm của tôi",
       "marketData": "Dữ liệu chuẩn thị trường IT 2026",
       "githubStack": "Bám sát Tech Stack GitHub thực tế",
-      "directConnect": "Kết nối trực tiếp ITviec & TopCV"
+      "directConnect": "Kết nối trực tiếp ITviec & TopCV",
+      "radarTitle": "Radar Tuyển Dụng IT",
+      "radarSubtitle": "Cập nhật thời gian thực",
+      "radarLive": "Live Feed",
+      "radarNewPositions": "Vị trí IT mới",
+      "radarMatchRate": "Khớp Tech Stack",
+      "radarHotStack": "Tech Stack săn đón Q4",
+      "radarDirectApi": "Đối soát API trực tiếp"
     },
     "trending": {
       "title": "Xu hướng việc làm",
