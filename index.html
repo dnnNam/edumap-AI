@@ -27,7 +27,7 @@
       gtag('config', 'G-7L3ZY4VJBJ')
     </script>
 
-    <!-- Theme Initialization Script: Chống nháy FOUC trước khi DOM render -->
+    <!-- Theme & Splash Session Check: Nếu đã xem splash trong phiên này thì ẩn pre-splash ngay -->
     <script>
       ;(function () {
         try {
@@ -41,9 +41,18 @@
             document.documentElement.setAttribute('data-theme', 'light')
             document.documentElement.style.colorScheme = 'light'
           }
+
+          if (sessionStorage.getItem('edumap_splash_seen') === 'true') {
+            document.documentElement.classList.add('skip-initial-splash')
+          }
         } catch (e) {}
       })()
     </script>
+    <style>
+      .skip-initial-splash #initial-splash {
+        display: none !important;
+      }
+    </style>
   </head>
 
   <body style="margin: 0; background-color: #121114">

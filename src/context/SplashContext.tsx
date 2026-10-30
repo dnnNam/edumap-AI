@@ -14,7 +14,9 @@ const SplashContext = createContext<SplashContextType>({
 export const useSplash = () => useContext(SplashContext)
 
 export function SplashProvider({ children }: { children: ReactNode }) {
-  const [isPageRevealed, setIsPageRevealed] = useState(false)
+  // Nếu người dùng đã xem splash trong phiên làm việc hiện tại, hiển thị web luôn không delay
+  const hasSeenSplash = typeof window !== 'undefined' && sessionStorage.getItem('edumap_splash_seen') === 'true'
+  const [isPageRevealed, setIsPageRevealed] = useState(hasSeenSplash)
 
   return <SplashContext.Provider value={{ isPageRevealed, setIsPageRevealed }}>{children}</SplashContext.Provider>
 }
