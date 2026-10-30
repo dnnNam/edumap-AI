@@ -13,12 +13,26 @@ import SplashScreen from './components/ui/SplashScreen'
 function AppContent() {
   const { isDark } = useTheme()
   const { isPageRevealed, setIsPageRevealed } = useSplash()
-  const [showSplash, setShowSplash] = useState(true)
+
+  // Kiểm tra session: Chỉ hiển thị splash một lần trong phiên truy cập (Session)
+  const [showSplash, setShowSplash] = useState(() => {
+    return sessionStorage.getItem('edumap_splash_seen') !== 'true'
+  })
+
+  const handleStartExit = () => {
+    setIsPageRevealed(true)
+    sessionStorage.setItem('edumap_splash_seen', 'true')
+  }
+
+  const handleFinish = () => {
+    setShowSplash(false)
+    sessionStorage.setItem('edumap_splash_seen', 'true')
+  }
 
   return (
     <SkeletonTheme baseColor={isDark ? '#1A191C' : '#f3f4f6'} highlightColor={isDark ? '#232227' : '#e5e7eb'}>
       <Toaster position='top-right' richColors theme={isDark ? 'dark' : 'light'} />
-      {showSplash && <SplashScreen onStartExit={() => setIsPageRevealed(true)} onFinish={() => setShowSplash(false)} />}
+      {showSplash && <SplashScreen onStartExit={handleStartExit} onFinish={handleFinish} />}
       <motion.div
         animate={isPageRevealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
         transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}

@@ -64,10 +64,7 @@ export default function AppHeader({ userName = 'Alex Johnson', userPlan, onToggl
             <img src='/favicon.svg' alt='EduMap AI' className='w-full h-full object-contain' />
           </div>
           <span className='font-black text-gray-900 dark:text-[#ECE9E4] text-base hidden xs:inline tracking-tight'>
-            EduMap
-            <span className='bg-gradient-to-r from-[#9B87F5] to-[#D4F973] bg-clip-text text-transparent ml-0.5'>
-              AI
-            </span>
+            EduMap<span className='text-indigo-600 dark:text-[#A99DFF] ml-0.5'>AI</span>
           </span>
         </div>
       </div>

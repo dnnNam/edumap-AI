@@ -25,10 +25,10 @@ const DOMAIN_ROADMAPS = [
     title: 'Backend Engineering',
     tag: 'High Concurrency & APIs',
     icon: Server,
-    color: 'from-purple-500 to-indigo-600',
-    accentText: 'text-purple-600 dark:text-[#C49BFF]',
+    color: 'from-indigo-600 to-indigo-700',
+    accentText: 'text-indigo-600 dark:text-[#A99DFF]',
     bgBadge:
-      'bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-[#C49BFF] border-purple-200 dark:border-purple-800/40',
+      'bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-[#A99DFF] border-indigo-200 dark:border-indigo-800/40',
     demandScore: '96% Nhu cầu cao',
     skills: [
       'Node.js & NestJS Architecture',
@@ -105,12 +105,12 @@ export default function LandingRoadmapSection() {
   return (
     <section
       id='roadmap'
-      className='py-20 sm:py-28 relative z-10 overflow-hidden bg-white dark:bg-[#15141A] border-y border-gray-200/80 dark:border-white/5 transition-colors'
+      className='py-20 sm:py-28 relative z-10 overflow-hidden bg-white dark:bg-[#121114] border-y border-gray-200/80 dark:border-white/5 transition-colors'
     >
       <div className='max-w-6xl mx-auto px-4 sm:px-6 lg:px-8'>
         {/* Section Header */}
         <div className='text-center max-w-2xl mx-auto mb-14 sm:mb-18'>
-          <div className='inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-50 dark:bg-purple-950/40 border border-purple-200/60 dark:border-purple-800/40 text-xs font-bold text-purple-700 dark:text-[#C49BFF] mb-3'>
+          <div className='inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200/60 dark:border-indigo-800/40 text-xs font-bold text-indigo-700 dark:text-[#A99DFF] mb-3'>
             <Sparkles className='w-3.5 h-3.5' />
             LỘ TRÌNH KỸ NĂNG CHUẨN DOANH NGHIỆP
           </div>
@@ -138,12 +138,12 @@ export default function LandingRoadmapSection() {
                 key={item.id}
                 variants={cardVariants}
                 whileHover={{ y: -6, transition: { duration: 0.25 } }}
-                className='rounded-3xl border border-gray-200/80 dark:border-white/[0.08] bg-gray-50/50 dark:bg-[#1A1824] p-6 shadow-xs hover:shadow-xl hover:border-indigo-400 dark:hover:border-indigo-500/40 transition-all flex flex-col justify-between group'
+                className='rounded-3xl border border-gray-200/80 dark:border-white/[0.08] bg-gray-50/50 dark:bg-[#1A191C] p-6 shadow-xs hover:shadow-xl hover:border-indigo-400 dark:hover:border-indigo-500/40 transition-all flex flex-col justify-between group'
               >
                 <div>
                   {/* Card Header */}
                   <div className='flex items-center justify-between mb-4'>
-                    <div className='w-12 h-12 rounded-2xl bg-white dark:bg-[#232032] border border-gray-200/70 dark:border-white/10 flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform'>
+                    <div className='w-12 h-12 rounded-2xl bg-white dark:bg-[#232227] border border-gray-200/70 dark:border-white/10 flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform'>
                       <Icon className={`w-6 h-6 ${item.accentText}`} />
                     </div>
                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${item.bgBadge}`}>

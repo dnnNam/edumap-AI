@@ -27,7 +27,7 @@
       gtag('config', 'G-7L3ZY4VJBJ')
     </script>
 
-    <!-- Theme Initialization Script: Chống nháy FOUC trước khi DOM render -->
+    <!-- Theme & Splash Session Check: Nếu đã xem splash trong phiên này thì ẩn pre-splash ngay -->
     <script>
       ;(function () {
         try {
@@ -41,12 +41,21 @@
             document.documentElement.setAttribute('data-theme', 'light')
             document.documentElement.style.colorScheme = 'light'
           }
+
+          if (sessionStorage.getItem('edumap_splash_seen') === 'true') {
+            document.documentElement.classList.add('skip-initial-splash')
+          }
         } catch (e) {}
       })()
     </script>
+    <style>
+      .skip-initial-splash #initial-splash {
+        display: none !important;
+      }
+    </style>
   </head>
 
-  <body style="margin: 0; background-color: #0c0a14">
+  <body style="margin: 0; background-color: #121114">
     <!-- Pre-React Splash: Ngăn chặn hoàn toàn hiện tượng chớp trắng trước khi React bundle tải xong -->
     <div
       id="initial-splash"
@@ -57,7 +66,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        background-color: #0c0a14;
+        background-color: #121114;
         z-index: 999999;
         font-family:
           system-ui,
@@ -67,36 +76,29 @@
     >
       <div
         style="
-          width: 84px;
-          height: 84px;
-          border-radius: 22px;
-          background: #161322;
-          border: 1px solid rgba(255, 255, 255, 0.12);
+          width: 80px;
+          height: 80px;
+          border-radius: 20px;
+          background: #131428;
+          border: 1px solid rgba(255, 255, 255, 0.1);
           display: flex;
           align-items: center;
           justify-content: center;
-          box-shadow: 0 0 35px rgba(95, 44, 255, 0.45);
+          box-shadow: 0 0 25px rgba(79, 70, 229, 0.35);
           margin-bottom: 18px;
         "
       >
-        <img src="/favicon.svg" alt="EduMap AI" style="width: 54px; height: 54px; object-fit: contain" />
+        <img src="/favicon.svg" alt="EduMap AI" style="width: 52px; height: 52px; object-fit: contain" />
       </div>
       <div style="font-size: 26px; font-weight: 800; color: #ffffff; letter-spacing: -0.5px">
         EduMap
-        <span
-          style="
-            background: linear-gradient(135deg, #9b87f5, #d4f973);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-          "
-          >AI</span
-        >
+        <span style="color: #a99dff; margin-left: 2px">AI</span>
       </div>
       <div
         style="
           font-size: 11px;
           font-weight: 600;
-          color: rgba(255, 255, 255, 0.4);
+          color: #85808c;
           letter-spacing: 2px;
           margin-top: 6px;
           text-transform: uppercase;

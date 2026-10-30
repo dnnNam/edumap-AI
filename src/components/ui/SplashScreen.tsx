@@ -57,10 +57,10 @@ export default function SplashScreen({ onStartExit, onFinish }: SplashScreenProp
         animate={{ opacity: phase === 4 ? 0 : 1 }}
         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
         onClick={handleSkip}
-        className='fixed inset-0 z-[999999] pointer-events-auto select-none overflow-hidden bg-[#13121D] flex items-center justify-center cursor-pointer'
+        className='fixed inset-0 z-[999999] pointer-events-auto select-none overflow-hidden bg-[#121114] flex items-center justify-center cursor-pointer'
       >
-        {/* Vầng sáng tím huyền ảo nhẹ phía sau */}
-        <div className='absolute w-[500px] h-[500px] rounded-full bg-[#5F2CFF]/15 blur-[140px] pointer-events-none' />
+        {/* Vầng sáng indigo dịu phía sau */}
+        <div className='absolute w-[500px] h-[500px] rounded-full bg-indigo-600/15 blur-[140px] pointer-events-none' />
 
         {/* Khung chứa Logo & Chữ chuyển động đồng bộ */}
         <motion.div
@@ -115,7 +115,7 @@ export default function SplashScreen({ onStartExit, onFinish }: SplashScreenProp
                     },
                   }
             }
-            className='relative w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-[#131428] border border-white/15 shadow-[0_0_25px_rgba(95,44,255,0.4)] flex items-center justify-center p-2.5 overflow-hidden shrink-0 z-20'
+            className='relative w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-[#131428] border border-white/10 shadow-[0_0_25px_rgba(79,70,229,0.35)] flex items-center justify-center p-2.5 overflow-hidden shrink-0 z-20'
           >
             {/* Phân mảnh khối hình học xoay ở phase 1 */}
             {phase === 1 ? (
@@ -125,10 +125,10 @@ export default function SplashScreen({ onStartExit, onFinish }: SplashScreenProp
                 transition={{ duration: 0.9, ease: 'easeInOut' }}
                 className='grid grid-cols-2 gap-1 w-full h-full p-0.5'
               >
-                <div className='bg-[#5F2CFF] rounded-sm' />
+                <div className='bg-indigo-600 rounded-sm' />
                 <div className='bg-white rounded-sm' />
                 <div className='bg-white rounded-sm' />
-                <div className='bg-[#5F2CFF] rounded-sm' />
+                <div className='bg-indigo-600 rounded-sm' />
               </motion.div>
             ) : (
               /* Vector SVG sắc nét 100%, không bị vệt mờ hay mất chữ viền */
@@ -149,7 +149,7 @@ export default function SplashScreen({ onStartExit, onFinish }: SplashScreenProp
              ======================================================== */}
           {phase >= 2 && (
             <div className='pl-3.5 flex flex-col justify-center select-none'>
-              {/* Tiêu đề EduMap AI */}
+              {/* Tiêu đề EduMap AI đồng nhất với hệ thống Logo */}
               <div className='flex items-baseline font-black text-3xl sm:text-4xl tracking-tight text-white leading-none'>
                 {/* Chữ "EduMap" */}
                 <div className='flex items-center'>
@@ -173,8 +173,8 @@ export default function SplashScreen({ onStartExit, onFinish }: SplashScreenProp
                 {/* Khoảng cách giữa EduMap và AI */}
                 <span className='inline-block w-2' />
 
-                {/* Chữ "AI" màu tím Indigo gradient nổi bật */}
-                <div className='flex items-center bg-gradient-to-r from-[#9B87F5] via-[#C4B5FD] to-[#D4F973] bg-clip-text text-transparent'>
+                {/* Chữ "AI" màu tím Indigo theo chuẩn thiết kế website */}
+                <div className='flex items-center text-[#A99DFF]'>
                   {BRAND_AI.map((char, index) => (
                     <motion.span
                       key={index}
@@ -185,7 +185,7 @@ export default function SplashScreen({ onStartExit, onFinish }: SplashScreenProp
                         delay: 0.38 + index * 0.08,
                         ease: [0.2, 0.65, 0.3, 0.9],
                       }}
-                      className='inline-block font-black drop-shadow-[0_0_15px_rgba(155,135,245,0.5)]'
+                      className='inline-block font-black drop-shadow-[0_0_12px_rgba(169,157,255,0.4)]'
                     >
                       {char}
                     </motion.span>
@@ -201,7 +201,7 @@ export default function SplashScreen({ onStartExit, onFinish }: SplashScreenProp
                     ? { opacity: 0, y: -4, transition: { duration: 0.2 } }
                     : { opacity: 0.65, y: 0, transition: { duration: 0.6, delay: 0.65, ease: 'easeOut' } }
                 }
-                className='text-[10px] sm:text-[11px] font-semibold tracking-[0.2em] uppercase text-gray-300 mt-1.5'
+                className='text-[10px] sm:text-[11px] font-semibold tracking-[0.2em] uppercase text-gray-400 mt-1.5'
               >
                 A Roadmap for Education
               </motion.div>

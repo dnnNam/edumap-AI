@@ -10,7 +10,7 @@
 
 ## 📌 MỤC TIÊU CẢI TIẾN TỔNG THỂ
 
-1. **Nâng tầm trải nghiệm thị giác (Visual Identity):** Chuyển dịch toàn bộ giao diện từ phong cách bảng biểu cũ sang ngôn ngữ thiết kế **Modern High-Tech EdTech SaaS (chuẩn Dribbble / Linear / Vercel)** với dải màu chủ đạo tím công nghệ cao (`#5F2CFF` / Indigo).
+1. **Nâng tầm trải nghiệm thị giác (Visual Identity):** Chuyển dịch toàn bộ giao diện từ phong cách bảng biểu cũ sang ngôn ngữ thiết kế **Modern High-Tech EdTech SaaS (chuẩn Dribbble / Linear / Vercel)** đồng nhất với dải màu chủ đạo Indigo thương hiệu (`#4f46e5` / `#a99dff`) trên nền đen ấm chuẩn mực (`#121114` / `#1a191c`).
 2. **Chuỗi chuyển động điện ảnh (Cinematic Motion Design 60fps):** Ứng dụng Framer Motion với các chuyển động mượt mà, tối ưu GPU (chỉ can thiệp `transform` và `opacity`), loại bỏ hoàn toàn giật lag và hiện tượng giật sáng (FOUC).
 3. **Nâng cấp Dashboard thành Bento Grid & 100% Real Backend Data:** Xóa sạch toàn bộ mockup, kết nối dữ liệu thật từ API Server (tiến độ học tập, radar năng lực, việc làm phù hợp).
 4. **Hệ thống Quản trị Đo lường Google Analytics 4 (GA4) Chuyên sâu:** Tự động theo dõi hành vi theo SPA route, phân tích chi tiết traffic xã hội, và xuất báo cáo chuẩn **Excel (.xlsx)** & **PDF**.
@@ -39,7 +39,7 @@ flowchart TD
 Được lấy cảm hứng từ motion design của các ứng dụng công nghệ quốc tế (SoundScape), kịch bản chuyển cảnh 4 giai đoạn được thiết kế đồng bộ qua `SplashContext`:
 
 1. **Giai đoạn 1: Biến đổi hình khối (Center Morphing):**
-   - Khởi đầu với một ô vuông trắng tối giản ngay giữa màn hình trên nền xanh đen công nghệ (`#13121D`).
+   - Khởi đầu với một ô vuông trắng tối giản ngay giữa màn hình trên nền tối đồng nhất của web (`#121114`).
    - Ô vuông mở rộng và biến đổi hình dạng (morph/scale) mượt mà thành **Biểu tượng Logo EduMap AI** (chuẩn Vector SVG sắc nét, không bị vỡ hay răng cưa).
 2. **Giai đoạn 2: Trình diễn tên thương hiệu (Staggered Letter-by-Letter Reveal):**
    - Logo trượt nhẹ sang trái theo cơ chế lò xo (spring physics).

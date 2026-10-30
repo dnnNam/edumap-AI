@@ -39,7 +39,7 @@ export default function LandingHero({ onWatchDemo }: LandingHeroProps) {
           className='text-3xl sm:text-5xl lg:text-6xl font-black text-gray-900 dark:text-[#ECE9E4] tracking-tight leading-[1.15] max-w-4xl mx-auto'
         >
           Lộ trình học tập & Định hướng nghề nghiệp cá nhân hóa cho{' '}
-          <span className='bg-gradient-to-r from-indigo-600 via-[#8B5CF6] to-[#06B6D4] bg-clip-text text-transparent'>
+          <span className='bg-gradient-to-r from-indigo-600 to-indigo-500 dark:from-indigo-400 dark:to-[#A99DFF] bg-clip-text text-transparent'>
             Developer
           </span>
         </motion.h1>
@@ -100,9 +100,9 @@ export default function LandingHero({ onWatchDemo }: LandingHeroProps) {
           className='mt-12 sm:mt-16 text-left relative'
         >
           {/* Ambient Glow Aura */}
-          <div className='absolute -inset-1 rounded-[36px] bg-gradient-to-r from-indigo-500/20 via-purple-500/20 to-teal-500/20 blur-xl pointer-events-none' />
+          <div className='absolute -inset-1 rounded-[36px] bg-indigo-500/15 blur-xl pointer-events-none' />
 
-          <div className='relative rounded-[32px] border border-gray-200/80 dark:border-white/10 bg-white dark:bg-[#161420] shadow-2xl overflow-hidden p-5 sm:p-8 backdrop-blur-xl'>
+          <div className='relative rounded-[32px] border border-gray-200/80 dark:border-white/10 bg-white dark:bg-[#1A191C] shadow-2xl overflow-hidden p-5 sm:p-8 backdrop-blur-xl'>
             {/* Window Topbar */}
             <div className='flex items-center justify-between pb-5 border-b border-gray-100 dark:border-white/5'>
               <div className='flex items-center gap-2'>
@@ -124,7 +124,7 @@ export default function LandingHero({ onWatchDemo }: LandingHeroProps) {
             {/* Interactive Mock DAG Skill Nodes */}
             <div className='mt-6 grid grid-cols-1 md:grid-cols-4 gap-4'>
               {/* Node 1 */}
-              <div className='rounded-2xl p-4 bg-gray-50/80 dark:bg-[#1E1B2C] border border-gray-200/60 dark:border-white/5'>
+              <div className='rounded-2xl p-4 bg-gray-50/80 dark:bg-[#232227] border border-gray-200/60 dark:border-white/5'>
                 <div className='flex items-center justify-between mb-2'>
                   <span className='text-[10px] font-mono text-indigo-600 dark:text-[#A99DFF] font-bold'>
                     LVL 1 • NỀN TẢNG
@@ -142,7 +142,7 @@ export default function LandingHero({ onWatchDemo }: LandingHeroProps) {
               </div>
 
               {/* Node 2 */}
-              <div className='rounded-2xl p-4 bg-indigo-50/50 dark:bg-[#25203D] border border-indigo-200/60 dark:border-indigo-500/30 ring-2 ring-indigo-500/20'>
+              <div className='rounded-2xl p-4 bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-200/60 dark:border-indigo-500/30 ring-2 ring-indigo-500/20'>
                 <div className='flex items-center justify-between mb-2'>
                   <span className='text-[10px] font-mono text-indigo-600 dark:text-[#A99DFF] font-bold'>
                     LVL 2 • CHUYÊN MÔN
@@ -162,7 +162,7 @@ export default function LandingHero({ onWatchDemo }: LandingHeroProps) {
               </div>
 
               {/* Node 3 */}
-              <div className='rounded-2xl p-4 bg-gray-50/80 dark:bg-[#1E1B2C] border border-gray-200/60 dark:border-white/5'>
+              <div className='rounded-2xl p-4 bg-gray-50/80 dark:bg-[#232227] border border-gray-200/60 dark:border-white/5'>
                 <div className='flex items-center justify-between mb-2'>
                   <span className='text-[10px] font-mono text-gray-400 font-bold'>LVL 3 • DỮ LIỆU</span>
                   <Database className='w-4 h-4 text-gray-400' />
@@ -178,7 +178,7 @@ export default function LandingHero({ onWatchDemo }: LandingHeroProps) {
               </div>
 
               {/* Node 4 */}
-              <div className='rounded-2xl p-4 bg-gray-50/80 dark:bg-[#1E1B2C] border border-gray-200/60 dark:border-white/5'>
+              <div className='rounded-2xl p-4 bg-gray-50/80 dark:bg-[#232227] border border-gray-200/60 dark:border-white/5'>
                 <div className='flex items-center justify-between mb-2'>
                   <span className='text-[10px] font-mono text-gray-400 font-bold'>LVL 4 • DEPLOYMENT</span>
                   <GitBranch className='w-4 h-4 text-gray-400' />
