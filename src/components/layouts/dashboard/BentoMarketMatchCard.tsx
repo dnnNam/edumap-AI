@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import SpotlightCard from '../../ui/SpotlightCard'
+import NumberTicker from '../../ui/NumberTicker'
 import { AnimatedTarget } from '../../ui/AnimatedIcons'
 
 interface BentoMarketMatchCardProps {
@@ -46,7 +47,7 @@ export default function BentoMarketMatchCard({ careerPath, completionPercentage 
         {/* Big Number & Status */}
         <div className='mt-4 flex items-baseline gap-3'>
           <div className='text-4xl font-black text-gray-900 dark:text-[#ECE9E4] tracking-tight'>
-            {percentage}
+            <NumberTicker value={percentage} />
             <span className='text-2xl text-indigo-600 dark:text-[#A99DFF]'>%</span>
           </div>
           <span className={`text-xs font-bold ${status.color}`}>{status.label}</span>

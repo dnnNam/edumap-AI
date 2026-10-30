@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import SpotlightCard from '../../ui/SpotlightCard'
+import NumberTicker from '../../ui/NumberTicker'
 import { AnimatedGitBranch, AnimatedClock } from '../../ui/AnimatedIcons'
 
 interface BentoMetricCardsProps {
@@ -40,7 +41,7 @@ export default function BentoMetricCards({
         <div className='my-3 flex items-baseline justify-between'>
           <div className='flex items-baseline gap-1.5'>
             <span className='text-3xl sm:text-4xl font-black text-gray-900 dark:text-[#ECE9E4] tracking-tight'>
-              {completedNodes}
+              <NumberTicker value={completedNodes} />
             </span>
             <span className='text-sm font-semibold text-gray-400 dark:text-[#A29FA8]'>
               /{totalNodes} {t('dashboard.bento.nodesUnit')}
@@ -48,14 +49,16 @@ export default function BentoMetricCards({
           </div>
           <div className='text-right'>
             <div className='text-xs font-bold text-gray-700 dark:text-[#ECE9E4]'>{t('dashboard.bento.unlockRate')}</div>
-            <div className='text-xs text-indigo-600 dark:text-[#A99DFF] font-semibold'>{rate}%</div>
+            <div className='text-xs text-indigo-600 dark:text-[#A99DFF] font-semibold'>
+              <NumberTicker value={rate} />%
+            </div>
           </div>
         </div>
 
         {/* Thanh tiến độ */}
         <div className='w-full h-2 rounded-full bg-gray-100 dark:bg-white/5 overflow-hidden'>
           <div
-            className='h-full rounded-full bg-gradient-to-r from-indigo-500 to-indigo-600 dark:from-indigo-400 dark:to-[#A99DFF] transition-all duration-500'
+            className='h-full rounded-full bg-gradient-to-r from-indigo-500 to-indigo-600 dark:from-indigo-400 dark:to-[#A99DFF] shimmer-progress transition-all duration-500'
             style={{ width: `${rate}%` }}
           />
         </div>
@@ -80,7 +83,7 @@ export default function BentoMetricCards({
         <div className='my-3 flex items-baseline justify-between'>
           <div className='flex items-baseline gap-1'>
             <span className='text-3xl sm:text-4xl font-black text-gray-900 dark:text-[#ECE9E4] tracking-tight'>
-              {totalHours}
+              <NumberTicker value={totalHours} />
             </span>
             <span className='text-sm font-semibold text-gray-400 dark:text-[#A29FA8]'>
               {t('dashboard.banner.hours')}
@@ -99,7 +102,7 @@ export default function BentoMetricCards({
         {/* Thanh tiến độ trực quan dựa theo mốc 100 giờ học */}
         <div className='w-full h-2 rounded-full bg-gray-100 dark:bg-white/5 overflow-hidden'>
           <div
-            className='h-full rounded-full bg-gradient-to-r from-emerald-400 to-indigo-500 transition-all duration-500'
+            className='h-full rounded-full bg-gradient-to-r from-emerald-400 to-indigo-500 shimmer-progress transition-all duration-500'
             style={{ width: `${Math.min(100, Math.max(5, (totalHours / 100) * 100))}%` }}
           />
         </div>

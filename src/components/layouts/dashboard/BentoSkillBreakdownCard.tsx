@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import SpotlightCard from '../../ui/SpotlightCard'
+import NumberTicker from '../../ui/NumberTicker'
 import { AnimatedLayers, AnimatedSparkles, AnimatedArrowRight } from '../../ui/AnimatedIcons'
 
 interface BentoSkillBreakdownCardProps {
@@ -46,7 +47,7 @@ export default function BentoSkillBreakdownCard({ totalSkills, categoryStats }: 
         {/* Big Number & Context */}
         <div className='mt-5 flex items-baseline gap-3'>
           <div className='text-4xl sm:text-5xl font-black text-gray-900 dark:text-[#ECE9E4] tracking-tight'>
-            {totalSkills}
+            <NumberTicker value={totalSkills} />
             <span className='text-xl sm:text-2xl font-bold text-indigo-600 dark:text-[#A99DFF] ml-1.5'>
               {t('dashboard.bento.skills')}
             </span>
