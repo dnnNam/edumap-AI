@@ -3,8 +3,7 @@ import { TrendingUp, Compass, ArrowUpRight } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { MotionFadeIn } from '../../motion/MotionWrapper'
-import { AnimatedSparkles, AnimatedZap, AnimatedShieldCheck, AnimatedBriefcase } from '../../ui/AnimatedIcons'
-import NumberTicker from '../../ui/NumberTicker'
+import { AnimatedSparkles, AnimatedZap, AnimatedShieldCheck } from '../../ui/AnimatedIcons'
 
 interface JobsHeroBannerProps {
   activeTab: 'trending' | 'analysis'
@@ -91,43 +90,109 @@ export default function JobsHeroBanner({ activeTab }: JobsHeroBannerProps) {
           </div>
         </div>
 
-        {/* Right Column: 3D Career Matching Illustration with Floating Glass Badges (5 cols) */}
-        <div className='lg:col-span-5 flex items-center justify-center relative'>
-          {/* Subtle Ambient Light Orb behind 3D art */}
-          <div className='absolute w-64 h-64 bg-indigo-500/20 dark:bg-indigo-500/25 rounded-full blur-3xl pointer-events-none' />
+        {/* Right Column: Floating 3D Career Match Cards (5 cols) */}
+        <div className='lg:col-span-5 relative flex items-center justify-center min-h-[300px] py-4 select-none'>
+          {/* Subtle Ambient Glow Orb */}
+          <div className='absolute w-72 h-72 bg-gradient-to-tr from-indigo-500/20 via-purple-500/15 to-emerald-500/10 rounded-full blur-3xl pointer-events-none' />
 
-          {/* 3D Illustration Frame with subtle float animation */}
-          <motion.div
-            animate={{ y: [0, -7, 0] }}
-            transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
-            className='relative w-full max-w-[380px] rounded-3xl overflow-hidden border border-gray-200/80 dark:border-white/10 shadow-lg dark:shadow-2xl bg-gradient-to-b from-indigo-50/40 to-white/60 dark:from-white/[0.04] dark:to-white/[0.01] backdrop-blur-sm group'
-          >
-            <img
-              src='/career-hero.jpg'
-              alt='EduMap AI Career Matching'
-              className='w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out'
-              loading='lazy'
-            />
+          {/* Wrapper for the 2 layered cards */}
+          <div className='relative w-full max-w-[360px] h-[260px] flex items-center justify-center'>
+            {/* CARD 2: Behind / Lower-right (Fullstack Developer - 92% Match) */}
+            <motion.div
+              animate={{ y: [0, 8, 0], rotate: [3, 4.5, 3] }}
+              transition={{ duration: 5.2, repeat: Infinity, ease: 'easeInOut' }}
+              whileHover={{ scale: 1.03, rotate: 2, zIndex: 30 }}
+              className='absolute bottom-0 right-0 w-[92%] rounded-2xl border border-gray-200/90 dark:border-white/10 bg-white/95 dark:bg-[#1A191C]/95 backdrop-blur-xl p-4 shadow-xl dark:shadow-2xl transition-shadow cursor-pointer z-10'
+            >
+              <div className='flex items-center justify-between gap-2'>
+                <div className='flex items-center gap-2.5 min-w-0'>
+                  <div className='w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-700 text-white flex items-center justify-center text-sm shadow-sm font-bold shrink-0'>
+                    🚀
+                  </div>
+                  <div className='min-w-0'>
+                    <div className='flex items-center gap-1.5'>
+                      <h4 className='text-xs font-bold text-gray-900 dark:text-white truncate'>Fullstack Developer</h4>
+                      <span className='px-1.5 py-0.2 rounded bg-indigo-50 dark:bg-indigo-950/50 text-[9px] font-semibold text-indigo-600 dark:text-[#A99DFF]'>
+                        Hot
+                      </span>
+                    </div>
+                    <p className='text-[10px] text-gray-500 dark:text-gray-400'>Hybrid · Quận 1, HCM</p>
+                  </div>
+                </div>
 
-            {/* Floating Glass Pill 1: Top Right (Live Feed & Jobs count) */}
-            <div className='absolute top-3.5 right-3.5 inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/90 dark:bg-[#161426]/90 border border-gray-200/80 dark:border-white/15 shadow-md backdrop-blur-md text-[11px] font-bold text-gray-900 dark:text-white'>
-              <span className='relative flex h-2 w-2'>
-                <span className='animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75' />
-                <span className='relative inline-flex rounded-full h-2 w-2 bg-emerald-500' />
-              </span>
-              <span>
-                <NumberTicker value={2450} />+ Vị trí mới
-              </span>
-            </div>
+                {/* Match pill */}
+                <span className='inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950/50 border border-indigo-200/60 dark:border-indigo-800/40 text-indigo-700 dark:text-[#A99DFF] text-[11px] font-black shrink-0'>
+                  ⚡ 92%
+                </span>
+              </div>
 
-            {/* Floating Glass Pill 2: Bottom Left (Match Rate) */}
-            <div className='absolute bottom-3.5 left-3.5 inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/90 dark:bg-[#161426]/90 border border-emerald-200/80 dark:border-emerald-500/20 shadow-md backdrop-blur-md text-[11px] font-bold text-emerald-700 dark:text-emerald-400'>
-              <AnimatedBriefcase className='w-3.5 h-3.5 text-indigo-600 dark:text-[#A99DFF]' />
-              <span>
-                Khớp <NumberTicker value={94} />% Tech Stack
-              </span>
-            </div>
-          </motion.div>
+              {/* Salary & Tech Stack */}
+              <div className='mt-2.5 pt-2 border-t border-gray-100 dark:border-white/5 flex items-center justify-between text-[11px]'>
+                <span className='font-bold text-gray-900 dark:text-gray-100'>
+                  $1,800 - $2,400<span className='text-[10px] font-normal text-gray-400'>/th</span>
+                </span>
+                <div className='flex items-center gap-1 text-[10px] text-gray-500 dark:text-gray-400'>
+                  <span className='px-1.5 py-0.5 rounded bg-gray-100 dark:bg-white/5 font-medium'>React 19</span>
+                  <span className='px-1.5 py-0.5 rounded bg-gray-100 dark:bg-white/5 font-medium'>Node.js</span>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* CARD 1: Front / Upper-left (Senior AI Engineer - 98% Match) */}
+            <motion.div
+              animate={{ y: [0, -8, 0], rotate: [-2, -0.5, -2] }}
+              transition={{ duration: 4.4, repeat: Infinity, ease: 'easeInOut' }}
+              whileHover={{ scale: 1.04, rotate: 0, zIndex: 40 }}
+              className='absolute top-0 left-0 w-[95%] rounded-2xl border border-indigo-200/80 dark:border-white/15 bg-white/95 dark:bg-[#161426]/95 backdrop-blur-xl p-4 shadow-2xl dark:shadow-indigo-950/40 ring-1 ring-indigo-500/10 cursor-pointer z-20'
+            >
+              {/* Live Scanner Banner */}
+              <div className='flex items-center justify-between gap-2 mb-2 pb-2 border-b border-gray-100 dark:border-white/5 text-[10px]'>
+                <span className='inline-flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-bold'>
+                  <span className='relative flex h-2 w-2'>
+                    <span className='animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75' />
+                    <span className='relative inline-flex rounded-full h-2 w-2 bg-emerald-500' />
+                  </span>
+                  AI vừa quét & đối soát
+                </span>
+                <span className='text-gray-400 dark:text-gray-500'>2 phút trước</span>
+              </div>
+
+              <div className='flex items-start justify-between gap-2'>
+                <div className='flex items-center gap-3 min-w-0'>
+                  <div className='w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 text-white flex items-center justify-center text-lg shadow-md shadow-amber-500/20 font-bold shrink-0'>
+                    💼
+                  </div>
+                  <div className='min-w-0'>
+                    <h4 className='text-sm font-black text-gray-900 dark:text-white truncate'>Senior AI Engineer</h4>
+                    <p className='text-[11px] text-gray-500 dark:text-gray-400 truncate'>Fintech Global · Remote</p>
+                  </div>
+                </div>
+
+                {/* Match pill 98% with glow */}
+                <span className='inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/15 border border-emerald-300 dark:border-emerald-500/30 text-emerald-700 dark:text-emerald-300 text-xs font-black shrink-0 shadow-xs'>
+                  ⚡ 98% Match
+                </span>
+              </div>
+
+              {/* Salary & Tags */}
+              <div className='mt-3 flex items-center justify-between text-xs'>
+                <span className='font-extrabold text-indigo-600 dark:text-[#A99DFF] text-sm'>
+                  $2,500 - $3,500<span className='text-[11px] font-normal text-gray-400'>/th</span>
+                </span>
+
+                <div className='flex items-center gap-1'>
+                  {['Python', 'PyTorch', 'LLM'].map((tag) => (
+                    <span
+                      key={tag}
+                      className='px-2 py-0.5 rounded-lg bg-gray-100 dark:bg-white/5 border border-gray-200/50 dark:border-white/5 text-[10px] font-medium text-gray-700 dark:text-gray-300'
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </div>
     </MotionFadeIn>
