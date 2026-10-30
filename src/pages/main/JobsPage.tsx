@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import { useTrendingJobsQuery } from '../../hooks/jobQuery'
 import TrendingRoles from '../../components/layouts/jobs/TrendingRoles'
+import JobsHeroBanner from '../../components/layouts/jobs/JobsHeroBanner'
 
 export default function JobsPage() {
   const { t } = useTranslation()
@@ -24,13 +25,20 @@ export default function JobsPage() {
   return (
     <div className='h-full overflow-y-auto scrollbar-thin'>
       <div className='max-w-6xl mx-auto px-6 py-10 pb-16'>
-        {/* Tiêu đề */}
-        <h1 className='text-3xl font-semibold text-gray-900 dark:text-[#ECE9E4]'>{t('jobs.trending.title')}</h1>
-        <p className='mt-2 text-gray-500 dark:text-[#A29FA8]'>
-          {isLoading
-            ? t('common.loading')
-            : `${t('jobs.trending.subtitle', { count: roles.length })}${body?.message ? ` · ${body.message}` : ''}`}
-        </p>
+        {/* Modern SaaS Hero Banner */}
+        <JobsHeroBanner activeTab='trending' />
+
+        {/* Tiêu đề & Mô tả */}
+        <div className='flex flex-wrap items-end justify-between gap-4'>
+          <div>
+            <h2 className='text-2xl font-bold text-gray-900 dark:text-[#ECE9E4]'>{t('jobs.trending.title')}</h2>
+            <p className='mt-1 text-sm text-gray-500 dark:text-[#A29FA8]'>
+              {isLoading
+                ? t('common.loading')
+                : `${t('jobs.trending.subtitle', { count: roles.length })}${body?.message ? ` · ${body.message}` : ''}`}
+            </p>
+          </div>
+        </div>
 
         {/* Ô tìm kiếm */}
         <div className='mt-8 rounded-3xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#1A191C] p-6'>
