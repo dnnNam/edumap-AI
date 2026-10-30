@@ -91,34 +91,30 @@ export default function JobsHeroBanner({ activeTab }: JobsHeroBannerProps) {
         </div>
 
         {/* Right Column: Sleek Floating Career Match Cards with 3D Mascot (5 cols) */}
-        <div className='lg:col-span-5 relative flex items-center justify-center min-h-[320px] py-4 select-none'>
+        <div className='lg:col-span-5 relative flex flex-col items-center justify-end min-h-[350px] pt-4 select-none'>
           {/* Subtle Ambient Glow Orb */}
           <div className='absolute w-72 h-72 bg-gradient-to-tr from-indigo-500/20 via-purple-500/15 to-emerald-500/10 rounded-full blur-3xl pointer-events-none' />
 
+          {/* 3D Mascot Character standing and hugging over the card */}
+          <motion.div
+            animate={{ y: [0, -6, 0] }}
+            transition={{ duration: 4.4, repeat: Infinity, ease: 'easeInOut' }}
+            className='relative z-30 flex flex-col items-end w-full max-w-[360px] -mb-10 pr-6 pointer-events-none'
+          >
+            {/* Mascot speech bubble */}
+            <div className='mb-1 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/95 dark:bg-[#1A191C]/95 border border-indigo-200 dark:border-white/15 shadow-md text-[10px] font-extrabold text-indigo-700 dark:text-[#A99DFF] backdrop-blur-md mr-3'>
+              <AnimatedSparkles className='w-3 h-3 text-amber-500' />
+              <span>EduBot Match!</span>
+            </div>
+
+            {/* Transparent Mascot Body */}
+            <div className='w-28 h-28 sm:w-32 sm:h-32 drop-shadow-2xl'>
+              <img src='/edumap-mascot.png' alt='EduMap AI Mascot' className='w-full h-full object-contain' />
+            </div>
+          </motion.div>
+
           {/* Layered Cards Canvas */}
-          <div className='relative w-full max-w-[360px] h-[270px] flex items-center justify-center'>
-            {/* 3D Mascot Character peeking and holding over the card */}
-            <motion.div
-              animate={{ y: [0, -6, 0] }}
-              transition={{ duration: 4.6, repeat: Infinity, ease: 'easeInOut' }}
-              className='absolute -top-12 right-2 sm:right-6 z-30 flex flex-col items-center pointer-events-none'
-            >
-              {/* Mini speech bubble from mascot */}
-              <div className='mb-1.5 inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white/95 dark:bg-[#1A191C]/95 border border-indigo-200 dark:border-white/15 shadow-md text-[10px] font-extrabold text-indigo-700 dark:text-[#A99DFF] backdrop-blur-md'>
-                <AnimatedSparkles className='w-3 h-3 text-amber-500' />
-                <span>EduBot Match!</span>
-              </div>
-
-              {/* Mascot 3D Avatar circle with glow ring */}
-              <div className='w-20 h-20 sm:w-22 sm:h-22 rounded-full overflow-hidden border-2 border-white dark:border-white/20 shadow-xl ring-4 ring-indigo-500/15 bg-gradient-to-b from-indigo-50 to-white dark:from-indigo-950/40 dark:to-[#161426]'>
-                <img
-                  src='/edumap-mascot.jpg'
-                  alt='EduMap AI Mascot'
-                  className='w-full h-full object-cover object-top'
-                />
-              </div>
-            </motion.div>
-
+          <div className='relative w-full max-w-[360px] h-[230px] flex items-center justify-center'>
             {/* CARD 2: Behind / Lower-right (Fullstack Developer - 92% Match) */}
             <motion.div
               animate={{ y: [0, 8, 0], rotate: [3, 4.5, 3] }}
