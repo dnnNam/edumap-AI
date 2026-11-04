@@ -114,24 +114,24 @@ export default function JobDetailDrawer({ job, isOpen, onClose }: JobDetailDrawe
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className='fixed inset-0 z-50 flex justify-end select-none'>
+        <div className='fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 md:p-8 select-none'>
           {/* Backdrop mờ phía sau */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
+            transition={{ duration: 0.2 }}
             onClick={onClose}
-            className='fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity'
+            className='fixed inset-0 bg-black/60 backdrop-blur-md transition-opacity'
           />
 
-          {/* Slide-over Drawer Panel */}
+          {/* Newsfeed Centered Modal Panel */}
           <motion.aside
-            initial={{ x: '100%' }}
-            animate={{ x: 0 }}
-            exit={{ x: '100%' }}
-            transition={{ type: 'spring', damping: 28, stiffness: 280 }}
-            className='relative z-50 flex h-full w-full max-w-2xl flex-col bg-white dark:bg-[#161426] border-l border-gray-200 dark:border-white/10 shadow-2xl overflow-hidden'
+            initial={{ opacity: 0, scale: 0.95, y: 16 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 16 }}
+            transition={{ type: 'spring', damping: 26, stiffness: 300 }}
+            className='relative z-50 flex flex-col w-full max-w-3xl max-h-[90vh] bg-white dark:bg-[#161426] rounded-3xl border border-gray-200/90 dark:border-white/10 shadow-2xl overflow-hidden'
           >
             {/* Header */}
             <div className='relative px-6 py-5 border-b border-gray-200/80 dark:border-white/10 bg-gray-50/80 dark:bg-[#1A191C]/80 backdrop-blur-md'>
