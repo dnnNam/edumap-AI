@@ -31,14 +31,93 @@ function getItviecCityPath(loc: string): string {
   return ''
 }
 
+const KNOWN_COMPANY_CAREERS: Record<string, string> = {
+  momo: 'https://momo.vn/tuyen-dung',
+  'ví momo': 'https://momo.vn/tuyen-dung',
+  m_service: 'https://momo.vn/tuyen-dung',
+  vng: 'https://careers.vng.com.vn',
+  'vng corporation': 'https://careers.vng.com.vn',
+  fpt: 'https://fptsoftware.com/careers',
+  'fpt software': 'https://fptsoftware.com/careers',
+  'fpt telecom': 'https://tuyendung.fpt.vn',
+  'fpt is': 'https://tuyendung.fpt.vn',
+  viettel: 'https://tuyendung.viettel.vn',
+  vnpt: 'https://tuyendung.vnpt.vn',
+  shopee: 'https://careers.shopee.vn',
+  zalo: 'https://careers.zalo.me',
+  tiki: 'https://tuyendung.tiki.vn',
+  'one mount': 'https://careers.onemount.com',
+  onemount: 'https://careers.onemount.com',
+  techcombank: 'https://techcombankjobs.com',
+  vpbank: 'https://tuyendung.vpbank.com.vn',
+  mbbank: 'https://tuyendung.mbbank.com.vn',
+  mb: 'https://tuyendung.mbbank.com.vn',
+  grab: 'https://careers.grab.com',
+  vinai: 'https://www.vinai.io/careers',
+  vnpay: 'https://vnpay.vn/tuyen-dung',
+  line: 'https://linepluscorp.com/career',
+}
+
+function getCompanyCareerUrl(company: string): string | undefined {
+  if (!company) return undefined
+  const normalized = company.toLowerCase().trim()
+  for (const [key, url] of Object.entries(KNOWN_COMPANY_CAREERS)) {
+    if (normalized === key || normalized.includes(key) || key.includes(normalized)) {
+      return url
+    }
+  }
+  return undefined
+}
+
 function SampleJobCard({ job, location }: { job: SampleJob; location?: string }) {
   const effectiveLocation = job.location || location || ''
   const itviecCity = getItviecCityPath(effectiveLocation)
   const cleanTitle = (job.title || '').replace(/\([^)]*\)/g, '').trim() || job.title
-  const encodedTitle = encodeURIComponent(cleanTitle)
+  const cleanCompany = (job.company || '').replace(/\([^)]*\)/g, '').trim() || (job.company || '').trim()
+  const companyJobQuery = cleanCompany ? `${cleanCompany} ${cleanTitle}` : cleanTitle
+  const encodedCompanyJob = encodeURIComponent(companyJobQuery)
+
+  const directCareerUrl = job.careerUrl || getCompanyCareerUrl(cleanCompany)
+
   const fallbackItviecUrl = itviecCity
-    ? `https://itviec.com/it-jobs/${itviecCity}?query=${encodedTitle}`
-    : `https://itviec.com/it-jobs?query=${encodedTitle}`
+    ? `https://itviec.com/it-jobs/${itviecCity}?query=${encodedCompanyJob}`
+    : `https://itviec.com/it-jobs?query=${encodedCompanyJob}`
+
+  const primaryApplyUrl = directCareerUrl || job.applyUrl || fallbackItviecUrl
+  const primaryButtonLabel = directCareerUrl
+    ? `Ứng tuyển tại ${cleanCompany}`
+    : cleanCompany
+      ? `Tìm việc tại ${cleanCompany}`
+      : 'Xem việc làm trên ITviec'
+
+  const fallbackPlatformLinks = [
+    ...(directCareerUrl
+      ? [
+          {
+            platform: `Cổng tuyển dụng ${cleanCompany}`,
+            url: directCareerUrl,
+          },
+        ]
+      : []),
+    {
+      platform: 'ITviec',
+      url: fallbackItviecUrl,
+    },
+    {
+      platform: 'TopCV',
+      url: `https://www.topcv.vn/tim-viec-lam-moi-nhat?keyword=${encodedCompanyJob}`,
+    },
+    {
+      platform: 'LinkedIn',
+      url: `https://www.linkedin.com/jobs/search/?keywords=${encodedCompanyJob}&location=${encodeURIComponent(effectiveLocation)}`,
+    },
+    {
+      platform: 'Google Tìm kiếm',
+      url: `https://www.google.com/search?q=${encodeURIComponent(`${cleanCompany} tuyển dụng ${cleanTitle} ${effectiveLocation}`)}`,
+    },
+  ]
+
+  const displayLinks = job.links && job.links.length > 0 ? job.links : fallbackPlatformLinks
 
   return (
     <div className='h-full rounded-3xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#1A191C] p-6 transition hover:shadow-md hover:border-gray-300 dark:hover:border-white/20'>
@@ -93,34 +172,19 @@ function SampleJobCard({ job, location }: { job: SampleJob; location?: string })
       {/* Action / Apply Links */}
       <div className='mt-5 pt-4 border-t border-gray-100 dark:border-white/5 flex flex-wrap items-center justify-between gap-3'>
         <a
-          href={job.applyUrl || fallbackItviecUrl}
+          href={primaryApplyUrl}
           target='_blank'
           rel='noopener noreferrer'
           className='inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white text-xs font-semibold shadow-sm shadow-indigo-500/20 transition'
         >
-          <span>Xem việc làm trên ITviec</span>
+          <span>{primaryButtonLabel}</span>
           <ExternalLink className='w-3.5 h-3.5' />
         </a>
 
         {/* Quick platform links */}
         <div className='flex items-center gap-1.5 flex-wrap'>
           <span className='text-xs text-gray-400 dark:text-[#A29FA8]'>Xem thêm trên:</span>
-          {(
-            job.links || [
-              {
-                platform: 'TopCV',
-                url: `https://www.topcv.vn/tim-viec-lam-moi-nhat?keyword=${encodeURIComponent(`${cleanTitle} ${effectiveLocation}`)}`,
-              },
-              {
-                platform: 'TopDev',
-                url: `https://topdev.vn/jobs/search?keyword=${encodeURIComponent(`${cleanTitle} ${effectiveLocation}`)}`,
-              },
-              {
-                platform: 'LinkedIn',
-                url: `https://www.linkedin.com/jobs/search/?keywords=${encodedTitle}&location=${encodeURIComponent(effectiveLocation)}`,
-              },
-            ]
-          ).map((pLink, idx) => (
+          {displayLinks.map((pLink, idx) => (
             <a
               key={idx}
               href={pLink.url}

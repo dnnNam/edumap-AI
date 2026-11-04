@@ -67,6 +67,7 @@ export interface SampleJob {
   experienceLevel?: string
   requirements?: string[]
   description: string
+  careerUrl?: string
   applyUrl?: string
   links?: SampleJobPlatformLink[]
 }
