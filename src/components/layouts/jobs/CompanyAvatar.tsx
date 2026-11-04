@@ -3,9 +3,9 @@ import { Building2 } from 'lucide-react'
 
 function getCompanyLogoUrl(company: string, providedUrl?: string): string {
   const norm = (company || '').toLowerCase().trim()
-  if (norm.includes('momo') || norm.includes('m_service')) return '/logos/momo.svg'
-  if (norm.includes('vng')) return '/logos/vng.svg'
-  if (norm.includes('fpt')) return '/logos/fpt.svg'
+  if (norm.includes('momo') || norm.includes('m_service')) return '/logos/momo.png'
+  if (norm.includes('vng')) return '/logos/vng.png'
+  if (norm.includes('fpt')) return '/logos/fpt.png'
   if (norm.includes('viettel')) return '/logos/viettel.svg'
   if (norm.includes('shopee')) return '/logos/shopee.svg'
 
