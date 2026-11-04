@@ -1,6 +1,6 @@
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-  Building2,
   Banknote,
   CheckCircle2,
   Clock,
@@ -10,129 +10,114 @@ import {
   Sparkles,
   TrendingUp,
   Award,
+  ArrowRight,
 } from 'lucide-react'
 import type { RecommendationBody, SampleJob } from '../../../types/api/job.types'
 import { MotionFadeIn, MotionStaggerContainer, MotionStaggerItem } from '../../motion/MotionWrapper'
+import { AnimatedZap } from '../../ui/AnimatedIcons'
+import JobDetailDrawer from './JobDetailDrawer'
+import CompanyAvatar from './CompanyAvatar'
 
-function getItviecCityPath(loc: string): string {
-  const clean = (loc || '')
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-  if (clean.includes('hcm') || clean.includes('ho chi minh') || clean.includes('sai gon')) {
-    return 'ho-chi-minh-hcm'
-  }
-  if (clean.includes('ha noi') || clean.includes('hanoi')) {
-    return 'ha-noi'
-  }
-  if (clean.includes('da nang') || clean.includes('danang')) {
-    return 'da-nang'
-  }
-  return ''
-}
-
-function SampleJobCard({ job, location }: { job: SampleJob; location?: string }) {
+function SampleJobCard({
+  job,
+  location,
+  onSelectJob,
+}: {
+  job: SampleJob
+  location?: string
+  onSelectJob: (job: SampleJob) => void
+}) {
   const effectiveLocation = job.location || location || ''
-  const itviecCity = getItviecCityPath(effectiveLocation)
   const cleanTitle = (job.title || '').replace(/\([^)]*\)/g, '').trim() || job.title
-  const encodedTitle = encodeURIComponent(cleanTitle)
-  const fallbackItviecUrl = itviecCity
-    ? `https://itviec.com/it-jobs/${itviecCity}?query=${encodedTitle}`
-    : `https://itviec.com/it-jobs?query=${encodedTitle}`
+  const cleanCompany = (job.company || '').replace(/\([^)]*\)/g, '').trim() || (job.company || '').trim()
+  const matchScore = job.matchScore ?? 88
 
   return (
-    <div className='h-full rounded-3xl border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-[#1A191C] p-6 transition hover:shadow-md hover:border-gray-300 dark:hover:border-white/20'>
-      <div className='flex flex-wrap items-start justify-between gap-3'>
-        <div>
-          <h3 className='text-lg font-semibold text-gray-900 dark:text-[#ECE9E4]'>{job.title}</h3>
-          <div className='mt-1 flex items-center gap-2 text-sm text-gray-500 dark:text-[#A29FA8]'>
-            <Building2 className='w-4 h-4 shrink-0 text-gray-400' />
-            <span className='font-medium text-gray-800 dark:text-gray-200'>{job.company}</span>
+    <div
+      onClick={() => onSelectJob(job)}
+      className='group h-full rounded-3xl border border-gray-200/90 dark:border-white/[0.08] bg-white dark:bg-[#1A191C] p-6 transition-all duration-300 hover:shadow-xl hover:border-indigo-300 dark:hover:border-indigo-500/40 cursor-pointer relative overflow-hidden flex flex-col justify-between'
+    >
+      <div>
+        <div className='flex flex-wrap items-start justify-between gap-3'>
+          <div className='flex items-start gap-3 min-w-0'>
+            <CompanyAvatar company={job.company} logoUrl={job.companyLogo} />
+            <div className='min-w-0'>
+              <h3 className='text-lg font-bold text-gray-900 dark:text-[#ECE9E4] group-hover:text-indigo-600 dark:group-hover:text-[#A99DFF] transition-colors truncate'>
+                {cleanTitle}
+              </h3>
+              <div className='mt-1 flex items-center gap-2 text-sm text-gray-500 dark:text-[#A29FA8]'>
+                <span className='font-semibold text-gray-800 dark:text-gray-200'>{cleanCompany}</span>
+                <span>·</span>
+                <span className='truncate'>{effectiveLocation}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Match Badge */}
+          <div className='flex items-center gap-2 flex-wrap'>
+            <span className='inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/15 border border-emerald-300/80 dark:border-emerald-500/30 text-emerald-700 dark:text-emerald-300 text-xs font-black shadow-xs'>
+              <AnimatedZap className='w-3 h-3 text-emerald-600 dark:text-emerald-400' />
+              <span>{matchScore}% Match</span>
+            </span>
+            <span className='rounded-full bg-indigo-50 dark:bg-[#5F2CFF]/15 px-3 py-1 text-xs font-semibold text-indigo-600 dark:text-[#A99DFF] whitespace-nowrap'>
+              {job.jobType || 'Full-time'}
+            </span>
           </div>
         </div>
 
-        <div className='flex items-center gap-2 flex-wrap'>
-          {job.experienceLevel && (
-            <span className='rounded-full bg-emerald-50 dark:bg-emerald-950/30 px-3 py-1 text-xs font-medium text-emerald-700 dark:text-emerald-400 border border-emerald-200/60 dark:border-emerald-800/40'>
-              {job.experienceLevel}
-            </span>
-          )}
-          <span className='rounded-full bg-indigo-50 dark:bg-[#5F2CFF]/15 px-3 py-1 text-xs font-medium text-indigo-600 dark:text-[#A99DFF] whitespace-nowrap'>
-            {job.jobType}
-          </span>
-        </div>
+        <dl className='mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-gray-600 dark:text-[#A29FA8]'>
+          <div className='flex items-center gap-2 min-w-0'>
+            <Banknote className='w-4 h-4 shrink-0 text-emerald-500' />
+            <dd className='font-bold text-emerald-600 dark:text-emerald-400 truncate'>{job.salary}</dd>
+          </div>
+          <div className='flex items-center gap-2 min-w-0'>
+            <MapPin className='w-4 h-4 shrink-0 text-gray-400 dark:text-[#A29FA8]' />
+            <dd className='truncate'>{effectiveLocation}</dd>
+          </div>
+        </dl>
+
+        {/* Requirements tags */}
+        {job.requirements && job.requirements.length > 0 && (
+          <div className='mt-4 flex flex-wrap gap-1.5'>
+            {job.requirements.slice(0, 4).map((req, idx) => (
+              <span
+                key={idx}
+                className='px-2.5 py-0.5 rounded-lg bg-gray-100 dark:bg-white/5 border border-gray-200/50 dark:border-white/5 text-xs font-medium text-gray-700 dark:text-[#ECE9E4]'
+              >
+                {req}
+              </span>
+            ))}
+            {job.requirements.length > 4 && (
+              <span className='px-2 py-0.5 rounded-lg text-xs font-medium text-gray-400 dark:text-gray-500'>
+                +{job.requirements.length - 4} kỹ năng khác
+              </span>
+            )}
+          </div>
+        )}
+
+        <p className='mt-4 text-[14px] leading-relaxed text-gray-600 dark:text-[#B5B1BA] line-clamp-2'>
+          {job.description}
+        </p>
       </div>
 
-      <dl className='mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-gray-600 dark:text-[#A29FA8]'>
-        <div className='flex items-center gap-2 min-w-0'>
-          <Banknote className='w-4 h-4 shrink-0 text-emerald-500' />
-          <dd className='font-medium text-emerald-600 dark:text-emerald-400 truncate'>{job.salary}</dd>
-        </div>
-        <div className='flex items-center gap-2 min-w-0'>
-          <MapPin className='w-4 h-4 shrink-0 text-gray-400 dark:text-[#A29FA8]' />
-          <dd className='truncate'>{job.location}</dd>
-        </div>
-      </dl>
+      {/* Action CTA Bar */}
+      <div className='mt-5 pt-4 border-t border-gray-100 dark:border-white/5 flex items-center justify-between gap-3'>
+        <span className='text-xs font-medium text-indigo-600 dark:text-[#A99DFF] flex items-center gap-1 group-hover:underline'>
+          <span>Xem chi tiết JD & đối soát kỹ năng</span>
+          <ArrowRight className='w-3.5 h-3.5 transition-transform group-hover:translate-x-1' />
+        </span>
 
-      {/* Requirements tags */}
-      {job.requirements && job.requirements.length > 0 && (
-        <div className='mt-4 flex flex-wrap gap-1.5'>
-          {job.requirements.map((req, idx) => (
-            <span
-              key={idx}
-              className='px-2.5 py-0.5 rounded-lg bg-gray-100 dark:bg-white/5 border border-gray-200/50 dark:border-white/5 text-xs text-gray-600 dark:text-[#ECE9E4]'
-            >
-              {req}
-            </span>
-          ))}
-        </div>
-      )}
-
-      <p className='mt-4 text-[15px] leading-relaxed text-gray-600 dark:text-[#B5B1BA]'>{job.description}</p>
-
-      {/* Action / Apply Links */}
-      <div className='mt-5 pt-4 border-t border-gray-100 dark:border-white/5 flex flex-wrap items-center justify-between gap-3'>
-        <a
-          href={job.applyUrl || fallbackItviecUrl}
-          target='_blank'
-          rel='noopener noreferrer'
-          className='inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white text-xs font-semibold shadow-sm shadow-indigo-500/20 transition'
+        <button
+          type='button'
+          onClick={(e) => {
+            e.stopPropagation()
+            onSelectJob(job)
+          }}
+          className='inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white text-xs font-bold shadow-md shadow-indigo-500/20 transition cursor-pointer'
         >
-          <span>Xem việc làm trên ITviec</span>
-          <ExternalLink className='w-3.5 h-3.5' />
-        </a>
-
-        {/* Quick platform links */}
-        <div className='flex items-center gap-1.5 flex-wrap'>
-          <span className='text-xs text-gray-400 dark:text-[#A29FA8]'>Xem thêm trên:</span>
-          {(
-            job.links || [
-              {
-                platform: 'TopCV',
-                url: `https://www.topcv.vn/tim-viec-lam-moi-nhat?keyword=${encodeURIComponent(`${cleanTitle} ${effectiveLocation}`)}`,
-              },
-              {
-                platform: 'TopDev',
-                url: `https://topdev.vn/jobs/search?keyword=${encodeURIComponent(`${cleanTitle} ${effectiveLocation}`)}`,
-              },
-              {
-                platform: 'LinkedIn',
-                url: `https://www.linkedin.com/jobs/search/?keywords=${encodedTitle}&location=${encodeURIComponent(effectiveLocation)}`,
-              },
-            ]
-          ).map((pLink, idx) => (
-            <a
-              key={idx}
-              href={pLink.url}
-              target='_blank'
-              rel='noopener noreferrer'
-              className='inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-white/5 dark:hover:bg-white/10 text-xs font-medium text-gray-700 dark:text-[#ECE9E4] transition'
-            >
-              <span>{pLink.platform}</span>
-              <ExternalLink className='w-3 h-3 text-gray-400' />
-            </a>
-          ))}
-        </div>
+          <Sparkles className='w-3.5 h-3.5 text-amber-300' />
+          <span>Đối soát kỹ năng</span>
+        </button>
       </div>
     </div>
   )
@@ -140,6 +125,7 @@ function SampleJobCard({ job, location }: { job: SampleJob; location?: string })
 
 export default function RecommendationResult({ result }: { result: RecommendationBody }) {
   const { t } = useTranslation()
+  const [selectedJob, setSelectedJob] = useState<SampleJob | null>(null)
   const { data: analysis } = result
   const metrics = analysis.marketMetrics
 
@@ -302,13 +288,17 @@ export default function RecommendationResult({ result }: { result: Recommendatio
               {t('jobs.result.sampleJobs')} ({analysis.sampleJobs.length})
             </h2>
             <span className='text-xs text-gray-500 dark:text-[#A29FA8]'>
-              Được AI tổng hợp theo hồ sơ kỹ năng của bạn
+              Việc làm thực tế được đối soát theo hồ sơ kỹ năng của bạn
             </span>
           </div>
           <MotionStaggerContainer className='grid grid-cols-1 gap-5'>
             {analysis.sampleJobs.map((job, i) => (
               <MotionStaggerItem key={`${job.company}-${job.title}-${i}`}>
-                <SampleJobCard job={job} location={result.location} />
+                <SampleJobCard
+                  job={job}
+                  location={result.location}
+                  onSelectJob={(selected) => setSelectedJob(selected)}
+                />
               </MotionStaggerItem>
             ))}
           </MotionStaggerContainer>
@@ -327,6 +317,9 @@ export default function RecommendationResult({ result }: { result: Recommendatio
           </p>
         </MotionFadeIn>
       )}
+
+      {/* Slide-over Drawer xem chi tiết công việc & đối soát kỹ năng */}
+      <JobDetailDrawer job={selectedJob} isOpen={!!selectedJob} onClose={() => setSelectedJob(null)} />
     </div>
   )
 }

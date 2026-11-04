@@ -59,14 +59,23 @@ export interface SampleJobPlatformLink {
 }
 
 export interface SampleJob {
+  id?: string
   title: string
   company: string
+  companyLogo?: string
   salary: string
   location: string
   jobType: string
   experienceLevel?: string
+  postedAt?: string
   requirements?: string[]
+  responsibilities?: string[]
+  benefits?: string[]
   description: string
+  matchScore?: number
+  matchedSkills?: string[]
+  missingSkills?: string[]
+  careerUrl?: string
   applyUrl?: string
   links?: SampleJobPlatformLink[]
 }

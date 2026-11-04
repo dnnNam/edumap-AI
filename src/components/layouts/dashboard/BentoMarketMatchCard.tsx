@@ -1,5 +1,7 @@
-import { Target } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import SpotlightCard from '../../ui/SpotlightCard'
+import NumberTicker from '../../ui/NumberTicker'
+import { AnimatedTarget } from '../../ui/AnimatedIcons'
 
 interface BentoMarketMatchCardProps {
   careerPath?: string | null
@@ -25,13 +27,13 @@ export default function BentoMarketMatchCard({ careerPath, completionPercentage 
   const status = getTierStatus(percentage)
 
   return (
-    <div className='h-full rounded-[32px] border border-gray-200/80 dark:border-white/[0.08] bg-white dark:bg-[#1A191C] p-6 sm:p-7 shadow-xs flex flex-col justify-between transition-all'>
+    <SpotlightCard className='h-full p-6 sm:p-7 shadow-xs flex flex-col justify-between transition-all group'>
       <div>
         {/* Header */}
         <div className='flex items-center justify-between'>
           <div className='flex items-center gap-2.5'>
             <div className='w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-[#A99DFF] flex items-center justify-center font-bold'>
-              <Target className='w-4 h-4' />
+              <AnimatedTarget className='w-4 h-4' />
             </div>
             <span className='font-bold text-gray-900 dark:text-[#ECE9E4] text-sm'>
               {t('dashboard.bento.roadmapMatch')}
@@ -45,7 +47,7 @@ export default function BentoMarketMatchCard({ careerPath, completionPercentage 
         {/* Big Number & Status */}
         <div className='mt-4 flex items-baseline gap-3'>
           <div className='text-4xl font-black text-gray-900 dark:text-[#ECE9E4] tracking-tight'>
-            {percentage}
+            <NumberTicker value={percentage} />
             <span className='text-2xl text-indigo-600 dark:text-[#A99DFF]'>%</span>
           </div>
           <span className={`text-xs font-bold ${status.color}`}>{status.label}</span>
@@ -68,7 +70,9 @@ export default function BentoMarketMatchCard({ careerPath, completionPercentage 
                 <div
                   key={rowIdx}
                   className={`w-3.5 h-3.5 rounded-full transition-all duration-300 ${
-                    isFilled ? 'bg-indigo-600 shadow-xs shadow-indigo-500/25' : 'bg-gray-100 dark:bg-white/[0.08]'
+                    isFilled
+                      ? 'bg-gradient-to-tr from-indigo-600 to-[#A99DFF] shadow-xs shadow-indigo-500/30'
+                      : 'bg-gray-100 dark:bg-white/[0.08]'
                   }`}
                 />
               )
@@ -81,6 +85,6 @@ export default function BentoMarketMatchCard({ careerPath, completionPercentage 
         <span>{t('dashboard.bento.roadmapStatus')}:</span>
         <span className={`font-bold ${status.color}`}>{status.label}</span>
       </div>
-    </div>
+    </SpotlightCard>
   )
 }

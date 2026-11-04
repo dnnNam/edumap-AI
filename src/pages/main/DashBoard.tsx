@@ -1,9 +1,10 @@
-import { ArrowRight, BookOpen, Sparkles } from 'lucide-react'
+import { BookOpen } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 import { useSplash } from '../../context/SplashContext'
+import { AnimatedSparkles, AnimatedArrowRight } from '../../components/ui/AnimatedIcons'
 
 import { useMySkillsSummaryQuery } from '../../hooks/skillsQuery'
 import { useMySkillTreeQuery } from '../../hooks/skillTreeQuery'
@@ -85,9 +86,9 @@ export default function DashBoard() {
           <button
             type='button'
             onClick={() => navigate('/upload')}
-            className='flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2.5 transition cursor-pointer shadow-sm'
+            className='flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2.5 transition cursor-pointer shadow-sm group'
           >
-            <Sparkles className='w-4 h-4' />
+            <AnimatedSparkles className='w-4 h-4 text-amber-300' />
             {t('dashboard.runAnalysis')}
           </button>
         </motion.div>
@@ -194,10 +195,10 @@ export default function DashBoard() {
                 <button
                   type='button'
                   onClick={() => navigate('/skill-tree')}
-                  className='mt-4 w-full flex items-center justify-center gap-2 rounded-xl border border-gray-200 dark:border-white/10 py-2.5 text-[15px] font-medium text-gray-900 dark:text-[#ECE9E4] shadow-xs hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer'
+                  className='mt-4 w-full flex items-center justify-center gap-2 rounded-xl border border-gray-200 dark:border-white/10 py-2.5 text-[15px] font-medium text-gray-900 dark:text-[#ECE9E4] shadow-xs hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer group'
                 >
                   {t('dashboard.viewSkillTree')}
-                  <ArrowRight className='w-4 h-4' />
+                  <AnimatedArrowRight className='w-4 h-4' />
                 </button>
               </Panel>
 
@@ -234,7 +235,7 @@ export default function DashBoard() {
                         </div>
                         <div className='mt-2 h-2 rounded-full bg-indigo-100 dark:bg-indigo-950/50 overflow-hidden'>
                           <div
-                            className='h-full rounded-full bg-indigo-600'
+                            className='h-full rounded-full bg-indigo-600 shimmer-progress transition-all duration-500'
                             style={{ width: `${maxCount > 0 ? (count / maxCount) * 100 : 0}%` }}
                           />
                         </div>

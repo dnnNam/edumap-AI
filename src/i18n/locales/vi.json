@@ -212,8 +212,9 @@
     "loadError": "Không tải được tổng quan học tập.",
     "loadErrorHint": "Kiểm tra kết nối và thử lại.",
     "banner": {
-      "badge": "EduMap AI · Bảng điều khiển năng lực",
+      "badge": "EduMap AI Engine · Bảng điều khiển năng lực lập trình",
       "heading": "Chào mừng trở lại, ",
+      "defaultName": "bạn",
       "description": "Tiếp tục mở rộng cây kỹ năng cá nhân hóa, đối soát tech stack từ GitHub với các cơ hội việc làm thực tế và chuẩn bị sẵn sàng cho những thử thách công nghệ mới.",
       "viewTree": "Xem Cây kỹ năng của tôi",
       "exploreJobs": "Khám phá Việc làm Hot",
@@ -223,9 +224,9 @@
       "skillsUnlocked": "Kỹ năng đã mở",
       "learningTime": "Thời lượng tích lũy",
       "hours": "giờ",
-      "skillsUnit": "kỹ năng",
+      "skillsUnit": "skills",
       "standard": "Chuẩn IEEE / ACM đối soát",
-      "advisor": "Hệ thống AI Advisor"
+      "advisor": "AI Advisor v2.5"
     },
     "bento": {
       "skillBreakdown": "Phân Bổ Kỹ Năng",
@@ -235,6 +236,7 @@
       "noSkillsTitle": "Chưa có dữ liệu kỹ năng",
       "noSkillsDesc": "Kết nối GitHub hoặc tải mã nguồn để hệ thống trích xuất kỹ năng thật.",
       "analyzeNow": "Phân tích ngay",
+      "dataWillShow": "Dữ liệu sẽ hiển thị khi hoàn tất phân tích",
       "targetSkillTree": "Cây Kỹ Năng Mục Tiêu",
       "personalRoadmap": "Lộ trình cá nhân",
       "notActivated": "Chưa kích hoạt",
@@ -829,6 +831,24 @@
     }
   },
   "jobs": {
+    "hero": {
+      "badge": "EduMap AI Career Radar · Thị trường IT 2026",
+      "title": "Khám Phá & Chinh Phục",
+      "titleAccent": "Cơ Hội Nghề Nghiệp IT",
+      "desc": "Hệ thống đối soát kỹ năng thực chiến từ các dự án lập trình thực tế của bạn với nhu cầu tuyển dụng theo thời gian thực trên các nền tảng ITviec, TopCV và LinkedIn.",
+      "tabTrending": "Việc làm xu hướng (Trending)",
+      "tabAnalysis": "Phân tích gợi ý việc làm của tôi",
+      "marketData": "Dữ liệu chuẩn thị trường IT 2026",
+      "githubStack": "Bám sát Tech Stack GitHub thực tế",
+      "directConnect": "Kết nối trực tiếp ITviec & TopCV",
+      "radarTitle": "Radar Tuyển Dụng IT",
+      "radarSubtitle": "Cập nhật thời gian thực",
+      "radarLive": "Live Feed",
+      "radarNewPositions": "Vị trí IT mới",
+      "radarMatchRate": "Khớp Tech Stack",
+      "radarHotStack": "Tech Stack săn đón Q4",
+      "radarDirectApi": "Đối soát API trực tiếp"
+    },
     "trending": {
       "title": "Xu hướng việc làm",
       "subtitle_other": "{{count}} vị trí",
@@ -956,7 +976,16 @@
       "k8s": "Học Kubernetes"
     },
     "achievements": "Thành tích",
-    "goals": "Mục tiêu hiện tại",
+    "goals": "Tiến độ học tập",
+    "learningProgress": "Tiến độ học tập",
+    "careerRoadmap": "Lộ trình nghề nghiệp",
+    "roadmapCompletion": "Tỷ lệ hoàn thành lộ trình",
+    "nodesCompleted": "{{completed}}/{{total}} kỹ năng hoàn thành",
+    "completed": "Hoàn thành",
+    "inProgress": "Đang học",
+    "noRoadmap": "Chưa kích hoạt lộ trình",
+    "noRoadmapDesc": "Tạo cây kỹ năng mục tiêu để theo dõi tiến độ học tập thực tế.",
+    "viewDetailTree": "Xem chi tiết cây kỹ năng",
     "certificates": "Chứng chỉ",
     "skillsMastered": "Kỹ năng thành thạo",
     "issued": "Cấp năm {{year}}",

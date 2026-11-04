@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <rect width="120" height="120" rx="26" fill="#EE4D2D"/>
+  <path d="M42 42 C42 32 50 24 60 24 C70 24 78 32 78 42" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round"/>
+  <path d="M34 40 L86 40 L82 96 L38 96 Z" fill="#EE4D2D" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round"/>
+  <text x="60" y="78" fill="#FFFFFF" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="34" text-anchor="middle">S</text>
+</svg>

@@ -1,5 +1,7 @@
-import { GitBranch, Clock } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import SpotlightCard from '../../ui/SpotlightCard'
+import NumberTicker from '../../ui/NumberTicker'
+import { AnimatedGitBranch, AnimatedClock } from '../../ui/AnimatedIcons'
 
 interface BentoMetricCardsProps {
   totalHours: number
@@ -21,11 +23,11 @@ export default function BentoMetricCards({
   return (
     <div className='flex flex-col gap-5 h-full justify-between'>
       {/* 1. Thẻ Cây kỹ năng (Tiến độ thực tế theo lộ trình) */}
-      <div className='flex-1 rounded-[32px] border border-gray-200/80 dark:border-white/[0.08] bg-white dark:bg-[#1A191C] p-6 shadow-xs flex flex-col justify-between transition-all'>
+      <SpotlightCard className='flex-1 p-6 shadow-xs flex flex-col justify-between transition-all group'>
         <div className='flex items-center justify-between'>
           <div className='flex items-center gap-2.5'>
-            <div className='w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-[#A99DFF] flex items-center justify-center'>
-              <GitBranch className='w-4 h-4' />
+            <div className='w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-[#A99DFF] flex items-center justify-center font-bold'>
+              <AnimatedGitBranch className='w-4 h-4' />
             </div>
             <span className='font-bold text-gray-900 dark:text-[#ECE9E4] text-sm'>
               {t('dashboard.bento.targetSkillTree')}
@@ -39,7 +41,7 @@ export default function BentoMetricCards({
         <div className='my-3 flex items-baseline justify-between'>
           <div className='flex items-baseline gap-1.5'>
             <span className='text-3xl sm:text-4xl font-black text-gray-900 dark:text-[#ECE9E4] tracking-tight'>
-              {completedNodes}
+              <NumberTicker value={completedNodes} />
             </span>
             <span className='text-sm font-semibold text-gray-400 dark:text-[#A29FA8]'>
               /{totalNodes} {t('dashboard.bento.nodesUnit')}
@@ -47,25 +49,27 @@ export default function BentoMetricCards({
           </div>
           <div className='text-right'>
             <div className='text-xs font-bold text-gray-700 dark:text-[#ECE9E4]'>{t('dashboard.bento.unlockRate')}</div>
-            <div className='text-xs text-indigo-600 dark:text-[#A99DFF] font-semibold'>{rate}%</div>
+            <div className='text-xs text-indigo-600 dark:text-[#A99DFF] font-semibold'>
+              <NumberTicker value={rate} />%
+            </div>
           </div>
         </div>
 
         {/* Thanh tiến độ */}
         <div className='w-full h-2 rounded-full bg-gray-100 dark:bg-white/5 overflow-hidden'>
           <div
-            className='h-full rounded-full bg-gradient-to-r from-indigo-600 to-indigo-500 dark:to-[#A99DFF] transition-all duration-500'
+            className='h-full rounded-full bg-gradient-to-r from-indigo-500 to-indigo-600 dark:from-indigo-400 dark:to-[#A99DFF] shimmer-progress transition-all duration-500'
             style={{ width: `${rate}%` }}
           />
         </div>
-      </div>
+      </SpotlightCard>
 
       {/* 2. Thẻ Thời lượng & Năng suất học tập (Dữ liệu thực từ DB) */}
-      <div className='flex-1 rounded-[32px] border border-gray-200/80 dark:border-white/[0.08] bg-white dark:bg-[#1A191C] p-6 shadow-xs flex flex-col justify-between transition-all'>
+      <SpotlightCard className='flex-1 p-6 shadow-xs flex flex-col justify-between transition-all group'>
         <div className='flex items-center justify-between'>
           <div className='flex items-center gap-2.5'>
-            <div className='w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-[#A99DFF] flex items-center justify-center'>
-              <Clock className='w-4 h-4' />
+            <div className='w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-[#A99DFF] flex items-center justify-center font-bold'>
+              <AnimatedClock className='w-4 h-4' />
             </div>
             <span className='font-bold text-gray-900 dark:text-[#ECE9E4] text-sm'>
               {t('dashboard.bento.accumulatedHours')}
@@ -79,7 +83,7 @@ export default function BentoMetricCards({
         <div className='my-3 flex items-baseline justify-between'>
           <div className='flex items-baseline gap-1'>
             <span className='text-3xl sm:text-4xl font-black text-gray-900 dark:text-[#ECE9E4] tracking-tight'>
-              {totalHours}
+              <NumberTicker value={totalHours} />
             </span>
             <span className='text-sm font-semibold text-gray-400 dark:text-[#A29FA8]'>
               {t('dashboard.banner.hours')}
@@ -95,14 +99,14 @@ export default function BentoMetricCards({
           </div>
         </div>
 
-        {/* Mini progress strip */}
+        {/* Thanh tiến độ trực quan dựa theo mốc 100 giờ học */}
         <div className='w-full h-2 rounded-full bg-gray-100 dark:bg-white/5 overflow-hidden'>
           <div
-            className='h-full rounded-full bg-gradient-to-r from-indigo-500 to-indigo-600'
-            style={{ width: `${Math.min(100, Math.max(10, totalHours))}%` }}
+            className='h-full rounded-full bg-gradient-to-r from-emerald-400 to-indigo-500 shimmer-progress transition-all duration-500'
+            style={{ width: `${Math.min(100, Math.max(5, (totalHours / 100) * 100))}%` }}
           />
         </div>
-      </div>
+      </SpotlightCard>
     </div>
   )
 }
