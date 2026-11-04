@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-  Building2,
   Banknote,
   CheckCircle2,
   Clock,
@@ -17,6 +16,7 @@ import type { RecommendationBody, SampleJob } from '../../../types/api/job.types
 import { MotionFadeIn, MotionStaggerContainer, MotionStaggerItem } from '../../motion/MotionWrapper'
 import { AnimatedZap } from '../../ui/AnimatedIcons'
 import JobDetailDrawer from './JobDetailDrawer'
+import CompanyAvatar from './CompanyAvatar'
 
 function SampleJobCard({
   job,
@@ -40,13 +40,7 @@ function SampleJobCard({
       <div>
         <div className='flex flex-wrap items-start justify-between gap-3'>
           <div className='flex items-start gap-3 min-w-0'>
-            <div className='w-11 h-11 rounded-2xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200/80 dark:border-indigo-800/60 flex items-center justify-center shrink-0 shadow-xs'>
-              {job.companyLogo ? (
-                <img src={job.companyLogo} alt={cleanCompany} className='w-full h-full object-contain p-1.5' />
-              ) : (
-                <Building2 className='w-5 h-5 text-indigo-600 dark:text-[#A99DFF]' />
-              )}
-            </div>
+            <CompanyAvatar company={job.company} logoUrl={job.companyLogo} />
             <div className='min-w-0'>
               <h3 className='text-lg font-bold text-gray-900 dark:text-[#ECE9E4] group-hover:text-indigo-600 dark:group-hover:text-[#A99DFF] transition-colors truncate'>
                 {cleanTitle}

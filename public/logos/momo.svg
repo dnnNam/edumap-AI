@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <rect width="120" height="120" rx="26" fill="#A50064"/>
+  <circle cx="60" cy="60" r="46" fill="#BD0074"/>
+  <g fill="#FFFFFF" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="900" text-anchor="middle">
+    <text x="60" y="70" font-size="34" letter-spacing="-1">MoMo</text>
+  </g>
+</svg>

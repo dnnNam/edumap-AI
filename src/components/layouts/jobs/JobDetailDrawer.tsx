@@ -2,7 +2,6 @@ import { useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   X,
-  Building2,
   MapPin,
   Banknote,
   Clock,
@@ -21,6 +20,7 @@ import {
 import { Link } from 'react-router'
 import type { SampleJob } from '../../../types/api/job.types'
 import { AnimatedZap, AnimatedSparkles } from '../../ui/AnimatedIcons'
+import CompanyAvatar from './CompanyAvatar'
 
 const VERIFIED_COMPANY_CAREERS: Record<string, string> = {
   momo: 'https://momo.careers/',
@@ -138,13 +138,12 @@ export default function JobDetailDrawer({ job, isOpen, onClose }: JobDetailDrawe
               <div className='flex items-start justify-between gap-4'>
                 <div className='flex items-start gap-3.5 min-w-0'>
                   {/* Logo hoặc Avatar ký tự công ty */}
-                  <div className='w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200/80 dark:border-indigo-800/60 flex items-center justify-center shrink-0 shadow-sm overflow-hidden'>
-                    {job.companyLogo ? (
-                      <img src={job.companyLogo} alt={cleanCompany} className='w-full h-full object-contain p-1.5' />
-                    ) : (
-                      <Building2 className='w-6 h-6 text-indigo-600 dark:text-[#A99DFF]' />
-                    )}
-                  </div>
+                  <CompanyAvatar
+                    company={job.company}
+                    logoUrl={job.companyLogo}
+                    className='w-12 h-12'
+                    iconSize='w-6 h-6'
+                  />
 
                   <div className='min-w-0'>
                     <div className='flex items-center gap-2 flex-wrap'>
