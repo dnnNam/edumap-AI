@@ -16,10 +16,62 @@ import {
   ListChecks,
   GraduationCap,
   ArrowRight,
+  Globe,
 } from 'lucide-react'
 import { Link } from 'react-router'
 import type { SampleJob } from '../../../types/api/job.types'
 import { AnimatedZap, AnimatedSparkles } from '../../ui/AnimatedIcons'
+
+const VERIFIED_COMPANY_CAREERS: Record<string, string> = {
+  momo: 'https://momo.careers/',
+  'ví momo': 'https://momo.careers/',
+  m_service: 'https://momo.careers/',
+  vng: 'https://itviec.com/companies/vng-corporation',
+  'vng corporation': 'https://itviec.com/companies/vng-corporation',
+  fpt: 'https://itviec.com/companies/fpt-software',
+  'fpt software': 'https://itviec.com/companies/fpt-software',
+  'fpt telecom': 'https://tuyendung.fpt.vn/',
+  'fpt is': 'https://tuyendung.fpt.vn/',
+  viettel: 'https://tuyendung.viettel.vn/',
+  vnpt: 'https://tuyendung.vnpt.vn/',
+  shopee: 'https://careers.shopee.vn/',
+  zalo: 'https://careers.zalo.me/',
+  tiki: 'https://tuyendung.tiki.vn/',
+  'one mount': 'https://careers.onemount.com/',
+  onemount: 'https://careers.onemount.com/',
+  techcombank: 'https://www.techcombankjobs.com/',
+  vpbank: 'https://tuyendung.vpbank.com.vn/',
+  mbbank: 'https://tuyendung.mbbank.com.vn/',
+  mb: 'https://tuyendung.mbbank.com.vn/',
+  grab: 'https://careers.grab.com/',
+  vinai: 'https://www.vinai.io/careers/',
+  vnpay: 'https://vnpay.vn/tuyen-dung/',
+}
+
+function sanitizeUrl(url: string): string {
+  if (url.includes('fptsoftware.com')) return 'https://itviec.com/companies/fpt-software'
+  if (url.includes('careers.vng.com.vn')) return 'https://itviec.com/companies/vng-corporation'
+  if (url.includes('momo.vn')) return 'https://momo.careers/'
+  return url
+}
+
+function resolveApplyUrl(job: SampleJob): string {
+  const normCompany = (job.company || '').toLowerCase().trim()
+
+  for (const [key, verifiedUrl] of Object.entries(VERIFIED_COMPANY_CAREERS)) {
+    if (normCompany.includes(key)) {
+      return verifiedUrl
+    }
+  }
+
+  const rawUrl = job.applyUrl || job.careerUrl
+  if (rawUrl) {
+    return sanitizeUrl(rawUrl)
+  }
+
+  const cleanCompany = (job.company || '').replace(/\([^)]*\)/g, '').trim() || job.company
+  return `https://itviec.com/it-jobs?query=${encodeURIComponent(`${cleanCompany} ${job.title}`)}`
+}
 
 interface JobDetailDrawerProps {
   job: SampleJob | null
@@ -57,10 +109,7 @@ export default function JobDetailDrawer({ job, isOpen, onClose }: JobDetailDrawe
   const matchedSkills = job.matchedSkills ?? job.requirements?.slice(0, 3) ?? []
   const missingSkills = job.missingSkills ?? []
   const cleanCompany = (job.company || '').replace(/\([^)]*\)/g, '').trim() || job.company
-  const primaryApplyUrl =
-    job.applyUrl ||
-    job.careerUrl ||
-    `https://itviec.com/it-jobs?query=${encodeURIComponent(`${cleanCompany} ${job.title}`)}`
+  const primaryApplyUrl = resolveApplyUrl(job)
 
   return (
     <AnimatePresence>
@@ -318,6 +367,30 @@ export default function JobDetailDrawer({ job, isOpen, onClose }: JobDetailDrawe
                       </li>
                     ))}
                   </ul>
+                </div>
+              )}
+
+              {/* 🌐 CÁC KÊNH ĐỐI SOÁT & ỨNG TUYỂN DỰ PHÒNG */}
+              {job.links && job.links.length > 0 && (
+                <div className='p-4 rounded-2xl border border-gray-200/80 dark:border-white/10 bg-gray-50/70 dark:bg-white/[0.02]'>
+                  <h4 className='text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2.5 flex items-center gap-1.5'>
+                    <Globe className='w-3.5 h-3.5 text-indigo-500' />
+                    <span>Tìm bài đăng liên quan trên các nền tảng khác</span>
+                  </h4>
+                  <div className='flex flex-wrap gap-2'>
+                    {job.links.map((link, idx) => (
+                      <a
+                        key={idx}
+                        href={sanitizeUrl(link.url)}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                        className='inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-white/10 bg-white dark:bg-[#1f1e24] text-xs font-medium text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-[#A99DFF] hover:border-indigo-300 dark:hover:border-indigo-500/40 transition'
+                      >
+                        <span>{link.platform}</span>
+                        <ExternalLink className='w-3 h-3 text-gray-400' />
+                      </a>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
